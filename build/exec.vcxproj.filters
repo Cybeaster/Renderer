@@ -7,6 +7,15 @@
     <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\Application\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\Renderer\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\Renderer\VertexBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\Renderer\IndexBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="X:\ProgrammingStuff\Projects\OpenGL\CMakeLists.txt" />
