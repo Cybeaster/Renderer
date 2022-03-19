@@ -16,6 +16,12 @@
     <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\Renderer\IndexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\VertexArray\VertexArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\Renderer\VertexBufferLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="X:\ProgrammingStuff\Projects\OpenGL\CMakeLists.txt" />

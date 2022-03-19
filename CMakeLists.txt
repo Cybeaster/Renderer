@@ -12,6 +12,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Externals/glm
 	${PROJECT_SOURCE_DIR}/Externals/glew/include
 	${PROJECT_SOURCE_DIR}/Renderer
+	${PROJECT_SOURCE_DIR}/VertexArray
 )
 
 
@@ -25,6 +26,8 @@ Application/Application.cpp
 Renderer/Renderer.cpp
 Renderer/VertexBuffer.cpp
 Renderer/IndexBuffer.cpp
+VertexArray/VertexArray.cpp
+Renderer/VertexBufferLayout.cpp
 )
 
 target_link_libraries(exec ${GLFW_LIB} ${OPENGL_LIBRARY} ${GLEW_LIB})
