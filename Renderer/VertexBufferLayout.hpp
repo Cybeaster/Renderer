@@ -32,7 +32,7 @@ public:
     template <typename T>
     void Push(uint32_t count)
     {
-        static_assert()
+        static_assert(false)
     }
     template<>
     void Push<float>(uint32_t count)

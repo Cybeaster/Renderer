@@ -22,6 +22,12 @@
     <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\Renderer\VertexBufferLayout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\Shader\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\Texture\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="X:\ProgrammingStuff\Projects\OpenGL\CMakeLists.txt" />

@@ -13,7 +13,10 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Externals/glew/include
 	${PROJECT_SOURCE_DIR}/Renderer
 	${PROJECT_SOURCE_DIR}/VertexArray
-)
+	${PROJECT_SOURCE_DIR}/Shader
+	${PROJECT_SOURCE_DIR}/Texture
+	${PROJECT_SOURCE_DIR}/Externals/Vendor
+	)
 
 
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/glfw/lib-vc2019/glfw3.lib)
@@ -28,6 +31,8 @@ Renderer/VertexBuffer.cpp
 Renderer/IndexBuffer.cpp
 VertexArray/VertexArray.cpp
 Renderer/VertexBufferLayout.cpp
+Shader/Shader.cpp
+Texture/Texture.cpp
 )
 
 target_link_libraries(exec ${GLFW_LIB} ${OPENGL_LIBRARY} ${GLEW_LIB})
