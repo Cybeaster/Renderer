@@ -44,6 +44,10 @@ uint32_t Shader::GetUnformLocation(const std::string& name)
     m_LocationCache[name] = location;
     return location;
 }
+void Shader::SetUnformMat4f(const std::string name, glm::mat4& matrix)
+{
+    GLCall(glUniformMatrix4fv(GetUnformLocation(name),1,GL_FALSE,&matrix[0][0]));
+}
 
 
 void Shader::Bind()const

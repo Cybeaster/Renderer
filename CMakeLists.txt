@@ -16,6 +16,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Shader
 	${PROJECT_SOURCE_DIR}/Texture
 	${PROJECT_SOURCE_DIR}/Externals/Vendor
+	${PROJECT_SOURCE_DIR}/Externals/imgui
 	)
 
 
@@ -33,6 +34,12 @@ VertexArray/VertexArray.cpp
 Renderer/VertexBufferLayout.cpp
 Shader/Shader.cpp
 Texture/Texture.cpp
+Externals/imgui/imgui.cpp
+Externals/imgui/imgui_impl_glfw_gl3.cpp
+Externals/imgui/imgui_demo.cpp
+Externals/imgui/imgui_draw.cpp
+Test/TestClearColor.cpp
+Test/Test.cpp
 )
 
 target_link_libraries(exec ${GLFW_LIB} ${OPENGL_LIBRARY} ${GLEW_LIB})
