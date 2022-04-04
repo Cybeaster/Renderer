@@ -1,0 +1,26 @@
+# CMake generation dependency list for this directory.
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/CMakeCInformation.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/CMakeCXXInformation.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/CMakeCommonLanguageInclude.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/CMakeGenericSystem.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/CMakeInitializeConfigs.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/CMakeLanguageInformation.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/CMakeRCInformation.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/CMakeSystemSpecificInformation.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/CMakeSystemSpecificInitialize.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/Compiler/MSVC-C.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/Compiler/MSVC-CXX.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/FindOpenGL.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/FindPackageHandleStandardArgs.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/FindPackageMessage.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/Platform/Windows-MSVC-C.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/Platform/Windows-MSVC-CXX.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/Platform/Windows-MSVC.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/Platform/Windows.cmake
+X:/ProgrammingStuff/Compilers/Cmake/share/cmake-3.21/Modules/Platform/WindowsPaths.cmake
+X:/ProgrammingStuff/Projects/OpenGL/CMakeLists.txt
+X:/ProgrammingStuff/Projects/OpenGL/build/CMakeFiles/3.21.1/CMakeCCompiler.cmake
+X:/ProgrammingStuff/Projects/OpenGL/build/CMakeFiles/3.21.1/CMakeCXXCompiler.cmake
+X:/ProgrammingStuff/Projects/OpenGL/build/CMakeFiles/3.21.1/CMakeRCCompiler.cmake
+X:/ProgrammingStuff/Projects/OpenGL/build/CMakeFiles/3.21.1/CMakeSystem.cmake
