@@ -17,7 +17,8 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Texture
 	${PROJECT_SOURCE_DIR}/Externals/Vendor
 	${PROJECT_SOURCE_DIR}/Externals/imgui
-	)
+	${PROJECT_SOURCE_DIR}/Test
+		)
 
 
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/glfw/lib-vc2019/glfw3.lib)
@@ -40,6 +41,8 @@ Externals/imgui/imgui_demo.cpp
 Externals/imgui/imgui_draw.cpp
 Test/TestClearColor.cpp
 Test/Test.cpp
+Test/TestTexture.cpp
+Test/TestSimpleCube.cpp
 )
 
 target_link_libraries(exec ${GLFW_LIB} ${OPENGL_LIBRARY} ${GLEW_LIB})

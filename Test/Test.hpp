@@ -3,8 +3,6 @@
 
 namespace test
 {
-    
-
     class Test
     {
 
@@ -13,9 +11,9 @@ namespace test
         Test(/* args */);
         virtual ~Test();
         
-        virtual void OnUpdate(float deltaTime){}
-        virtual void OnRender(){}
-        virtual void OnImGuiRendere() {}
+        virtual void OnUpdate(float deltaTime) =0;
+        virtual void OnRender() = 0;
+        virtual void OnImGuiRender(){}
 
     private:
 

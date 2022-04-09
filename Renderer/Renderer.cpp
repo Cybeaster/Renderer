@@ -1,4 +1,6 @@
 #include "Renderer.hpp"
+#include <VertexBufferLayout.hpp>
+#include <string>
 #include <iostream>
 
 void GLClearError()
@@ -28,6 +30,16 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
 void Renderer::Clear() const 
 {
     GLCall(glClear(GL_COLOR_BUFFER_BIT));
+}
+
+void Renderer:: Init(const void* BufferData,
+                    uint32_t BufferSize,
+                    const uint32_t* IndexData,
+                    uint32_t IndexSize,
+                    std::string shaderSource)
+{
+    
+
 }
 
 Renderer::Renderer()

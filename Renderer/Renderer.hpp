@@ -26,6 +26,12 @@ public:
     ~Renderer();
 
     void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& sh);
+    void Init(const void* BufferData,
+              uint32_t BufferSize,
+              const uint32_t* IndexData,
+              uint32_t IndexSize,
+              std::string shaderSource);
+              
     void Clear() const ;
 
 private:

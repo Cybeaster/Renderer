@@ -46,6 +46,12 @@
     <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\Test\Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\Test\TestTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="X:\ProgrammingStuff\Projects\OpenGL\Test\TestSimpleCube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="X:\ProgrammingStuff\Projects\OpenGL\CMakeLists.txt" />
