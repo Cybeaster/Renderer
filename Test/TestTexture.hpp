@@ -1,6 +1,7 @@
 #pragma once
 #include <Test.hpp>
 #include <Texture.hpp>
+class GLFWwindow;
 namespace test
 {
     class TestTexture : public Test
@@ -10,9 +11,7 @@ namespace test
         TestTexture(std::string filePath);
         ~TestTexture();
 
-        void OnUpdate(float deltaTime) override;
-        void OnRender()override;
-        void OnImGuiRender() override;
+        void OnUpdate(GLFWwindow* window,float currentTime);
         
         private:
         

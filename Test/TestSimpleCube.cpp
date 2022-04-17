@@ -1,7 +1,7 @@
 #include <TestSimpleCube.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include "GLFW/glfw3.h"
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
+#include "glfw3.h"
 
 namespace test
 {
@@ -21,18 +21,19 @@ namespace test
         TestSimpleCube::pMat = glm::perspective(1.0472f,TestSimpleCube::aspect,0.1f,1000.f);
     }
 
-    void TestSimpleCube::OnRender(GLFWwindow* window,float currentTime)
+    void TestSimpleCube::OnUpdate(GLFWwindow* window,float currentTime)
     {
         GLCall(glClear(GL_DEPTH_BUFFER_BIT));
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
         GLCall(glEnable(GL_CULL_FACE));
+
         shader.Bind();
 
         glfwGetFramebufferSize(window,&width,&height);
-
         aspect = float(width) / float(height);
 
         pMat = glm::perspective(1.0472f,aspect,0.01f,1000.f);
+        
         shader.SetUnformMat4f("proj_matrix",pMat);
 
 
@@ -103,10 +104,7 @@ namespace test
         GLCall(glDepthFunc(GL_LEQUAL));
         GLCall(glDrawArrays(GL_TRIANGLES,0,36));
 
-         mvStack.pop(); mvStack.pop(); mvStack.pop(); mvStack.pop();
-
-
-
+        mvStack.pop(); mvStack.pop(); mvStack.pop(); mvStack.pop();
     }
 
  

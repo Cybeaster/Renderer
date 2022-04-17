@@ -1,12 +1,7 @@
 #pragma once
-#define GLEW_STATIC
-
-#include "GL/glew.h"
-#include <VertexArray.hpp>
-#include <VertexBuffer.hpp>
-#include <Shader.hpp>
-#include <IndexBuffer.hpp>
-
+#include <glm.hpp>
+#include "Shader.hpp"
+#include "glfw3.h"
 
 #define ASSERT(x) if ((!x)) __debugbreak();
 
@@ -18,27 +13,53 @@
 void GLClearError();
 bool GLLogCall(const char* func, const char* file, int line);
 
-class Renderer
+namespace RenderAPI
 {
-    
-public:
-    Renderer();
-    ~Renderer();
+    class Renderer 
+    {
 
-    void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& sh);
-    void Init(const void* BufferData,
-              uint32_t BufferSize,
-              const uint32_t* IndexData,
-              uint32_t IndexSize,
-              std::string shaderSource);
-              
-    void Clear() const ;
+    public:
 
-private:
+        void RenderTick());
+        GLFWwindow* Init(const std::string shaderSource);
 
 
-};
+        Renderer() = default;
+        ~Renderer();
+
+    protected:
 
 
+    private:
 
+        void RendererStart(float currentTime);
+        void RendererEnd();
+        void CalcDeltaTime(float currentTime);
+        void CleanScene();
+        void CalcPerspective(GLFWwindow* window);
+
+        glm::mat4 
+        pMat, // perspective matrix
+        vMat, // view matrix
+        mMat, // model matrix
+        mvMat, //model-view matrix
+        tMat, //
+        rMat;
+
+        float aspect{0.f};
+
+        GLint height{0};
+        GLint width{0};
+
+        Shader shader;
+
+        float deltaTime = 0.f;
+
+        float lastFrame = 0.f;
+        float currentFrame = 0.f;
+
+        GLFWwindow* window;
+    };
+
+} 
 

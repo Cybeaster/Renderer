@@ -1,8 +1,9 @@
-
 #pragma once
-
+#include "GL/glew.h"
+#include "glfw3.h"
 namespace test
 {
+
     class Test
     {
 
@@ -11,14 +12,9 @@ namespace test
         Test(/* args */);
         virtual ~Test();
         
-        virtual void OnUpdate(float deltaTime) =0;
-        virtual void OnRender() = 0;
-        virtual void OnImGuiRender(){}
+        virtual void OnUpdate(GLFWwindow* window, float deltaTime) = 0;
 
     private:
-
-
-   
 
     };
     

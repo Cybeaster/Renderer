@@ -2,16 +2,11 @@
 #include <Test.hpp>
 #include <Renderer.hpp>
 #include <cstdint>
-#include <glm/glm.hpp>
+#include <glm.hpp>
 #include <stack>
-class GLFWwindow;
 namespace test
 {
-
-    
-
-
-    class TestSimpleCube
+    class TestSimpleCube : public Test
     {
     public:
 
@@ -19,7 +14,7 @@ namespace test
         TestSimpleCube(GLFWwindow* window);
         ~TestSimpleCube();
 
-        void OnRender(GLFWwindow* window,float currentTime);
+        virtual void OnUpdate(GLFWwindow* window,float deltaTime) override;
         
         GLuint renderingProg = 0;
 

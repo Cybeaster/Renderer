@@ -8,10 +8,8 @@
 
 
 Shader::Shader(const std::string source)
-    :m_FilePath(source), m_RendererID(0)
 {
-    ShaderSource shaderSource = ParseShader(source);
-    m_RendererID = CreateShader(shaderSource.vertexShader,shaderSource.fragmentShader);
+    Init(source);
 }
 
 
@@ -21,6 +19,13 @@ Shader::~Shader()
     GLCall(glDeleteProgram(m_RendererID));
 }
 
+void Shader::Init(const std::string source)
+{
+    filePath = source;
+    ShaderSource shaderSource = ParseShader(source);
+    m_RendererID = CreateShader(shaderSource.vertexShader,shaderSource.fragmentShader);
+    Bind();
+}
 
 void Shader::SetUniform1i(const std::string name, int32_t v0)
 {
@@ -94,7 +99,7 @@ uint32_t Shader::CompileShader( uint32_t type,const std::string& source)
 
 ShaderSource Shader::ParseShader(const std::string& filePath)
 {
-    std::fstream stream(m_FilePath);
+    std::fstream stream(filePath);
     if(stream.is_open())
     {
         ShaderType currentType = ShaderType::NONE;
