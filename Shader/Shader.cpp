@@ -139,5 +139,6 @@ int Shader::CreateShader(const std::string& vertexShader, const std::string& fra
 
     glDeleteShader(vs);
     glDeleteShader(fs);
+    
     return program;
 }

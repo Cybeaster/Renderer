@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 #include <TestSimpleCube.hpp>
+
+
 void Application::Start()
 {
     GLFWwindow* window;
@@ -25,6 +27,7 @@ void Application::Start()
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+
     glfwSwapInterval(1);
 
     if(glewInit() != GLEW_OK)
@@ -33,7 +36,7 @@ void Application::Start()
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA));
 
-    test::TestSimpleCube simpleCube;
+    test::TestSimpleCube simpleCube(window);
         
     while (!glfwWindowShouldClose(window))
     {

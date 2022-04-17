@@ -1,6 +1,5 @@
 #include "TestClearColor.hpp"
 #include "Renderer.hpp"
-#include <imgui.h>
 namespace test
 {
     
@@ -28,7 +27,7 @@ namespace test
 
     void ClearColorTest::OnImGuiRender() 
     {
-        ImGui::ColorEdit4("Clear color",m_Clearcolor);
+        
     }
 
 } // namespace test
