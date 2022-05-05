@@ -1,30 +1,39 @@
+
 #include "Renderer.hpp"
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
-#include "GL/glew.h"
 #include <iostream>
 
+
+void GLClearError()
+{
+    while(glGetError() != GL_NO_ERROR);
+}
+
+bool GLLogCall(const char* func, const char* file, int line)
+{
+    while(GLenum error = glGetError())
+    {
+        std::cout<< "[Opengl Error] (" << std::hex<< error << ") :" << func <<'\t'<< line <<'\t'<< file<< std::endl;
+        return false;
+     }
+    return true;
+}
 namespace RenderAPI
 {
 
-    void GLClearError()
+    float Renderer::aspect{0};
+    glm::mat4 Renderer::pMat{};
+
+    void WindowReshapeCallback(GLFWwindow* window,int newHeight,int newWidth)
     {
-        while(glGetError() != GL_NO_ERROR);
+        Renderer::aspect = (float)newWidth / (float)newHeight;
+        glViewport(0,0,newWidth,newHeight);
+        Renderer::pMat = glm::perspective(1.0472f,Renderer::aspect,0.1f,1000.f);
     }
 
-    bool GLLogCall(const char* func, const char* file, int line)
+    GLFWwindow* Renderer::Init()
     {
-        while(GLenum error = glGetError())
-        {
-            std::cout<< "[Opengl Error] (" << std::hex<< error << ") :" << func <<'\t'<< line <<'\t'<< file<< std::endl;
-            return false;
-        }
-        return true;
-    }
-
-    GLFWwindow* Renderer::Init(const std::string shaderSource)
-    {
-        
         /* Initialize the library */
         assert(glfwInit());
         
@@ -43,8 +52,8 @@ namespace RenderAPI
     
         GLCall(glEnable(GL_BLEND));
         GLCall(glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA));
-
-        shader.Init(shaderSource);
+        glfwSetWindowSizeCallback(window,WindowReshapeCallback);
+        return window;
     }
 
 
@@ -58,11 +67,8 @@ namespace RenderAPI
     void Renderer::RendererStart(float currentTime)
     {
         CleanScene();
-        CalcDeltaTime(currentTime);
-
-        GLCall(glEnable(GL_CULL_FACE));
         CalcPerspective(window);
-        shader.Bind();
+        CalcDeltaTime(currentTime);
     }
     void Renderer::RendererEnd()
     {
@@ -70,11 +76,14 @@ namespace RenderAPI
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-    void Renderer::RenderTick()
+    void Renderer::renderTick()
     {
         RendererStart(glfwGetTime());
         
-
+        for(auto* test :tests)
+            if(test != nullptr)
+                test->OnUpdate(window,deltaTime,aspect,cameraPos,pMat,vMat);
+       
         RendererEnd();
     }
 
@@ -83,6 +92,7 @@ namespace RenderAPI
     {
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
         GLCall(glClear(GL_DEPTH_BUFFER_BIT));
+        GLCall(glEnable(GL_CULL_FACE));
     }
 
     void Renderer::CalcPerspective(GLFWwindow* window)
@@ -90,6 +100,8 @@ namespace RenderAPI
         glfwGetFramebufferSize(window,&width,&height);
         aspect = float(width) / float(height);
         pMat = glm::perspective(1.0472f,aspect,0.1f,1000.f);
+        vMat = glm::translate(glm::mat4(1.0f),cameraPos * -1.f);
+
     }
 
     void Renderer::CalcDeltaTime(float currentTime)

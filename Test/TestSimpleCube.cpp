@@ -6,123 +6,75 @@
 namespace test
 {
     
-    float TestSimpleCube::aspect{0};
-    glm::mat4 TestSimpleCube::pMat{};
-    glm::mat4 TestSimpleCube::vMat{};
-    glm::mat4 TestSimpleCube::mMat{};
-    glm::mat4 TestSimpleCube::mvMat{};
-    glm::mat4 TestSimpleCube::tMat{};
-    glm::mat4 TestSimpleCube::rMat{};
-    
-    void WindowReshapeCallback(GLFWwindow* window,int newHeight,int newWidth)
+    void TestSimpleCube::OnUpdate(GLFWwindow* window,
+    float deltaTime,
+    float aspect,
+    const glm::vec3& cameraPos,
+    glm::mat4& pMat,
+    glm::mat4& vMat)
     {
-        TestSimpleCube::aspect = (float)newWidth / (float)newHeight;
-        glViewport(0,0,newWidth,newHeight);
-        TestSimpleCube::pMat = glm::perspective(1.0472f,TestSimpleCube::aspect,0.1f,1000.f);
-    }
-
-    void TestSimpleCube::OnUpdate(GLFWwindow* window,float currentTime)
-    {
-        GLCall(glClear(GL_DEPTH_BUFFER_BIT));
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
-        GLCall(glEnable(GL_CULL_FACE));
-
-        shader.Bind();
-
-        glfwGetFramebufferSize(window,&width,&height);
-        aspect = float(width) / float(height);
-
-        pMat = glm::perspective(1.0472f,aspect,0.01f,1000.f);
-        
-        shader.SetUnformMat4f("proj_matrix",pMat);
-
-
+        Test::OnUpdate(window,deltaTime,aspect,cameraPos,pMat,vMat);
         //pyr
-        vMat = glm::translate(glm::mat4(1.0f),cameraPos * -1.f);
-        mvStack.push(vMat);
+        
+        GetMVStack().push(vMat);
+        GetMVStack().push(GetMVStack().top());
+        
+        GetMVStack().top() *= glm::translate(glm::mat4(1.0f),glm::vec3(0.0,0.0,0.0));
 
-        mvStack.push(mvStack.top());
-        mvStack.top()*= glm::translate(glm::mat4(1.0f),glm::vec3(0.0,0.0,0.0));
+        GetMVStack().push(GetMVStack().top());
 
-        mvStack.push(mvStack.top());
-        mvStack.top()*= glm::rotate(glm::mat4(1.0f),float(currentTime),glm::vec3(1.0,0.0,0.0));
+        GetMVStack().top()*= glm::rotate(glm::mat4(1.0f),float(deltaTime),glm::vec3(1.0,0.0,0.0));
 
-        shader.SetUnformMat4f("mv_matrix",mvStack.top());
+        getShader().SetUnformMat4f("mv_matrix",GetMVStack().top());
         
 
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER,vbo[1]));
-        GLCall(glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,0)); //says that data in the buffer are arrange in order of 3 cooridinates for a point;
-        GLCall(glEnableVertexAttribArray(0));
-
+        EnableVertexArray(1);
         GLCall(glEnable(GL_DEPTH_TEST));
         GLCall(glFrontFace(GL_CCW));
         GLCall(glDepthFunc(GL_LEQUAL));
         GLCall(glDrawArrays(GL_TRIANGLES,0,18));
-        
-        mvStack.pop();
-
+        GetMVStack().pop();
         //pyr
 
 
         //cube
 
-        mvStack.push(mvStack.top());
-        mvStack.top() *= glm::translate(glm::mat4(1.0f),glm::vec3(sin(float(currentTime))* 4.0f,0.0f,cos(float(currentTime)*4.0)));
+        GetMVStack().push(GetMVStack().top());
+        GetMVStack().top() *= glm::translate(glm::mat4(1.0f),glm::vec3(sin(float(deltaTime))* 4.0f,0.0f,cos(float(deltaTime)*4.0)));
+        GetMVStack().push(GetMVStack().top());
+        GetMVStack().top()*= glm::rotate(glm::mat4(1.0f),float(deltaTime),glm::vec3(0.0,1.0,0.0));
+        getShader().SetUnformMat4f("mv_matrix",GetMVStack().top());
 
-        mvStack.push(mvStack.top());
-        mvStack.top()*= glm::rotate(glm::mat4(1.0f),float(currentTime),glm::vec3(0.0,1.0,0.0));
-
-
-       
-        shader.SetUnformMat4f("mv_matrix",mvStack.top());
-
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER,vbo[1]))
-        GLCall(glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,0));
-        GLCall(glEnableVertexAttribArray(0));
-        
+        EnableVertexArray(1);
         GLCall(glEnable(GL_DEPTH_TEST));
         GLCall(glFrontFace(GL_CCW));
         GLCall(glDepthFunc(GL_LEQUAL));
         GLCall(glDrawArrays(GL_TRIANGLES,0,36));
-        mvStack.pop();
+        GetMVStack().pop();
 
         //smaller cube
 
-        mvStack.push(mvStack.top());
-        mvStack.top()*= glm::translate(glm::mat4(1.0f),glm::vec3(0.f,sin(currentTime)*2.0,cos(float(currentTime)*2.0)));
-        mvStack.top()*= glm::rotate(glm::mat4(1.0f),float(currentTime),glm::vec3(0.0,0.0,1.0));
-        mvStack.top()*= glm::scale(glm::mat4(1.0),glm::vec3(0.25f,0.25f,0.25f));
+        GetMVStack().push(GetMVStack().top());
+        GetMVStack().top()*= glm::translate(glm::mat4(1.0f),glm::vec3(0.f,sin(deltaTime)*2.0,cos(float(deltaTime)*2.0)));
+        GetMVStack().top()*= glm::rotate(glm::mat4(1.0f),float(deltaTime),glm::vec3(0.0,0.0,1.0));
+        GetMVStack().top()*= glm::scale(glm::mat4(1.0),glm::vec3(0.25f,0.25f,0.25f));
+        getShader().SetUnformMat4f("mv_matrix",GetMVStack().top());
 
-        shader.SetUnformMat4f("mv_matrix",mvStack.top());
-
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER,vbo[1]))
-        GLCall(glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,0));
-        GLCall(glEnableVertexAttribArray(0));
-        
+        EnableVertexArray(1);
         GLCall(glEnable(GL_DEPTH_TEST));
         GLCall(glFrontFace(GL_CW));
         GLCall(glDepthFunc(GL_LEQUAL));
         GLCall(glDrawArrays(GL_TRIANGLES,0,36));
-
-        mvStack.pop(); mvStack.pop(); mvStack.pop(); mvStack.pop();
+        GetMVStack().pop(); GetMVStack().pop(); GetMVStack().pop(); GetMVStack().pop();
     }
 
  
-    TestSimpleCube::TestSimpleCube(GLFWwindow* window)
+    TestSimpleCube::TestSimpleCube(GLFWwindow* window, std::string shaderPath) : Test(shaderPath)
     {
-        GLCall(glGenVertexArrays(1,vao));
-        GLCall(glBindVertexArray(vao[0]));
-        GLCall(glGenBuffers(2,vbo));
-
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER,vbo[0]));
-        GLCall(glBufferData(GL_ARRAY_BUFFER,sizeof(vertexPositions),vertexPositions,GL_STATIC_DRAW));
-
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER,vbo[1]));
-        GLCall(glBufferData(GL_ARRAY_BUFFER,sizeof(pyramidPositions),pyramidPositions,GL_STATIC_DRAW));
-
-     
-        glfwSetWindowSizeCallback(window,WindowReshapeCallback);
-    }
+        AddVertexArray();
+        AddBuffer(vertexPositions,sizeof(vertexPositions));
+        AddBuffer(pyramidPositions,sizeof(pyramidPositions));
+    }       
 
     TestSimpleCube::~TestSimpleCube()
     {

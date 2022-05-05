@@ -1,7 +1,6 @@
 #pragma once
 #include <glm.hpp>
-#include "Shader.hpp"
-#include "glfw3.h"
+#include <Test.hpp>
 
 #define ASSERT(x) if ((!x)) __debugbreak();
 
@@ -12,7 +11,7 @@
 
 void GLClearError();
 bool GLLogCall(const char* func, const char* file, int line);
-
+class GLFWwindow;
 namespace RenderAPI
 {
     class Renderer 
@@ -20,16 +19,23 @@ namespace RenderAPI
 
     public:
 
-        void RenderTick());
-        GLFWwindow* Init(const std::string shaderSource);
-
+        void renderTick();
+        GLFWwindow* Init();
+        void addTest(test::Test* testPtr)
+        {
+            if(testPtr != nullptr)
+            {
+                testPtr->Init(pMat);
+                tests.push_back(testPtr);
+            }
+        
+        }
 
         Renderer() = default;
         ~Renderer();
 
-    protected:
-
-
+        static float aspect;
+        static glm::mat4 pMat;
     private:
 
         void RendererStart(float currentTime);
@@ -38,20 +44,10 @@ namespace RenderAPI
         void CleanScene();
         void CalcPerspective(GLFWwindow* window);
 
-        glm::mat4 
-        pMat, // perspective matrix
-        vMat, // view matrix
-        mMat, // model matrix
-        mvMat, //model-view matrix
-        tMat, //
-        rMat;
-
-        float aspect{0.f};
-
+        glm::mat4 vMat; // view matrix
+ 
         GLint height{0};
         GLint width{0};
-
-        Shader shader;
 
         float deltaTime = 0.f;
 
@@ -59,6 +55,10 @@ namespace RenderAPI
         float currentFrame = 0.f;
 
         GLFWwindow* window;
+
+        glm::vec3 cameraPos{0.f,2.f,50.f};
+
+        std::vector<test::Test*> tests;
     };
 
 } 

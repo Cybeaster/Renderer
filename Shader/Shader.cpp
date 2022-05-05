@@ -24,7 +24,6 @@ void Shader::Init(const std::string source)
     filePath = source;
     ShaderSource shaderSource = ParseShader(source);
     m_RendererID = CreateShader(shaderSource.vertexShader,shaderSource.fragmentShader);
-    Bind();
 }
 
 void Shader::SetUniform1i(const std::string name, int32_t v0)
@@ -124,6 +123,7 @@ ShaderSource Shader::ParseShader(const std::string& filePath)
                 ss[int(currentType)] << line << '\n';
             }
         }
+        stream.close();
         return {ss[0].str() , ss[1].str()};
     }
 

@@ -29,8 +29,10 @@ void main(void)
     
     // build the model matrix and then the model-view matrix
     mat4 newM_matrix = localTrans * localRotX * localRotY * localRotZ;
+
     //mat4 mv_matrix = v_matrix * newM_matrix;
     gl_Position = proj_matrix * mv_matrix * vec4(position,1.0);
+    
     varyingColor = vec4(position,1.0) * 0.5 + vec4(0.5, 0.5, 0.5, 0.5);
 }
 
