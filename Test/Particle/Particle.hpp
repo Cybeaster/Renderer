@@ -16,15 +16,35 @@ namespace test
             glm::vec3 vel,
             uint32_t _stackCount,
             uint32_t _sectorCount,
-            uint32_t _radius);
+            uint32_t _radius,
+            float _charge);
+
         ~Particle();
 
+
+        inline float getCharge()const
+        {return charge;}
 
         inline void increaseSpeed(float Inc)
         {speed += Inc;}
         
-        inline void move(glm::vec3 deltaVec)
-        {position += deltaVec * speed;}
+        inline void increaseRotSpeed(float Inc)
+        {rotationSpeed += Inc;}
+        
+        inline void move()
+        {position += velocity * speed;}
+
+        inline void incVelocity(glm::vec3 inc)
+        {velocity += inc;}
+
+        inline glm::mat4 rotate(float deltaTime)
+        {
+            currentRotationAngle += deltaTime * rotationSpeed;
+            if(currentRotationAngle > 360)
+                currentRotationAngle = 0;
+
+            return glm::rotate(glm::mat4(1.0f),float(currentRotationAngle),glm::vec3(1.0,1.0,1.0));
+        }
 
         inline const glm::vec3& getPosition() const
         {return position;}
@@ -62,7 +82,7 @@ namespace test
         uint32_t sectorCount = 36;
         uint32_t radius = 1.f;
         
-        float speed = 10.f;
+        float speed = 1.f;
 
         std::vector<float> vertices;
         std::vector<float> normals;
@@ -70,6 +90,9 @@ namespace test
         std::vector<int32_t> indices;
         std::vector<int32_t> lineIndices;
 
+        float currentRotationAngle = 0.f;
+        float rotationSpeed = 10.f;
+        float charge = -1.f;
         // interleaved
         std::vector<float> interleavedVertices;
         int interleavedStride;      

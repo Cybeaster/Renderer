@@ -8,12 +8,14 @@ namespace test
         glm::vec3 vel,
         uint32_t _stackCount,
         uint32_t _sectorCount,
-        uint32_t _radius)
+        uint32_t _radius,
+        float _charge)
         : position(pos),
           velocity(vel),
           stackCount(_stackCount),
           sectorCount(_sectorCount),
-          radius(_radius)
+          radius(_radius),
+          charge(_charge)
     {
         createVertecies();
     }

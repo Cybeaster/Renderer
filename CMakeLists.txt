@@ -51,8 +51,8 @@ Test/TestTexture.hpp
 Test/TestSimpleCube.hpp
 Test/Particle/TestParticles.hpp
 Test/Particle/Particle.hpp
+Test/Particle/ElectroField.hpp
 Test/SimpleBox.hpp
-
 )
 
 target_link_libraries(exec ${GLFW_LIB} ${OPENGL_LIBRARY} ${GLEW_LIB} ${SOIL_LIB})

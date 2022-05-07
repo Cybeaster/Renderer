@@ -56,7 +56,7 @@ namespace RenderAPI
 
         GLFWwindow* window;
 
-        glm::vec3 cameraPos{0.f,2.f,50.f};
+        glm::vec3 cameraPos{0.f,2.f,100.f};
 
         std::vector<test::Test*> tests;
     };

@@ -23,7 +23,7 @@ namespace test
 
         GetMVStack().push(GetMVStack().top());
 
-        GetMVStack().top()*= glm::rotate(glm::mat4(1.0f),float(deltaTime),glm::vec3(1.0,0.0,0.0));
+        GetMVStack().top() *= glm::rotate(glm::mat4(1.0f),float(deltaTime),glm::vec3(1.0,0.0,0.0));
 
         getShader().SetUnformMat4f("mv_matrix",GetMVStack().top());
         

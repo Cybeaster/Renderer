@@ -84,11 +84,11 @@ in vec4 varyingColor;
 uniform mat4 v_matrix;
 uniform mat4 proj_matrix;
 uniform float tf; // time factor for animation and placement of cubes
-
+uniform vec4 additionalColor;
 
 void main(void)
 {
-    color = varyingColor;
+    color = varyingColor * additionalColor;
 }
 
 
