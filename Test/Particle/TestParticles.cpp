@@ -39,7 +39,7 @@ namespace test
         
         
     }
-#pragma optimize("",off)
+
     void TestParticles::moveParticle(Particle& particle,float deltaTime, glm::mat4 vMat)
     {
         for(auto& field : electroFields)
@@ -70,7 +70,6 @@ namespace test
         
         getShader().SetUnformMat4f("mv_matrix",translation * rotation);
     }
-#pragma optimize("",on)
 
     void TestParticles::drawParticles(float deltaTime,glm::mat4 vMat)
     {

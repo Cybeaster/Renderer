@@ -5,12 +5,14 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED)
 
 find_package(OpenGL REQUIRED)
+find_package(CUDA)
 
 include_directories(
 	${PROJECT_SOURCE_DIR}/Externals/Include/glfw
 	${PROJECT_SOURCE_DIR}/Externals/Include/glm
 	${PROJECT_SOURCE_DIR}/Externals/Include/glew
 	${PROJECT_SOURCE_DIR}/Externals/Include/SOIL2
+	${PROJECT_SOURCE_DIR}/Externals/Include/cuda
 	${PROJECT_SOURCE_DIR}/Renderer
 	${PROJECT_SOURCE_DIR}/Renderer/Removed
 	${PROJECT_SOURCE_DIR}/Shader
@@ -20,9 +22,11 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Test)
 
 
+
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
 set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)
 set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
+
 
 
 add_executable(exec 
@@ -38,6 +42,7 @@ Test/TestSimpleCube.cpp
 Test/Particle/TestParticles.cpp
 Test/Particle/Particle.cpp
 Test/SimpleBox.cpp
+Test/Particle/Particle.cu
 
 
 
@@ -54,5 +59,9 @@ Test/Particle/Particle.hpp
 Test/Particle/ElectroField.hpp
 Test/SimpleBox.hpp
 )
+
+set_property(TARGET exec 
+             PROPERTY CUDA_SEPARABLE_COMPILATION ON)
+
 
 target_link_libraries(exec ${GLFW_LIB} ${OPENGL_LIBRARY} ${GLEW_LIB} ${SOIL_LIB})
