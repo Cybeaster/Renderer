@@ -1,5 +1,73 @@
 #include "TestParticles.hpp"
 #include "Renderer.hpp"
+#include <cuda_runtime.h>
+#include <cuda_profiler_api.h>
+#include "glm.hpp"
+
+// Helper functions and utilities to work with CUDA
+#include <helper_functions.h>
+#include <helper_cuda.h>
+#include <device_launch_parameters.h>
+
+__global__ void calcParticleVel(float* particlePos, float* inc, float* result,const float incMultiplier, bool UsePositiveDir)
+{
+    int it = threadIdx.x;
+    float incResult;
+
+    if(UsePositiveDir)
+        incResult  = (particlePos[it] - inc[it]) * incMultiplier;
+    else
+        incResult = (inc[it] - particlePos[it]) * incMultiplier;
+
+    result[it] = particlePos[it] + 1.f * (incResult - particlePos[it]);
+
+}
+
+void calcVelocity(glm::vec3& outParticlePos,const glm::vec3& inc,float incMultiplier, bool UsePositiveDir)
+{
+
+    float host_ParticlePos[3] = {outParticlePos.x,outParticlePos.y,outParticlePos.z};
+    float host_Inc[3] = {inc.x,inc.y,inc.z};
+
+    float* device_ParticlePos = nullptr;
+    float* device_Inc = nullptr;
+    float* device_Result = nullptr;
+
+    size_t vecSize = 3 * sizeof(float);
+
+    checkCudaErrors(cudaMalloc(&device_ParticlePos,vecSize));
+    checkCudaErrors(cudaMalloc(&device_Inc,vecSize));
+    checkCudaErrors(cudaMalloc(&device_Result,vecSize));
+
+    checkCudaErrors(cudaMemcpy(device_ParticlePos,&host_ParticlePos,vecSize,cudaMemcpyHostToDevice));
+    checkCudaErrors(cudaMemcpy(device_Inc,&host_Inc,vecSize,cudaMemcpyHostToDevice));
+
+    
+    // Create and start timer
+    printf("Computing result using CUDA Kernel...\n");
+
+
+    calcParticleVel<<<1,3>>>(
+        device_ParticlePos,
+        device_Inc,
+        device_Result,
+        incMultiplier,
+        UsePositiveDir);
+
+    cudaDeviceSynchronize();
+    printf("done\n");
+
+    checkCudaErrors(
+        cudaMemcpy(&host_ParticlePos, device_Result, vecSize, cudaMemcpyDeviceToHost));
+
+
+    for (size_t i = 0; i < 3; i++)
+        printf("%f",host_ParticlePos[i]);
+    
+    checkCudaErrors(cudaFree(device_ParticlePos));
+    checkCudaErrors(cudaFree(device_Inc));
+    checkCudaErrors(cudaFree(device_Result));
+}
 
 
 namespace test
@@ -39,25 +107,25 @@ namespace test
         
         
     }
-
+    //Move all particles 
     void TestParticles::moveParticle(Particle& particle,float deltaTime, glm::mat4 vMat)
     {
-        for(auto& field : electroFields)
+        for(auto& field : electroFields) // Check distance to all fields to detect a collision.
         {
             float pointsDist = glm::distance(particle.getPosition(),field.particleField.getPosition());
-            if(pointsDist <  field.radius)
+            if(pointsDist <  field.radius) 
             {
-                if(particle.getCharge() == field.particleField.getCharge())
+                if(particle.getCharge() == field.particleField.getCharge()) // If the particle and field have the same charge - Move particle in opossite dir.
                 {
-                    glm::vec3 inc = (particle.getPosition() - field.particleField.getPosition()) * field.fieldStrenght / pointsDist;
-                    glm::vec3 res = glm::mix(particle.getPosition(),inc,1.f);
-                    particle.incVelocity(res);
+                    glm::vec3 pos = particle.getPosition();
+                    calcVelocity(pos,field.particleField.getPosition(),field.fieldStrenght / pointsDist,false); //Call to cuda func
+                    particle.incVelocity(pos);
                 }
                 else
                 {
-                    glm::vec3 inc = (field.particleField.getPosition() - particle.getPosition()) * field.fieldStrenght / pointsDist;
-                    glm::vec3 res = glm::mix(particle.getPosition(),inc,1.f);
-                    particle.incVelocity(res);
+                    glm::vec3 pos = particle.getPosition();
+                    calcVelocity(pos,field.particleField.getPosition(),field.fieldStrenght / pointsDist,true); //Call to cuda func
+                    particle.incVelocity(pos);
                 }
             }
         }

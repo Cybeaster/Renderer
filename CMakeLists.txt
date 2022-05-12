@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.21)
-project(OpenGLGraphics)
+project(OpenGLGraphics LANGUAGES CXX CUDA)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CUDA_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED)
+set(CMAKE_CUDA_COMPILER "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/bin/nvcc.exe")
 
 find_package(OpenGL REQUIRED)
-find_package(CUDA)
+find_package(CUDAToolkit REQUIRED)
 
 include_directories(
 	${PROJECT_SOURCE_DIR}/Externals/Include/glfw
@@ -29,6 +31,18 @@ set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
 
 
 
+add_library(mainTarget 
+Test/Particle/TestParticles.cu
+)
+
+target_compile_features(mainTarget PUBLIC cxx_std_11)
+
+set_target_properties(mainTarget
+PROPERTIES  
+	CUDA_SEPARABLE_COMPILATION ON
+	CUDA_RESOLVE_DEVICE_SYMBOLS ON
+)
+
 add_executable(exec 
 main.cpp
 Renderer/Renderer.cpp
@@ -39,11 +53,8 @@ Texture/Texture.cpp
 Test/Test.cpp
 Test/TestTexture.cpp
 Test/TestSimpleCube.cpp
-Test/Particle/TestParticles.cpp
 Test/Particle/Particle.cpp
 Test/SimpleBox.cpp
-Test/Particle/Particle.cu
-
 
 
 Renderer/Renderer.hpp
@@ -54,14 +65,18 @@ Texture/Texture.hpp
 Test/Test.hpp
 Test/TestTexture.hpp
 Test/TestSimpleCube.hpp
-Test/Particle/TestParticles.hpp
 Test/Particle/Particle.hpp
 Test/Particle/ElectroField.hpp
 Test/SimpleBox.hpp
+Test/Particle/TestParticles.hpp
+
 )
 
-set_property(TARGET exec 
-             PROPERTY CUDA_SEPARABLE_COMPILATION ON)
-
-
-target_link_libraries(exec ${GLFW_LIB} ${OPENGL_LIBRARY} ${GLEW_LIB} ${SOIL_LIB})
+target_link_libraries(
+	exec
+	 PRIVATE
+	  ${GLFW_LIB} 
+	  ${OPENGL_LIBRARY}
+	   ${GLEW_LIB} 
+	   ${SOIL_LIB}
+	    mainTarget )

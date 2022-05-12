@@ -62,6 +62,7 @@ namespace test
         {return vertices;}
 
     private:
+    
         void addVertex(float x, float y, float z);
         void addTexCoord(float s, float t);
         void addIndices(unsigned int i1, unsigned int i2, unsigned int i3);
