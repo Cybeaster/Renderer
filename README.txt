@@ -1,0 +1,1 @@
+Что бы перенести вычисления теста TestParticles на CUDA, необходимо добавить дерективу #define USE_CUDA в файле TestParticles.cu.
