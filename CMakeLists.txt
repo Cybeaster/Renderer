@@ -1,10 +1,8 @@
 cmake_minimum_required(VERSION 3.21)
 project(OpenGLGraphics LANGUAGES CXX CUDA)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CUDA_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED)
-set(CMAKE_CUDA_COMPILER "X:/cuda10/dev/bin/nvcc.exe")
 
 find_package(OpenGL REQUIRED)
 find_package(CUDAToolkit REQUIRED)
