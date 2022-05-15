@@ -60,7 +60,9 @@ namespace test
 
         inline std::vector<float> getVertecies()const
         {return vertices;}
-
+        
+        inline void setCharge(float Value)
+        {charge = Value;}
     private:
     
         void addVertex(float x, float y, float z);
@@ -94,6 +96,7 @@ namespace test
         float currentRotationAngle = 0.f;
         float rotationSpeed = 10.f;
         float charge = -1.f;
+
         // interleaved
         std::vector<float> interleavedVertices;
         int interleavedStride;      

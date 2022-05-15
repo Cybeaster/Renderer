@@ -10,7 +10,7 @@ namespace test
 
     private:
 
-        void addField(const glm::vec3& pos,const float& charge,const glm::vec3& chargeVec);
+        void addField(const glm::vec3& pos,const float& strenght,const glm::vec3& chargeVec,const float& charge);
         void addParticle();
         void particleSpawnTick(float DeltaTime);
         void fieldSpawnTick(float DeltaTime);

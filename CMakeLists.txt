@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.21)
 project(OpenGLGraphics LANGUAGES CXX CUDA)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CUDA_STANDARD 14)
+set(CMAKE_CUDA_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED)
-set(CMAKE_CUDA_COMPILER "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/bin/nvcc.exe")
+set(CMAKE_CUDA_COMPILER "X:/cuda10/dev/bin/nvcc.exe")
 
 find_package(OpenGL REQUIRED)
 find_package(CUDAToolkit REQUIRED)
@@ -31,13 +31,13 @@ set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
 
 
 
-add_library(mainTarget 
+add_library(cudaTarget 
 Test/Particle/TestParticles.cu
 )
 
-target_compile_features(mainTarget PUBLIC cxx_std_11)
+target_compile_features(cudaTarget PUBLIC cxx_std_11)
 
-set_target_properties(mainTarget
+set_target_properties(cudaTarget
 PROPERTIES  
 	CUDA_SEPARABLE_COMPILATION ON
 	CUDA_RESOLVE_DEVICE_SYMBOLS ON
@@ -79,4 +79,4 @@ target_link_libraries(
 	  ${OPENGL_LIBRARY}
 	   ${GLEW_LIB} 
 	   ${SOIL_LIB}
-	    mainTarget )
+	   cudaTarget )

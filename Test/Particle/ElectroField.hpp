@@ -9,6 +9,9 @@ struct ElectroField
     test::Particle particleField;
 
     ElectroField() = default;
-    ElectroField(const float& rad ,const float& charge,const test::Particle& particle) : 
-        radius(rad),fieldStrenght(charge), particleField(particle){} 
+    ElectroField(const float& rad ,const float& strenght,const test::Particle& particle,const float& charge) :
+    radius(rad), fieldStrenght(strenght), particleField(particle)
+        {    
+            particleField.setCharge(charge);
+        } 
 };
