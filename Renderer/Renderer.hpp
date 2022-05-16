@@ -11,6 +11,8 @@
 
 void GLClearError();
 bool GLLogCall(const char* func, const char* file, int line);
+
+
 class GLFWwindow;
 namespace RenderAPI
 {
@@ -20,7 +22,15 @@ namespace RenderAPI
     public:
 
         void renderTick();
+
+        /**
+         * @brief Инициализирует контекст Opengl и создает окно.
+         * 
+         * @return GLFWwindow* 
+         */
         GLFWwindow* Init();
+
+        
         void addTest(test::Test* testPtr)
         {
             if(testPtr != nullptr)
@@ -50,7 +60,6 @@ namespace RenderAPI
         GLint width{0};
 
         float deltaTime = 0.f;
-
         float lastFrame = 0.f;
         float currentFrame = 0.f;
 
