@@ -1,12 +1,6 @@
 #pragma once
-#define GLEW_STATIC
-
-#include "GL/glew.h"
-#include <VertexArray.hpp>
-#include <VertexBuffer.hpp>
-#include <Shader.hpp>
-#include <IndexBuffer.hpp>
-
+#include <glm.hpp>
+#include <Test.hpp>
 
 #define ASSERT(x) if ((!x)) __debugbreak();
 
@@ -18,21 +12,63 @@
 void GLClearError();
 bool GLLogCall(const char* func, const char* file, int line);
 
-class Renderer
+
+class GLFWwindow;
+namespace RenderAPI
 {
-    
-public:
-    Renderer();
-    ~Renderer();
+    class Renderer 
+    {
 
-    void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& sh);
-    void Clear() const ;
+    public:
 
-private:
+        void renderTick();
 
+        /**
+         * @brief Инициализирует контекст Opengl и создает окно.
+         * 
+         * @return GLFWwindow* 
+         */
+        GLFWwindow* Init();
 
-};
+        
+        void addTest(test::Test* testPtr)
+        {
+            if(testPtr != nullptr)
+            {
+                testPtr->Init(pMat);
+                tests.push_back(testPtr);
+            }
+        
+        }
 
+        Renderer() = default;
+        ~Renderer();
 
+        static float aspect;
+        static glm::mat4 pMat;
+    private:
 
+        void RendererStart(float currentTime);
+        void RendererEnd();
+        void CalcDeltaTime(float currentTime);
+        void CleanScene();
+        void CalcPerspective(GLFWwindow* window);
+
+        glm::mat4 vMat; // view matrix
+ 
+        GLint height{0};
+        GLint width{0};
+
+        float deltaTime = 0.f;
+        float lastFrame = 0.f;
+        float currentFrame = 0.f;
+
+        GLFWwindow* window;
+
+        glm::vec3 cameraPos{0.f,2.f,100.f};
+
+        std::vector<test::Test*> tests;
+    };
+
+} 
 

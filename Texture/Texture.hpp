@@ -1,6 +1,6 @@
 #pragma once
 #include <Renderer.hpp>
-
+#include <string>
  class Texture
  {
 
@@ -12,14 +12,8 @@ public:
     void Bind(uint32_t slot = 0)const;
     void Unbind();
 
-    inline int GetWidth()
-    {return m_Width;}
+    
 private:
 
-    uint32_t m_RendererID;
-    std::string m_FilePath;
-    uint8_t* m_LocalBuffer;
-    int32_t m_Width, m_Height, m_BPP;
-
-
+    uint32_t textureID;
 };

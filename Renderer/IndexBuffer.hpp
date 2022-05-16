@@ -13,9 +13,9 @@ public:
     void Unbind() const;
 
     inline uint32_t GetCount() const
-    {return m_Count;}
+    {return count;}
 
 private:
-    uint32_t m_RendererID;
-    size_t m_Count;
+    uint32_t bufferID;
+    size_t count;
 };
