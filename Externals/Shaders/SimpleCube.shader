@@ -88,7 +88,7 @@ uniform vec4 additionalColor;
 
 void main(void)
 {
-    color = varyingColor * additionalColor;
+    color = additionalColor;
 }
 
 

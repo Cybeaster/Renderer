@@ -277,4 +277,19 @@ namespace test
             interleavedVertices.push_back(texCoords[j+1]);
         }
     }
+
+    void Particle::updateColor()
+    {
+        float red = velocity.x;
+        float blue = velocity.y;
+        float green = velocity.z;
+        
+        red = glm::clamp(red,0.5f,1.f);
+        blue = glm::clamp(blue,0.5f,1.f);
+        green = glm::clamp(green,0.5f,1.f);
+        
+
+        color = {red,blue,green};
+    }
+
 } // namespace test

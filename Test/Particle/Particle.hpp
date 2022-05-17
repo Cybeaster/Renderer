@@ -20,8 +20,12 @@ namespace test
             float _charge);
 
         ~Particle();
+        inline void setColor(const glm::vec3 _color)
+        {color = _color;}
 
-
+        inline const glm::vec3& getColor()const
+        {return color;}
+        
         inline float getCharge()const
         {return charge;}
 
@@ -63,6 +67,8 @@ namespace test
         
         inline void setCharge(float Value)
         {charge = Value;}
+
+        void updateColor();
     private:
     
         void addVertex(float x, float y, float z);
@@ -77,7 +83,7 @@ namespace test
         void buildInterleavedVertices();
 
 
-
+        glm::vec3 color{1.f,1.f,1.f};
         glm::vec3 position{0.f,0.f,0.f};
         glm::vec3 velocity;
         

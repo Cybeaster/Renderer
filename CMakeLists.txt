@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
+
 project(OpenGLGraphics LANGUAGES CXX CUDA)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CUDA_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED)
@@ -33,7 +35,6 @@ add_library(cudaTarget
 Test/Particle/TestParticles.cu
 )
 
-target_compile_features(cudaTarget PUBLIC cxx_std_11)
 
 set_target_properties(cudaTarget
 PROPERTIES  

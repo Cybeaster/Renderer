@@ -9,7 +9,7 @@
 #include <helper_cuda.h>
 #include <device_launch_parameters.h>
 
-
+#define USE_CUDA
 
 
 #pragma region CUDA
@@ -31,8 +31,15 @@ __global__ void calcParticleVel(float* particlePos, float* inc, float* result,co
 }
 
 
-
-
+/**
+ * @brief Считает вектор скорости частицы.
+ * 
+ * @param ParticlePos Позиция частицы.
+ * @param inc Инкремент.
+ * @param incMultiplier Множитель инкремента.
+ * @param UsePositiveDir Определяет вектор напарвления (на поле или от него).
+ * @return glm::vec3 Результат - текущая скорость.
+ */
 glm::vec3 calcVelocity(const glm::vec3& ParticlePos,const glm::vec3& inc,float incMultiplier, bool UsePositiveDir)
 {
 
@@ -112,6 +119,13 @@ __global__ void calcCudaMVMatrix(float* rotation, float* translation, float* res
     result[ROW * 4 + COL] = tmpSum;
 }
 
+/**
+ * @brief Перемножает матрицы поворота и положения.
+ * 
+ * @param rotation Поворот.
+ * @param translation Положение.
+ * @return glm::mat4 Результат умножения.
+ */
 glm::mat4 calcMVMatrix(const glm::mat4& rotation,const glm::mat4& translation)
 {
     float host_rotation[16] = 
@@ -192,6 +206,13 @@ __global__ void calcCudaTranslation(float* vMat, float* position, float* result)
 
 }
 
+/**
+ * @brief Считает смещение матрицы базируясь на vMat.
+ * 
+ * @param vMat Матрица камеры.
+ * @param position Позиция на которую необходимо сместить.
+ * @return glm::mat4 Результат смещения.
+ */
 glm::mat4 calcTranslation(const glm::mat4& vMat, const glm::vec3 position)
 {
     float host_vMat[16] = 
@@ -252,14 +273,14 @@ namespace test
     TestParticles::TestParticles(std::string shaderPath) : Test(shaderPath)
     {
         AddVertexArray();
-        addParticle();
+        addParticle({-80,20,0},1,1,particles45StartVel);
         AddBuffer(particles[0].getVertecies().begin()._Ptr,sizeof(float) * particles[0].getVertecies().size());
 
-
-        addField({75.f,-10.f,-1.f},0.5,{1.f,0.f,0.f},1);
-        addField({75.f,20.f,-1.f},0.5,{1.f,0.f,0.f},1);
-        addField({25.f,-10.f,-1.f},0.5,{1.f,0.f,0.f},-1);
-        addField({25.f,20.f,-1.f},0.5,{1.f,0.f,0.f},1);
+        
+        addField({80.f,-10.f,-1.f},defaultFieldStrenght,{1.f,0.f,0.f},1);
+        addField({55.f,20.f,-1.f},defaultFieldStrenght,{1.f,0.f,0.f},1);
+        addField({23.f,0.f,-1.f},defaultFieldStrenght,{1.f,0.f,0.f},1);
+        addField({-25.f,-20.f,-1.f},defaultFieldStrenght,{1.f,0.f,0.f},1);
     }
 
    
@@ -285,7 +306,6 @@ namespace test
         
         
     }
-    //Move all particles 
     void TestParticles::moveParticle(Particle& particle,float deltaTime, glm::mat4 vMat)
     {
         for(auto& field : electroFields) // Check distance to all fields to detect a collision.
@@ -346,7 +366,10 @@ namespace test
         for(auto& particle : particles)
         {
             moveParticle(particle,deltaTime,vMat);
-            getShader().SetUniform4f("additionalColor",1,1,1,1);
+            particle.updateColor();
+            glm::vec3 color = particle.getColor();
+
+            getShader().SetUniform4f("additionalColor",color.x,color.y,color.y,1);
 
             EnableVertexArray(0);
             GLCall(glEnable(GL_DEPTH_TEST));
@@ -361,7 +384,9 @@ namespace test
         if(particleSpawnTimer <= 0)
         {
             particleSpawnTimer = particleSpawnTime;
-            addParticle();
+            float charge = rand() % 100 > 100 ? -1 : 1;
+            const glm::vec3 velocity = rand() % 100 > 50 ? particles45StartVel : particlesNegative45StartVel;
+            addParticle({-80,20,0},rand() % 3,charge,velocity);
         }
         else
             particleSpawnTimer -= DeltaTime;
@@ -385,11 +410,10 @@ namespace test
             fieldSpawnTimer -= DeltaTime;
     }
 
-    void TestParticles::addParticle()
+    void TestParticles::addParticle(const glm::vec3& startPos,const float& radius,const float& charge,const glm::vec3& startVelocity)
     {
-        glm::vec3 startPos(-80,20,0);
-        glm::vec3 randPos{float( rand() % 5),float( rand() % 5), 0.f};
-        particles.push_back(Particle(startPos + randPos,particlesStartVel,36,18,1,1));
+        glm::vec3 randPos{float( rand() % 15),float( rand() % 15), 0.f};
+        particles.push_back(Particle(startPos + randPos,startVelocity,36,18,radius,charge));
     }
 
     void TestParticles::drawFields(float deltaTime,glm::mat4 vMat)

@@ -4,7 +4,7 @@
 
 struct ElectroField
 {
-    float radius = 100.f;
+    float radius = 500.f;
     float fieldStrenght;
     test::Particle particleField;
 

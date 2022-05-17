@@ -23,15 +23,11 @@ void Application::Start()
     GLFWwindow* window = renderer.Init();
 
     //Создаем тест,передавая путь к шейдеру.
-    test::TestSimpleCube cube(window,"X:/ProgrammingStuff/Projects/OpenGL/Externals/Shaders/SimpleCube.shader");
     test::TestParticles particles("X:/ProgrammingStuff/Projects/OpenGL/Externals/Shaders/SimpleCube.shader");
-    test::TestSimpleBox box("X:/ProgrammingStuff/Projects/OpenGL/Externals/Shaders/simpleBox.shader");
 
     //Каждый добавленный тест будет отрисовывать свою сцену независимо от другого
     //Контекст у них будет один, тот, что создал RenderAPI::Renderer
-    renderer.addTest(&cube);
     renderer.addTest(&particles);
-    renderer.addTest(&box);
     
     //Кадровый тик
     while (!glfwWindowShouldClose(window))

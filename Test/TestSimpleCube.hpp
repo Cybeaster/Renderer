@@ -5,6 +5,11 @@
 #include <vector>
 namespace test
 {
+
+    /**
+     * @brief Спавнит 2 фигуры с определенными параметрами и сдвигом.
+     * 
+     */
     class TestSimpleCube : public Test
     {
     public:
