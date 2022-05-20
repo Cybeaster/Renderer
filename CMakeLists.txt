@@ -6,8 +6,23 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CUDA_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED)
 
+set(USE_CUDA OFF)
+
+add_library(cudaTarget 
+		Test/Particle/TestParticles.cu)
+
+if(OFF)
+	find_package(CUDAToolkit REQUIRED)
+	
+	set_target_properties(cudaTarget
+	PROPERTIES  
+		CUDA_SEPARABLE_COMPILATION ON
+		CUDA_RESOLVE_DEVICE_SYMBOLS ON)
+	
+endif(OFF)
+
 find_package(OpenGL REQUIRED)
-find_package(CUDAToolkit REQUIRED)
+
 
 include_directories(
 	${PROJECT_SOURCE_DIR}/Externals/Include/glfw
@@ -30,17 +45,6 @@ set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)
 set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
 
 
-
-add_library(cudaTarget 
-Test/Particle/TestParticles.cu
-)
-
-
-set_target_properties(cudaTarget
-PROPERTIES  
-	CUDA_SEPARABLE_COMPILATION ON
-	CUDA_RESOLVE_DEVICE_SYMBOLS ON
-)
 
 add_executable(exec 
 main.cpp
@@ -71,11 +75,14 @@ Test/Particle/TestParticles.hpp
 
 )
 
-target_link_libraries(
-	exec
-	 PRIVATE
-	  ${GLFW_LIB} 
-	  ${OPENGL_LIBRARY}
-	   ${GLEW_LIB} 
-	   ${SOIL_LIB}
-	   cudaTarget )
+
+	target_link_libraries(
+		exec
+		PRIVATE
+		${GLFW_LIB} 
+		${OPENGL_LIBRARY}
+		${GLEW_LIB} 
+		${SOIL_LIB}
+		cudaTarget )
+
+

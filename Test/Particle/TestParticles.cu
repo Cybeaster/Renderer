@@ -1,15 +1,21 @@
+
+
+#define USE_CUDA
+
 #include "TestParticles.hpp"
 #include "Renderer.hpp"
-#include <cuda_runtime.h>
-#include <cuda_profiler_api.h>
 #include "glm.hpp"
+
+#ifdef USE_CUDA
 
 // Helper functions and utilities to work with CUDA
 #include <helper_functions.h>
 #include <helper_cuda.h>
 #include <device_launch_parameters.h>
+#include <cuda_runtime.h>
+#include <cuda_profiler_api.h>
 
-#define USE_CUDA
+
 
 
 #pragma region CUDA
@@ -267,6 +273,8 @@ glm::mat4 calcTranslation(const glm::mat4& vMat, const glm::vec3 position)
 }
 
 #pragma endregion CUDA
+#endif
+
 namespace test
 {
     
