@@ -8,8 +8,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED)
 
 set(USE_CUDA OFF)
 
-add_library(cudaTarget 
-		Test/Particle/TestParticles.cu)
+add_library(
+	    cudaTarget 
+		Test/Particle/TestParticles.cu
+		Test/Tube/TestTube.cu)
 
 if(OFF)
 	find_package(CUDAToolkit REQUIRED)
@@ -36,7 +38,11 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Texture
 	${PROJECT_SOURCE_DIR}/Externals/Vendor
 	${PROJECT_SOURCE_DIR}/Test/Particle
-	${PROJECT_SOURCE_DIR}/Test)
+	${PROJECT_SOURCE_DIR}/Test
+	${PROJECT_SOURCE_DIR}/Test/Tube
+	${PROJECT_SOURCE_DIR}/Test/Tube/Plane
+
+	)
 
 
 
@@ -58,6 +64,7 @@ Test/TestTexture.cpp
 Test/TestSimpleCube.cpp
 Test/Particle/Particle.cpp
 Test/SimpleBox.cpp
+Test/Tube/Tube.cpp
 
 
 Renderer/Renderer.hpp
@@ -72,7 +79,24 @@ Test/Particle/Particle.hpp
 Test/Particle/ElectroField.hpp
 Test/SimpleBox.hpp
 Test/Particle/TestParticles.hpp
+Test/Particle/StaticParticle.hpp
+Test/Tube/TestTube.hpp
+Test/Tube/Tube.hpp
 
+
+
+Test/Tube/Plane/Line.cpp
+Test/Tube/Plane/Line.h
+Test/Tube/Plane/mainTest.cpp
+Test/Tube/Plane/Pipe.cpp
+Test/Tube/Plane/Pipe.h
+Test/Tube/Plane/Plane.cpp
+Test/Tube/Plane/Plane.h
+Test/Tube/Plane/Timer.cpp
+Test/Tube/Plane/Timer.h
+Test/Tube/Plane/Vectors.h
+Test/Tube/Plane/Matrices.h
+Test/Tube/Plane/Matrices.cpp
 )
 
 
@@ -83,6 +107,6 @@ Test/Particle/TestParticles.hpp
 		${OPENGL_LIBRARY}
 		${GLEW_LIB} 
 		${SOIL_LIB}
-		cudaTarget )
+		cudaTarget)
 
 

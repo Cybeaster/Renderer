@@ -1,6 +1,5 @@
 
 
-#define USE_CUDA
 
 #include "TestParticles.hpp"
 #include "Renderer.hpp"
@@ -311,9 +310,8 @@ namespace test
         
         drawParticles(deltaTime,vMat);
         drawFields(deltaTime,vMat);
-        
-        
     }
+    
     void TestParticles::moveParticle(Particle& particle,float deltaTime, glm::mat4 vMat)
     {
         for(auto& field : electroFields) // Check distance to all fields to detect a collision.

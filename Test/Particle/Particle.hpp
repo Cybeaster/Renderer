@@ -36,18 +36,20 @@ namespace test
         {rotationSpeed += Inc;}
         
         inline void move()
-        {position += velocity * speed;}
+        {
+            position += velocity * speed;
+        }
 
         inline void incVelocity(glm::vec3 inc)
         {velocity += inc;}
 
         inline glm::mat4 rotate(float deltaTime)
         {
+           
             currentRotationAngle += deltaTime * rotationSpeed;
             if(currentRotationAngle > 360)
                 currentRotationAngle = 0;
-
-            return glm::rotate(glm::mat4(1.0f),float(currentRotationAngle),glm::vec3(1.0,1.0,1.0));
+            return glm::rotate(glm::mat4(1.0f),float(currentRotationAngle),glm::vec3(1.0,1.0,1.0)); 
         }
 
         inline const glm::vec3& getPosition() const

@@ -8,7 +8,7 @@
 #include <Particle/TestParticles.hpp>
 #include "TestTexture.hpp"
 #include "SimpleBox.hpp"
-
+#include "TestTube.hpp"
 
 void Application::Start()
 {
@@ -23,11 +23,11 @@ void Application::Start()
     GLFWwindow* window = renderer.Init();
 
     //Создаем тест,передавая путь к шейдеру.
-    test::TestParticles particles("X:/ProgrammingStuff/Projects/OpenGL/Externals/Shaders/SimpleCube.shader");
+    test::TestTube tube("X:/ProgrammingStuff/Projects/OpenGL/Externals/Shaders/SimpleCube.shader");
 
     //Каждый добавленный тест будет отрисовывать свою сцену независимо от другого
     //Контекст у них будет один, тот, что создал RenderAPI::Renderer
-    renderer.addTest(&particles);
+    renderer.addTest(&tube);
     
     //Кадровый тик
     while (!glfwWindowShouldClose(window))
