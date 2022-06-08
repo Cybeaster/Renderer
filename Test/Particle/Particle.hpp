@@ -36,16 +36,26 @@ namespace test
         {rotationSpeed += Inc;}
         
         inline void move()
-        {
-            position += velocity * speed;
-        }
+        {position += velocity * speed;}
+
+        inline void movePosition(glm::vec3 vel)
+        {position += vel;}
 
         inline void incVelocity(glm::vec3 inc)
         {velocity += inc;}
 
+
+        inline void setVelocity(glm::vec3 inc)
+        {velocity = inc;}
+
+        inline glm::vec3 getVeclocity()const
+        {return velocity;}
+
+        inline float getSpeed()const
+        {return speed;}
+
         inline glm::mat4 rotate(float deltaTime)
         {
-           
             currentRotationAngle += deltaTime * rotationSpeed;
             if(currentRotationAngle > 360)
                 currentRotationAngle = 0;
@@ -70,7 +80,21 @@ namespace test
         inline void setCharge(float Value)
         {charge = Value;}
 
+        inline void setWeight(float Value)
+        {weight = Value;}
+
+        inline float getWeight() const
+        {return weight;}
+
+        inline bool getDidParticleMoveThroughField()const
+        {return DidParticleMoveThroughField;}
+
+        inline void setDidParticleMoveThroughField(bool Value)
+        {DidParticleMoveThroughField = Value;}
+
         void updateColor();
+        
+        bool isParticleAffectedByField = false;
     private:
     
         void addVertex(float x, float y, float z);
@@ -93,6 +117,8 @@ namespace test
         uint32_t sectorCount = 36;
         uint32_t radius = 1.f;
         
+
+        bool DidParticleMoveThroughField = true;
         float speed = 1.f;
 
         std::vector<float> vertices;
@@ -101,6 +127,7 @@ namespace test
         std::vector<int32_t> indices;
         std::vector<int32_t> lineIndices;
 
+        float weight = 1.f;
         float currentRotationAngle = 0.f;
         float rotationSpeed = 10.f;
         float charge = -1.f;

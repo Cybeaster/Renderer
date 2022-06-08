@@ -15,10 +15,10 @@ namespace test
     public:
 
         TestSimpleCube() = default;
-        TestSimpleCube(GLFWwindow* window, std::string shaderPath);
+        TestSimpleCube( std::string shaderPath);
         ~TestSimpleCube();
 
-        void OnUpdate(GLFWwindow* window,
+        void OnUpdate(
         float deltaTime,
         float aspect,
         const glm::vec3& cameraPos,

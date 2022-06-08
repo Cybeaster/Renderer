@@ -10,29 +10,18 @@
 #include "SimpleBox.hpp"
 #include "TestTube.hpp"
 
-void Application::Start()
+
+Application* Application::application;
+
+
+void Application::Start(int argc, char **argv)
 {
-    
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
 
-    
-    //Инициализируем класс, отвечающий за рендер.
-    RenderAPI::Renderer renderer;
-    GLFWwindow* window = renderer.Init();
+    RenderAPI::Renderer* renderer = RenderAPI::Renderer::getRenderer();
+    renderer->GLFWInit();
 
-    //Создаем тест,передавая путь к шейдеру.
-    test::TestTube tube("X:/ProgrammingStuff/Projects/OpenGL/Externals/Shaders/SimpleCube.shader");
+    test::TestTube tube("E:/ProgrammingStuff/Projects/OpenGL/Externals/Shaders/SimpleCube.shader");
+    renderer->addTest(&tube);
 
-    //Каждый добавленный тест будет отрисовывать свою сцену независимо от другого
-    //Контекст у них будет один, тот, что создал RenderAPI::Renderer
-    renderer.addTest(&tube);
-    
-    //Кадровый тик
-    while (!glfwWindowShouldClose(window))
-        renderer.renderTick();
-    
-
-    exit(EXIT_SUCCESS);
+    renderer->GLFWRenderTickStart();
 }

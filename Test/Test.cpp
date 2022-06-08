@@ -14,6 +14,7 @@ namespace test
     {
 
     }
+    
     void Test::AddVertexArray()
     {
         vertexArray.push_back({});
@@ -23,6 +24,10 @@ namespace test
         GLCall(glBindVertexArray(*vaID));
     }
 
+    void Test::AddBuffer(void* buffer,int32_t size)
+    {
+        buffers.push_back(std::make_shared<VertexBuffer>(buffer,size));
+    }
 
     void Test::AddBuffers(std::vector<std::vector<float>>& vertecis,size_t numOfBuffers)
     {
@@ -45,22 +50,17 @@ namespace test
     }
 
     void Test::OnUpdate(
-        GLFWwindow* window,
          const float deltaTime,
          const float aspect,
          const glm::vec3& cameraPos,
          glm::mat4& pMat,
          glm::mat4& vMat)
     {
-       shader.Bind();
-        
+        shader.Bind();
         pMat = glm::perspective(1.0472f,aspect,0.01f,1000.f);
         shader.SetUnformMat4f("proj_matrix",pMat);
         vMat = glm::translate(glm::mat4(1.0f),cameraPos * -1.f);
 
     }
-    void Test::AddBuffer(void* buffer,int32_t size)
-    {
-        buffers.push_back(std::make_shared<VertexBuffer>(buffer,size));
-    }
+   
 }

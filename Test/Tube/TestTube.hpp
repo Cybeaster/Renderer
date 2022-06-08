@@ -3,15 +3,17 @@
 #include "Test.hpp"
 #include "Particle.hpp"
 #include "ElectroField.hpp"
-#include "Tube.hpp"
+#include <vector>
 namespace test
 {
+
     
     class TestTube : public Test
     {
 
     private:
-        void drawTube();
+        void OnTestEnd() override;
+        void drawTube(glm::mat4 vMat);
         void glDrawParticle(const Particle& particle);
         void drawParticlePath(const glm::vec3& pos);
         void addParticle(const glm::vec3& startPos,const float& radius,const float& charge,const glm::vec3& startVelocity);
@@ -68,18 +70,32 @@ namespace test
          * @brief Начальная скорость всех частиц по x,y и z соответственно.
          * 
          */
-        const glm::vec3 particles45StartVel{0.95f,0.1f,0};
-        const glm::vec3 particlesNegative45StartVel{0.95f,-0.5f,0};
-
+        const glm::vec3 particleDefaultVelocity{1.f,0,0};
         const float defaultFieldStrenght = 1.1f;
 
-        Tube magnitTube;
+        
+        //настройка трубы
+        //радиус (положение нижней части)
+        float downSideTubeRadius = 1;
+        //радиус (положение верхней части)
+        float upperSideTubeRadius = 5;
+        float middleTubeRad = (downSideTubeRadius + upperSideTubeRadius) / 2;
+        float magintPointSize = upperSideTubeRadius - downSideTubeRadius;
+
+        void checkDidParticleHittedTube(Particle& outParticle);
+        void setTubePoints();
     public:
 
+        std::vector<ElectroField> electroFields;
+        std::vector<float> tubeVert;
+        std::vector<glm::vec3> tubePoints;
+        std::vector<float> magnitPoints;
+        
         TestTube(std::string shaderPath);
-        ~TestTube();
+        void Init(std::string shaderPath);
+        TestTube() = default;
 
-        void OnUpdate(GLFWwindow* window,
+        void OnUpdate(
         float deltaTime,
         float aspect,
         const glm::vec3& cameraPos,

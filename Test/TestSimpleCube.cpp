@@ -6,14 +6,14 @@
 namespace test
 {
     
-    void TestSimpleCube::OnUpdate(GLFWwindow* window,
+    void TestSimpleCube::OnUpdate(
     float deltaTime,
     float aspect,
     const glm::vec3& cameraPos,
     glm::mat4& pMat,
     glm::mat4& vMat)
     {
-        Test::OnUpdate(window,deltaTime,aspect,cameraPos,pMat,vMat);
+        Test::OnUpdate(deltaTime,aspect,cameraPos,pMat,vMat);
         //pyr
         
         GetMVStack().push(vMat);
@@ -69,7 +69,7 @@ namespace test
     }
 
  
-    TestSimpleCube::TestSimpleCube(GLFWwindow* window, std::string shaderPath) : Test(shaderPath)
+    TestSimpleCube::TestSimpleCube(std::string shaderPath) : Test(shaderPath)
     {
         AddVertexArray();
         AddBuffer(vertexPositions,sizeof(vertexPositions));

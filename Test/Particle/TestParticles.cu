@@ -31,7 +31,6 @@ __global__ void calcParticleVel(float* particlePos, float* inc, float* result,co
             incResult = (inc[it] - particlePos[it]) * incMultiplier;
         result[it] = particlePos[it] + 1.f * (incResult - particlePos[it]);
            __syncthreads();
-
     }
 }
 
@@ -208,7 +207,6 @@ __global__ void calcCudaTranslation(float* vMat, float* position, float* result)
                 result[xIt] += vMat[i * 4 + xIt] * position[i];
         }
     }
-
 }
 
 /**
@@ -296,17 +294,16 @@ namespace test
 
     }
 
-    void TestParticles::OnUpdate(GLFWwindow* window,
+    void TestParticles::OnUpdate(
         float deltaTime,
         float aspect,
         const glm::vec3& cameraPos,
         glm::mat4& pMat,
         glm::mat4& vMat)
     {
-        Test::OnUpdate(window,deltaTime,aspect,cameraPos,pMat,vMat);
+        Test::OnUpdate(deltaTime,aspect,cameraPos,pMat,vMat);
 
         particleSpawnTick(deltaTime);
-        //fieldSpawnTick(deltaTime);
         
         drawParticles(deltaTime,vMat);
         drawFields(deltaTime,vMat);
@@ -401,7 +398,7 @@ namespace test
     void TestParticles::addField(const glm::vec3& pos,const float& strenght,const glm::vec3& chargeVec, const float& charge)
     {
         Particle particle(pos,{},76,32,1,-1);
-        ElectroField field(35,strenght,particle,charge);
+        GravityField field(35,strenght,particle,charge);
         electroFields.push_back(field);
     }
 

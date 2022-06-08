@@ -44,7 +44,7 @@ private:
    uint32_t GetUnformLocation(const std::string& name);
 
    std::string filePath;
-   uint32_t m_RendererID;
+   uint32_t m_RendererID = 277;
    
    std::unordered_map<std::string,int32_t> m_LocationCache;
 

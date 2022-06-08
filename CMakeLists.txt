@@ -5,7 +5,6 @@ project(OpenGLGraphics LANGUAGES CXX CUDA)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CUDA_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED)
-
 set(USE_CUDA OFF)
 
 add_library(
@@ -25,7 +24,6 @@ endif(OFF)
 
 find_package(OpenGL REQUIRED)
 
-
 include_directories(
 	${PROJECT_SOURCE_DIR}/Externals/Include/glfw
 	${PROJECT_SOURCE_DIR}/Externals/Include/glm
@@ -41,7 +39,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Test
 	${PROJECT_SOURCE_DIR}/Test/Tube
 	${PROJECT_SOURCE_DIR}/Test/Tube/Plane
-
+	${PROJECT_SOURCE_DIR}/Externals/freeglut/include
 	)
 
 
@@ -49,8 +47,6 @@ include_directories(
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
 set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)
 set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
-
-
 
 add_executable(exec 
 main.cpp
@@ -64,8 +60,6 @@ Test/TestTexture.cpp
 Test/TestSimpleCube.cpp
 Test/Particle/Particle.cpp
 Test/SimpleBox.cpp
-Test/Tube/Tube.cpp
-
 
 Renderer/Renderer.hpp
 Renderer/VertexBuffer.hpp
@@ -81,22 +75,9 @@ Test/SimpleBox.hpp
 Test/Particle/TestParticles.hpp
 Test/Particle/StaticParticle.hpp
 Test/Tube/TestTube.hpp
-Test/Tube/Tube.hpp
 
 
 
-Test/Tube/Plane/Line.cpp
-Test/Tube/Plane/Line.h
-Test/Tube/Plane/mainTest.cpp
-Test/Tube/Plane/Pipe.cpp
-Test/Tube/Plane/Pipe.h
-Test/Tube/Plane/Plane.cpp
-Test/Tube/Plane/Plane.h
-Test/Tube/Plane/Timer.cpp
-Test/Tube/Plane/Timer.h
-Test/Tube/Plane/Vectors.h
-Test/Tube/Plane/Matrices.h
-Test/Tube/Plane/Matrices.cpp
 )
 
 
@@ -107,6 +88,7 @@ Test/Tube/Plane/Matrices.cpp
 		${OPENGL_LIBRARY}
 		${GLEW_LIB} 
 		${SOIL_LIB}
-		cudaTarget)
+		cudaTarget
+		)
 
 

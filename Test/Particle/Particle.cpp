@@ -20,8 +20,6 @@ namespace test
         createVertecies();
     }
 
-
-
     Particle::~Particle()
     {
     }

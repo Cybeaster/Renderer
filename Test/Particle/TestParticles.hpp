@@ -68,7 +68,7 @@ namespace test
          * @brief Заспавненные поля.
          * 
          */
-        std::vector<ElectroField> electroFields;
+        std::vector<GravityField> electroFields;
 
         /**
          * @brief Таймер для отсчета спавна частиц.
@@ -106,7 +106,7 @@ namespace test
         TestParticles(std::string shaderPath);
         ~TestParticles();
 
-        void OnUpdate(GLFWwindow* window,
+        void OnUpdate(
         float deltaTime,
         float aspect,
         const glm::vec3& cameraPos,

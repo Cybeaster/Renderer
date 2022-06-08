@@ -3,6 +3,7 @@
 #include "glfw3.h"
 #include "Shader.hpp"
 #include <vector>
+
 #include "VertexBuffer.hpp"
 #include <stack>
 #include <memory>
@@ -28,13 +29,13 @@ namespace test
         void Init(const glm::mat4& pMatRef)
         {pMat = pMatRef;}
 
-        virtual void OnUpdate(GLFWwindow* window,
+        virtual void OnUpdate(
          const float deltaTime,
          const float aspect,
          const glm::vec3& cameraPos,
          glm::mat4& pMat,
          glm::mat4& vMat);
-
+        virtual void OnTestEnd(){}
         void AddBuffers(std::vector<std::vector<float>>& vertecis,size_t numOfBuffers);
         void AddBuffer(void* buffer,int32_t size);
 
