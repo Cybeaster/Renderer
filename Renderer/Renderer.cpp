@@ -33,8 +33,6 @@ namespace RenderAPI
 
 
 
-
-
     void WindowReshapeCallback(GLFWwindow* window,int newHeight,int newWidth)
     {
         Renderer::aspect = (float)newWidth / (float)newHeight;
@@ -116,7 +114,6 @@ namespace RenderAPI
     }
 #pragma endregion GLFW
 
-    
 
     void Renderer::CleanScene()
     {

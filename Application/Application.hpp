@@ -28,8 +28,8 @@ class Application
       }
 
       /**
-       * @brief Вход в программу.
-       * @details Инициализирует класс Renderer, отвечающий за создание окна и контекста для OpenGL.
+       * @brief Programm start.
+       * @details Initializes Renderer class.
        * 
        */
       void Start(int argc, char **argv);

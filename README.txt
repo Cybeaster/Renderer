@@ -1,1 +1,2 @@
-Что бы перенести вычисления теста TestParticles на CUDA, необходимо добавить дерективу #define USE_CUDA в файле TestParticles.cu.
+The application is used to draw primitive tests, e.g applications with basic API provided by RendererAPI::Renderer.
+To use Tests just create them in Application::Start method with providing a specific shader.

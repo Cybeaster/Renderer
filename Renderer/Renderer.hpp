@@ -18,6 +18,10 @@ class GLFWwindow;
 class Application;
 namespace RenderAPI
 {
+    /**
+     * @brief Singleton class that creates the context, calculates perspective, frames etc.
+     * 
+     */
     class Renderer 
     {
     public:
@@ -34,14 +38,13 @@ namespace RenderAPI
         }
 
         /**
-         * @brief Инициализирует контекст glfw Opengl и создает окно.
+         * @brief Initalizes glfw Opengl context and creates a window.
          * 
          * @return GLFWwindow* 
          */
         GLFWwindow* GLFWInit();
         void GLFWRenderTickStart();
         
-
 
         void addTest(test::Test* testPtr);
 
@@ -54,15 +57,12 @@ namespace RenderAPI
 
          ~Renderer();
     private:
-       
+    
         void GLFWRendererStart(float currentTime);
         void GLFWRendererEnd();
-
         void CalcDeltaTime(float currentTime);
         void CleanScene();
-
         void GLFWCalcPerspective(GLFWwindow* window);
-
  
         GLint height{0};
         GLint width{0};

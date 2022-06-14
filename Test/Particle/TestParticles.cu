@@ -36,22 +36,21 @@ __global__ void calcParticleVel(float* particlePos, float* inc, float* result,co
 
 
 /**
- * @brief Считает вектор скорости частицы.
+ * @brief Calc's particles vector speed.
  * 
- * @param ParticlePos Позиция частицы.
- * @param inc Инкремент.
- * @param incMultiplier Множитель инкремента.
- * @param UsePositiveDir Определяет вектор напарвления (на поле или от него).
- * @return glm::vec3 Результат - текущая скорость.
+ * @param ParticlePos
+ * @param inc 
+ * @param incMultiplier
+ * @param UsePositiveDir Determines where particle has to move (to field or from it).
+ * @return glm::vec3 Result - current velocity vector..
  */
-glm::vec3 calcVelocity(const glm::vec3& ParticlePos,const glm::vec3& inc,float incMultiplier, bool UsePositiveDir)
+glm::vec3 calcVelocity(const glm::vec3& particlePos,const glm::vec3& inc,float incMultiplier, bool usePositiveDir)
 {
 
     float* host_ParticlePos = new float[3];
-
-    host_ParticlePos[0] = ParticlePos.x;
-    host_ParticlePos[1] = ParticlePos.y;
-    host_ParticlePos[2] = ParticlePos.z;
+    host_ParticlePos[0] = particlePos.x;
+    host_ParticlePos[1] = particlePos.y;
+    host_ParticlePos[2] = particlePos.z;
 
 
     float* host_Inc = new float[3];
@@ -76,19 +75,15 @@ glm::vec3 calcVelocity(const glm::vec3& ParticlePos,const glm::vec3& inc,float i
     checkCudaErrors(cudaMemcpy(device_Inc,host_Inc,vecSize,cudaMemcpyHostToDevice));
 
     
-    // Create and start timer
-    printf("Computing result using CUDA Kernel...\n");
-
     calcParticleVel<<<1, 3>>>(
         device_ParticlePos,
         device_Inc,
         device_Result,
         incMultiplier,
-        UsePositiveDir);
+        usePositiveDir);
 
     checkCudaErrors(cudaDeviceSynchronize());
 
-    printf("done\n");
 
     checkCudaErrors(
         cudaMemcpy(host_result, device_Result, vecSize, cudaMemcpyDeviceToHost));
@@ -124,11 +119,11 @@ __global__ void calcCudaMVMatrix(float* rotation, float* translation, float* res
 }
 
 /**
- * @brief Перемножает матрицы поворота и положения.
+ * @brief Multiplies rotation by translation.
  * 
- * @param rotation Поворот.
- * @param translation Положение.
- * @return glm::mat4 Результат умножения.
+ * @param rotation 
+ * @param translation 
+ * @return glm::mat4 Result
  */
 glm::mat4 calcMVMatrix(const glm::mat4& rotation,const glm::mat4& translation)
 {
@@ -160,14 +155,11 @@ glm::mat4 calcMVMatrix(const glm::mat4& rotation,const glm::mat4& translation)
     checkCudaErrors(cudaMemcpy(device_translation,host_translation,matSize,cudaMemcpyHostToDevice));
 
         
-    printf("Computing result using CUDA Kernel...\n");
     dim3 threadsPerBlock(4, 4);
     dim3 blocksPerGrid(1,1);
     calcCudaMVMatrix<<<blocksPerGrid,threadsPerBlock>>>(device_rotation,device_translation,device_Result);
 
     checkCudaErrors(cudaDeviceSynchronize());
-
-    printf("done\n");
 
     checkCudaErrors(
         cudaMemcpy(host_result, device_Result, matSize, cudaMemcpyDeviceToHost));
@@ -186,13 +178,7 @@ glm::mat4 calcMVMatrix(const glm::mat4& rotation,const glm::mat4& translation)
 }
 
 
-/**
- * @brief 
- * 
- * @param vMat Матрица камеры
- * @param position Позиция,по которой будет строится матрица преобразования
- * @param result Вектор состоящий из координат, который будут слинкованы с освновной матрицей чтобы образовать model-view Матрицу.
- */
+
 __global__ void calcCudaTranslation(float* vMat, float* position, float* result)
 {
     int xIt = blockIdx.x * blockDim.x + threadIdx.x;
@@ -210,11 +196,11 @@ __global__ void calcCudaTranslation(float* vMat, float* position, float* result)
 }
 
 /**
- * @brief Считает смещение матрицы базируясь на vMat.
+ * @brief Calcs Model-View matrix
  * 
- * @param vMat Матрица камеры.
- * @param position Позиция на которую необходимо сместить.
- * @return glm::mat4 Результат смещения.
+ * @param vMat Camera matrix.
+ * @param position Particle position.
+ * @return glm::mat4 Assembled Model-View matrix.
  */
 glm::mat4 calcTranslation(const glm::mat4& vMat, const glm::vec3 position)
 {
@@ -319,17 +305,17 @@ namespace test
                 if(particle.getCharge() == field.particleField.getCharge()) // If the particle and field have the same charge - Move particle in opossite dir.
                 {
 #ifndef USE_CUDA
+
                     glm::vec3 inc = (field.particleField.getPosition() - particle.getPosition()) * field.fieldStrenght / pointsDist;
                     glm::vec3 res = glm::mix(particle.getPosition(),inc,1.f);
                     particle.incVelocity(res);
-#else
+#else 
                     glm::vec3 vel = 
                         calcVelocity(particle.getPosition(),field.particleField.getPosition(),field.fieldStrenght / pointsDist,false); //Call to cuda func
                     particle.incVelocity(vel);
 #endif
                 }
                 else
-
                 {
 #ifndef USE_CUDA
                     glm::vec3 inc = (particle.getPosition() - field.particleField.getPosition()) * field.fieldStrenght / pointsDist;
@@ -344,8 +330,6 @@ namespace test
                 }
             }
         }
-
-
 
 #ifdef USE_CUDA   
         
@@ -371,9 +355,9 @@ namespace test
             moveParticle(particle,deltaTime,vMat);
             particle.updateColor();
             glm::vec3 color = particle.getColor();
-
             getShader().SetUniform4f("additionalColor",color.x,color.y,color.y,1);
 
+            //Drawing
             EnableVertexArray(0);
             GLCall(glEnable(GL_DEPTH_TEST));
             GLCall(glFrontFace(GL_CCW));
@@ -391,7 +375,7 @@ namespace test
             const glm::vec3 velocity = rand() % 100 > 50 ? particles45StartVel : particlesNegative45StartVel;
             addParticle({-80,20,0},rand() % 3,charge,velocity);
         }
-        else
+        else 
             particleSpawnTimer -= DeltaTime;
     }
 
@@ -430,7 +414,7 @@ namespace test
 
             getShader().SetUnformMat4f("mv_matrix",translation * rot);
             getShader().SetUniform4f("additionalColor",1,0,0,1);
-
+        
             EnableVertexArray(0);
             GLCall(glEnable(GL_DEPTH_TEST));
             GLCall(glFrontFace(GL_CCW));

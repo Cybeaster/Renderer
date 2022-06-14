@@ -20,6 +20,7 @@ namespace test
             float _charge);
 
         ~Particle();
+
         inline void setColor(const glm::vec3 _color)
         {color = _color;}
 
@@ -80,12 +81,6 @@ namespace test
         inline void setCharge(float Value)
         {charge = Value;}
 
-        inline void setWeight(float Value)
-        {weight = Value;}
-
-        inline float getWeight() const
-        {return weight;}
-
         inline bool getDidParticleMoveThroughField()const
         {return DidParticleMoveThroughField;}
 
@@ -93,7 +88,6 @@ namespace test
         {DidParticleMoveThroughField = Value;}
 
         void updateColor();
-        
         bool isParticleAffectedByField = false;
     private:
     

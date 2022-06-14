@@ -7,7 +7,7 @@ namespace test
 {
 
     /**
-     * @brief Спавнит частицы Particle в определенной зоне, с начальным ускоронием velocity, и поля, такие же объекты, с дополнительными параметрами вроде силы притяжения.
+     * @brief Spawns particles in a specific area, with start velocity, <<field>> and additional parameters like force of gravity.
      * 
      * 
      */
@@ -17,84 +17,82 @@ namespace test
     private:
 
         void addField(const glm::vec3& pos,const float& strenght,const glm::vec3& chargeVec,const float& charge);
-
         void addParticle(const glm::vec3& startPos,const float& radius,const float& charge,const glm::vec3& startVelocity);
          /**
-         * @brief Считает тамер для спавна частиц.
+         * @brief Calculates timer for spawning particles.
          * 
          * @param DeltaTime 
          */
         void particleSpawnTick(float DeltaTime);
 
         /**
-         * @brief Считает тамер для спавна полей.
+         * @brief Calculates time for fields spawning.
          * 
          * @param DeltaTime 
          */
         void fieldSpawnTick(float DeltaTime);
 
         /**
-         * @brief Отрисовывает частицы.
+         * @brief Draws particles.
          * 
-         * @param deltaTime Время между кадрами.
-         * @param vMat Матрица камеры (описывает положение оной в пространстве).
+         * @param deltaTime Time between frames.
+         * @param vMat Camera matrix.
          */
         void drawParticles(float deltaTime,glm::mat4 vMat);
 
         /**
-         * @brief Отрисовывает поля.
-         * 
-         * @param deltaTime Время между кадрами.
-         * @param vMat Матрица камеры (описывает положение оной в пространстве).
+         * @brief Draws fiels.
+         * @param deltaTime Time between frames.
+         * @param vMat Camera matrix.
          */
         void drawFields(float deltaTime,glm::mat4 vMat);
 
         /**
-         * @brief Сдвигает частицу на определенную дистацию каждый кадр.
+         * @brief Moves a particle each frame. 
          * 
-         * @param particle Частица, которую необходимо сдвинуть.
-         * @param deltaTime Время между кадрами.
-         * @param vMat Матрица камеры (описывает положение оной в пространстве).
+         * @param particle Particle that has to be moved.
+         * @param deltaTime Time between frames.
+         * @param vMat Camera matrix.
          */
         void moveParticle(Particle& particle,float deltaTime, glm::mat4 vMat);
 
 
         /**
-         * @brief Заспавненные частицы.
+         * @brief Already spawned particles.
          * 
          */
         std::vector<Particle> particles;
          /**
-         * @brief Заспавненные поля.
+         * @brief Already spawned fields.
          * 
          */
         std::vector<GravityField> electroFields;
 
         /**
-         * @brief Таймер для отсчета спавна частиц.
+         * @brief Timer for particles.
          * 
          */
         float particleSpawnTimer = 0.f;
         /**
-         * @brief Время, через которое будут спавнится частицы.
+         * @brief Time that is required to spawn each particle.
          * 
          */
         float particleSpawnTime = 0.05f;
 
         /**
-         * @brief Таймер спавна полей.
+         * @brief Timer for fields.
          * 
          */
         float fieldSpawnTimer = 0.f;
         /**
-         * @brief Время спавна полей.
+         * @brief Time for spawning fields
          * 
          */
         float fieldSpawnTime = 100.f;
        
 
         /**
-         * @brief Начальная скорость всех частиц по x,y и z соответственно.
+         * @brief Start speed for particles.
          * 
          */
         const glm::vec3 particles45StartVel{0.95f,0.1f,0};

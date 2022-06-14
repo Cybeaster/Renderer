@@ -10,10 +10,11 @@
 
 namespace test
 {
+    using namespace RenderAPI;
 
     /**
-     * @brief Базовый класс для всех Тестов.
-     * @details Каждый тест - абстрактный модуль, получающий на вход базовые параметры (положение камеры, frame-rate, соотношение сторон окна а так же матрицу переспективы.)
+     * @brief Base class for all tests.
+     * @details Each test is an abstract modul, receiving as input base parameters(camera location, frame rate, aspect ration, perspective matrix)
      * 
      */
     class Test

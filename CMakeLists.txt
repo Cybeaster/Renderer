@@ -9,8 +9,7 @@ set(USE_CUDA OFF)
 
 add_library(
 	    cudaTarget 
-		Test/Particle/TestParticles.cu
-		Test/Tube/TestTube.cu)
+		Test/Particle/TestParticles.cu)
 
 if(OFF)
 	find_package(CUDAToolkit REQUIRED)
@@ -73,14 +72,10 @@ Test/Particle/Particle.hpp
 Test/Particle/ElectroField.hpp
 Test/SimpleBox.hpp
 Test/Particle/TestParticles.hpp
-Test/Particle/StaticParticle.hpp
-Test/Tube/TestTube.hpp
 
 
 
 )
-
-
 	target_link_libraries(
 		exec
 		PRIVATE

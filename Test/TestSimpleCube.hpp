@@ -7,7 +7,7 @@ namespace test
 {
 
     /**
-     * @brief Спавнит 2 фигуры с определенными параметрами и сдвигом.
+     * @brief Spawns 2 figures with specific offset.
      * 
      */
     class TestSimpleCube : public Test
