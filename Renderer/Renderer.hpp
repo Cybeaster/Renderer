@@ -1,6 +1,7 @@
 #pragma once
 #include <glm.hpp>
 #include <Test.hpp>
+#include <memory.h>
 
 #define ASSERT(x) if ((!x)) __debugbreak();
 
@@ -14,60 +15,70 @@ bool GLLogCall(const char* func, const char* file, int line);
 
 
 class GLFWwindow;
+class Application;
 namespace RenderAPI
 {
+    /**
+     * @brief Singleton class that creates the context, calculates perspective, frames etc.
+     * 
+     */
     class Renderer 
     {
-
     public:
 
-        void renderTick();
+        static Renderer* getRenderer()
+        {
+            if(renderer == nullptr)
+            {
+                renderer = new Renderer();
+                return renderer;
+            }
+            else
+                return renderer;
+        }
 
         /**
-         * @brief Инициализирует контекст Opengl и создает окно.
+         * @brief Initalizes glfw Opengl context and creates a window.
          * 
          * @return GLFWwindow* 
          */
-        GLFWwindow* Init();
-
+        GLFWwindow* GLFWInit();
+        void GLFWRenderTickStart();
         
-        void addTest(test::Test* testPtr)
-        {
-            if(testPtr != nullptr)
-            {
-                testPtr->Init(pMat);
-                tests.push_back(testPtr);
-            }
-        
-        }
 
-        Renderer() = default;
-        ~Renderer();
+        void addTest(test::Test* testPtr);
+
+        inline std::vector<test::Test*>& getTests()
+        {return tests;}
+        
 
         static float aspect;
         static glm::mat4 pMat;
-    private:
 
-        void RendererStart(float currentTime);
-        void RendererEnd();
+         ~Renderer();
+    private:
+    
+        void GLFWRendererStart(float currentTime);
+        void GLFWRendererEnd();
         void CalcDeltaTime(float currentTime);
         void CleanScene();
-        void CalcPerspective(GLFWwindow* window);
-
-        glm::mat4 vMat; // view matrix
+        void GLFWCalcPerspective(GLFWwindow* window);
  
         GLint height{0};
         GLint width{0};
 
-        float deltaTime = 0.f;
-        float lastFrame = 0.f;
-        float currentFrame = 0.f;
+        uint32_t screenWidth = 1920;
+        uint32_t screenHeight = 1080;
+
+        static float deltaTime;
+        static float lastFrame;
+        static float currentFrame;
+        static glm::vec3 cameraPos;
+        static glm::mat4 vMat;
 
         GLFWwindow* window;
-
-        glm::vec3 cameraPos{0.f,2.f,100.f};
-
         std::vector<test::Test*> tests;
+        static Renderer* renderer;
     };
 
 } 

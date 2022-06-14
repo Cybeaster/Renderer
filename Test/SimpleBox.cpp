@@ -13,14 +13,14 @@ namespace test
     }
 
 
-    void TestSimpleBox::OnUpdate(GLFWwindow* window,
+    void TestSimpleBox::OnUpdate(
         float deltaTime,
         float aspect,
         const glm::vec3& cameraPos,
         glm::mat4& pMat,
         glm::mat4& vMat)
         {
-            Test::OnUpdate(window,deltaTime,aspect,cameraPos,pMat,vMat);
+            Test::OnUpdate(deltaTime,aspect,cameraPos,pMat,vMat);
             
     
             getShader().SetUnformMat4f("mv_matrix",glm::translate(vMat,glm::vec3(0.0,0.0,0.0)));

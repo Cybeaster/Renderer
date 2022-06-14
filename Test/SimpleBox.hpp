@@ -12,7 +12,7 @@ namespace test
         TestSimpleBox(std::string shaderPath);
 
 
-        void OnUpdate(GLFWwindow* window,
+        void OnUpdate(
         float deltaTime,
         float aspect,
         const glm::vec3& cameraPos,

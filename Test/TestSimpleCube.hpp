@@ -7,7 +7,7 @@ namespace test
 {
 
     /**
-     * @brief Спавнит 2 фигуры с определенными параметрами и сдвигом.
+     * @brief Spawns 2 figures with specific offset.
      * 
      */
     class TestSimpleCube : public Test
@@ -15,10 +15,10 @@ namespace test
     public:
 
         TestSimpleCube() = default;
-        TestSimpleCube(GLFWwindow* window, std::string shaderPath);
+        TestSimpleCube( std::string shaderPath);
         ~TestSimpleCube();
 
-        void OnUpdate(GLFWwindow* window,
+        void OnUpdate(
         float deltaTime,
         float aspect,
         const glm::vec3& cameraPos,

@@ -20,8 +20,6 @@ namespace test
         createVertecies();
     }
 
-
-
     Particle::~Particle()
     {
     }
@@ -247,7 +245,6 @@ namespace test
         texCoords.clear();
         indices.clear();
         lineIndices.clear();
-
     }
 
     void Particle::addNormal(float nx, float ny, float nz)

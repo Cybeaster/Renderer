@@ -21,9 +21,17 @@ bool GLLogCall(const char* func, const char* file, int line)
 }
 namespace RenderAPI
 {
-
+    
     float Renderer::aspect{0};
     glm::mat4 Renderer::pMat{};
+    float Renderer::deltaTime{0};
+    float Renderer::lastFrame{0};
+    float Renderer::currentFrame{0};
+    glm::vec3 Renderer::cameraPos{0.f,2.f,100.f};
+    glm::mat4 Renderer::vMat{};
+    Renderer* Renderer::renderer = nullptr;
+
+
 
     void WindowReshapeCallback(GLFWwindow* window,int newHeight,int newWidth)
     {
@@ -32,7 +40,16 @@ namespace RenderAPI
         Renderer::pMat = glm::perspective(1.0472f,Renderer::aspect,0.1f,1000.f);
     }
 
-    GLFWwindow* Renderer::Init()
+    Renderer::~Renderer()
+    {
+        glfwDestroyWindow(window);
+        glfwTerminate();
+    }
+
+
+#pragma region GLFW
+
+    GLFWwindow* Renderer::GLFWInit()
     {
         /* Initialize the library */
         assert(glfwInit());
@@ -56,36 +73,46 @@ namespace RenderAPI
         return window;
     }
 
-
-
-    Renderer::~Renderer()
-    {
-        glfwDestroyWindow(window);
-        glfwTerminate();
-    }
-
-    void Renderer::RendererStart(float currentTime)
+    void Renderer::GLFWRendererStart(float currentTime)
     {
         CleanScene();
-        CalcPerspective(window);
+        GLFWCalcPerspective(window);
         CalcDeltaTime(currentTime);
     }
-    void Renderer::RendererEnd()
+    void Renderer::GLFWRendererEnd()
     {
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-    void Renderer::renderTick()
+
+    void Renderer::GLFWRenderTickStart()
     {
-        RendererStart(glfwGetTime());
+        while (!glfwWindowShouldClose(window))
+        {
+            GLFWRendererStart(glfwGetTime());
+            for(auto* test :tests)
+                if(test != nullptr)
+                    test->OnUpdate(deltaTime,aspect,cameraPos,pMat,vMat);
+            if(glfwGetTime() > 30.f)
+            {
+                for(auto* test : tests)
+                    test->OnTestEnd();
+                exit(0);
+            }
+            GLFWRendererEnd();
+        }
         
-        for(auto* test :tests)
-            if(test != nullptr)
-                test->OnUpdate(window,deltaTime,aspect,cameraPos,pMat,vMat);
-       
-        RendererEnd();
     }
+
+    void Renderer::GLFWCalcPerspective(GLFWwindow* window)
+    {
+        glfwGetFramebufferSize(window,&width,&height);
+        aspect = float(width) / float(height);
+        pMat = glm::perspective(1.0472f,aspect,0.1f,1000.f);
+        vMat = glm::translate(glm::mat4(1.0f),cameraPos * -1.f);
+    }
+#pragma endregion GLFW
 
 
     void Renderer::CleanScene()
@@ -95,14 +122,7 @@ namespace RenderAPI
         GLCall(glEnable(GL_CULL_FACE));
     }
 
-    void Renderer::CalcPerspective(GLFWwindow* window)
-    {
-        glfwGetFramebufferSize(window,&width,&height);
-        aspect = float(width) / float(height);
-        pMat = glm::perspective(1.0472f,aspect,0.1f,1000.f);
-        vMat = glm::translate(glm::mat4(1.0f),cameraPos * -1.f);
-
-    }
+    
 
     void Renderer::CalcDeltaTime(float currentTime)
     {
@@ -110,4 +130,13 @@ namespace RenderAPI
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;        
     }
+
+    void Renderer::addTest(test::Test* testPtr)
+        {
+            if(testPtr != nullptr)
+            {
+                testPtr->Init(pMat);
+                tests.push_back(testPtr);
+            }
+        }
 } // namespace RenderAPI

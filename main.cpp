@@ -3,9 +3,9 @@
 
 
 
-int main(void)
+int main(int argc, char **argv)
 {
-    Application application;
-	application.Start();
+    Application* app = Application::GetApplication();
+	app->Start(argc,argv);
     return 0;
 }

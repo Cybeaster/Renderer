@@ -1,17 +1,37 @@
 #include <cstdint>
 #include <string>
+#include <memory>
 
-
+namespace RenderAPI
+{
+  class Renderer;
+}
 
 class Application 
 {
+    private:
+
+      Application() = default;
+      static Application* application;
+
     public:
 
-    /**
-     * @brief Вход в программу.
-     * @details Инициализирует класс Renderer, отвечающий за создание окна и контекста для OpenGL.
-     * 
-     */
-   void Start();
+      static Application* GetApplication()
+      {
+          if(application == nullptr)
+          {
+              application = new Application();
+              return application;
+          }
+          else
+            return application;
+      }
+
+      /**
+       * @brief Programm start.
+       * @details Initializes Renderer class.
+       * 
+       */
+      void Start(int argc, char **argv);
 
 };

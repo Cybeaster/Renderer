@@ -10,29 +10,18 @@
 #include "SimpleBox.hpp"
 
 
-void Application::Start()
+Application* Application::application;
+
+
+void Application::Start(int argc, char **argv)
 {
-    
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
 
+    RenderAPI::Renderer* renderer = RenderAPI::Renderer::getRenderer();
+    renderer->GLFWInit();
     
-    //Инициализируем класс, отвечающий за рендер.
-    RenderAPI::Renderer renderer;
-    GLFWwindow* window = renderer.Init();
+    //Add different tests or write your own.
+    test::TestParticles tube("E:/ProgrammingStuff/Projects/OpenGL/Externals/Shaders/SimpleCube.shader");
+    renderer->addTest(&tube);
 
-    //Создаем тест,передавая путь к шейдеру.
-    test::TestParticles particles("X:/ProgrammingStuff/Projects/OpenGL/Externals/Shaders/SimpleCube.shader");
-
-    //Каждый добавленный тест будет отрисовывать свою сцену независимо от другого
-    //Контекст у них будет один, тот, что создал RenderAPI::Renderer
-    renderer.addTest(&particles);
-    
-    //Кадровый тик
-    while (!glfwWindowShouldClose(window))
-        renderer.renderTick();
-    
-
-    exit(EXIT_SUCCESS);
+    renderer->GLFWRenderTickStart();
 }

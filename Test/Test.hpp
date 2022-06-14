@@ -3,16 +3,18 @@
 #include "glfw3.h"
 #include "Shader.hpp"
 #include <vector>
+
 #include "VertexBuffer.hpp"
 #include <stack>
 #include <memory>
 
 namespace test
 {
+    using namespace RenderAPI;
 
     /**
-     * @brief Базовый класс для всех Тестов.
-     * @details Каждый тест - абстрактный модуль, получающий на вход базовые параметры (положение камеры, frame-rate, соотношение сторон окна а так же матрицу переспективы.)
+     * @brief Base class for all tests.
+     * @details Each test is an abstract modul, receiving as input base parameters(camera location, frame rate, aspect ration, perspective matrix)
      * 
      */
     class Test
@@ -28,13 +30,13 @@ namespace test
         void Init(const glm::mat4& pMatRef)
         {pMat = pMatRef;}
 
-        virtual void OnUpdate(GLFWwindow* window,
+        virtual void OnUpdate(
          const float deltaTime,
          const float aspect,
          const glm::vec3& cameraPos,
          glm::mat4& pMat,
          glm::mat4& vMat);
-
+        virtual void OnTestEnd(){}
         void AddBuffers(std::vector<std::vector<float>>& vertecis,size_t numOfBuffers);
         void AddBuffer(void* buffer,int32_t size);
 
