@@ -1,19 +1,16 @@
 #pragma once
 #include <Renderer.hpp>
 #include <string>
- class Texture
- {
+class Texture
+{
 
 public:
-
-    Texture(const std::string path);
+    Texture(const String path);
     ~Texture();
 
-    void Bind(uint32_t slot = 0)const;
+    void Bind(uint32 slot = 0) const;
     void Unbind();
 
-    
 private:
-
-    uint32_t textureID;
+    uint32 textureID;
 };

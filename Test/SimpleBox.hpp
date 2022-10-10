@@ -2,29 +2,30 @@
 
 #include "Test.hpp"
 
-namespace test
+namespace Test
 {
     class TestSimpleBox : public Test
     {
-        
+
     public:
         TestSimpleBox() = default;
-        TestSimpleBox(std::string shaderPath);
-
+        TestSimpleBox(String shaderPath);
 
         void OnUpdate(
-        float deltaTime,
-        float aspect,
-        const glm::vec3& cameraPos,
-        glm::mat4& pMat,
-        glm::mat4& vMat) override;
-        
-        float box[18]
-        {
-            0.f,1.f,1.f,
-            1.f,1.f,1.f,
+            float deltaTime,
+            float aspect,
+            const Vec3 &cameraPos,
+            Mat4 &pMat,
+            Mat4 &vMat) override;
+
+        float box[18]{
+            0.f,
+            1.f,
+            1.f,
+            1.f,
+            1.f,
+            1.f,
         };
     };
-    
- 
+
 }

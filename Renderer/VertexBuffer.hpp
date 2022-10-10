@@ -1,16 +1,15 @@
 #pragma once
-#include "cstdint"
-
+#include <RenderAPI.hpp>
 class VertexBuffer
 {
 
 public:
-    VertexBuffer(const void* Data, size_t size);
+    VertexBuffer(const void *Data, size_t size);
     ~VertexBuffer();
 
+    void Bind() const;
+    void Unbind() const;
 
-    void Bind()const;
-    void Unbind()const;
 private:
-    uint32_t bufferID;
+    uint32 bufferID;
 };

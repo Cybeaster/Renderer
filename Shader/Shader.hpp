@@ -1,11 +1,11 @@
 #pragma once
-#include <string>
+#include <RenderAPI.hpp>
 #include <unordered_map>
-#include "glm.hpp"
+
 struct ShaderSource
 {
-    std::string vertexShader;
-    std::string fragmentShader;
+    String vertexShader;
+    String fragmentShader;
 };
 
 enum class ShaderType
@@ -20,35 +20,29 @@ namespace RenderAPI
     class Shader
     {
     public:
-        void Init(const std::string source);
+        void Init(const String source);
 
-        void Bind()const;
+        void Bind() const;
         void Unbind() const;
-        void SetUniform4f(const std::string name, float v0, float v1, float v2, float v3);
-        
-        void SetUniform1f(const std::string name, float v0);
-        void SetUniform1i(const std::string name, int32_t v0);
-        void SetUnformMat4f(const std::string name, glm::mat4& matrix);
+        void SetUniform4f(const String name, float v0, float v1, float v2, float v3);
 
+        void SetUniform1f(const String name, float v0);
+        void SetUniform1i(const String name, int32_t v0);
+        void SetUnformMat4f(const String name, Mat4 &matrix);
 
         Shader() = default;
-        Shader(const std::string source);
+        Shader(const String source);
         ~Shader();
 
     private:
+        uint32 CompileShader(uint32 type, const String &source);
+        uint32 GetUnformLocation(const String &name);
+        int CreateShader(const String &vertexShader, const String &fragmentShader);
+        ShaderSource ParseShader(const String &filePath);
+        bool CompileShader();
 
-    uint32_t CompileShader( uint32_t type,const std::string& source);
-    uint32_t GetUnformLocation(const std::string& name);
-    int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
-    ShaderSource ParseShader(const std::string& filePath);
-    bool CompileShader();
-
-
-    std::string filePath;
-    uint32_t rendererID = 277;
-    std::unordered_map<std::string,int32_t> locationCache;
-
+        String filePath;
+        uint32 rendererID = 277;
+        std::unordered_map<String, int32_t> locationCache;
     };
-}//RenderAPI
-
-
+} // RenderAPI

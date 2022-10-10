@@ -7,31 +7,28 @@ namespace RenderAPI
   class Renderer;
 }
 
-class Application 
+class Application
 {
-    private:
+private:
+  Application() = default;
+  static Application *application;
 
-      Application() = default;
-      static Application* application;
+public:
+  static Application *GetApplication()
+  {
+    if (application == nullptr)
+    {
+      application = new Application();
+      return application;
+    }
+    else
+      return application;
+  }
 
-    public:
-
-      static Application* GetApplication()
-      {
-          if(application == nullptr)
-          {
-              application = new Application();
-              return application;
-          }
-          else
-            return application;
-      }
-
-      /**
-       * @brief Programm start.
-       * @details Initializes Renderer class.
-       * 
-       */
-      void Start(int argc, char **argv);
-
+  /**
+   * @brief Programm start.
+   * @details Initializes Renderer class.
+   *
+   */
+  void Start(int argc, char **argv);
 };

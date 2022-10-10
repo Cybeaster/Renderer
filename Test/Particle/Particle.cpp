@@ -1,14 +1,14 @@
 #include "Particle.hpp"
 
-namespace test
+namespace Test
 {
 
     Particle::Particle(
-        glm::vec3 pos,
-        glm::vec3 vel,
-        uint32_t _stackCount,
-        uint32_t _sectorCount,
-        uint32_t _radius,
+        Vec3 pos,
+        Vec3 vel,
+        uint32 _stackCount,
+        uint32 _sectorCount,
+        uint32 _radius,
         float _charge)
         : position(pos),
           velocity(vel),
@@ -32,7 +32,7 @@ namespace test
         {
             float x, y, z, s, t;
         };
-        std::vector<Vertex> tmpVertices;
+        Vector<Vertex> tmpVertices;
 
         float sectorStep = 2 * PI / sectorCount;
         float stackStep = PI / stackCount;
@@ -65,7 +65,7 @@ namespace test
         clearArrays();
 
         Vertex v1, v2, v3, v4; // 4 vertex positions and tex coords
-        std::vector<float> n;  // 1 face normal
+        Vector<float> n;       // 1 face normal
 
         int i, j, k, vi1, vi2;
         int index = 0; // index for vertex
@@ -204,13 +204,13 @@ namespace test
         indices.push_back(i3);
     }
 
-    std::vector<float> Particle::computeFaceNormal(float x1, float y1, float z1,  // v1
-                                                   float x2, float y2, float z2,  // v2
-                                                   float x3, float y3, float z3)  // v3
+    Vector<float> Particle::computeFaceNormal(float x1, float y1, float z1, // v1
+                                              float x2, float y2, float z2, // v2
+                                              float x3, float y3, float z3) // v3
     {
         const float EPSILON = 0.000001f;
 
-        std::vector<float> normal(3, 0.0f);     // default return value (0,0,0)
+        Vector<float> normal(3, 0.0f); // default return value (0,0,0)
         float nx, ny, nz;
 
         // find 2 edge vectors: v1-v2, v1-v3
@@ -228,7 +228,7 @@ namespace test
 
         // normalize only if the length is > 0
         float length = sqrtf(nx * nx + ny * ny + nz * nz);
-        if(length > EPSILON)
+        if (length > EPSILON)
         {
             // normalize
             float lengthInv = 1.0f / length;
@@ -256,22 +256,22 @@ namespace test
 
     void Particle::buildInterleavedVertices()
     {
-        std::vector<float>().swap(interleavedVertices);
+        Vector<float>().swap(interleavedVertices);
 
         std::size_t i, j;
         std::size_t count = vertices.size();
-        for(i = 0, j = 0; i < count; i += 3, j += 2)
+        for (i = 0, j = 0; i < count; i += 3, j += 2)
         {
             interleavedVertices.push_back(vertices[i]);
-            interleavedVertices.push_back(vertices[i+1]);
-            interleavedVertices.push_back(vertices[i+2]);
+            interleavedVertices.push_back(vertices[i + 1]);
+            interleavedVertices.push_back(vertices[i + 2]);
 
             interleavedVertices.push_back(normals[i]);
-            interleavedVertices.push_back(normals[i+1]);
-            interleavedVertices.push_back(normals[i+2]);
+            interleavedVertices.push_back(normals[i + 1]);
+            interleavedVertices.push_back(normals[i + 2]);
 
             interleavedVertices.push_back(texCoords[j]);
-            interleavedVertices.push_back(texCoords[j+1]);
+            interleavedVertices.push_back(texCoords[j + 1]);
         }
     }
 
@@ -280,13 +280,12 @@ namespace test
         float red = velocity.x;
         float blue = velocity.y;
         float green = velocity.z;
-        
-        red = glm::clamp(red,0.5f,1.f);
-        blue = glm::clamp(blue,0.5f,1.f);
-        green = glm::clamp(green,0.5f,1.f);
-        
 
-        color = {red,blue,green};
+        red = glm::clamp(red, 0.5f, 1.f);
+        blue = glm::clamp(blue, 0.5f, 1.f);
+        green = glm::clamp(green, 0.5f, 1.f);
+
+        color = {red, blue, green};
     }
 
 } // namespace test

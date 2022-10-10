@@ -9,19 +9,17 @@
 #include "TestTexture.hpp"
 #include "SimpleBox.hpp"
 
-
-Application* Application::application;
-
+Application *Application::application;
 
 void Application::Start(int argc, char **argv)
 {
 
-    RenderAPI::Renderer* renderer = RenderAPI::Renderer::getRenderer();
+    RenderAPI::Renderer *renderer = RenderAPI::Renderer::getRenderer();
     renderer->GLFWInit();
-    
-    //Add different tests or write your own.
-    test::TestParticles tube("E:/ProgrammingStuff/Projects/OpenGL/Externals/Shaders/SimpleCube.shader");
-    renderer->addTest(&tube);
 
+    // Add different tests or write your own.
+    Test::TestParticles cube("D://Programs//ProgrammingStuff//OpenGL//Externals//Shaders//SimpleCube.shader");
+
+    renderer->addTest(&cube);
     renderer->GLFWRenderTickStart();
 }

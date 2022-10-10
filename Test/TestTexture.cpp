@@ -1,26 +1,17 @@
 #include "TestTexture.hpp"
-#include "glfw3.h"
 
-namespace test
+namespace Test
 {
-    TestTexture::TestTexture(std::string filePath) : texture(filePath)
+    TestTexture::TestTexture(String filePath) : texture(filePath)
     {
-      
-    
     }
-    
+
     TestTexture::~TestTexture()
     {
-
-
     }
 
-
-    void TestTexture::OnUpdate(GLFWwindow* window,float currentTime) 
+    void TestTexture::OnUpdate(GLFWwindow *window, float currentTime)
     {
-
-
-
     }
- 
+
 } // namespace test
