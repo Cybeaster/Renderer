@@ -14,19 +14,19 @@ namespace Test
     class TestParticles : public Test
     {
     public:
-        TestParticles(String shaderPath);
+        TestParticles(TString shaderPath);
 
         void OnUpdate(
             float deltaTime,
             float aspect,
-            const Vec3 &cameraPos,
-            Mat4 &pMat,
-            Mat4 &vMat) override;
+            const TVec3 &cameraPos,
+            TMat4 &pMat,
+            TMat4 &vMat) override;
 
     private:
         void ChangeVelocity(Particle &particle);
-        void AddField(const Vec3 &pos, const float &strenght, const Vec3 &chargeVec, const float &charge);
-        void AddParticle(const Vec3 &startPos, const float &radius, const float &charge, const Vec3 &startVelocity);
+        void AddField(const TVec3 &pos, const float &strenght, const TVec3 &chargeVec, const float &charge);
+        void AddParticle(const TVec3 &startPos, const float &radius, const float &charge, const TVec3 &startVelocity);
         /**
          * @brief Calculates timer for spawning particles.
          *
@@ -47,14 +47,14 @@ namespace Test
          * @param deltaTime Time between frames.
          * @param vMat Camera matrix.
          */
-        void drawParticles(float deltaTime, Mat4 vMat);
+        void drawParticles(float deltaTime, TMat4 vMat);
 
         /**
          * @brief Draws fiels.
          * @param deltaTime Time between frames.
          * @param vMat Camera matrix.
          */
-        void DrawFields(float deltaTime, Mat4 vMat);
+        void DrawFields(float deltaTime, TMat4 vMat);
 
         /**
          * @brief Moves a particle each frame.
@@ -63,18 +63,18 @@ namespace Test
          * @param deltaTime Time between frames.
          * @param vMat Camera matrix.
          */
-        void MoveParticle(Particle &particle, float deltaTime, Mat4 vMat);
+        void MoveParticle(Particle &particle, float deltaTime, TMat4 vMat);
 
         /**
          * @brief Already spawned particles.
          *
          */
-        Vector<Particle> Particles;
+        TTVector<Particle> Particles;
         /**
          * @brief Already spawned fields.
          *
          */
-        Vector<GravityField> Fields;
+        TTVector<GravityField> Fields;
 
         /**
          * @brief Timer for particles.
@@ -102,8 +102,8 @@ namespace Test
          * @brief Start speed for particles.
          *
          */
-        const Vec3 Particles45StartVel{0.95f, 0.1f, 0};
-        const Vec3 ParticlesNegative45StartVel{0.95f, -0.5f, 0};
+        const TVec3 Particles45StartVel{0.95f, 0.1f, 0};
+        const TVec3 ParticlesNegative45StartVel{0.95f, -0.5f, 0};
 
         const float DefaultFieldStrenght = 1.1f;
     };

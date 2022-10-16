@@ -8,7 +8,7 @@ namespace Test
     class TestTexture : public Test
     {
     public:
-        TestTexture(String filePath);
+        TestTexture(TString filePath);
         ~TestTexture();
 
         void OnUpdate(GLFWwindow *window, float currentTime);

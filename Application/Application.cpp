@@ -20,6 +20,6 @@ void Application::Start(int argc, char **argv)
     // Add different tests or write your own.
     Test::TestParticles cube("D://Programs//ProgrammingStuff//OpenGL//Externals//Shaders//SimpleCube.shader");
 
-    renderer->addTest(&cube);
+    renderer->AddTest(&cube);
     renderer->GLFWRenderTickStart();
 }

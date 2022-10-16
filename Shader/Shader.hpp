@@ -1,11 +1,12 @@
 #pragma once
-#include <RenderAPI.hpp>
 #include <unordered_map>
-
+#include "Math.hpp"
+#include "Vector.hpp"
+#include "Types.hpp"
 struct ShaderSource
 {
-    String vertexShader;
-    String fragmentShader;
+    TString vertexShader;
+    TString fragmentShader;
 };
 
 enum class ShaderType
@@ -20,29 +21,29 @@ namespace RenderAPI
     class Shader
     {
     public:
-        void Init(const String source);
+        void Init(const TString source);
 
         void Bind() const;
         void Unbind() const;
-        void SetUniform4f(const String name, float v0, float v1, float v2, float v3);
+        void SetUniform4f(const TString name, float v0, float v1, float v2, float v3);
 
-        void SetUniform1f(const String name, float v0);
-        void SetUniform1i(const String name, int32_t v0);
-        void SetUnformMat4f(const String name, Mat4 &matrix);
+        void SetUniform1f(const TString name, float v0);
+        void SetUniform1i(const TString name, int32_t v0);
+        void SetUnformMat4f(const TString name, TMat4 &matrix);
 
         Shader() = default;
-        Shader(const String source);
+        Shader(const TString source);
         ~Shader();
 
     private:
-        uint32 CompileShader(uint32 type, const String &source);
-        uint32 GetUnformLocation(const String &name);
-        int CreateShader(const String &vertexShader, const String &fragmentShader);
-        ShaderSource ParseShader(const String &filePath);
+        uint32 CompileShader(uint32 type, const TString &source);
+        uint32 GetUnformLocation(const TString &name);
+        int CreateShader(const TString &vertexShader, const TString &fragmentShader);
+        ShaderSource ParseShader(const TString &filePath);
         bool CompileShader();
 
-        String filePath;
+        TString filePath;
         uint32 rendererID = 277;
-        std::unordered_map<String, int32_t> locationCache;
+        std::unordered_map<TString, int32_t> locationCache;
     };
 } // RenderAPI

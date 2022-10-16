@@ -2,7 +2,7 @@
 
 namespace Test
 {
-    TestTexture::TestTexture(String filePath) : texture(filePath)
+    TestTexture::TestTexture(TString filePath) : texture(filePath)
     {
     }
 

@@ -4,8 +4,8 @@ namespace Test
 {
 
     Particle::Particle(
-        Vec3 pos,
-        Vec3 vel,
+        TVec3 pos,
+        TVec3 vel,
         uint32 _stackCount,
         uint32 _sectorCount,
         uint32 _radius,
@@ -32,7 +32,7 @@ namespace Test
         {
             float x, y, z, s, t;
         };
-        Vector<Vertex> tmpVertices;
+        TTVector<Vertex> tmpVertices;
 
         float sectorStep = 2 * PI / sectorCount;
         float stackStep = PI / stackCount;
@@ -65,7 +65,7 @@ namespace Test
         clearArrays();
 
         Vertex v1, v2, v3, v4; // 4 vertex positions and tex coords
-        Vector<float> n;       // 1 face normal
+        TTVector<float> n;     // 1 face normal
 
         int i, j, k, vi1, vi2;
         int index = 0; // index for vertex
@@ -204,13 +204,13 @@ namespace Test
         indices.push_back(i3);
     }
 
-    Vector<float> Particle::computeFaceNormal(float x1, float y1, float z1, // v1
-                                              float x2, float y2, float z2, // v2
-                                              float x3, float y3, float z3) // v3
+    TTVector<float> Particle::computeFaceNormal(float x1, float y1, float z1, // v1
+                                                float x2, float y2, float z2, // v2
+                                                float x3, float y3, float z3) // v3
     {
         const float EPSILON = 0.000001f;
 
-        Vector<float> normal(3, 0.0f); // default return value (0,0,0)
+        TTVector<float> normal(3, 0.0f); // default return value (0,0,0)
         float nx, ny, nz;
 
         // find 2 edge vectors: v1-v2, v1-v3
@@ -256,7 +256,7 @@ namespace Test
 
     void Particle::buildInterleavedVertices()
     {
-        Vector<float>().swap(interleavedVertices);
+        TTVector<float>().swap(interleavedVertices);
 
         std::size_t i, j;
         std::size_t count = vertices.size();

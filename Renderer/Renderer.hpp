@@ -1,10 +1,11 @@
 #pragma once
 #include <Test.hpp>
 #include <memory.h>
+#include "Checks/Assert.hpp"
+#include "Math.hpp"
+#include "Vector.hpp"
+#include "Types.hpp"
 
-#define ASSERT(x) \
-    if ((!x))     \
-        __debugbreak();
 
 #define GLCall(x)   \
     GLClearError(); \
@@ -44,15 +45,15 @@ namespace RenderAPI
         GLFWwindow *GLFWInit();
         void GLFWRenderTickStart();
 
-        void addTest(Test::Test *testPtr);
+        void AddTest(Test::Test *testPtr);
 
-        inline Vector<Test::Test *> &getTests()
+        inline TTVector<Test::Test *> &getTests()
         {
             return Tests;
         }
 
         static float Aspect;
-        static Mat4 PMat;
+        static TMat4 PMat;
 
         ~Renderer();
 
@@ -72,11 +73,11 @@ namespace RenderAPI
         static float DeltaTime;
         static float LastFrame;
         static float CurrentFrame;
-        static Vec3 CameraPos;
-        static Mat4 VMat;
+        static TVec3 CameraPos;
+        static TMat4 VMat;
 
         GLFWwindow *Window;
-        Vector<Test::Test *> Tests;
+        TTVector<Test::Test *> Tests;
         static Renderer *SingletonRenderer;
     };
 

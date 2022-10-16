@@ -9,18 +9,18 @@ namespace Test
     void TestSimpleCube::OnUpdate(
         float deltaTime,
         float aspect,
-        const Vec3 &cameraPos,
-        Mat4 &pMat,
-        Mat4 &vMat)
+        const TVec3 &cameraPos,
+        TMat4 &pMat,
+        TMat4 &vMat)
     {
         Test::OnUpdate(deltaTime, aspect, cameraPos, pMat, vMat);
 
         GetMVStack().push(vMat);
         GetMVStack().push(GetMVStack().top());
 
-        GetMVStack().top() *= glm::translate(Mat4(1.0f), Vec3(0.0, 0.0, 0.0));
+        GetMVStack().top() *= glm::translate(TMat4(1.0f), TVec3(0.0, 0.0, 0.0));
         GetMVStack().push(GetMVStack().top());
-        GetMVStack().top() *= glm::rotate(Mat4(1.0f), float(deltaTime), Vec3(1.0, 0.0, 0.0));
+        GetMVStack().top() *= glm::rotate(TMat4(1.0f), float(deltaTime), TVec3(1.0, 0.0, 0.0));
         getShader().SetUnformMat4f("mv_matrix", GetMVStack().top());
 
         EnableVertexArray(1);
@@ -34,9 +34,9 @@ namespace Test
         // cube
 
         GetMVStack().push(GetMVStack().top());
-        GetMVStack().top() *= glm::translate(Mat4(1.0f), Vec3(sin(float(deltaTime)) * 4.0f, 0.0f, cos(float(deltaTime) * 4.0)));
+        GetMVStack().top() *= glm::translate(TMat4(1.0f), TVec3(sin(float(deltaTime)) * 4.0f, 0.0f, cos(float(deltaTime) * 4.0)));
         GetMVStack().push(GetMVStack().top());
-        GetMVStack().top() *= glm::rotate(Mat4(1.0f), float(deltaTime), Vec3(0.0, 1.0, 0.0));
+        GetMVStack().top() *= glm::rotate(TMat4(1.0f), float(deltaTime), TVec3(0.0, 1.0, 0.0));
         getShader().SetUnformMat4f("mv_matrix", GetMVStack().top());
 
         EnableVertexArray(1);
@@ -49,9 +49,9 @@ namespace Test
         // smaller cube
 
         GetMVStack().push(GetMVStack().top());
-        GetMVStack().top() *= glm::translate(Mat4(1.0f), Vec3(0.f, sin(deltaTime) * 2.0, cos(float(deltaTime) * 2.0)));
-        GetMVStack().top() *= glm::rotate(Mat4(1.0f), float(deltaTime), Vec3(0.0, 0.0, 1.0));
-        GetMVStack().top() *= glm::scale(Mat4(1.0), Vec3(0.25f, 0.25f, 0.25f));
+        GetMVStack().top() *= glm::translate(TMat4(1.0f), TVec3(0.f, sin(deltaTime) * 2.0, cos(float(deltaTime) * 2.0)));
+        GetMVStack().top() *= glm::rotate(TMat4(1.0f), float(deltaTime), TVec3(0.0, 0.0, 1.0));
+        GetMVStack().top() *= glm::scale(TMat4(1.0), TVec3(0.25f, 0.25f, 0.25f));
         getShader().SetUnformMat4f("mv_matrix", GetMVStack().top());
 
         EnableVertexArray(1);
@@ -65,7 +65,7 @@ namespace Test
         GetMVStack().pop();
     }
 
-    TestSimpleCube::TestSimpleCube(String shaderPath) : Test(shaderPath)
+    TestSimpleCube::TestSimpleCube(TString shaderPath) : Test(shaderPath)
     {
         AddVertexArray();
         AddBuffer(vertexPositions, sizeof(vertexPositions));
