@@ -31,6 +31,8 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Utils/Threads/HierarchicalMutex
 	${PROJECT_SOURCE_DIR}/Utils/Checks
 	${PROJECT_SOURCE_DIR}/Utils/Types
+	${PROJECT_SOURCE_DIR}/Utils/Types/Tuple
+
 )
 
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
@@ -69,6 +71,7 @@ add_executable(exec
 	Utils/Threads/HierarchicalMutex/HierarchicalMutex.hpp
 	Utils/Checks/Exception.hpp
 	Utils/Checks/Assert.hpp
+	Utils/Functor/Functor.hpp
 
 	Utils/Types/Math.hpp
 	Utils/Types/Queue.hpp
@@ -78,6 +81,7 @@ add_executable(exec
 	Utils/Types/Hash.hpp
 	Utils/Types/Pair.hpp
 	Utils/Types/Tuple.hpp
+	Utils/Types/Tuple/Tuple.hpp
 
 )
 target_link_libraries(

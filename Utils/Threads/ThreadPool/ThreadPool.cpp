@@ -5,25 +5,28 @@ namespace RenderAPI
 
     namespace Thread
     {
-        ThreadPool::ThreadPool(uint32 NumOfThreads)
+        TThreadPool::TThreadPool(uint32 NumOfThreads)
         {
             Threads.reserve(NumOfThreads);
             for (size_t i = 0; i < NumOfThreads; i++)
             {
-                Threads.emplace_back(&ThreadPool::Run, this);
+                Threads.emplace_back(&TThreadPool::Run, this);
             }
         }
-
-        template <typename ReturnType, typename... Args>
-        TTaskID ThreadPool::AddTask(const TTFunctor<ReturnType(Args...)>& Function, Args&&... Arguments)
+        
+        TTaskID TThreadPool::AddTask(TTFunctor<void()> &&Function)
         {
             int64 taskID = LastID++;
             TMutexGuard queueLock(QueueMutex);
-            
-            TaskQueue.emplace();
+            TTaskID id(taskID);
+            auto elem = std::pair(Function, taskID);
+            // TaskQueue.emplace(std::move(elem));
+
+            QueueCV.notify_one();
+            return TTaskID(taskID);
         }
 
-        void ThreadPool::Run()
+        void TThreadPool::Run()
         {
             while (!Quite)
             {
@@ -36,7 +39,7 @@ namespace RenderAPI
                     auto &elem = std::move(TaskQueue.front());
                     TaskQueue.pop();
                     uniqueLock.unlock();
-                    elem.first();
+                    // elem.first();
 
                     TMutexGuard guardlock(CompletedTaskMutex);
                     CompletedTasksIDs.insert(elem.second);
@@ -44,12 +47,46 @@ namespace RenderAPI
                 }
             }
         }
-
-        ThreadPool::~ThreadPool()
+        void TThreadPool::Wait(const TTaskID &ID)
         {
+            TTaskID id{23};
+            TTaskID id1{0};
+
+            TUniqueLock lock(CompletedTaskMutex);
+            // wait for notify in function run
+            CompletedTaskIdsCV.wait(lock, [this, ID]() -> bool
+                                    { return CompletedTasksIDs.find(ID) != CompletedTasksIDs.end(); });
+        }
+        void TThreadPool::WaitAll()
+        {
+            TUniqueLock lock(QueueMutex);
+            CompletedTaskIdsCV.wait(lock, [this]() -> bool
+                                    {
+                                        TMutexGuard taskLock(CompletedTaskMutex);
+                                        return  TaskQueue.empty() && LastID == CompletedTasksIDs.size(); });
         }
 
-        void ThreadPool::CreateThread(JoiningThread &&Thread)
+        TThreadPool::~TThreadPool()
+        {
+            Quite = true;
+            for (auto &&thread : Threads)
+            {
+                QueueCV.notify_all();
+                thread.Join();
+            }
+        }
+
+        bool TThreadPool::IsDone(const TTaskID &ID)
+        {
+            TMutexGuard lock(CompletedTaskMutex);
+            if (CompletedTasksIDs.find(ID) != CompletedTasksIDs.end())
+            {
+                return true;
+            }
+            return false;
+        }
+
+        void TThreadPool::CreateThread(JoiningThread &&Thread)
         {
             Threads.push_back(std::move(Thread));
         }

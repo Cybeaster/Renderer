@@ -3,6 +3,14 @@
 #include <string>
 #include "cstdint"
 
+template <typename T, T... Indices>
+struct TIntegerSequenceWrapper
+{
+};
+
+template<typename T, T Size>
+using TTMakeIntegerSequence = __make_integer_seq<TIntegerSequenceWrapper,T, Size>;
+
 using TString = std::string;
 
 using int32 = int32_t;

@@ -11,8 +11,8 @@ namespace RenderAPI
         public:
             JoiningThread() noexcept = default;
 
-            template <typename Callable, typename... Args>
-            explicit JoiningThread(Callable &&_Func, Args &&..._Args) : Thread(_Func,_Args...)
+            template <typename Callable, typename... ArgTypes>
+            explicit JoiningThread(Callable &&_Func, ArgTypes &&..._Args) : Thread(_Func, _Args...)
             {
             }
 
