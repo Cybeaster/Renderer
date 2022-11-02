@@ -13,14 +13,13 @@ namespace RenderAPI
                 Threads.emplace_back(&TThreadPool::Run, this);
             }
         }
-        
+
         TTaskID TThreadPool::AddTask(TTFunctor<void()> &&Function)
         {
             int64 taskID = LastID++;
             TMutexGuard queueLock(QueueMutex);
-            TTaskID id(taskID);
-            auto elem = std::pair(Function, taskID);
-            // TaskQueue.emplace(std::move(elem));
+            
+            TaskQueue.emplace(std::make_pair(std::move(Function), TTaskID(taskID)));
 
             QueueCV.notify_one();
             return TTaskID(taskID);

@@ -22,11 +22,12 @@ namespace RenderAPI
 
         public:
             TTFunctor() = default;
+            TTFunctor(const TTFunctor& Functor) = delete;
 
             TTFunctor(TTFunctor &&Functor)
             {
-                Arguments = std::move(MovableFunctor.Arguments);
-                Function = MovableFunctor.Function;
+                Arguments = std::move(Functor.Arguments);
+                Function = Functor.Function;
             }
 
             TTFunctor(FuncType &&FunctionType, ArgTypes... FuncArgs) : Function(std::forward<FuncType>(FunctionType)), Arguments(std::forward<ArgTypes>(FuncArgs)...) {}
