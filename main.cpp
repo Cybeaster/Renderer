@@ -12,10 +12,9 @@ using namespace RenderAPI::Functor;
 
 int sum(int &ans, TTVector<int> &arr)
 {
-    for (int i = 0; i < arr.size(); ++i)
-    {
-        ans += arr[i];
-    }
+    for (const auto& i : arr)
+        ans += i;
+
     return 0;
 }
 
