@@ -1,5 +1,7 @@
 #pragma once
-#include <RenderAPI.hpp>
+#include "Math.hpp"
+#include "Vector.hpp"
+#include "Types.hpp"
 
 namespace Test
 {
@@ -7,8 +9,8 @@ namespace Test
     {
     public:
         Particle(
-            Vec3 pos,
-            Vec3 vel,
+            TVec3 pos,
+            TVec3 vel,
             uint32 _stackCount,
             uint32 _sectorCount,
             uint32 _radius,
@@ -16,12 +18,12 @@ namespace Test
 
         ~Particle();
 
-        inline void setColor(const Vec3 _color)
+        inline void setColor(const TVec3 _color)
         {
             color = _color;
         }
 
-        inline const Vec3 &getColor() const
+        inline const TVec3 &getColor() const
         {
             return color;
         }
@@ -46,22 +48,22 @@ namespace Test
             position += velocity * speed;
         }
 
-        inline void movePosition(Vec3 vel)
+        inline void movePosition(TVec3 vel)
         {
             position += vel;
         }
 
-        inline void incVelocity(Vec3 inc)
+        inline void incVelocity(TVec3 inc)
         {
             velocity += inc;
         }
 
-        inline void setVelocity(Vec3 inc)
+        inline void setVelocity(TVec3 inc)
         {
             velocity = inc;
         }
 
-        inline Vec3 getVeclocity() const
+        inline TVec3 getVeclocity() const
         {
             return velocity;
         }
@@ -71,15 +73,15 @@ namespace Test
             return speed;
         }
 
-        inline Mat4 rotate(float deltaTime)
+        inline TMat4 rotate(float deltaTime)
         {
             currentRotationAngle += deltaTime * rotationSpeed;
             if (currentRotationAngle > 360)
                 currentRotationAngle = 0;
-            return glm::rotate(Mat4(1.0f), float(currentRotationAngle), Vec3(1.0, 1.0, 1.0));
+            return glm::rotate(TMat4(1.0f), float(currentRotationAngle), TVec3(1.0, 1.0, 1.0));
         }
 
-        inline const Vec3 &getPosition() const
+        inline const TVec3 &getPosition() const
         {
             return position;
         }
@@ -99,12 +101,12 @@ namespace Test
             return radius;
         }
 
-        inline Vector<float> getVertecies() const
+        inline TTVector<float> getVertecies() const
         {
             return vertices;
         }
 
-        inline void setCharge(float Value)
+        inline void SetCharge(float Value)
         {
             charge = Value;
         }
@@ -126,17 +128,17 @@ namespace Test
         void addVertex(float x, float y, float z);
         void addTexCoord(float s, float t);
         void addIndices(unsigned int i1, unsigned int i2, unsigned int i3);
-        Vector<float> computeFaceNormal(float x1, float y1, float z1,  // v1
-                                        float x2, float y2, float z2,  // v2
-                                        float x3, float y3, float z3); // v3
+        TTVector<float> computeFaceNormal(float x1, float y1, float z1,  // v1
+                                          float x2, float y2, float z2,  // v2
+                                          float x3, float y3, float z3); // v3
         void clearArrays();
         void addNormal(float nx, float ny, float nz);
         void createVertecies();
         void buildInterleavedVertices();
 
-        Vec3 color{1.f, 1.f, 1.f};
-        Vec3 position{0.f, 0.f, 0.f};
-        Vec3 velocity;
+        TVec3 color{1.f, 1.f, 1.f};
+        TVec3 position{0.f, 0.f, 0.f};
+        TVec3 velocity;
 
         uint32 stackCount = 12;
         uint32 sectorCount = 36;
@@ -145,11 +147,11 @@ namespace Test
         bool DidParticleMoveThroughField = true;
         float speed = 1.f;
 
-        Vector<float> vertices;
-        Vector<float> normals;
-        Vector<float> texCoords;
-        Vector<int32_t> indices;
-        Vector<int32_t> lineIndices;
+        TTVector<float> vertices;
+        TTVector<float> normals;
+        TTVector<float> texCoords;
+        TTVector<int32_t> indices;
+        TTVector<int32_t> lineIndices;
 
         float weight = 1.f;
         float currentRotationAngle = 0.f;
@@ -157,7 +159,7 @@ namespace Test
         float charge = -1.f;
 
         // interleaved
-        Vector<float> interleavedVertices;
+        TTVector<float> interleavedVertices;
         int interleavedStride;
     };
 

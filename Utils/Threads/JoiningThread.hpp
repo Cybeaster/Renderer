@@ -1,3 +1,4 @@
+#pragma once
 #include <thread>
 
 namespace RenderAPI
@@ -10,8 +11,8 @@ namespace RenderAPI
         public:
             JoiningThread() noexcept = default;
 
-            template <typename Callable, typename... Args>
-            explicit JoiningThread(Callable &&_Func, Args &&..._Args) : Thread(std::forward(Func), std::forward<Args>(_Args)...)
+            template <typename Callable, typename... ArgTypes>
+            explicit JoiningThread(Callable &&_Func, ArgTypes &&..._Args) : Thread(_Func, _Args...)
             {
             }
 

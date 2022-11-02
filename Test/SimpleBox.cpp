@@ -4,7 +4,7 @@
 namespace Test
 {
 
-    TestSimpleBox::TestSimpleBox(String shaderPath) : Test(shaderPath)
+    TestSimpleBox::TestSimpleBox(TString shaderPath) : Test(shaderPath)
     {
         AddVertexArray();
         AddBuffer(box, 12);
@@ -13,13 +13,13 @@ namespace Test
     void TestSimpleBox::OnUpdate(
         float deltaTime,
         float aspect,
-        const Vec3 &cameraPos,
-        Mat4 &pMat,
-        Mat4 &vMat)
+        const TVec3 &cameraPos,
+        TMat4 &pMat,
+        TMat4 &vMat)
     {
         Test::OnUpdate(deltaTime, aspect, cameraPos, pMat, vMat);
 
-        getShader().SetUnformMat4f("mv_matrix", glm::translate(vMat, Vec3(0.0, 0.0, 0.0)));
+        getShader().SetUnformMat4f("mv_matrix", glm::translate(vMat, TVec3(0.0, 0.0, 0.0)));
 
         EnableVertexArray(0);
 

@@ -5,7 +5,7 @@
 namespace Test
 {
 
-    Test::Test(String shaderPath) : shader(shaderPath)
+    Test::Test(TString shaderPath) : shader(shaderPath)
     {
     }
 
@@ -27,14 +27,14 @@ namespace Test
         buffers.push_back(std::make_shared<VertexBuffer>(buffer, size));
     }
 
-    void Test::AddBuffers(Vector<Vector<float>> &vertecis, size_t numOfBuffers)
+    void Test::AddBuffers(TTVector<TTVector<float>> &vertecis, size_t numOfBuffers)
     {
         for (size_t i = 0; i < numOfBuffers; i++)
         {
         }
     }
 
-    void Test::InitShader(String shaderPath)
+    void Test::InitShader(TString shaderPath)
     {
         shader.Init(shaderPath);
     }
@@ -49,14 +49,14 @@ namespace Test
     void Test::OnUpdate(
         const float deltaTime,
         const float aspect,
-        const Vec3 &cameraPos,
-        Mat4 &pMat,
-        Mat4 &vMat)
+        const TVec3 &cameraPos,
+        TMat4 &pMat,
+        TMat4 &vMat)
     {
         shader.Bind();
         pMat = glm::perspective(1.0472f, aspect, 0.01f, 1000.f);
         shader.SetUnformMat4f("proj_matrix", pMat);
-        vMat = glm::translate(Mat4(1.0f), cameraPos * -1.f);
+        vMat = glm::translate(TMat4(1.0f), cameraPos * -1.f);
     }
 
 }

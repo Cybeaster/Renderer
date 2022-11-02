@@ -22,13 +22,13 @@ bool GLLogCall(const char *func, const char *file, int line)
 namespace RenderAPI
 {
     // All default settings
+    TMat4 Renderer::PMat{};
     float Renderer::Aspect{0};
-    Mat4 Renderer::PMat{};
     float Renderer::DeltaTime{0};
     float Renderer::LastFrame{0};
     float Renderer::CurrentFrame{0};
-    Vec3 Renderer::CameraPos{0.f, 10.f, 100.f};
-    Mat4 Renderer::VMat{};
+    TVec3 Renderer::CameraPos{0.f, 10.f, 100.f};
+    TMat4 Renderer::VMat{};
     Renderer *Renderer::SingletonRenderer = nullptr;
 
     void WindowReshapeCallback(GLFWwindow *window, int newHeight, int newWidth)
@@ -100,7 +100,7 @@ namespace RenderAPI
         glfwGetFramebufferSize(window, &Width, &Height);
         Aspect = float(Width) / float(Height);
         PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.f);
-        VMat = glm::translate(Mat4(1.0f), CameraPos * -1.f);
+        VMat = glm::translate(TMat4(1.0f), CameraPos * -1.f);
     }
 #pragma endregion GLFW
 
@@ -118,7 +118,7 @@ namespace RenderAPI
         LastFrame = CurrentFrame;
     }
 
-    void Renderer::addTest(Test::Test *testPtr)
+    void Renderer::AddTest(Test::Test *testPtr)
     {
         if (testPtr != nullptr)
         {

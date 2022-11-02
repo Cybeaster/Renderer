@@ -1,6 +1,7 @@
 #pragma once
-
-#include <RenderAPI.hpp>
+#include "Math.hpp"
+#include "Vector.hpp"
+#include "Types.hpp"
 #include "GL/glew.h"
 #include "glfw3.h"
 #include "Shader.hpp"
@@ -23,11 +24,11 @@ namespace Test
     {
 
     public:
-        Test(String shaderPath);
+        Test(TString shaderPath);
         Test() = default;
         virtual ~Test();
 
-        void Init(const Mat4 &pMatRef)
+        void Init(const TMat4 &pMatRef)
         {
             pMat = pMatRef;
         }
@@ -35,16 +36,16 @@ namespace Test
         virtual void OnUpdate(
             const float deltaTime,
             const float aspect,
-            const Vec3 &cameraPos,
-            Mat4 &pMat,
-            Mat4 &vMat);
+            const TVec3 &cameraPos,
+            TMat4 &pMat,
+            TMat4 &vMat);
 
         virtual void OnTestEnd() {}
 
-        void AddBuffers(Vector<Vector<float>> &vertecis, size_t numOfBuffers);
+        void AddBuffers(TTVector<TTVector<float>> &vertecis, size_t numOfBuffers);
         void AddBuffer(void *buffer, int32_t size);
 
-        virtual void InitShader(String shaderPath);
+        virtual void InitShader(TString shaderPath);
         virtual void EnableVertexArray(GLuint bufferID);
 
     protected:
@@ -55,17 +56,17 @@ namespace Test
             return shader;
         }
 
-        std::stack<Mat4> &GetMVStack()
+        std::stack<TMat4> &GetMVStack()
         {
             return mvStack;
         }
 
-        std::stack<Mat4> mvStack;
-        Vector<GLuint> vertexArray;
-        Vector<std::shared_ptr<VertexBuffer>> buffers;
+        std::stack<TMat4> mvStack;
+        TTVector<GLuint> vertexArray;
+        TTVector<std::shared_ptr<VertexBuffer>> buffers;
 
     private:
-        Mat4
+        TMat4
             pMat,
             mMat,
             mvMat,

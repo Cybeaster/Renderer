@@ -12,6 +12,6 @@ struct GravityField
     GravityField() = default;
     GravityField(const float &rad, const float &strenght, const Test::Particle &particle, const float &charge) : radius(rad), fieldStrenght(strenght), particleField(particle)
     {
-        particleField.setCharge(charge);
+        particleField.SetCharge(charge);
     }
 };

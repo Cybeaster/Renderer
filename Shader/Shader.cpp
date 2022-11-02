@@ -7,7 +7,7 @@
 
 namespace RenderAPI
 {
-    Shader::Shader(const String source)
+    Shader::Shader(const TString source)
     {
         Init(source);
     }
@@ -17,24 +17,24 @@ namespace RenderAPI
         GLCall(glDeleteProgram(rendererID));
     }
 
-    void Shader::Init(const String source)
+    void Shader::Init(const TString source)
     {
         filePath = source;
         ShaderSource shaderSource = ParseShader(source);
         rendererID = CreateShader(shaderSource.vertexShader, shaderSource.fragmentShader);
     }
 
-    void Shader::SetUniform1i(const String name, int32_t v0)
+    void Shader::SetUniform1i(const TString name, int32_t v0)
     {
         GLCall(glUniform1i(GetUnformLocation(name), v0));
     }
 
-    void Shader::SetUniform1f(const String name, float v0)
+    void Shader::SetUniform1f(const TString name, float v0)
     {
         GLCall(glUniform1f(GetUnformLocation(name), v0));
     }
 
-    uint32 Shader::GetUnformLocation(const String &name)
+    uint32 Shader::GetUnformLocation(const TString &name)
     {
         if (locationCache.find(name) != locationCache.end())
             return locationCache[name];
@@ -46,7 +46,7 @@ namespace RenderAPI
         locationCache[name] = location;
         return location;
     }
-    void Shader::SetUnformMat4f(const String name, Mat4 &matrix)
+    void Shader::SetUnformMat4f(const TString name, TMat4 &matrix)
     {
         GLCall(glUniformMatrix4fv(GetUnformLocation(name), 1, GL_FALSE, &matrix[0][0]));
     }
@@ -61,12 +61,12 @@ namespace RenderAPI
         GLCall(glUseProgram(0));
     }
 
-    void Shader::SetUniform4f(const String name, float v0, float v1, float v2, float v3)
+    void Shader::SetUniform4f(const TString name, float v0, float v1, float v2, float v3)
     {
         GLCall(glUniform4f(GetUnformLocation(name), v0, v1, v2, v3));
     }
 
-    uint32 Shader::CompileShader(uint32 type, const String &source)
+    uint32 Shader::CompileShader(uint32 type, const TString &source)
     {
         uint32 id = glCreateShader(type);
         const char *src = source.c_str();
@@ -89,24 +89,24 @@ namespace RenderAPI
         return id;
     }
 
-    ShaderSource Shader::ParseShader(const String &filePath)
+    ShaderSource Shader::ParseShader(const TString &filePath)
     {
         std::fstream stream(filePath);
         if (stream.is_open())
         {
             ShaderType currentType = ShaderType::NONE;
-            String line;
+            TString line;
             std::stringstream stringStream[2];
 
             while (getline(stream, line))
             {
-                if (line.find("#shader") != String::npos)
+                if (line.find("#shader") != TString::npos)
                 {
-                    if (line.find("vertex") != String::npos)
+                    if (line.find("vertex") != TString::npos)
                     {
                         currentType = ShaderType::VERTEX;
                     }
-                    else if (line.find("fragment") != String::npos)
+                    else if (line.find("fragment") != TString::npos)
                     {
                         currentType = ShaderType::FRAGMENT;
                     }
@@ -123,7 +123,7 @@ namespace RenderAPI
         return {};
     }
 
-    int Shader::CreateShader(const String &vertexShader, const String &fragmentShader)
+    int Shader::CreateShader(const TString &vertexShader, const TString &fragmentShader)
     {
         uint32 program = glCreateProgram();
         uint32 vs = CompileShader(GL_VERTEX_SHADER, vertexShader);

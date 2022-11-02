@@ -14,15 +14,15 @@ namespace Test
     {
     public:
         TestSimpleCube() = default;
-        TestSimpleCube(String shaderPath);
+        TestSimpleCube(TString shaderPath);
         ~TestSimpleCube();
 
         void OnUpdate(
             float deltaTime,
             float aspect,
-            const Vec3 &cameraPos,
-            Mat4 &pMat,
-            Mat4 &vMat) override;
+            const TVec3 &cameraPos,
+            TMat4 &pMat,
+            TMat4 &vMat) override;
 
     private:
         float vertexPositions[108] = {

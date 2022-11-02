@@ -9,14 +9,14 @@ namespace Test
 
     public:
         TestSimpleBox() = default;
-        TestSimpleBox(String shaderPath);
+        TestSimpleBox(TString shaderPath);
 
         void OnUpdate(
             float deltaTime,
             float aspect,
-            const Vec3 &cameraPos,
-            Mat4 &pMat,
-            Mat4 &vMat) override;
+            const TVec3 &cameraPos,
+            TMat4 &pMat,
+            TMat4 &vMat) override;
 
         float box[18]{
             0.f,
