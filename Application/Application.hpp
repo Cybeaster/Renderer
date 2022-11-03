@@ -9,20 +9,16 @@ namespace RenderAPI
 
 class Application
 {
-private:
+public:
   Application() = default;
-  static Application *application;
+  static std::unique_ptr<Application> application;
 
 public:
-  static Application *GetApplication()
+  static  auto GetApplication()
   {
-    if (application == nullptr)
-    {
-      application = new Application();
-      return application;
-    }
-    else
-      return application;
+    if (!application)
+        return std::move(application = std::make_unique<Application>());
+  	return std::move(application);
   }
 
   /**
