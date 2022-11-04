@@ -78,6 +78,7 @@ add_executable(exec
 	Utils/Types/Thread.hpp
 	Utils/Types/Types.hpp
 	Utils/Types/Vector.hpp
+	Utils/Types/UniquePtr.hpp
 	Utils/Types/Hash.hpp
 	Utils/Types/Pair.hpp
 	Utils/Types/Tuple.hpp

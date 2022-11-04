@@ -98,7 +98,7 @@ namespace RenderAPI
     void Renderer::GLFWCalcPerspective(GLFWwindow *window)
     {
         glfwGetFramebufferSize(window, &Width, &Height);
-    	Aspect = static_cast<float>(Width/Height);
+    	Aspect = static_cast<float>(Width / Height);
     	PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.f);
         VMat = glm::translate(TMat4(1.0f), CameraPos * -1.f);
     }
