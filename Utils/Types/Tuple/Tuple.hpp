@@ -26,6 +26,11 @@ namespace RenderAPI
         }
         ~TTupleBase() {}
 
+
+        void Empty()
+        {
+            
+        }
 #pragma region GetByIndex
         template <uint32 Index>
         decltype(auto) Get() &&
@@ -95,7 +100,7 @@ namespace RenderAPI
         template <typename FuncType>
         decltype(auto) Call(FuncType &&Function) const &
         {
-            return ::Execute(Function, static_cast<const TTupleBase &>(*this) Get<Indices>()...);
+            return ::Execute(Function, static_cast<const TTupleBase &>(*this).Get<Indices>()...);
         }
     };
 

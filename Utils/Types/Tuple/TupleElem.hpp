@@ -59,7 +59,7 @@ namespace RenderAPI
     {
 
         template<uint32 DeducedIndex, typename TupleType>
-        decltype(auto) GetImpl(const TTupleElem<Type,DeducedIndex,TupleSize>&, TupleType&& Tuple)
+        static decltype(auto) GetImpl(const TTupleElem<Type,DeducedIndex,TupleSize>&, TupleType&& Tuple)
         {
             return TTupleElemGetterByIndex<DeducedIndex,TupleSize>::Get(std::forward<TupleType>(Tuple));
         }

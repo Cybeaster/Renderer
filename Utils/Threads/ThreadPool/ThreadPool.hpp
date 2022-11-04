@@ -12,7 +12,7 @@ namespace RenderAPI
 {
     namespace Thread
     {
-        using namespace RenderAPI::Functor;
+        using namespace RenderAPI;
 
         struct TTaskID
         {
@@ -52,7 +52,7 @@ namespace RenderAPI
             ~TThreadPool();
             TThreadPool(uint32 NumOfThreads);
 
-            TTaskID AddTask(TTFunctor<void()> &&Function);
+            TTaskID AddTask(const TTFunctor<void()> &Function);
 
             void CreateThread(JoiningThread &&Thread);
             void Wait(const TTaskID &ID);

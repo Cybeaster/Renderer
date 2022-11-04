@@ -8,11 +8,11 @@
 // }
 #include <iostream>
 #include "ThreadPool.hpp"
-using namespace RenderAPI::Functor;
+using namespace RenderAPI;
 
 int sum(int &ans, TTVector<int> &arr)
 {
-    for (const auto& i : arr)
+    for (const auto &i : arr)
         ans += i;
 
     return 0;
@@ -20,12 +20,12 @@ int sum(int &ans, TTVector<int> &arr)
 
 void OneParamFunc(int ans)
 {
-       std::cout<<ans<<std::endl;
+    std::cout << ans << std::endl;
 }
 
 void NoParamFunc()
 {
-    std::cout<<"Smthing"<<std::endl;
+    std::cout << "Smthing" << std::endl;
 }
 
 int main(int argc, char **argv)
@@ -45,9 +45,9 @@ int main(int argc, char **argv)
     int ans3 = 0;
 
     auto funcNoParam = NoParamFunctor(NoParamFunc);
-    auto funcOneParam = FunctorOneParam(OneParamFunc,ans1);
-    funcNoParam();
-    funcOneParam();
-    auto id1 = pool.AddTask(std::move(funcNoParam));
+    auto funcOneParam = FunctorOneParam(OneParamFunc, ans1);
+
+    auto id1 = pool.AddTask(funcNoParam);
+    auto id2 = pool.AddTask(funcOneParam);
     return 0;
 }
