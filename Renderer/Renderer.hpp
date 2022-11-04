@@ -4,6 +4,7 @@
 #include "Math.hpp"
 #include "Vector.hpp"
 #include "Types.hpp"
+#include "UniquePtr.hpp"
 
 
 #define GLCall(x)   \
@@ -28,7 +29,7 @@ namespace RenderAPI
         static auto getRenderer()
         {
             if (!SingletonRenderer)
-               return std::move(SingletonRenderer = std::make_unique<Renderer>());
+               return std::move(SingletonRenderer = TTMakeUnique<Renderer>());
             else
         		return std::move(SingletonRenderer);
         }
