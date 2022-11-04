@@ -75,7 +75,7 @@ namespace RenderAPI
 
         GLFWwindow *Window;
     	TTVector<Test::Test *> Tests;
-    	static inline std::unique_ptr<Renderer> SingletonRenderer = nullptr;
+    	static inline TTUniquePtr<Renderer> SingletonRenderer = nullptr;
     };
 
 }
