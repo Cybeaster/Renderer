@@ -1,10 +1,10 @@
 #pragma once
 #include <Test.hpp>
-#include <memory.h>
 #include "Checks/Assert.hpp"
 #include "Math.hpp"
 #include "Vector.hpp"
 #include "Types.hpp"
+#include "UniquePtr.hpp"
 
 
 #define GLCall(x)   \
@@ -26,15 +26,12 @@ namespace RenderAPI
     class Renderer
     {
     public:
-        static Renderer *getRenderer()
+        static auto getRenderer()
         {
-            if (SingletonRenderer == nullptr)
-            {
-                SingletonRenderer = new Renderer();
-                return SingletonRenderer;
-            }
+            if (!SingletonRenderer)
+               return std::move(SingletonRenderer = TTMakeUnique<Renderer>());
             else
-                return SingletonRenderer;
+        		return std::move(SingletonRenderer);
         }
 
         /**
@@ -42,7 +39,7 @@ namespace RenderAPI
          *
          * @return GLFWwindow*
          */
-        GLFWwindow *GLFWInit();
+        GLFWwindow* GLFWInit();
         void GLFWRenderTickStart();
 
         void AddTest(Test::Test *testPtr);
@@ -61,14 +58,14 @@ namespace RenderAPI
         void GLFWRendererStart(float currentTime);
         void GLFWRendererEnd();
         void CalcDeltaTime(float currentTime);
-        void CleanScene();
+    	void CleanScene();
         void GLFWCalcPerspective(GLFWwindow *window);
 
         GLint Height{0};
         GLint Width{0};
 
-        uint32 ScreenWidth = 1920;
-        uint32 ScreenHeight = 1080;
+        static constexpr uint32 ScreenWidth = 1920;
+        static constexpr uint32 ScreenHeight = 1080;
 
         static float DeltaTime;
         static float LastFrame;
@@ -77,8 +74,8 @@ namespace RenderAPI
         static TMat4 VMat;
 
         GLFWwindow *Window;
-        TTVector<Test::Test *> Tests;
-        static Renderer *SingletonRenderer;
+    	TTVector<Test::Test *> Tests;
+    	static inline TTUniquePtr<Renderer> SingletonRenderer = nullptr;
     };
 
 }
