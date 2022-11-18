@@ -1,6 +1,6 @@
 #include <cstdint>
 #include <string>
-#include <memory>
+#include <UniquePtr.hpp>
 
 namespace RenderAPI
 {
@@ -10,19 +10,17 @@ namespace RenderAPI
 class Application
 {
 private:
-  Application() = default;
-  static Application *application;
+  static TTUniquePtr<Application> application;
 
 public:
-  static Application *GetApplication()
+	Application() = default;
+
+  static auto GetApplication()
   {
-    if (application == nullptr)
-    {
-      application = new Application();
-      return application;
-    }
+    if (!application)
+        return std::move(application = TTMakeUnique<Application>());
     else
-      return application;
+  		return std::move(application);
   }
 
   /**

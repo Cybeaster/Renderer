@@ -9,12 +9,13 @@
 #include "TestTexture.hpp"
 #include "SimpleBox.hpp"
 
-Application *Application::application;
+TTUniquePtr<Application> Application::application = nullptr;
 
 void Application::Start(int argc, char **argv)
 {
+    const TTUniquePtr<RenderAPI::Renderer> renderer = RenderAPI::Renderer::getRenderer();
 
-    RenderAPI::Renderer *renderer = RenderAPI::Renderer::getRenderer();
+	if (!renderer) return;
     renderer->GLFWInit();
 
     // Add different tests or write your own.
