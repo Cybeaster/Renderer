@@ -46,7 +46,12 @@ namespace RenderAPI
         locationCache[name] = location;
         return location;
     }
-    void Shader::SetUnformMat4f(const TString name, TMat4 &matrix)
+    void Shader::SetUnformMat4f(const TString name, TMat4 &&matrix)
+    {
+        GLCall(glUniformMatrix4fv(GetUnformLocation(name), 1, GL_FALSE, &matrix[0][0]));
+    }
+
+    void Shader::SetUnformMat4f(const TString name, const TMat4 &matrix)
     {
         GLCall(glUniformMatrix4fv(GetUnformLocation(name), 1, GL_FALSE, &matrix[0][0]));
     }

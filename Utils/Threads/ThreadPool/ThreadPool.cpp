@@ -14,12 +14,12 @@ namespace RenderAPI
             }
         }
 
-        TTaskID TThreadPool::AddTask(const TTFunctor<void()> &Function)
+        TTaskID TThreadPool::AddTask(TCallableInterface *Function)
         {
             int64 taskID = LastID++;
             TMutexGuard queueLock(QueueMutex);
 
-            TaskQueue.emplace(std::make_pair(std::move(Function), TTaskID(taskID)));
+            TaskQueue.emplace(std::make_pair(Function, TTaskID(taskID)));
 
             QueueCV.notify_one();
             return TTaskID(taskID);
@@ -35,10 +35,10 @@ namespace RenderAPI
 
                 if (!TaskQueue.empty())
                 {
-                    auto &elem = std::move(TaskQueue.front());
+                    auto &elem = TaskQueue.front();
                     TaskQueue.pop();
                     uniqueLock.unlock();
-                    // elem.first();
+                    elem.first->Call();
 
                     TMutexGuard guardlock(CompletedTaskMutex);
                     CompletedTasksIDs.insert(elem.second);

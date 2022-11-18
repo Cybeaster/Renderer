@@ -21,15 +21,13 @@ namespace RenderAPI
         friend TTFunctor;
 
         template <typename... ArgTypes>
-        TTupleBase(ArgTypes &&...Args) : TTupleElem<ArgTypes, Indices, sizeof...(ArgTypes)>(std::forward<ArgTypes>(Args))...
+        TTupleBase(ArgTypes... Args) : TTupleElem<ArgTypes, Indices, sizeof...(ArgTypes)>(std::forward<ArgTypes>(Args))...
         {
         }
         ~TTupleBase() {}
 
-
         void Empty()
         {
-            
         }
 #pragma region GetByIndex
         template <uint32 Index>
@@ -79,28 +77,28 @@ namespace RenderAPI
         }
 #pragma endregion GetByType
 
-        template <typename FuncType>
-        decltype(auto) Call(FuncType &&Function) &&
+        template <typename FuncType, typename... ArgTypes>
+        decltype(auto) Call(FuncType &&Function, ArgTypes &&...Args) &&
         {
-            ::Execute(Function, static_cast<TTupleBase &&>(*this).Get<Indices>()...);
+            ::Execute(Function, Args..., static_cast<TTupleBase &&>(*this).Get<Indices>()...);
         }
 
-        template <typename FuncType>
-        decltype(auto) Call(FuncType &&Function) &
+        template <typename FuncType, typename... ArgTypes>
+        decltype(auto) Call(FuncType &&Function, ArgTypes &&...Args) &
         {
-            ::Execute(Function, static_cast<TTupleBase &>(*this).Get<Indices>()...);
+            ::Execute(Function, Args..., static_cast<TTupleBase &>(*this).Get<Indices>()...);
         }
 
-        template <typename FuncType>
-        decltype(auto) Call(FuncType &&Function) const &&
+        template <typename FuncType, typename... ArgTypes>
+        decltype(auto) Call(FuncType &&Function, ArgTypes &&...Args) const &&
         {
-            ::Execute(Function, static_cast<const TTupleBase &&>(*this).Get<Indices>()...);
+            ::Execute(Function, Args..., static_cast<const TTupleBase &&>(*this).Get<Indices>()...);
         }
 
-        template <typename FuncType>
-        decltype(auto) Call(FuncType &&Function) const &
+        template <typename FuncType, typename... ArgTypes>
+        decltype(auto) Call(FuncType &&Function, ArgTypes &&...Args) const &
         {
-            return ::Execute(Function, static_cast<const TTupleBase &>(*this).Get<Indices>()...);
+            return ::Execute(Function, Args..., static_cast<const TTupleBase &>(*this).Get<Indices>()...);
         }
     };
 
@@ -117,8 +115,39 @@ namespace RenderAPI
         using Super = TTupleBase<IntegerSequence, Types...>;
 
     public:
+
+        
+        template <typename... OtherTypes>
+        TTElemSequenceTuple &operator=(const TTElemSequenceTuple<OtherTypes...> &Tuple)
+        {
+            Assign(*this, Tuple, TTMakeIntegerSequence<uint32, sizeof...(Types)>{});
+            return *this;
+        }
+
+        template <typename... OtherTypes>
+        TTElemSequenceTuple &operator=(TTElemSequenceTuple<OtherTypes...> &&Tuple)
+        {
+            Assign(*this, Tuple, TTMakeIntegerSequence<uint32, sizeof...(Types)>{});
+            return *this;
+        }
+
+        template <typename FirstTupleType, typename SecondTupleType, uint32... Indices>
+        static void Assign(FirstTupleType &FirstTuple, SecondTupleType &&SecondTuple, TIntegerSequenceWrapper<uint32, Indices...>)
+        {
+            // This should be implemented with a fold expression when our compilers support it
+            int Temp[] = {0, (FirstTuple.template Get<Indices>() = SecondTupleType.template Get<Indices>(), 0)...};
+            SecondTuple.Empty();
+        }
+
+        template <typename FirstTupleType, typename SecondTupleType, uint32... Indices>
+        static void Assign(FirstTupleType &FirstTuple, SecondTupleType &SecondTuple, TIntegerSequenceWrapper<uint32, Indices...>)
+        {
+            // This should be implemented with a fold expression when our compilers support it
+            int Temp[] = {0, (FirstTuple.template Get<Indices>() = std::forward<SecondTupleType>(SecondTuple).template Get<Indices>(), 0)...};
+        }
+
         template <typename... ArgTypes>
-        TTElemSequenceTuple(ArgTypes &&...Args) : Super(std::forward<ArgTypes>(Args)...)
+        TTElemSequenceTuple(ArgTypes... Args) : Super(std::forward<ArgTypes>(Args)...)
         {
         }
         ~TTElemSequenceTuple() {}

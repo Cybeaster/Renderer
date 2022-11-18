@@ -277,7 +277,7 @@ namespace Test
 
         TMat4 translation = glm::translate(vMat, particle.getPosition());
         TMat4 rotation = particle.rotate(deltaTime);
-        getShader().SetUnformMat4f("mv_matrix", translation * rotation);
+        getShader().SetUnformMat4f("mv_matrix",TMat4(translation * rotation));
         particle.increaseRotSpeed(deltaTime * 10);
         particle.move();
     }
@@ -370,7 +370,7 @@ namespace Test
 
             field.particleField.increaseRotSpeed(10);
 
-            getShader().SetUnformMat4f("mv_matrix", translation * rot);
+            getShader().SetUnformMat4f("mv_matrix", (translation * rot));
             getShader().SetUniform4f("additionalColor", 1, 0, 0, 1);
 
             EnableVertexArray(0);

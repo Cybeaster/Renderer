@@ -1,102 +1,139 @@
 #pragma once
 #include <Assert.hpp>
 #include <Tuple.hpp>
+#include <stdexcept>
+#include <typeinfo>
+#include <SmartPtr.hpp>
 namespace RenderAPI
 {
-
-    // template<typename FunctionType, typename OwnerObj, typename LastArgType>
-    // auto Call(FunctionType OwnerObj::*MemberFunc, LastArgType LastArg) -> decltype()
-    // {
-
-    // }
 
     template <typename Func>
     class TTFunctor;
 
-    template <typename ReturnType, typename... ArgTypes>
-    class TTFunctor<ReturnType(ArgTypes...)>
+    struct TFunctorBase
     {
+        struct TCallableInterface
+        {
+            virtual void Call() = 0;
+            virtual ~TCallableInterface() = default;
+        };
+
+        template <typename CallableType>
+        struct TTCallableImpl : public TCallableInterface
+        {
+            template <typename FunctorType>
+            TTCallableImpl(FunctorType&& FunctorTypeArg) : FunctorArg(FunctorTypeArg)
+            {
+            }
+
+            void Call() override
+            {
+                FunctorArg.Call();
+            }
+            CallableType FunctorArg;
+        };
+
+        template <typename RetType, typename... ArgTypes>
+        inline static TCallableInterface *Create(RetType(Function)(ArgTypes...), ArgTypes... FuncArgs)
+        {
+            using FunctorType = TTFunctor<RetType(ArgTypes...)>;
+            return new TTCallableImpl<FunctorType>(FunctorType(Function, FuncArgs...));
+        }
+    };
+
+    template <typename ReturnType, typename... ArgTypes>
+    class TTFunctor<ReturnType(ArgTypes...)> : public TFunctorBase
+    {
+        struct TCallableInterface;
         typedef ReturnType(FuncType)(ArgTypes...);
 
     public:
-        //template <typename FunConstructorType, typename... ArgConstructorTypes>
-        TTFunctor(FunConstructorType &&FunctionType, ArgConstructorTypes... FuncArgs) : Function(std::forward<FunConstructorType>(FunctionType)), Arguments(std::forward<ArgConstructorTypes>(FuncArgs)...) {}
+        template <typename FuncConstrType, typename... ArgsConstrTypes>
+        TTFunctor(FuncConstrType FunctionType, ArgsConstrTypes... FuncArgs) : Function(FunctionType), Arguments(FuncArgs...) {}
 
-        TTFunctor(TTFunctor &&Functor)
+        template <typename RetType, typename... Args>
+        TTFunctor(TTFunctor<RetType(Args...)> &&Functor)
         {
-            Arguments = std::move(Functor.Arguments);
             Function = Functor.Function;
+            Arguments = Move(Functor.Arguments);
+
+            Functor.Arguments.Empty();
+            Functor.Function = nullptr;
         }
 
-        TTFunctor(const TTFunctor &Functor)
+        template <typename RetType, typename... Args>
+        TTFunctor(const TTFunctor<RetType(Args...)> &Functor)
         {
-            *this = Functor;
-        }
-
-        TTFunctor &operator=(const TTFunctor &Functor)
-        {
+            Function = Functor.Function;
             Arguments = Functor.Arguments;
-            *Function = *Functor.Function;
+        }
+
+        template <typename RetType, typename... Args>
+        TTFunctor &operator=(const TTFunctor<RetType(Args...)> &Functor)
+        {
+            Function = Functor.Function;
+            Arguments = Functor.Arguments;
+
             return *this;
         }
 
-        TTFunctor &operator=(TTFunctor &&MovableFunctor)
+        template <typename RetType, typename... Args>
+        TTFunctor &operator=(TTFunctor<RetType(Args...)> &&MovableFunctor)
         {
-            Arguments = std::move(MovableFunctor.Arguments);
             Function = MovableFunctor.Function;
+            Arguments = MovableFunctor.Arguments;
+
             MovableFunctor.Function = nullptr;
             MovableFunctor.Arguments.Empty();
-            return this;
+            return *this;
         }
 
-        ReturnType operator()()
+        ReturnType Call()
         {
             CheckCallable();
             return Arguments.Call<FuncType>(std::forward<FuncType>(*Function));
         }
 
-        ~TTFunctor();
-
-        template <typename FunctorType, typename... ParamTypes>
-        static TTFunctor<ReturnType(ArgTypes...)> CreateFunctor(ParamTypes... Types)
+        ReturnType operator()()
         {
-            return
+            return Call();
         }
 
-    private:
-        void CheckCallable();
+        ~TTFunctor() = default;
+
+    protected:
+        void CheckCallable()
+        {
+        }
 
         TTuple<ArgTypes...> Arguments;
-        FuncType *Function = nullptr;
+        FuncType *Function;
     };
 
-    template <typename ReturnType, typename... ArgTypes>
-    inline TTFunctor<ReturnType(ArgTypes...)>::~TTFunctor()
-    {
-    }
-
-    template <typename ReturnType, typename... ArgTypes>
-    inline void TTFunctor<ReturnType(ArgTypes...)>::CheckCallable()
-    {
-        ASSERT(Function);
-    }
-
     // #pragma region FuncWithOwner
-    //         template <typename ReturnType, typename OwnerObject, typename... Args>
-    //         class TTMemberFunctor : <ReturnType(OwnerObject::*)(Args...)>
+    //     template <typename OwnerType, typename ReturnType, typename... Args>
+    //     class TTMemberFunctor : public TTFunctor<ReturnType (OwnerType::*)(Args...)>
+    //     {
+    //         using FuncType = ReturnType (OwnerType::*)(Args...);
+
+    //     public:
+    //         template <typename OwnerType, typename FunConstructorType, typename... ArgConstructorTypes>
+    //         TTMemberFunctor(OwnerType *OwnerArg, FunConstructorType &&FunctionType, ArgConstructorTypes... FuncArgs)
+    //             : Owner(MakeShared<OwnerType>(OwnerArg)),
+    //               Function(std::forward<FunConstructorType>(FunctionType)),
+    //               Arguments(std::forward<ArgConstructorTypes>(FuncArgs)...) {}
+
+    //         ~TTMemberFunctor();
+
+    //         void operator()()
     //         {
-    //             using FuncType = ReturnType(OwnerObject::*)(Args...);
-    //         public:
-    //             TTMemberFunctor(FuncType &&FunctionType, Args &&...FuncArgs) : Function(std::forward<FuncType>(*FunctionType)), Arguments(FuncArgs...) {}
-    //             ~TTMemberFunctor();
+    //             CheckCallable();
+    //             Arguments.Call(std::forward<FuncType>(*Function), *Owner);
+    //         }
 
-    //             void operator()()
-    //             {
-
-    //             }
-    //         private:
-    //             /* data */
-    //         };
+    //     private:
+    //         TTSharedPtr<OwnerType> Owner;
+    //     };
     // #pragma endregion FuncWithOwner
 
 } // namespace RenderAPI

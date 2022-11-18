@@ -55,7 +55,7 @@ namespace Test
     {
         shader.Bind();
         pMat = glm::perspective(1.0472f, aspect, 0.01f, 1000.f);
-        shader.SetUnformMat4f("proj_matrix", pMat);
+        shader.SetUnformMat4f("proj_matrix", std::move(pMat));
         vMat = glm::translate(TMat4(1.0f), cameraPos * -1.f);
     }
 

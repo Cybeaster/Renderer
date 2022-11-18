@@ -7,6 +7,7 @@
 #include "Thread.hpp"
 #include "Pair.hpp"
 #include "Hash.hpp"
+#include <functional>
 #include "Set.hpp"
 namespace RenderAPI
 {
@@ -44,7 +45,8 @@ namespace RenderAPI
 
         class TThreadPool
         {
-            using ThreadQueueElem = TTPair<TTFunctor<void()>, TTaskID>;
+            using TCallableInterface = TFunctorBase::TCallableInterface;
+            using ThreadQueueElem = TTPair<TFunctorBase::TCallableInterface *, TTaskID>;
 
         public:
             TThreadPool(/* args */) = delete;
@@ -52,7 +54,7 @@ namespace RenderAPI
             ~TThreadPool();
             TThreadPool(uint32 NumOfThreads);
 
-            TTaskID AddTask(const TTFunctor<void()> &Function);
+            TTaskID AddTask(TCallableInterface *Function);
 
             void CreateThread(JoiningThread &&Thread);
             void Wait(const TTaskID &ID);

@@ -44,10 +44,11 @@ int main(int argc, char **argv)
     TTVector<int> s3 = {8, 9, 10};
     int ans3 = 0;
 
-    auto funcNoParam = NoParamFunctor(NoParamFunc);
-    auto funcOneParam = FunctorOneParam(OneParamFunc, ans1);
+    auto funcNoParam = TFunctorBase::Create(NoParamFunc);
+    auto funcOneParam = TFunctorBase::Create(OneParamFunc, ans1);
 
     auto id1 = pool.AddTask(funcNoParam);
     auto id2 = pool.AddTask(funcOneParam);
+    
     return 0;
 }

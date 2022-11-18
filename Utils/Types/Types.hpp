@@ -3,6 +3,7 @@
 #include <string>
 #include "cstdint"
 
+
 template <typename T, T... Indices>
 struct TIntegerSequenceWrapper
 {
@@ -10,6 +11,13 @@ struct TIntegerSequenceWrapper
 
 template<typename T, T Size>
 using TTMakeIntegerSequence = __make_integer_seq<TIntegerSequenceWrapper,T, Size>;
+
+
+template<typename T>
+T&& Move(T& Arg)
+{
+    return (T&&)Arg;
+}
 
 using TString = std::string;
 

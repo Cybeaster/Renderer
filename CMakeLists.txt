@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(OpenGLGraphics LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED)
 
 find_package(OpenGL REQUIRED)
@@ -81,7 +81,7 @@ add_executable(exec
 	Utils/Types/Pair.hpp
 	Utils/Types/Tuple.hpp
 	Utils/Types/Tuple/Tuple.hpp
-
+	Utils/Delegate/Delegate.hpp
 )
 target_link_libraries(
 	exec
