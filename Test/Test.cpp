@@ -24,7 +24,7 @@ namespace Test
 
     void Test::AddBuffer(void *buffer, int32_t size)
     {
-        buffers.push_back(std::make_shared<VertexBuffer>(buffer, size));
+        buffers.push_back(std::make_shared<TBuffer>(buffer, size));
     }
 
     void Test::AddBuffers(TTVector<TTVector<float>> &vertecis, size_t numOfBuffers)

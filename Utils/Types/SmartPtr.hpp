@@ -3,16 +3,17 @@
 
 namespace RenderAPI
 {
+
     template <typename T>
-    __forceinline auto MakeShared(T Arg)
+    __forceinline auto MakeUnique(T* Arg)
     {
-        return std::make_shared<T>;
+        return std::make_unique<T>;
     }
 
     template <typename T>
-    __forceinline auto MakeUnique(T Arg)
+    __forceinline auto MakeShared(T* Arg)
     {
-        return std::make_unique<T>;
+        return std::make_shared<T>(Arg);
     }
 
     template <typename T>
@@ -23,4 +24,5 @@ namespace RenderAPI
 
     template <typename T>
     using TTUniquePtr = std::unique_ptr<T>;
+
 }

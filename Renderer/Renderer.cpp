@@ -3,7 +3,7 @@
 #include <gtc/type_ptr.hpp>
 #include <iostream>
 
-void GLClearError() 
+void GLClearError()
 {
     while (glGetError() != GL_NO_ERROR)
         ;
@@ -22,17 +22,19 @@ namespace RenderAPI
 {
     // All default settings
     TMat4 Renderer::PMat{};
-	float Renderer::Aspect{0};
+    float Renderer::Aspect{0};
     float Renderer::DeltaTime{0};
     float Renderer::LastFrame{0};
     float Renderer::CurrentFrame{0};
     TVec3 Renderer::CameraPos{0.f, 10.f, 100.f};
     TMat4 Renderer::VMat{};
-   // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
+
+    // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
 
     void WindowReshapeCallback(GLFWwindow *window, const int newHeight, const int newWidth)
     {
-        if (!window) return;
+        if (!window)
+            return;
         Renderer::Aspect = static_cast<float>(newWidth / newHeight);
         glViewport(0, 0, newWidth, newHeight);
         Renderer::PMat = glm::perspective(1.0472f, Renderer::Aspect, 0.1f, 1000.f);
@@ -52,7 +54,7 @@ namespace RenderAPI
         assert(glfwInit());
 
         /* Create a windowed mode window and its OpenGL context */
-         Window = glfwCreateWindow(1920, 1080, "Renderer", NULL, NULL);
+        Window = glfwCreateWindow(1920, 1080, "Renderer", NULL, NULL);
 
         if (!Window)
             glfwTerminate();
@@ -75,6 +77,7 @@ namespace RenderAPI
         CleanScene();
         GLFWCalcPerspective(Window);
         CalcDeltaTime(currentTime);
+        PrintDebugInfo();
     }
     void Renderer::GLFWRendererEnd()
     {
@@ -88,23 +91,30 @@ namespace RenderAPI
         while (!glfwWindowShouldClose(Window))
         {
             GLFWRendererStart(glfwGetTime());
-            for (auto* const test  : Tests)
+            for (auto *const test : Tests)
                 if (test)
                     test->OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
             GLFWRendererEnd();
+        }
+    }
+    void Renderer::PrintDebugInfo()
+    {
+        if (PrintFPS)
+        {
+            std::cout << "Current FPS is " << 1 / DeltaTime << '\n';
         }
     }
 
     void Renderer::GLFWCalcPerspective(GLFWwindow *window)
     {
         glfwGetFramebufferSize(window, &Width, &Height);
-    	Aspect = static_cast<float>(Width / Height);
-    	PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.f);
+        Aspect = static_cast<float>(Width / Height);
+        PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.f);
         VMat = glm::translate(TMat4(1.0f), CameraPos * -1.f);
     }
 #pragma endregion GLFW
 
-	void Renderer::CleanScene()
+    void Renderer::CleanScene()
     {
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
         GLCall(glClear(GL_DEPTH_BUFFER_BIT));

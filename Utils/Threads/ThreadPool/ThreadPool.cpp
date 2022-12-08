@@ -48,9 +48,6 @@ namespace RenderAPI
         }
         void TThreadPool::Wait(const TTaskID &ID)
         {
-            TTaskID id{23};
-            TTaskID id1{0};
-
             TUniqueLock lock(CompletedTaskMutex);
             // wait for notify in function run
             CompletedTaskIdsCV.wait(lock, [this, ID]() -> bool

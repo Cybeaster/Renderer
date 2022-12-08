@@ -1,6 +1,6 @@
 #include <cstdint>
 #include <string>
-#include <UniquePtr.hpp>
+#include "SmartPtr.hpp"
 
 namespace RenderAPI
 {
@@ -9,18 +9,18 @@ namespace RenderAPI
 
 class Application
 {
-private:
-  static TTUniquePtr<Application> application;
-
 public:
-	Application() = default;
-
   static auto GetApplication()
   {
     if (!application)
-        return std::move(application = TTMakeUnique<Application>());
+    {
+      application = RenderAPI::TTSharedPtr<Application>(new Application());
+      return application;
+    }
     else
-  		return std::move(application);
+    {
+      return application;
+    }
   }
 
   /**
@@ -29,4 +29,9 @@ public:
    *
    */
   void Start(int argc, char **argv);
+
+private:
+  Application() = default;
+
+  static inline RenderAPI::TTSharedPtr<Application> application = nullptr;
 };

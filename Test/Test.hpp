@@ -7,7 +7,7 @@
 #include "Shader.hpp"
 #include <vector>
 
-#include "VertexBuffer.hpp"
+#include "Vertex/VertexArrayElem.hpp"
 #include <stack>
 #include <memory>
 
@@ -47,6 +47,7 @@ namespace Test
 
         virtual void InitShader(TString shaderPath);
         virtual void EnableVertexArray(GLuint bufferID);
+        void EnableVertexArray(TBuffer &buffer);
 
     protected:
         void AddVertexArray();
@@ -63,7 +64,7 @@ namespace Test
 
         std::stack<TMat4> mvStack;
         TTVector<GLuint> vertexArray;
-        TTVector<std::shared_ptr<VertexBuffer>> buffers;
+        TTVector<std::shared_ptr<TBuffer>> buffers;
 
     private:
         TMat4

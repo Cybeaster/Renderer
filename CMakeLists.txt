@@ -31,7 +31,6 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Utils/Checks
 	${PROJECT_SOURCE_DIR}/Utils/Types
 	${PROJECT_SOURCE_DIR}/Utils/Types/Tuple
-
 )
 
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
@@ -41,7 +40,7 @@ set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
 add_executable(exec
 	main.cpp
 	Renderer/Renderer.cpp
-	Renderer/VertexBuffer.cpp
+	Renderer/Vertex/Buffer.cpp
 	Application/Application.cpp
 	Shader/Shader.cpp
 	Texture/Texture.cpp
@@ -51,11 +50,13 @@ add_executable(exec
 	Test/Particle/Particle.cpp
 	Test/SimpleBox.cpp
 	Test/Particle/TestParticles.cpp
+	Renderer/Vertex/VertexArrayElem.cpp
 	Utils/Threads/ThreadPool/ThreadPool.cpp
 	Utils/Threads/HierarchicalMutex/HierarchicalMutex.cpp
 
 	Renderer/Renderer.hpp
-	Renderer/VertexBuffer.hpp
+	Renderer/Vertex/Buffer.hpp
+	Renderer/Vertex/VertexArrayElem.hpp
 	Application/Application.hpp
 	Shader/Shader.hpp
 	Texture/Texture.hpp
@@ -77,7 +78,6 @@ add_executable(exec
 	Utils/Types/Thread.hpp
 	Utils/Types/Types.hpp
 	Utils/Types/Vector.hpp
-	Utils/Types/UniquePtr.hpp
 	Utils/Types/Hash.hpp
 	Utils/Types/Pair.hpp
 	Utils/Types/Tuple.hpp

@@ -49,10 +49,9 @@ namespace RenderAPI
             using ThreadQueueElem = TTPair<TFunctorBase::TCallableInterface *, TTaskID>;
 
         public:
-            TThreadPool(/* args */) = delete;
-
             ~TThreadPool();
             TThreadPool(uint32 NumOfThreads);
+            TThreadPool(/* args */) = default;
 
             TTaskID AddTask(TCallableInterface *Function);
 

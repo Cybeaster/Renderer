@@ -309,7 +309,6 @@ namespace Test
             {
                 if (particle.getCharge() == field.particleField.getCharge()) // If the particle and field have the same charge - Move particle in opossite dir.
                 {
-
                     TVec3 inc = (field.particleField.getPosition() - particle.getPosition()) * field.fieldStrenght / pointsDist;
                     TVec3 res = glm::mix(particle.getPosition(), inc, 1.f);
                     particle.incVelocity(res);
@@ -374,6 +373,7 @@ namespace Test
             getShader().SetUniform4f("additionalColor", 1, 0, 0, 1);
 
             EnableVertexArray(0);
+            
             GLCall(glEnable(GL_DEPTH_TEST));
             GLCall(glFrontFace(GL_CCW));
             GLCall(glDepthFunc(GL_LEQUAL));
