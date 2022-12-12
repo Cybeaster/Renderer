@@ -5,6 +5,7 @@
 #include "Vector.hpp"
 #include "Types.hpp"
 #include "SmartPtr.hpp"
+#include "Vertex/VertexArray.hpp"
 #include "ThreadPool.hpp"
 
 #define GLCall(x)   \
@@ -15,7 +16,7 @@
 void GLClearError();
 bool GLLogCall(const char *func, const char *file, int line);
 
-class GLFWwindow;
+struct GLFWwindow;
 class Application;
 namespace RenderAPI
 {

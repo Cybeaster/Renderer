@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.20)
 
 project(OpenGLGraphics LANGUAGES CXX)
 
@@ -51,12 +51,15 @@ add_executable(exec
 	Test/SimpleBox.cpp
 	Test/Particle/TestParticles.cpp
 	Renderer/Vertex/VertexArrayElem.cpp
+	Renderer/Vertex/VertexArray.cpp
 	Utils/Threads/ThreadPool/ThreadPool.cpp
 	Utils/Threads/HierarchicalMutex/HierarchicalMutex.cpp
+
 
 	Renderer/Renderer.hpp
 	Renderer/Vertex/Buffer.hpp
 	Renderer/Vertex/VertexArrayElem.hpp
+	Renderer/Vertex/VertexArray.hpp
 	Application/Application.hpp
 	Shader/Shader.hpp
 	Texture/Texture.hpp
@@ -72,7 +75,6 @@ add_executable(exec
 	Utils/Checks/Exception.hpp
 	Utils/Checks/Assert.hpp
 	Utils/Functor/Functor.hpp
-
 	Utils/Types/Math.hpp
 	Utils/Types/Queue.hpp
 	Utils/Types/Thread.hpp
