@@ -21,7 +21,7 @@ namespace Test
 
         GetMVStack().top() *= glm::translate(TMat4(1.0f), TVec3(0.0, 0.0, 0.0));
         GetMVStack().push(GetMVStack().top());
-        
+
         GetMVStack().top() *= glm::rotate(TMat4(1.0f), float(deltaTime), TVec3(1.0, 0.0, 0.0));
         getShader().SetUnformMat4f("mv_matrix", GetMVStack().top());
 
@@ -67,11 +67,9 @@ namespace Test
         GetMVStack().pop();
     }
 
-    TestSimpleCube::TestSimpleCube(TString shaderPath) : Test(shaderPath)
+    TestSimpleCube::TestSimpleCube(TString shaderPath, TRenderer *Renderer) : Test(shaderPath, Renderer)
     {
-        AddVertexArray();
-        AddBuffer(vertexPositions, sizeof(vertexPositions));
-        AddBuffer(pyramidPositions, sizeof(pyramidPositions));
+        
     }
 
     TestSimpleCube::~TestSimpleCube()

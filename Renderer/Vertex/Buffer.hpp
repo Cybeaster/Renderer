@@ -6,19 +6,18 @@ class TBuffer
 public:
     TBuffer(const void *Data, size_t size);
 
-    TBuffer(TBuffer &&Buffer)
+    TBuffer(const TBuffer& Buffer) : BufferID(Buffer.BufferID)
     {
-        *this = Move(Buffer);
     }
 
-    TBuffer &operator=(TBuffer &&Buffer)
+    TBuffer &operator=(const TBuffer &Buffer)
     {
         BufferID = Buffer.BufferID;
-        Buffer.BufferID = UINT32_MAX;
         return *this;
     }
 
     TBuffer() = default;
+
     ~TBuffer();
 
     void Bind() const;

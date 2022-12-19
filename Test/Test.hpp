@@ -5,17 +5,20 @@
 #include "GL/glew.h"
 #include "glfw3.h"
 #include "Shader.hpp"
-#include <vector>
+#include "SmartPtr.hpp"
 #include <filesystem>
-#include "Vertex/VertexArrayElem.hpp"
+#include "Vertex/VertexArray.hpp"
 #include <stack>
 #include <memory>
 
+
+namespace RenderAPI
+{
+    class TRenderer;
+}
 namespace Test
 {
-
     using namespace RenderAPI;
-
     /**
      * @brief Base class for all tests.
      * @details Each test is an abstract modul, receiving as input base parameters(camera location, frame rate, aspect ration, perspective matrix)
@@ -25,7 +28,7 @@ namespace Test
     {
 
     public:
-        Test(TString shaderPath);
+        Test(TString shaderPath, TRenderer *RendererArg);
         Test() = default;
         virtual ~Test();
 
@@ -43,16 +46,17 @@ namespace Test
 
         virtual void OnTestEnd() {}
 
-        void AddBuffers(TTVector<TTVector<float>> &vertecis, size_t numOfBuffers);
         void AddBuffer(void *buffer, int32_t size);
 
         virtual void InitShader(TString shaderPath);
         virtual void EnableVertexArray(GLuint bufferID);
+
         void EnableVertexArray(TBuffer &buffer);
 
-    protected:
-        void AddVertexArray();
+        TVertexArrayHandle CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext);
+        void DrawBuffer(const TVertexArrayHandle &Handle);
 
+    protected:
         Shader &getShader()
         {
             return shader;
@@ -80,6 +84,8 @@ namespace Test
          *
          */
         Shader shader;
+        TTVector<TVertexArrayHandle> Handles;
+        TTSharedPtr<class TRenderer> Renderer;
     };
 
 }

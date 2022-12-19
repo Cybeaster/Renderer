@@ -1,8 +1,14 @@
 #pragma once
 #include "VertexArrayElem.hpp"
 #include "Hash.hpp"
+#include "Vector.hpp"
 namespace RenderAPI
 {
+
+    struct TVertexIndex
+    {
+        uint32 Index;
+    };
 
     class TVertexArray
     {
@@ -10,10 +16,16 @@ namespace RenderAPI
         TVertexArray(/* args */);
         ~TVertexArray();
 
-        TVertexArrayHandle CreateVertex(TBuffer &&Buffer, uint32 Index, uint32 Size, bool Normalized, size_t Stride);
+        TVertexArrayHandle CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext);
+
+        void DrawBuffer(const TVertexArrayHandle &Handle) const;
+        void AddVertexArray();
+
     private:
         static inline uint64 VertexCounter = 0;
-        TTHashMap<TVertexArrayHandle,TVertexArrayElem> VertexElements;
+
+        TTHashMap<TVertexArrayHandle, TVertexArrayElem, TVertexArrayHandle::THandleHash> VertexElements;
+        TTVector<TVertexIndex> VertexIndicesArray;
     };
 
 };

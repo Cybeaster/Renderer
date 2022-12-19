@@ -38,7 +38,7 @@ namespace Test
             speed += Inc;
         }
 
-        inline void increaseRotSpeed(float Inc)
+        inline void IncreaseRotSpeed(float Inc)
         {
             rotationSpeed += Inc;
         }
@@ -142,7 +142,7 @@ namespace Test
 
         uint32 stackCount = 12;
         uint32 sectorCount = 36;
-        uint32 radius = 1.f;
+        uint32 radius = 1;
 
         bool DidParticleMoveThroughField = true;
         float speed = 1.f;

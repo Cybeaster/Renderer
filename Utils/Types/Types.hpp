@@ -15,12 +15,16 @@ using TTMakeIntegerSequence = __make_integer_seq<TIntegerSequenceWrapper,T, Size
 
 
 template<typename T>
-T&& Move(T& Arg)
+T&& Move(T Arg)
 {
     return (T&&)Arg;
 }
 
-
+template<typename T>
+T&& Forward(T Arg)
+{
+    return std::forward(Arg);
+}
 
 using TString = std::string;
 

@@ -6,7 +6,7 @@
 
 namespace RenderAPI
 {
-  class Renderer;
+  class TRenderer;
 }
 using namespace std::filesystem;
 

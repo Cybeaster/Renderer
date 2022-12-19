@@ -244,11 +244,29 @@ Mat4 calcTranslation(const Mat4 &vMat, const Vec3 position)
 namespace Test
 {
 
-    TestParticles::TestParticles(TString shaderPath) : Test(shaderPath)
+    TestParticles::TestParticles(TString shaderPath, TRenderer *Renderer) : Test(shaderPath, Renderer)
     {
-        AddVertexArray();
         AddParticle({-80, 20, 0}, 1, 1, Particles45StartVel);
-        AddBuffer(Particles[0].getVertecies().begin()._Ptr, sizeof(float) * Particles[0].getVertecies().size());
+        //   EnableVertexArray(0);
+        //             GLCall(glEnable(GL_DEPTH_TEST));
+        //             GLCall(glFrontFace(GL_CCW));
+        //             GLCall(glDepthFunc(GL_LEQUAL));
+        //             GLCall(glDrawArrays(GL_TRIANGLES, 0, particle.getVertecies().size()));
+
+        auto particle = Particles[0];
+        auto size = sizeof(float) * Particles[0].getVertecies().size();
+        auto data = particle.getVertecies().begin()._Ptr;
+
+        TVertexContext contextVertex({data, size}, 0, 3, GL_FLOAT, false, 0);
+        
+        TDrawContext drawContext(GL_TRIANGLES,
+                                 0,
+                                 particle.getVertecies().size(),
+                                 GL_LEQUAL,
+                                 GL_CCW,
+                                 GL_DEPTH_TEST,
+                                 0);
+        DefaultParticleHandle = CreateVertexElement(contextVertex, drawContext);
 
         AddField({80.f, -10.f, -1.f}, DefaultFieldStrenght, {1.f, 0.f, 0.f}, 1);
         AddField({55.f, 20.f, -1.f}, DefaultFieldStrenght, {1.f, 0.f, 0.f}, 1);
@@ -265,9 +283,8 @@ namespace Test
     {
         Test::OnUpdate(deltaTime, aspect, cameraPos, pMat, vMat);
 
-        particleSpawnTick(deltaTime);
-
-        drawParticles(deltaTime, vMat);
+        ParticleSpawnTick(deltaTime);
+        DrawParticles(deltaTime, vMat);
         DrawFields(deltaTime, vMat);
     }
 
@@ -277,12 +294,12 @@ namespace Test
 
         TMat4 translation = glm::translate(vMat, particle.getPosition());
         TMat4 rotation = particle.rotate(deltaTime);
-        getShader().SetUnformMat4f("mv_matrix",TMat4(translation * rotation));
-        particle.increaseRotSpeed(deltaTime * 10);
+        getShader().SetUnformMat4f("mv_matrix", TMat4(translation * rotation));
+        particle.IncreaseRotSpeed(deltaTime * 10);
         particle.move();
     }
 
-    void TestParticles::drawParticles(float deltaTime, TMat4 vMat)
+    void TestParticles::DrawParticles(float deltaTime, TMat4 vMat)
     {
         for (auto &particle : Particles)
         {
@@ -291,12 +308,8 @@ namespace Test
             TVec3 color = particle.getColor();
             getShader().SetUniform4f("additionalColor", color.x, color.y, color.y, 1);
 
-            // Drawing
-            EnableVertexArray(0);
-            GLCall(glEnable(GL_DEPTH_TEST));
-            GLCall(glFrontFace(GL_CCW));
-            GLCall(glDepthFunc(GL_LEQUAL));
-            GLCall(glDrawArrays(GL_TRIANGLES, 0, particle.getVertecies().size()));
+
+            DrawBuffer(DefaultParticleHandle);
         }
     }
 
@@ -323,7 +336,7 @@ namespace Test
         }
     }
 
-    void TestParticles::particleSpawnTick(float DeltaTime)
+    void TestParticles::ParticleSpawnTick(float DeltaTime)
     {
         if (ParticleSpawnTimer <= 0)
         {
@@ -367,17 +380,12 @@ namespace Test
             TMat4 rot = field.particleField.rotate(deltaTime);
             TMat4 translation = glm::translate(vMat, field.particleField.getPosition());
 
-            field.particleField.increaseRotSpeed(10);
+            field.particleField.IncreaseRotSpeed(10);
 
             getShader().SetUnformMat4f("mv_matrix", (translation * rot));
             getShader().SetUniform4f("additionalColor", 1, 0, 0, 1);
 
-            EnableVertexArray(0);
-            
-            GLCall(glEnable(GL_DEPTH_TEST));
-            GLCall(glFrontFace(GL_CCW));
-            GLCall(glDepthFunc(GL_LEQUAL));
-            GLCall(glDrawArrays(GL_TRIANGLES, 0, field.particleField.getVertecies().size()));
+            DrawBuffer(DefaultParticleHandle);
         }
     }
 

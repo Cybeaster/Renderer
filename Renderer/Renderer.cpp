@@ -21,13 +21,13 @@ bool GLLogCall(const char *func, const char *file, const int line)
 namespace RenderAPI
 {
     // All default settings
-    TMat4 Renderer::PMat{};
-    float Renderer::Aspect{0};
-    float Renderer::DeltaTime{0};
-    float Renderer::LastFrame{0};
-    float Renderer::CurrentFrame{0};
-    TVec3 Renderer::CameraPos{0.f, 10.f, 100.f};
-    TMat4 Renderer::VMat{};
+    TMat4 TRenderer::PMat{};
+    float TRenderer::Aspect{0};
+    float TRenderer::DeltaTime{0};
+    float TRenderer::LastFrame{0};
+    float TRenderer::CurrentFrame{0};
+    TVec3 TRenderer::CameraPos{0.f, 10.f, 100.f};
+    TMat4 TRenderer::VMat{};
 
     // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
 
@@ -35,12 +35,12 @@ namespace RenderAPI
     {
         if (!window)
             return;
-        Renderer::Aspect = static_cast<float>(newWidth / newHeight);
+        TRenderer::Aspect = static_cast<float>(newWidth / newHeight);
         glViewport(0, 0, newWidth, newHeight);
-        Renderer::PMat = glm::perspective(1.0472f, Renderer::Aspect, 0.1f, 1000.f);
+        TRenderer::PMat = glm::perspective(1.0472f, TRenderer::Aspect, 0.1f, 1000.f);
     }
 
-    Renderer::~Renderer()
+    TRenderer::~TRenderer()
     {
         glfwDestroyWindow(Window);
         glfwTerminate();
@@ -48,7 +48,7 @@ namespace RenderAPI
 
 #pragma region GLFW
 
-    GLFWwindow *Renderer::GLFWInit()
+    GLFWwindow *TRenderer::GLFWInit()
     {
         /* Initialize the library */
         assert(glfwInit());
@@ -72,21 +72,21 @@ namespace RenderAPI
         return Window;
     }
 
-    void Renderer::GLFWRendererStart(const float currentTime)
+    void TRenderer::GLFWRendererStart(const float currentTime)
     {
         CleanScene();
         GLFWCalcPerspective(Window);
         CalcDeltaTime(currentTime);
         PrintDebugInfo();
     }
-    void Renderer::GLFWRendererEnd()
+    void TRenderer::GLFWRendererEnd()
     {
         /* Swap front and back buffers */
         glfwSwapBuffers(Window);
         glfwPollEvents();
     }
 
-    void Renderer::GLFWRenderTickStart()
+    void TRenderer::GLFWRenderTickStart()
     {
         while (!glfwWindowShouldClose(Window))
         {
@@ -97,7 +97,7 @@ namespace RenderAPI
             GLFWRendererEnd();
         }
     }
-    void Renderer::PrintDebugInfo()
+    void TRenderer::PrintDebugInfo()
     {
         if (PrintFPS)
         {
@@ -105,7 +105,7 @@ namespace RenderAPI
         }
     }
 
-    void Renderer::GLFWCalcPerspective(GLFWwindow *window)
+    void TRenderer::GLFWCalcPerspective(GLFWwindow *window)
     {
         glfwGetFramebufferSize(window, &Width, &Height);
         Aspect = static_cast<float>(Width / Height);
@@ -114,21 +114,21 @@ namespace RenderAPI
     }
 #pragma endregion GLFW
 
-    void Renderer::CleanScene()
+    void TRenderer::CleanScene()
     {
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
         GLCall(glClear(GL_DEPTH_BUFFER_BIT));
         GLCall(glEnable(GL_CULL_FACE));
     }
 
-    void Renderer::CalcDeltaTime(const float currentTime)
+    void TRenderer::CalcDeltaTime(const float currentTime)
     {
         CurrentFrame = currentTime;
         DeltaTime = CurrentFrame - LastFrame;
         LastFrame = CurrentFrame;
     }
 
-    void Renderer::AddTest(Test::Test *testPtr)
+    void TRenderer::AddTest(Test::Test *testPtr)
     {
         if (testPtr)
         {

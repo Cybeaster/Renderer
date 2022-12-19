@@ -7,18 +7,17 @@
 #include <TestSimpleCube.hpp>
 #include <Particle/TestParticles.hpp>
 #include "TestTexture.hpp"
-#include "SimpleBox.hpp"
 
 void Application::Start(int argc, char **argv)
 {
-    auto renderer = RenderAPI::Renderer::GetRenderer();
+    auto renderer = RenderAPI::TRenderer::GetRenderer();
 
     if (!renderer)
         return;
 
     renderer->GLFWInit();
     // Add different tests or write your own.
-    Test::TestParticles cube(GetShaderLocalPath());
+    Test::TestParticles cube(GetShaderLocalPath(),renderer.get());
 
     // renderer->AddTest(&cube);
     renderer->GLFWRenderTickStart();

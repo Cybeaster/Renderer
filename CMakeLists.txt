@@ -48,7 +48,6 @@ add_executable(exec
 	Test/TestTexture.cpp
 	Test/TestSimpleCube.cpp
 	Test/Particle/Particle.cpp
-	Test/SimpleBox.cpp
 	Test/Particle/TestParticles.cpp
 	Renderer/Vertex/VertexArrayElem.cpp
 	Renderer/Vertex/VertexArray.cpp
@@ -68,7 +67,6 @@ add_executable(exec
 	Test/TestSimpleCube.hpp
 	Test/Particle/Particle.hpp
 	Test/Particle/ElectroField.hpp
-	Test/SimpleBox.hpp
 	Test/Particle/TestParticles.hpp
 	Utils/Threads/ThreadPool/ThreadPool.hpp
 	Utils/Threads/HierarchicalMutex/HierarchicalMutex.hpp

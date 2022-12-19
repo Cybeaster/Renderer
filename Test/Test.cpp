@@ -4,8 +4,7 @@
 #include <gtc/type_ptr.hpp>
 namespace Test
 {
-
-    Test::Test(TString shaderPath) : shader(shaderPath)
+    Test::Test(TString shaderPath, TRenderer *RendererArg) : shader(shaderPath), Renderer(RendererArg)
     {
     }
 
@@ -13,25 +12,9 @@ namespace Test
     {
     }
 
-    void Test::AddVertexArray()
-    {
-        vertexArray.push_back({});
-        GLuint *vaID = &vertexArray[vertexArray.size() - 1];
-
-        GLCall(glGenVertexArrays(1, vaID));
-        GLCall(glBindVertexArray(*vaID));
-    }
-
     void Test::AddBuffer(void *buffer, int32_t size)
     {
         buffers.push_back(std::make_shared<TBuffer>(buffer, size));
-    }
-
-    void Test::AddBuffers(TTVector<TTVector<float>> &vertecis, size_t numOfBuffers)
-    {
-        for (size_t i = 0; i < numOfBuffers; i++)
-        {
-        }
     }
 
     void Test::InitShader(TString shaderPath)
@@ -44,6 +27,16 @@ namespace Test
         buffers[bufferID]->Bind();
         GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0));
         GLCall(glEnableVertexAttribArray(0));
+    }
+
+    void Test::DrawBuffer(const TVertexArrayHandle &Handle)
+    {
+        Renderer->DrawBuffer(Handle);
+    }
+
+    TVertexArrayHandle Test::CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext)
+    {
+        return Renderer->CreateVertexElement(VContext, RContext);
     }
 
     void Test::OnUpdate(

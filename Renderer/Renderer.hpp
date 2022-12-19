@@ -24,14 +24,14 @@ namespace RenderAPI
      * @brief Singleton class that creates the context, calculates perspective, frames etc.
      *
      */
-    class Renderer
+    class TRenderer
     {
     public:
         static auto GetRenderer()
         {
             if (!SingletonRenderer)
             {
-                SingletonRenderer = TTSharedPtr<Renderer>(new Renderer());
+                SingletonRenderer = TTSharedPtr<TRenderer>(new TRenderer());
                 return SingletonRenderer;
             }
             else
@@ -58,11 +58,20 @@ namespace RenderAPI
         static float Aspect;
         static TMat4 PMat;
 
-        ~Renderer();
+        ~TRenderer();
+
+        TVertexArrayHandle CreateVertexElement(const TVertexContext& VContext, const TDrawContext& RContext)
+        {
+            return VertexArray.CreateVertexElement(VContext,RContext);
+        }
+
+        void DrawBuffer(const TVertexArrayHandle& Handle)
+        {
+            VertexArray.DrawBuffer(Handle);
+        }
 
     private:
-
-        Renderer() = default;
+        TRenderer() = default;
         Thread::TThreadPool RendererThreadPool;
 
         void GLFWRendererStart(float currentTime);
@@ -71,7 +80,7 @@ namespace RenderAPI
         void CleanScene();
         void GLFWCalcPerspective(GLFWwindow *window);
         void PrintDebugInfo();
-        
+
         GLint Height{0};
         GLint Width{0};
 
@@ -86,9 +95,11 @@ namespace RenderAPI
         static TVec3 CameraPos;
         static TMat4 VMat;
 
+        TVertexArray VertexArray;
+
         GLFWwindow *Window;
         TTVector<Test::Test *> Tests;
-        static inline TTSharedPtr<Renderer> SingletonRenderer = nullptr;
+        static inline TTSharedPtr<TRenderer> SingletonRenderer = nullptr;
     };
 
 }
