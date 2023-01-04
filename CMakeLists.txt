@@ -31,6 +31,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Utils/Checks
 	${PROJECT_SOURCE_DIR}/Utils/Types
 	${PROJECT_SOURCE_DIR}/Utils/Types/Tuple
+	${PROJECT_SOURCE_DIR}/Utils/Types/Queue
 )
 
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
@@ -68,6 +69,7 @@ add_executable(exec
 	Test/Particle/Particle.hpp
 	Test/Particle/ElectroField.hpp
 	Test/Particle/TestParticles.hpp
+
 	Utils/Threads/ThreadPool/ThreadPool.hpp
 	Utils/Threads/HierarchicalMutex/HierarchicalMutex.hpp
 	Utils/Checks/Exception.hpp
@@ -83,6 +85,8 @@ add_executable(exec
 	Utils/Types/Tuple.hpp
 	Utils/Types/Tuple/Tuple.hpp
 	Utils/Delegate/Delegate.hpp
+	
+	Utils/Types/Queue/ThreadSafeQueue.hpp
 )
 target_link_libraries(
 	exec

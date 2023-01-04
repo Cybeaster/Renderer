@@ -8,6 +8,7 @@
 #include "Pair.hpp"
 #include "Hash.hpp"
 #include <functional>
+#include <ThreadSafeQueue.hpp>
 #include "Set.hpp"
 namespace RenderAPI
 {
