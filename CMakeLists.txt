@@ -38,6 +38,10 @@ set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
 set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)
 set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
 
+set(GLFW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glfw3.dll)
+set(GLEW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew64.dll)
+set(GLEW32_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew32.dll)
+
 add_executable(exec
 	main.cpp
 	Renderer/Renderer.cpp
@@ -54,7 +58,6 @@ add_executable(exec
 	Renderer/Vertex/VertexArray.cpp
 	Utils/Threads/ThreadPool/ThreadPool.cpp
 	Utils/Threads/HierarchicalMutex/HierarchicalMutex.cpp
-
 
 	Renderer/Renderer.hpp
 	Renderer/Vertex/Buffer.hpp
@@ -85,9 +88,14 @@ add_executable(exec
 	Utils/Types/Tuple.hpp
 	Utils/Types/Tuple/Tuple.hpp
 	Utils/Delegate/Delegate.hpp
-	
+
 	Utils/Types/Queue/ThreadSafeQueue.hpp
 )
+
+add_library(GLEW GLEW_DLL)
+
+string(STRIP)
+
 target_link_libraries(
 	exec
 	PRIVATE

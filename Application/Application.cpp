@@ -16,8 +16,10 @@ void Application::Start(int argc, char **argv)
         return;
 
     renderer->GLFWInit();
+    const auto path = GetShaderLocalPath();
+
     // Add different tests or write your own.
-    Test::TestParticles cube(GetShaderLocalPath(),renderer.get());
+    Test::TestParticles cube(path, renderer.get());
 
     // renderer->AddTest(&cube);
     renderer->GLFWRenderTickStart();

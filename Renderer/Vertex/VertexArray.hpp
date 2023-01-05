@@ -7,7 +7,7 @@ namespace RenderAPI
 
     struct TVertexIndex
     {
-        uint32 Index;
+        uint32 Index = 0;
     };
 
     class TVertexArray

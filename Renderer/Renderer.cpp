@@ -6,7 +6,7 @@
 void GLClearError()
 {
     while (glGetError() != GL_NO_ERROR)
-        ;
+        std::cout << "[Opengl Error] (" << std::hex << glGetError() << ")" << std::endl;
 }
 
 bool GLLogCall(const char *func, const char *file, const int line)
@@ -20,14 +20,7 @@ bool GLLogCall(const char *func, const char *file, const int line)
 }
 namespace RenderAPI
 {
-    // All default settings
-    TMat4 TRenderer::PMat{};
-    float TRenderer::Aspect{0};
-    float TRenderer::DeltaTime{0};
-    float TRenderer::LastFrame{0};
-    float TRenderer::CurrentFrame{0};
-    TVec3 TRenderer::CameraPos{0.f, 10.f, 100.f};
-    TMat4 TRenderer::VMat{};
+
 
     // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
 
@@ -46,9 +39,22 @@ namespace RenderAPI
         glfwTerminate();
     }
 
+    void TRenderer::Init()
+    {
+        
+
+        //Post Init has to be called after everything
+        PostInit();
+    }
+
+    void TRenderer::PostInit()
+    {
+        VertexArray.AddVertexArray();
+    }
 #pragma region GLFW
 
-    GLFWwindow *TRenderer::GLFWInit()
+    GLFWwindow *
+    TRenderer::GLFWInit()
     {
         /* Initialize the library */
         assert(glfwInit());

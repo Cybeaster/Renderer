@@ -6,7 +6,6 @@ namespace RenderAPI
 {
     TVertexArray::TVertexArray(/* args */)
     {
-        AddVertexArray();
     }
 
     void TVertexArray::AddVertexArray()

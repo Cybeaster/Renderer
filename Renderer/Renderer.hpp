@@ -54,21 +54,34 @@ namespace RenderAPI
         {
             return Tests;
         }
-
-        static float Aspect;
-        static TMat4 PMat;
-
+        
         ~TRenderer();
 
-        TVertexArrayHandle CreateVertexElement(const TVertexContext& VContext, const TDrawContext& RContext)
+        TVertexArrayHandle CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext)
         {
-            return VertexArray.CreateVertexElement(VContext,RContext);
+            return VertexArray.CreateVertexElement(VContext, RContext);
         }
 
-        void DrawBuffer(const TVertexArrayHandle& Handle)
+        void DrawBuffer(const TVertexArrayHandle &Handle)
         {
             VertexArray.DrawBuffer(Handle);
         }
+
+        void Init();
+        void PostInit();
+
+        static constexpr uint32 ScreenWidth = 1920;
+        static constexpr uint32 ScreenHeight = 1080;
+
+        static inline float Aspect{0};
+        static inline float DeltaTime{0};
+        static inline float LastFrame{0};
+        static inline float CurrentFrame{0};
+        static inline float Fovy{1.0041};
+        static inline TVec3 CameraPos{0.f, 10.f, 100.f};
+        
+        static inline TMat4 VMat{};
+        static inline TMat4 PMat{};
 
     private:
         TRenderer() = default;
@@ -85,15 +98,6 @@ namespace RenderAPI
         GLint Width{0};
 
         bool PrintFPS = true;
-
-        static constexpr uint32 ScreenWidth = 1920;
-        static constexpr uint32 ScreenHeight = 1080;
-
-        static float DeltaTime;
-        static float LastFrame;
-        static float CurrentFrame;
-        static TVec3 CameraPos;
-        static TMat4 VMat;
 
         TVertexArray VertexArray;
 
