@@ -1,28 +1,34 @@
 #include <cstdint>
 #include <string>
-#include <memory>
+#include <filesystem>
+#include "SmartPtr.hpp"
+#include <Types.hpp>
 
 namespace RenderAPI
 {
-  class Renderer;
+  class TRenderer;
 }
+using namespace std::filesystem;
 
 class Application
 {
-private:
-  Application() = default;
-  static Application *application;
-
 public:
-  static Application *GetApplication()
+  static auto GetApplication()
   {
-    if (application == nullptr)
+    if (!application)
     {
-      application = new Application();
+      application = RenderAPI::TTSharedPtr<Application>(new Application());
       return application;
     }
     else
+    {
       return application;
+    }
+  }
+
+  static auto GetShaderLocalPath()
+  {
+    return RootDirPath.string() + SimpleCubeShaderLocalPath;
   }
 
   /**
@@ -31,4 +37,14 @@ public:
    *
    */
   void Start(int argc, char **argv);
+
+private:
+  Application() = default;
+
+  static inline RenderAPI::TTSharedPtr<Application> application = nullptr;
+
+  static inline path DebugPath = current_path();
+  static inline path RootDirPath = current_path().parent_path().parent_path();
+
+  static inline TString SimpleCubeShaderLocalPath = "/Externals/Shaders/SimpleCube.shader";
 };

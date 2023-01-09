@@ -29,7 +29,9 @@ namespace RenderAPI
 
         void SetUniform1f(const TString name, float v0);
         void SetUniform1i(const TString name, int32_t v0);
-        void SetUnformMat4f(const TString name, TMat4 &matrix);
+        void SetUnformMat4f(const TString name, TMat4 &&matrix);
+        void SetUnformMat4f(const TString name, const TMat4 &matrix);
+
 
         Shader() = default;
         Shader(const TString source);

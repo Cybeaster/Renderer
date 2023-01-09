@@ -14,7 +14,7 @@ namespace Test
     class TestParticles : public Test
     {
     public:
-        TestParticles(TString shaderPath);
+        TestParticles(TString shaderPath, TRenderer *Renderer);
 
         void OnUpdate(
             float deltaTime,
@@ -24,6 +24,8 @@ namespace Test
             TMat4 &vMat) override;
 
     private:
+
+        TVertexArrayHandle DefaultParticleHandle;
         void ChangeVelocity(Particle &particle);
         void AddField(const TVec3 &pos, const float &strenght, const TVec3 &chargeVec, const float &charge);
         void AddParticle(const TVec3 &startPos, const float &radius, const float &charge, const TVec3 &startVelocity);
@@ -32,7 +34,7 @@ namespace Test
          *
          * @param DeltaTime
          */
-        void particleSpawnTick(float DeltaTime);
+        void ParticleSpawnTick(float DeltaTime);
 
         /**
          * @brief Calculates time for fields spawning.
@@ -47,7 +49,7 @@ namespace Test
          * @param deltaTime Time between frames.
          * @param vMat Camera matrix.
          */
-        void drawParticles(float deltaTime, TMat4 vMat);
+        void DrawParticles(float deltaTime, TMat4 vMat);
 
         /**
          * @brief Draws fiels.

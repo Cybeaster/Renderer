@@ -59,7 +59,7 @@ namespace glm
 		T const a = angle;
 		T const c = cos(a);
 		T const s = sin(a);
-
+		
 		tvec3<T, P> axis(normalize(v));
 		tvec3<T, P> temp((T(1) - c) * axis);
 

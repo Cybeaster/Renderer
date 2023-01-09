@@ -7,12 +7,14 @@
 #include "Thread.hpp"
 #include "Pair.hpp"
 #include "Hash.hpp"
+#include <functional>
+#include <ThreadSafeQueue.hpp>
 #include "Set.hpp"
 namespace RenderAPI
 {
     namespace Thread
     {
-        using namespace RenderAPI::Functor;
+        using namespace RenderAPI;
 
         struct TTaskID
         {
@@ -44,15 +46,15 @@ namespace RenderAPI
 
         class TThreadPool
         {
-            using ThreadQueueElem = TTPair<TTFunctor<void()>, TTaskID>;
+            using TCallableInterface = TFunctorBase::TCallableInterface;
+            using ThreadQueueElem = TTPair<TFunctorBase::TCallableInterface *, TTaskID>;
 
         public:
-            TThreadPool(/* args */) = delete;
-
             ~TThreadPool();
             TThreadPool(uint32 NumOfThreads);
+            TThreadPool(/* args */) = default;
 
-            TTaskID AddTask(TTFunctor<void()> &&Function);
+            TTaskID AddTask(TCallableInterface *Function);
 
             void CreateThread(JoiningThread &&Thread);
             void Wait(const TTaskID &ID);

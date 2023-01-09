@@ -1,11 +1,12 @@
 #pragma once
 #include <Test.hpp>
-#include <memory.h>
 #include "Checks/Assert.hpp"
 #include "Math.hpp"
 #include "Vector.hpp"
 #include "Types.hpp"
-
+#include "SmartPtr.hpp"
+#include "Vertex/VertexArray.hpp"
+#include "ThreadPool.hpp"
 
 #define GLCall(x)   \
     GLClearError(); \
@@ -15,7 +16,7 @@
 void GLClearError();
 bool GLLogCall(const char *func, const char *file, int line);
 
-class GLFWwindow;
+struct GLFWwindow;
 class Application;
 namespace RenderAPI
 {
@@ -23,18 +24,20 @@ namespace RenderAPI
      * @brief Singleton class that creates the context, calculates perspective, frames etc.
      *
      */
-    class Renderer
+    class TRenderer
     {
     public:
-        static Renderer *getRenderer()
+        static auto GetRenderer()
         {
-            if (SingletonRenderer == nullptr)
+            if (!SingletonRenderer)
             {
-                SingletonRenderer = new Renderer();
+                SingletonRenderer = TTSharedPtr<TRenderer>(new TRenderer());
                 return SingletonRenderer;
             }
             else
+            {
                 return SingletonRenderer;
+            }
         }
 
         /**
@@ -51,34 +54,56 @@ namespace RenderAPI
         {
             return Tests;
         }
+        
+        ~TRenderer();
 
-        static float Aspect;
-        static TMat4 PMat;
+        TVertexArrayHandle CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext)
+        {
+            return VertexArray.CreateVertexElement(VContext, RContext);
+        }
 
-        ~Renderer();
+        void DrawBuffer(const TVertexArrayHandle &Handle)
+        {
+            VertexArray.DrawBuffer(Handle);
+        }
+
+        void Init();
+        void PostInit();
+
+        static constexpr uint32 ScreenWidth = 1920;
+        static constexpr uint32 ScreenHeight = 1080;
+
+        static inline float Aspect{0};
+        static inline float DeltaTime{0};
+        static inline float LastFrame{0};
+        static inline float CurrentFrame{0};
+        static inline float Fovy{1.0041};
+        static inline TVec3 CameraPos{0.f, 10.f, 100.f};
+        
+        static inline TMat4 VMat{};
+        static inline TMat4 PMat{};
 
     private:
+        TRenderer() = default;
+        Thread::TThreadPool RendererThreadPool;
+
         void GLFWRendererStart(float currentTime);
         void GLFWRendererEnd();
         void CalcDeltaTime(float currentTime);
         void CleanScene();
         void GLFWCalcPerspective(GLFWwindow *window);
+        void PrintDebugInfo();
 
         GLint Height{0};
         GLint Width{0};
 
-        uint32 ScreenWidth = 1920;
-        uint32 ScreenHeight = 1080;
+        bool PrintFPS = true;
 
-        static float DeltaTime;
-        static float LastFrame;
-        static float CurrentFrame;
-        static TVec3 CameraPos;
-        static TMat4 VMat;
+        TVertexArray VertexArray;
 
         GLFWwindow *Window;
         TTVector<Test::Test *> Tests;
-        static Renderer *SingletonRenderer;
+        static inline TTSharedPtr<TRenderer> SingletonRenderer = nullptr;
     };
 
 }

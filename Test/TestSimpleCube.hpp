@@ -14,7 +14,7 @@ namespace Test
     {
     public:
         TestSimpleCube() = default;
-        TestSimpleCube(TString shaderPath);
+        TestSimpleCube(TString shaderPath,TRenderer *Renderer );
         ~TestSimpleCube();
 
         void OnUpdate(

@@ -1,4 +1,3 @@
-
 #include "Renderer.hpp"
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
@@ -7,12 +6,12 @@
 void GLClearError()
 {
     while (glGetError() != GL_NO_ERROR)
-        ;
+        std::cout << "[Opengl Error] (" << std::hex << glGetError() << ")" << std::endl;
 }
 
-bool GLLogCall(const char *func, const char *file, int line)
+bool GLLogCall(const char *func, const char *file, const int line)
 {
-    while (GLenum error = glGetError())
+    while (const GLenum error = glGetError())
     {
         std::cout << "[Opengl Error] (" << std::hex << error << ") :" << func << '\t' << line << '\t' << file << std::endl;
         return false;
@@ -21,32 +20,41 @@ bool GLLogCall(const char *func, const char *file, int line)
 }
 namespace RenderAPI
 {
-    // All default settings
-    TMat4 Renderer::PMat{};
-    float Renderer::Aspect{0};
-    float Renderer::DeltaTime{0};
-    float Renderer::LastFrame{0};
-    float Renderer::CurrentFrame{0};
-    TVec3 Renderer::CameraPos{0.f, 10.f, 100.f};
-    TMat4 Renderer::VMat{};
-    Renderer *Renderer::SingletonRenderer = nullptr;
 
-    void WindowReshapeCallback(GLFWwindow *window, int newHeight, int newWidth)
+
+    // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
+
+    void WindowReshapeCallback(GLFWwindow *window, const int newHeight, const int newWidth)
     {
-        Renderer::Aspect = (float)newWidth / (float)newHeight;
+        if (!window)
+            return;
+        TRenderer::Aspect = static_cast<float>(newWidth / newHeight);
         glViewport(0, 0, newWidth, newHeight);
-        Renderer::PMat = glm::perspective(1.0472f, Renderer::Aspect, 0.1f, 1000.f);
+        TRenderer::PMat = glm::perspective(1.0472f, TRenderer::Aspect, 0.1f, 1000.f);
     }
 
-    Renderer::~Renderer()
+    TRenderer::~TRenderer()
     {
         glfwDestroyWindow(Window);
         glfwTerminate();
     }
 
+    void TRenderer::Init()
+    {
+        
+
+        //Post Init has to be called after everything
+        PostInit();
+    }
+
+    void TRenderer::PostInit()
+    {
+        VertexArray.AddVertexArray();
+    }
 #pragma region GLFW
 
-    GLFWwindow *Renderer::GLFWInit()
+    GLFWwindow *
+    TRenderer::GLFWInit()
     {
         /* Initialize the library */
         assert(glfwInit());
@@ -70,57 +78,65 @@ namespace RenderAPI
         return Window;
     }
 
-    void Renderer::GLFWRendererStart(float currentTime)
+    void TRenderer::GLFWRendererStart(const float currentTime)
     {
         CleanScene();
         GLFWCalcPerspective(Window);
         CalcDeltaTime(currentTime);
+        PrintDebugInfo();
     }
-    void Renderer::GLFWRendererEnd()
+    void TRenderer::GLFWRendererEnd()
     {
         /* Swap front and back buffers */
         glfwSwapBuffers(Window);
         glfwPollEvents();
     }
 
-    void Renderer::GLFWRenderTickStart()
+    void TRenderer::GLFWRenderTickStart()
     {
         while (!glfwWindowShouldClose(Window))
         {
             GLFWRendererStart(glfwGetTime());
-            for (auto *test : Tests)
-                if (test != nullptr)
+            for (auto *const test : Tests)
+                if (test)
                     test->OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
             GLFWRendererEnd();
         }
     }
+    void TRenderer::PrintDebugInfo()
+    {
+        if (PrintFPS)
+        {
+            std::cout << "Current FPS is " << 1 / DeltaTime << '\n';
+        }
+    }
 
-    void Renderer::GLFWCalcPerspective(GLFWwindow *window)
+    void TRenderer::GLFWCalcPerspective(GLFWwindow *window)
     {
         glfwGetFramebufferSize(window, &Width, &Height);
-        Aspect = float(Width) / float(Height);
+        Aspect = static_cast<float>(Width / Height);
         PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.f);
         VMat = glm::translate(TMat4(1.0f), CameraPos * -1.f);
     }
 #pragma endregion GLFW
 
-    void Renderer::CleanScene()
+    void TRenderer::CleanScene()
     {
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
         GLCall(glClear(GL_DEPTH_BUFFER_BIT));
         GLCall(glEnable(GL_CULL_FACE));
     }
 
-    void Renderer::CalcDeltaTime(float currentTime)
+    void TRenderer::CalcDeltaTime(const float currentTime)
     {
         CurrentFrame = currentTime;
         DeltaTime = CurrentFrame - LastFrame;
         LastFrame = CurrentFrame;
     }
 
-    void Renderer::AddTest(Test::Test *testPtr)
+    void TRenderer::AddTest(Test::Test *testPtr)
     {
-        if (testPtr != nullptr)
+        if (testPtr)
         {
             testPtr->Init(PMat);
             Tests.push_back(testPtr);

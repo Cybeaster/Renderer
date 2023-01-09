@@ -1,25 +1,26 @@
 #define GLEW_STATIC
-
 #include "Application.hpp"
 #include <string>
+#include <Windows.h>
 #include "Renderer.hpp"
 #include <iostream>
 #include <TestSimpleCube.hpp>
 #include <Particle/TestParticles.hpp>
 #include "TestTexture.hpp"
-#include "SimpleBox.hpp"
-
-Application *Application::application;
 
 void Application::Start(int argc, char **argv)
 {
+    auto renderer = RenderAPI::TRenderer::GetRenderer();
 
-    RenderAPI::Renderer *renderer = RenderAPI::Renderer::getRenderer();
+    if (!renderer)
+        return;
+
     renderer->GLFWInit();
+    const auto path = GetShaderLocalPath();
 
     // Add different tests or write your own.
-    Test::TestParticles cube("D://Programs//ProgrammingStuff//OpenGL//Externals//Shaders//SimpleCube.shader");
+    Test::TestParticles cube(path, renderer.get());
 
-    renderer->AddTest(&cube);
+    // renderer->AddTest(&cube);
     renderer->GLFWRenderTickStart();
 }

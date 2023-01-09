@@ -1,9 +1,8 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.20)
 
 project(OpenGLGraphics LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CUDA_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED)
 
 find_package(OpenGL REQUIRED)
@@ -32,17 +31,21 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Utils/Checks
 	${PROJECT_SOURCE_DIR}/Utils/Types
 	${PROJECT_SOURCE_DIR}/Utils/Types/Tuple
-
+	${PROJECT_SOURCE_DIR}/Utils/Types/Queue
 )
 
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
 set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)
 set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
 
+set(GLFW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glfw3.dll)
+set(GLEW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew64.dll)
+set(GLEW32_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew32.dll)
+
 add_executable(exec
 	main.cpp
 	Renderer/Renderer.cpp
-	Renderer/VertexBuffer.cpp
+	Renderer/Vertex/Buffer.cpp
 	Application/Application.cpp
 	Shader/Shader.cpp
 	Texture/Texture.cpp
@@ -50,13 +53,16 @@ add_executable(exec
 	Test/TestTexture.cpp
 	Test/TestSimpleCube.cpp
 	Test/Particle/Particle.cpp
-	Test/SimpleBox.cpp
 	Test/Particle/TestParticles.cpp
+	Renderer/Vertex/VertexArrayElem.cpp
+	Renderer/Vertex/VertexArray.cpp
 	Utils/Threads/ThreadPool/ThreadPool.cpp
 	Utils/Threads/HierarchicalMutex/HierarchicalMutex.cpp
 
 	Renderer/Renderer.hpp
-	Renderer/VertexBuffer.hpp
+	Renderer/Vertex/Buffer.hpp
+	Renderer/Vertex/VertexArrayElem.hpp
+	Renderer/Vertex/VertexArray.hpp
 	Application/Application.hpp
 	Shader/Shader.hpp
 	Texture/Texture.hpp
@@ -65,14 +71,13 @@ add_executable(exec
 	Test/TestSimpleCube.hpp
 	Test/Particle/Particle.hpp
 	Test/Particle/ElectroField.hpp
-	Test/SimpleBox.hpp
 	Test/Particle/TestParticles.hpp
+
 	Utils/Threads/ThreadPool/ThreadPool.hpp
 	Utils/Threads/HierarchicalMutex/HierarchicalMutex.hpp
 	Utils/Checks/Exception.hpp
 	Utils/Checks/Assert.hpp
 	Utils/Functor/Functor.hpp
-
 	Utils/Types/Math.hpp
 	Utils/Types/Queue.hpp
 	Utils/Types/Thread.hpp
@@ -82,8 +87,15 @@ add_executable(exec
 	Utils/Types/Pair.hpp
 	Utils/Types/Tuple.hpp
 	Utils/Types/Tuple/Tuple.hpp
+	Utils/Delegate/Delegate.hpp
 
+	Utils/Types/Queue/ThreadSafeQueue.hpp
 )
+
+add_library(GLEW GLEW_DLL)
+
+string(STRIP)
+
 target_link_libraries(
 	exec
 	PRIVATE
