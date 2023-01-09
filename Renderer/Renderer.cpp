@@ -6,7 +6,7 @@
 void GLClearError()
 {
     while (glGetError() != GL_NO_ERROR)
-        std::cout << "[Opengl Error] (" << std::hex << glGetError() << ")" << std::endl;
+        ;
 }
 
 bool GLLogCall(const char *func, const char *file, const int line)
@@ -21,7 +21,6 @@ bool GLLogCall(const char *func, const char *file, const int line)
 namespace RenderAPI
 {
 
-
     // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
 
     void WindowReshapeCallback(GLFWwindow *window, const int newHeight, const int newWidth)
@@ -30,7 +29,7 @@ namespace RenderAPI
             return;
         TRenderer::Aspect = static_cast<float>(newWidth / newHeight);
         glViewport(0, 0, newWidth, newHeight);
-        TRenderer::PMat = glm::perspective(1.0472f, TRenderer::Aspect, 0.1f, 1000.f);
+        TRenderer::PMat = glm::perspective(TRenderer::Fovy, TRenderer::Aspect, 0.1f, 1000.f);
     }
 
     TRenderer::~TRenderer()
@@ -41,9 +40,8 @@ namespace RenderAPI
 
     void TRenderer::Init()
     {
-        
 
-        //Post Init has to be called after everything
+        // Post Init has to be called after everything
         PostInit();
     }
 
@@ -60,7 +58,7 @@ namespace RenderAPI
         assert(glfwInit());
 
         /* Create a windowed mode window and its OpenGL context */
-        Window = glfwCreateWindow(1920, 1080, "Renderer", NULL, NULL);
+        Window = glfwCreateWindow(ScreenWidth, ScreenHeight, "Renderer", NULL, NULL);
 
         if (!Window)
             glfwTerminate();
@@ -113,11 +111,22 @@ namespace RenderAPI
 
     void TRenderer::GLFWCalcPerspective(GLFWwindow *window)
     {
-        glfwGetFramebufferSize(window, &Width, &Height);
-        Aspect = static_cast<float>(Width / Height);
+        glfwGetFramebufferSize(window, &ScreenWidth, &ScreenHeight);
+        Aspect = static_cast<float>(ScreenWidth / ScreenHeight);
         PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.f);
         VMat = glm::translate(TMat4(1.0f), CameraPos * -1.f);
     }
+
+    void TRenderer::TranslateCameraLocation(const glm::mat4 &Transform)
+    {
+        //CameraPos *= Transform;
+    }
+
+    void TRenderer::LookAtCamera(const TVec3 &Position)
+    {
+        //CameraPos *= glm::lookAt(CameraPos,Position,TVec3(0,0,1));
+    }
+
 #pragma endregion GLFW
 
     void TRenderer::CleanScene()

@@ -10,25 +10,54 @@ namespace RenderAPI
 
     void TVertexArray::AddVertexArray()
     {
-        TVertexIndex id;
+        TSimpleVertexIndex id;
         GLCall(glGenVertexArrays(1, &id.Index));
         GLCall(glBindVertexArray(id.Index));
 
         VertexIndicesArray.push_back(id);
     }
 
-    TVertexArrayHandle TVertexArray::CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext)
+    TDrawVertexHandle TVertexArray::CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext)
     {
-        ++VertexCounter;
-        auto handle = TVertexArrayHandle(VertexCounter);
-        VertexElements[handle] = TVertexArrayElem(VContext, RContext);
-        return handle;
+        ++ElementsCounter;
+
+        auto elementsHandle = TDrawVertexHandle(ElementsCounter);
+        auto bufferAttribHandle = AddAttribBufferImpl(VContext);
+
+        VertexElements[elementsHandle] = TVertexArrayElem(bufferAttribHandle, RContext);
+
+        return elementsHandle;
     }
 
-    void TVertexArray::DrawBuffer(const TVertexArrayHandle &Handle) const
+    TBufferAttribVertexHandle TVertexArray::AddAttribBufferImpl(const TVertexAttribBuffer &Buffer)
+    {
+        ++AttribBuffersCounter;
+        auto bufferAttribHandle = TBufferAttribVertexHandle(AttribBuffersCounter);
+        VertexAttribBuffers[bufferAttribHandle] = Buffer;
+
+        return bufferAttribHandle;
+    }
+
+    TBufferAttribVertexHandle TVertexArray::AddAttribBuffer(const TVertexContext &VContext)
+    {
+        return AddAttribBufferImpl(TVertexAttribBuffer(Context));
+    }
+
+    TBufferAttribVertexHandle TVertexArray::AddAttribBuffer(const TVertexAttribBuffer &Buffer)
+    {
+        return AddAttribBufferImpl(Buffer);
+    }
+
+    void TVertexArray::DrawArrays(const TDrawVertexHandle &Handle) const
     {
         auto elem = VertexElements.find(Handle);
-        elem->second.DrawBuffer();
+        elem->second.DrawArrays();
+    }
+
+    void TVertexArray::EnableBuffer(const TBufferAttribVertexHandle &Handle)
+    {
+        auto elem = VertexAttribBuffers[Handle];
+        elem.EnableVertexAttribPointer();
     }
 
     TVertexArray::~TVertexArray()

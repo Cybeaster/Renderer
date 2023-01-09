@@ -2,10 +2,10 @@
 #include <iostream>
 #include "SOIL2.h"
 
-Texture::Texture(const TString path)
+Texture::Texture(const TPath& path)
 {
     textureID = SOIL_load_OGL_texture(
-        path.c_str(),
+        path.string().c_str(),
         SOIL_LOAD_AUTO,
         SOIL_CREATE_NEW_ID,
         SOIL_FLAG_INVERT_Y);

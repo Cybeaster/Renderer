@@ -4,7 +4,7 @@
 #include <gtc/type_ptr.hpp>
 namespace Test
 {
-    Test::Test(TString shaderPath, TRenderer *RendererArg) : shader(shaderPath), Renderer(RendererArg)
+    Test::Test(TPath shaderPath, TRenderer *RendererArg) : Shader(shaderPath), Renderer(RendererArg)
     {
     }
 
@@ -12,29 +12,22 @@ namespace Test
     {
     }
 
-    void Test::AddBuffer(void *buffer, int32_t size)
-    {
-        buffers.push_back(std::make_shared<TBuffer>(buffer, size));
-    }
-
     void Test::InitShader(TString shaderPath)
     {
-        shader.Init(shaderPath);
+        Shader.Init(shaderPath);
     }
 
-    void Test::EnableVertexArray(GLuint bufferID)
+    void Test::DrawArrays(const TDrawVertexHandle &Handle)
     {
-        buffers[bufferID]->Bind();
-        GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0));
-        GLCall(glEnableVertexAttribArray(0));
+        Renderer->DrawArrays(Handle);
     }
 
-    void Test::DrawBuffer(const TVertexArrayHandle &Handle)
+    void Test::EnableBuffer(const TBufferAttribVertexHandle &Handle)
     {
-        Renderer->DrawBuffer(Handle);
+        Renderer->EnableBuffer(Handle);
     }
 
-    TVertexArrayHandle Test::CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext)
+    TDrawVertexHandle Test::CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext)
     {
         return Renderer->CreateVertexElement(VContext, RContext);
     }
@@ -46,9 +39,9 @@ namespace Test
         TMat4 &pMat,
         TMat4 &vMat)
     {
-        shader.Bind();
+        Shader.Bind();
         pMat = glm::perspective(1.0472f, aspect, 0.01f, 1000.f);
-        shader.SetUnformMat4f("proj_matrix", std::move(pMat));
+        Shader.SetUnformMat4f("proj_matrix", std::move(pMat));
         vMat = glm::translate(TMat4(1.0f), cameraPos * -1.f);
     }
 

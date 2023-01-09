@@ -5,3 +5,4 @@
 
 using TMat4 = glm::mat4;
 using TVec3 = glm::vec3;
+using TVec4 = glm::vec4;

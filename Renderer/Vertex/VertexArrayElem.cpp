@@ -3,19 +3,10 @@
 namespace RenderAPI
 {
 
-    void TVertexArrayElem::DrawBuffer() const
+    void TVertexArrayElem::DrawArrays() const
     {
-        VertexContext.Bind();
-
-        GLCall(glVertexAttribPointer(
-            VertexContext.VertexIndex,
-            VertexContext.VertexSize,
-            VertexContext.VertexType,
-            VertexContext.IsNormalized,
-            VertexContext.VertexStride,
-            0));
-
-        GLCall(glEnableVertexAttribArray(DrawContext.AttributeArray));
+        TRenderer::GetRenderer()->EnableBuffer(BoundBufferHandle);
+        
         GLCall(glEnable(DrawContext.Flag));
         GLCall(glFrontFace(DrawContext.FrontFace));
 

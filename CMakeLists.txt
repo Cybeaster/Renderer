@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(OpenGLGraphics LANGUAGES CXX)
+project(RenderAPI LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED)
@@ -34,14 +34,6 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Utils/Types/Queue
 )
 
-set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
-set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)
-set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
-
-set(GLFW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glfw3.dll)
-set(GLEW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew64.dll)
-set(GLEW32_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew32.dll)
-
 add_executable(exec
 	main.cpp
 	Renderer/Renderer.cpp
@@ -54,6 +46,8 @@ add_executable(exec
 	Test/TestSimpleCube.cpp
 	Test/Particle/Particle.cpp
 	Test/Particle/TestParticles.cpp
+	Test/TestSimpleSolarSystem.cpp
+
 	Renderer/Vertex/VertexArrayElem.cpp
 	Renderer/Vertex/VertexArray.cpp
 	Utils/Threads/ThreadPool/ThreadPool.cpp
@@ -91,10 +85,13 @@ add_executable(exec
 
 	Utils/Types/Queue/ThreadSafeQueue.hpp
 )
+set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
+set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)
+set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
 
-add_library(GLEW GLEW_DLL)
-
-string(STRIP)
+set(GLFW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glfw3.dll)
+set(GLEW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew64.dll)
+set(GLEW32_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew32.dll)
 
 target_link_libraries(
 	exec

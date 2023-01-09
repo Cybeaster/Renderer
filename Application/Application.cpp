@@ -6,7 +6,10 @@
 #include <iostream>
 #include <TestSimpleCube.hpp>
 #include <Particle/TestParticles.hpp>
+#include <TestSimpleSolarSystem.hpp>
 #include "TestTexture.hpp"
+
+#define DEBUG
 
 void Application::Start(int argc, char **argv)
 {
@@ -17,10 +20,14 @@ void Application::Start(int argc, char **argv)
 
     renderer->GLFWInit();
     const auto path = GetShaderLocalPath();
+    auto ResourceDir = GetResourceDirectory();
+#ifdef DEBUG
+    std::cout << path << std::endl;
+    
+#endif
 
     // Add different tests or write your own.
-    Test::TestParticles cube(path, renderer.get());
-
-    // renderer->AddTest(&cube);
+    Test::TestTexture test(ResourceDir.concat("Parrot.jpg"));
+    renderer->AddTest(&test);
     renderer->GLFWRenderTickStart();
 }

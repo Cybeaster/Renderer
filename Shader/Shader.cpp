@@ -7,74 +7,74 @@
 
 namespace RenderAPI
 {
-    Shader::Shader(const TString source)
+    TShader::TShader(const TPath Source)
     {
-        Init(source);
+        Init(Source);
     }
 
-    Shader::~Shader()
+    TShader::~TShader()
     {
-        GLCall(glDeleteProgram(rendererID));
+        GLCall(glDeleteProgram(RendererID));
     }
 
-    void Shader::Init(const TString source)
+    void TShader::Init(const TPath Source)
     {
-        filePath = source;
-        ShaderSource shaderSource = ParseShader(source);
-        rendererID = CreateShader(shaderSource.vertexShader, shaderSource.fragmentShader);
+        FilePath = Source;
+        ShaderSource shaderSource = ParseShader(Source);
+        RendererID = CreateShader(shaderSource.vertexShader, shaderSource.fragmentShader);
     }
 
-    void Shader::SetUniform1i(const TString name, int32_t v0)
+    void TShader::SetUniform1i(const TString name, int32_t v0)
     {
         GLCall(glUniform1i(GetUnformLocation(name), v0));
     }
 
-    void Shader::SetUniform1f(const TString name, float v0)
+    void TShader::SetUniform1f(const TString name, float v0)
     {
         GLCall(glUniform1f(GetUnformLocation(name), v0));
     }
 
-    uint32 Shader::GetUnformLocation(const TString &name)
+    uint32 TShader::GetUnformLocation(const TString &name)
     {
-        if (locationCache.find(name) != locationCache.end())
-            return locationCache[name];
+        if (LocationCache.find(name) != LocationCache.end())
+            return LocationCache[name];
 
-        GLCall(int32_t location = glGetUniformLocation(rendererID, name.c_str()));
+        GLCall(int32_t location = glGetUniformLocation(RendererID, name.c_str()));
         if (location == -1)
             std::cout << "Warning unform " << name << "  doesnt exist." << std::endl;
 
-        locationCache[name] = location;
+        LocationCache[name] = location;
         return location;
     }
-    void Shader::SetUnformMat4f(const TString name, TMat4 &&matrix)
+    void TShader::SetUnformMat4f(const TString name, TMat4 &&matrix)
     {
         GLCall(glUniformMatrix4fv(GetUnformLocation(name), 1, GL_FALSE, &matrix[0][0]));
     }
 
-    void Shader::SetUnformMat4f(const TString name, const TMat4 &matrix)
+    void TShader::SetUnformMat4f(const TString name, const TMat4 &matrix)
     {
         GLCall(glUniformMatrix4fv(GetUnformLocation(name), 1, GL_FALSE, &matrix[0][0]));
     }
 
-    void Shader::Bind() const
+    void TShader::Bind() const
     {
-        GLCall(glUseProgram(rendererID));
+        GLCall(glUseProgram(RendererID));
     }
 
-    void Shader::Unbind() const
+    void TShader::Unbind() const
     {
         GLCall(glUseProgram(0));
     }
 
-    void Shader::SetUniform4f(const TString name, float v0, float v1, float v2, float v3)
+    void TShader::SetUniform4f(const TString name, float v0, float v1, float v2, float v3)
     {
         GLCall(glUniform4f(GetUnformLocation(name), v0, v1, v2, v3));
     }
 
-    uint32 Shader::CompileShader(uint32 type, const TString &source)
+    uint32 TShader::CompileShader(uint32 type, const TString &Source)
     {
         uint32 id = glCreateShader(type);
-        const char *src = source.c_str();
+        const char *src = Source.c_str();
         glShaderSource(id, 1, &src, nullptr);
         glCompileShader(id);
 
@@ -94,7 +94,7 @@ namespace RenderAPI
         return id;
     }
 
-    ShaderSource Shader::ParseShader(const TString &filePath)
+    ShaderSource TShader::ParseShader(const TPath &filePath)
     {
         std::fstream stream(filePath);
         if (stream.is_open())
@@ -128,7 +128,7 @@ namespace RenderAPI
         return {};
     }
 
-    int Shader::CreateShader(const TString &vertexShader, const TString &fragmentShader)
+    int TShader::CreateShader(const TString &vertexShader, const TString &fragmentShader)
     {
         uint32 program = glCreateProgram();
         uint32 vs = CompileShader(GL_VERTEX_SHADER, vertexShader);

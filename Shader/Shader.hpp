@@ -3,6 +3,7 @@
 #include "Math.hpp"
 #include "Vector.hpp"
 #include "Types.hpp"
+#include <Path.hpp>
 struct ShaderSource
 {
     TString vertexShader;
@@ -18,10 +19,10 @@ enum class ShaderType
 
 namespace RenderAPI
 {
-    class Shader
+    class TShader
     {
     public:
-        void Init(const TString source);
+        void Init(const TPath source);
 
         void Bind() const;
         void Unbind() const;
@@ -32,20 +33,19 @@ namespace RenderAPI
         void SetUnformMat4f(const TString name, TMat4 &&matrix);
         void SetUnformMat4f(const TString name, const TMat4 &matrix);
 
-
-        Shader() = default;
-        Shader(const TString source);
-        ~Shader();
+        TShader() = default;
+        TShader(const TPath source);
+        ~TShader();
 
     private:
         uint32 CompileShader(uint32 type, const TString &source);
         uint32 GetUnformLocation(const TString &name);
         int CreateShader(const TString &vertexShader, const TString &fragmentShader);
-        ShaderSource ParseShader(const TString &filePath);
+        ShaderSource ParseShader(const TPath &filePath);
         bool CompileShader();
 
-        TString filePath;
-        uint32 rendererID = 277;
-        std::unordered_map<TString, int32_t> locationCache;
+        TPath FilePath;
+        uint32 RendererID = 277;
+        std::unordered_map<TString, int32_t> LocationCache;
     };
 } // RenderAPI

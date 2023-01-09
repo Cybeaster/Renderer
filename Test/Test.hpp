@@ -10,7 +10,7 @@
 #include "Vertex/VertexArray.hpp"
 #include <stack>
 #include <memory>
-
+#include <Path.hpp>
 
 namespace RenderAPI
 {
@@ -28,7 +28,7 @@ namespace Test
     {
 
     public:
-        Test(TString shaderPath, TRenderer *RendererArg);
+        Test(TPath shaderPath, TRenderer *RendererArg);
         Test() = default;
         virtual ~Test();
 
@@ -46,20 +46,18 @@ namespace Test
 
         virtual void OnTestEnd() {}
 
-        void AddBuffer(void *buffer, int32_t size);
-
         virtual void InitShader(TString shaderPath);
-        virtual void EnableVertexArray(GLuint bufferID);
 
         void EnableVertexArray(TBuffer &buffer);
 
-        TVertexArrayHandle CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext);
-        void DrawBuffer(const TVertexArrayHandle &Handle);
+        TDrawVertexHandle CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext);
+        void EnableBuffer(const TBufferAttribVertexHandle& Handle)
+        void DrawArrays(const TDrawVertexHandle &Handle);
 
     protected:
-        Shader &getShader()
+        TShader &GetShader()
         {
-            return shader;
+            return Shader;
         }
 
         std::stack<TMat4> &GetMVStack()
@@ -69,7 +67,8 @@ namespace Test
 
         std::stack<TMat4> mvStack;
         TTVector<GLuint> vertexArray;
-        TTVector<std::shared_ptr<TBuffer>> buffers;
+
+        TTSharedPtr<class TRenderer> Renderer;
 
     private:
         TMat4
@@ -80,12 +79,11 @@ namespace Test
             rMat;
 
         /**
-         * @brief Шейдер, в который будут отправляться данные по пайплайну.
+         * @brief Shader that is used for pipeline.
          *
          */
-        Shader shader;
-        TTVector<TVertexArrayHandle> Handles;
-        TTSharedPtr<class TRenderer> Renderer;
+        TShader Shader;
+        TTVector<TVertexHandle> Handles;
     };
 
 }

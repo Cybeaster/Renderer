@@ -1,6 +1,6 @@
 #include <cstdint>
 #include <string>
-#include <filesystem>
+#include <Path.hpp>
 #include "SmartPtr.hpp"
 #include <Types.hpp>
 
@@ -8,7 +8,6 @@ namespace RenderAPI
 {
   class TRenderer;
 }
-using namespace std::filesystem;
 
 class Application
 {
@@ -28,7 +27,11 @@ public:
 
   static auto GetShaderLocalPath()
   {
-    return RootDirPath.string() + SimpleCubeShaderLocalPath;
+    return RootDirPath.concat(SimpleCubeShaderLocalPath.string());
+  }
+  static auto GetResourceDirectory()
+  {
+    return ResourceDirectory;
   }
 
   /**
@@ -43,8 +46,9 @@ private:
 
   static inline RenderAPI::TTSharedPtr<Application> application = nullptr;
 
-  static inline path DebugPath = current_path();
-  static inline path RootDirPath = current_path().parent_path().parent_path();
+  static inline TPath DebugPath = current_path();
+  static inline TPath RootDirPath = current_path().parent_path();
 
-  static inline TString SimpleCubeShaderLocalPath = "/Externals/Shaders/SimpleCube.shader";
+  static inline TPath SimpleCubeShaderLocalPath = "\\Externals\\Shaders\\SimpleCube.shader";
+  static inline TPath ResourceDirectory = "\\Externals\\Resources\\";
 };

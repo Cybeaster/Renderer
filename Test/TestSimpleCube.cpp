@@ -1,79 +1,47 @@
-
-#include <TestSimpleCube.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
-#include "glfw3.h"
-
+#include "TestSimpleCube.hpp"
+#include <Renderer.hpp>
 namespace Test
 {
+    TestSimpleCube::TestSimpleCube(TPath ShaderPath, TRenderer *Renderer) : Test(ShaderPath, Renderer)
+    {
+        TVertexContext contextVertex(
+            new TBuffer{cubePositions, sizeof(cubePositions)},
+            0,
+            3,
+            GL_FLOAT,
+            false,
+            0,
+            0,
+            nullptr);
+
+        TDrawContext drawContext(GL_TRIANGLES,
+                                 0,
+                                 108 / 3,
+                                 GL_LEQUAL,
+                                 GL_CCW,
+                                 GL_DEPTH_TEST);
+
+        handle = CreateVertexElement(contextVertex, drawContext);
+    }
 
     void TestSimpleCube::OnUpdate(
-        float deltaTime,
-        float aspect,
+        const float deltaTime,
+        const float aspect,
         const TVec3 &cameraPos,
         TMat4 &pMat,
         TMat4 &vMat)
     {
         Test::OnUpdate(deltaTime, aspect, cameraPos, pMat, vMat);
 
-        GetMVStack().push(vMat);
-        GetMVStack().push(GetMVStack().top());
+        mMatrix = glm::translate(TMat4(1), cubePos);
+        mvMatrix = mMatrix * vMat;
+        GetShader().SetUnformMat4f("mv_matrix", mvMatrix);
+        GetShader().SetUniform4f("additionalColor", 1, 1, 1, 1);
 
-        GetMVStack().top() *= glm::translate(TMat4(1.0f), TVec3(0.0, 0.0, 0.0));
-        GetMVStack().push(GetMVStack().top());
+        DrawArrays(handle);
+        // GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0));
+        // GLCall(glEnableVertexAttribArray(0));
 
-        GetMVStack().top() *= glm::rotate(TMat4(1.0f), float(deltaTime), TVec3(1.0, 0.0, 0.0));
-        getShader().SetUnformMat4f("mv_matrix", GetMVStack().top());
-
-        EnableVertexArray(1);
-        GLCall(glEnable(GL_DEPTH_TEST));
-        GLCall(glFrontFace(GL_CCW));
-        GLCall(glDepthFunc(GL_LEQUAL));
-        GLCall(glDrawArrays(GL_TRIANGLES, 0, 18));
-        GetMVStack().pop();
-        // pyr
-
-        // cube
-
-        GetMVStack().push(GetMVStack().top());
-        GetMVStack().top() *= glm::translate(TMat4(1.0f), TVec3(sin(float(deltaTime)) * 4.0f, 0.0f, cos(float(deltaTime) * 4.0)));
-        GetMVStack().push(GetMVStack().top());
-        GetMVStack().top() *= glm::rotate(TMat4(1.0f), float(deltaTime), TVec3(0.0, 1.0, 0.0));
-        getShader().SetUnformMat4f("mv_matrix", GetMVStack().top());
-
-        EnableVertexArray(1);
-        GLCall(glEnable(GL_DEPTH_TEST));
-        GLCall(glFrontFace(GL_CCW));
-        GLCall(glDepthFunc(GL_LEQUAL));
-        GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
-        GetMVStack().pop();
-
-        // smaller cube
-
-        GetMVStack().push(GetMVStack().top());
-        GetMVStack().top() *= glm::translate(TMat4(1.0f), TVec3(0.f, sin(deltaTime) * 2.0, cos(float(deltaTime) * 2.0)));
-        GetMVStack().top() *= glm::rotate(TMat4(1.0f), float(deltaTime), TVec3(0.0, 0.0, 1.0));
-        GetMVStack().top() *= glm::scale(TMat4(1.0), TVec3(0.25f, 0.25f, 0.25f));
-        getShader().SetUnformMat4f("mv_matrix", GetMVStack().top());
-
-        EnableVertexArray(1);
-        GLCall(glEnable(GL_DEPTH_TEST));
-        GLCall(glFrontFace(GL_CW));
-        GLCall(glDepthFunc(GL_LEQUAL));
-        GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
-        GetMVStack().pop();
-        GetMVStack().pop();
-        GetMVStack().pop();
-        GetMVStack().pop();
+        // GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
     }
-
-    TestSimpleCube::TestSimpleCube(TString shaderPath, TRenderer *Renderer) : Test(shaderPath, Renderer)
-    {
-        
-    }
-
-    TestSimpleCube::~TestSimpleCube()
-    {
-    }
-
 }
