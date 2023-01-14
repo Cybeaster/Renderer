@@ -19,15 +19,20 @@ void Application::Start(int argc, char **argv)
         return;
 
     renderer->GLFWInit();
-    const auto Shaderpath = GetShaderLocalPathWith(SimpleTextureShader);
-    auto parrotPath = GetResourceDirectoryWith("BrickWall.jpg");
+    const auto textureShaderPath = GetShaderLocalPathWith(SimpleTextureShader);
+    const auto simpleCubeShader = GetShaderLocalPathWith(SimpleCubeShader);
+    auto brickTexture = GetResourceDirectoryWith("BrickWall.jpg");
 #ifdef DEBUG
-    std::cout << Shaderpath << std::endl;
+
+    std::cout << textureShaderPath << std::endl;
 
 #endif
 
     // Add different tests or write your own.
-    Test::TestTexture test(parrotPath, Shaderpath, renderer);
-    renderer->AddTest(&test);
+    Test::TestSimpleSolarSystem test(simpleCubeShader, renderer);
+    Test::TestTexture textureTest(brickTexture, textureShaderPath, renderer);
+
+    // renderer->AddTest(&test);
+    renderer->AddTest(&textureTest);
     renderer->GLFWRenderTickStart();
 }

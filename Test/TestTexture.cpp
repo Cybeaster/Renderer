@@ -28,7 +28,8 @@ namespace Test
             vMat);
 
         EnableBuffer(pyramidHandle);
-
+        EnableBuffer(textureHandle);
+        
         Texture.Bind(0);
 
         DrawArrays(textureHandle);

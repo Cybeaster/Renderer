@@ -93,6 +93,11 @@ namespace RenderAPI
         static TMat4 VMat;
         static TMat4 PMat;
 
+        static bool RightMousePressed;
+        static TVec2 PressedMousePos;
+
+        static TMat4 MouseCameraRotation;
+
         void TranslateCameraLocation(const glm::mat4 &Transform);
 
         void LookAtCamera(const TVec3 &Position);
@@ -106,6 +111,7 @@ namespace RenderAPI
         {
             return VertexArray.AddAttribBuffer(Context);
         }
+        
 
     private:
         TRenderer() = default;
@@ -117,8 +123,7 @@ namespace RenderAPI
         void CleanScene();
         void GLFWCalcPerspective(GLFWwindow *window);
         void PrintDebugInfo();
-
-        bool PrintFPS = false;
+        void CalcScene();
 
         TVertexArray VertexArray;
 

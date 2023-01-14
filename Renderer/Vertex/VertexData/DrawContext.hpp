@@ -53,11 +53,11 @@ namespace RenderAPI
         {
         }
 
-        TDrawFlag DrawType;
-        TDrawFlag FirstDrawIndex;
-        TDrawFlag DrawSize;
-        TDrawFlag DepthFunction;
-        TDrawFlag FrontFace;
-        TDrawFlag Flag;
+        uint32 DrawType = UINT32_MAX;
+        uint32 FirstDrawIndex = UINT32_MAX;
+        uint32 DrawSize = UINT32_MAX;
+        uint32 DepthFunction = UINT32_MAX;
+        uint32 FrontFace = UINT32_MAX;
+        uint32 Flag = UINT32_MAX;
     };
 } // namespace RenderAPI

@@ -57,7 +57,7 @@ namespace RenderAPI
     void TVertexArray::EnableBuffer(const TDrawVertexHandle &Handle)
     {
         auto elem = VertexElements.find(Handle);
-        elem->second.GetBoundBufferHandle();
+        EnableBuffer(elem->second.GetBoundBufferHandle());
     }
 
     void TVertexArray::EnableBuffer(const TBufferAttribVertexHandle &Handle)

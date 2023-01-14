@@ -1,7 +1,13 @@
 #include "Renderer.hpp"
 #include <gtc/matrix_transform.hpp>
+#include <gtx/rotate_vector.hpp>
 #include <gtc/type_ptr.hpp>
+#include <gtx/string_cast.hpp>
 #include <iostream>
+
+#define DEBUG_MOUSE_WHEEL false
+#define DEBUG_MOUSE_POS true
+#define DEBUG_FPS false
 
 void GLClearError()
 {
@@ -21,18 +27,23 @@ bool GLLogCall(const char *func, const char *file, const int line)
 namespace RenderAPI
 {
 
-    int TRenderer::ScreenWidth = 1920;
-    int TRenderer::ScreenHeight = 1080;
+    int TRenderer::ScreenWidth = 900;
+    int TRenderer::ScreenHeight = 700;
 
     float TRenderer::Aspect{0};
     float TRenderer::DeltaTime{0};
     float TRenderer::LastFrame{0};
     float TRenderer::CurrentFrame{0};
     float TRenderer::Fovy{1.0472f};
-    TVec3 TRenderer::CameraPos{0.f, -2.f, 8.f};
+    TVec3 TRenderer::CameraPos{0.f, 0.f, -2.f};
 
     TMat4 TRenderer::VMat{};
     TMat4 TRenderer::PMat{};
+
+    TVec2 TRenderer::PressedMousePos{0, 0};
+    TMat4 TRenderer::MouseCameraRotation{TMat4(1.f)};
+
+    bool TRenderer::RightMousePressed{false};
 
     // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
 
@@ -40,9 +51,57 @@ namespace RenderAPI
     {
         if (!window)
             return;
-        TRenderer::Aspect = static_cast<float>(newWidth / newHeight);
         glViewport(0, 0, newWidth, newHeight);
+
+        TRenderer::Aspect = static_cast<float>(newWidth / newHeight);
+        TRenderer::ScreenWidth = newWidth;
+        TRenderer::ScreenHeight = newHeight;
         TRenderer::PMat = glm::perspective(TRenderer::Fovy, TRenderer::Aspect, 0.1f, 1000.f);
+    }
+
+    void CursorWheelInputCallback(GLFWwindow *window, double XOffset, double YOffset)
+    {
+        TRenderer::CameraPos.z -= YOffset;
+        if (DEBUG_MOUSE_WHEEL)
+        {
+            std::cout << glm::to_string(TRenderer::CameraPos) << std::endl;
+        }
+    }
+
+    void MouseInputCallback(GLFWwindow *window, int Button, int Action, int Mods)
+    {
+        if (Button == GLFW_MOUSE_BUTTON_RIGHT)
+        {
+            if (Action == GLFW_RELEASE)
+            {
+                TRenderer::RightMousePressed = false;
+
+                double xPos, yPos;
+                glfwGetCursorPos(window, &xPos, &yPos);
+                TRenderer::PressedMousePos = {xPos, yPos};
+            }
+            else if (Action == GLFW_PRESS)
+            {
+                TRenderer::RightMousePressed = true;
+            }
+        }
+    }
+
+    void MouseCursorMoveCallback(GLFWwindow *Window, double XPos, double YPos)
+    {
+        if (TRenderer::RightMousePressed)
+        {
+            auto pos = TVec2(XPos, YPos);
+            const auto delta = (TRenderer::PressedMousePos - pos);
+            TRenderer::CameraPos =
+                glm::rotate(TRenderer::CameraPos, glm::length(delta) / 100, TVec3(delta.y, delta.x, 0)); // inverted
+
+            TRenderer::PressedMousePos = pos;
+            if (DEBUG_MOUSE_POS)
+            {
+                std::cout << glm::to_string(delta) << std::endl;
+            }
+        }
     }
 
     TRenderer::~TRenderer()
@@ -86,16 +145,27 @@ namespace RenderAPI
         GLCall(glEnable(GL_BLEND));
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         glfwSetWindowSizeCallback(Window, WindowReshapeCallback);
+        glfwSetScrollCallback(Window, CursorWheelInputCallback);
+        glfwSetMouseButtonCallback(Window, MouseInputCallback);
+        glfwSetCursorPosCallback(Window, MouseCursorMoveCallback);
         return Window;
     }
 
     void TRenderer::GLFWRendererStart(const float currentTime)
     {
         CleanScene();
+        CalcScene();
         GLFWCalcPerspective(Window);
         CalcDeltaTime(currentTime);
         PrintDebugInfo();
     }
+
+    void TRenderer::CalcScene()
+    {
+        PMat = glm::perspective(1.0472f, Aspect, 0.01f, 1000.f);
+        VMat = MouseCameraRotation * glm::translate(TMat4(1.0f), CameraPos * -1.f);
+    }
+
     void TRenderer::GLFWRendererEnd()
     {
         /* Swap front and back buffers */
@@ -116,7 +186,7 @@ namespace RenderAPI
     }
     void TRenderer::PrintDebugInfo()
     {
-        if (PrintFPS)
+        if (DEBUG_FPS)
         {
             std::cout << "Current FPS is " << 1 / DeltaTime << '\n';
         }
