@@ -40,7 +40,7 @@ namespace RenderAPI
 
     TBufferAttribVertexHandle TVertexArray::AddAttribBuffer(const TVertexContext &VContext)
     {
-        return AddAttribBufferImpl(TVertexAttribBuffer(Context));
+        return AddAttribBufferImpl(TVertexAttribBuffer(VContext));
     }
 
     TBufferAttribVertexHandle TVertexArray::AddAttribBuffer(const TVertexAttribBuffer &Buffer)
@@ -52,6 +52,12 @@ namespace RenderAPI
     {
         auto elem = VertexElements.find(Handle);
         elem->second.DrawArrays();
+    }
+
+    void TVertexArray::EnableBuffer(const TDrawVertexHandle &Handle)
+    {
+        auto elem = VertexElements.find(Handle);
+        elem->second.GetBoundBufferHandle();
     }
 
     void TVertexArray::EnableBuffer(const TBufferAttribVertexHandle &Handle)

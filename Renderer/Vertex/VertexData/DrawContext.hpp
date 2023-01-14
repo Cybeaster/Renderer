@@ -4,6 +4,23 @@
 namespace RenderAPI
 {
 
+    struct TDrawFlag
+    {
+        TDrawFlag() = default;
+
+        TDrawFlag(uint32 Arg)
+        {
+            Flag = Arg;
+        }
+
+        operator const uint32&()
+        {
+            return Flag;
+        }
+
+        uint32 Flag = UINT32_MAX;
+    };
+
     struct TDrawContext
     {
 
@@ -27,20 +44,20 @@ namespace RenderAPI
                      const uint32 FrontFaceArg,
                      const uint32 FlagArg) :
 
-                                           DrawType(Type),
-                                           FirstDrawIndex(Index),
-                                           DrawSize(Size),
-                                           DepthFunction(Function),
-                                           FrontFace(FrontFaceArg),
-                                           Flag(FlagArg)
+                                             DrawType(Type),
+                                             FirstDrawIndex(Index),
+                                             DrawSize(Size),
+                                             DepthFunction(Function),
+                                             FrontFace(FrontFaceArg),
+                                             Flag(FlagArg)
         {
         }
 
-        uint32 DrawType;
-        uint32 FirstDrawIndex;
-        uint32 DrawSize;
-        uint32 DepthFunction;
-        uint32 FrontFace;
-        uint32 Flag;
+        TDrawFlag DrawType;
+        TDrawFlag FirstDrawIndex;
+        TDrawFlag DrawSize;
+        TDrawFlag DepthFunction;
+        TDrawFlag FrontFace;
+        TDrawFlag Flag;
     };
 } // namespace RenderAPI

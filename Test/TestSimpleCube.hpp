@@ -6,7 +6,7 @@ namespace Test
     class TestSimpleCube : public Test
     {
     public:
-        TestSimpleCube(TPath ShaderPath, TRenderer *Renderer);
+        TestSimpleCube(TPath ShaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer);
 
         virtual void OnUpdate(
             const float deltaTime,

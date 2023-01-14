@@ -2,16 +2,16 @@
 
 namespace Test
 {
-    TestTexture::TestTexture(const TPath &TexturePath, const TPath &ShaderPath, TRenderer *Renderer)
-        : texture(TexturePath), Test(ShaderPath, Renderer)
+    TestTexture::TestTexture(const TPath &TexturePath, const TPath &ShaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer)
+        : Texture(TexturePath), Test(ShaderPath, Renderer)
     {
 
         pyramidHandle = Renderer->AddAttribBuffer(
             TVertexContext(new TBuffer(pyramidPositions, sizeof(pyramidPositions)), 0, 3, GL_FLOAT, false, 0, 0, 0));
 
         textureHandle = CreateVertexElement(
-            TVertexContext(new TBuffer(textureCoods, sizeof(textureCoods)), 1, 3, GL_FLOAT, false, 0, 1, 0),
-            TDrawContext(GL_TRIANGLES, 0, 18 / 3, GL_LEQUAL, GL_CCW, GL_DEPTH_TEST));
+            TVertexContext(new TBuffer(textureCoods, sizeof(textureCoods)), 1, 2, GL_FLOAT, false, 0, 1, 0),
+            TDrawContext(GL_TRIANGLES, 0, 18, GL_LEQUAL, GL_CCW, GL_DEPTH_TEST));
     }
 
     void TestTexture::OnUpdate(
@@ -28,7 +28,10 @@ namespace Test
             vMat);
 
         EnableBuffer(pyramidHandle);
-        EnableBuffer();
+
+        Texture.Bind(0);
+
+        DrawArrays(textureHandle);
     }
 
     TestTexture::~TestTexture()

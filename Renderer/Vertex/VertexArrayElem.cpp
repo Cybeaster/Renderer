@@ -6,15 +6,15 @@ namespace RenderAPI
     void TVertexArrayElem::DrawArrays() const
     {
         TRenderer::GetRenderer()->EnableBuffer(BoundBufferHandle);
-        
-        GLCall(glEnable(DrawContext.Flag));
-        GLCall(glFrontFace(DrawContext.FrontFace));
 
-        GLCall(glDepthFunc(DrawContext.DepthFunction));
+        GLCall(glEnable(DrawContext.Flag.Flag));
+        GLCall(glFrontFace(DrawContext.FrontFace.Flag));
 
-        GLCall(glDrawArrays(DrawContext.DrawType,
-                            DrawContext.FirstDrawIndex,
-                            DrawContext.DrawSize));
+        GLCall(glDepthFunc(DrawContext.DepthFunction.Flag));
+
+        GLCall(glDrawArrays(DrawContext.DrawType.Flag,
+                            DrawContext.FirstDrawIndex.Flag,
+                            DrawContext.DrawSize.Flag));
     }
 
 } // namespace RenderAPI

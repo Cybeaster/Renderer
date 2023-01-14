@@ -2,7 +2,7 @@
 #include <Renderer.hpp>
 namespace Test
 {
-    TestSimpleCube::TestSimpleCube(TPath ShaderPath, TRenderer *Renderer) : Test(ShaderPath, Renderer)
+    TestSimpleCube::TestSimpleCube(TPath ShaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer) : Test(ShaderPath, Renderer)
     {
         TVertexContext contextVertex(
             new TBuffer{cubePositions, sizeof(cubePositions)},

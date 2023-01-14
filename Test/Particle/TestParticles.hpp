@@ -14,7 +14,7 @@ namespace Test
     class TestParticles : public Test
     {
     public:
-        TestParticles(TPath shaderPath, TRenderer *Renderer);
+        TestParticles(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer);
 
         void OnUpdate(
             float deltaTime,

@@ -14,7 +14,7 @@ namespace Test
     {
     public:
         TestSimpleSolarSystem() = default;
-        TestSimpleSolarSystem(TPath shaderPath, TRenderer *Renderer);
+        TestSimpleSolarSystem(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer);
 
         void OnUpdate(
             float deltaTime,

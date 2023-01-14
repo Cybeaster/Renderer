@@ -21,6 +21,19 @@ bool GLLogCall(const char *func, const char *file, const int line)
 namespace RenderAPI
 {
 
+    int TRenderer::ScreenWidth = 1920;
+    int TRenderer::ScreenHeight = 1080;
+
+    float TRenderer::Aspect{0};
+    float TRenderer::DeltaTime{0};
+    float TRenderer::LastFrame{0};
+    float TRenderer::CurrentFrame{0};
+    float TRenderer::Fovy{1.0472f};
+    TVec3 TRenderer::CameraPos{0.f, -2.f, 8.f};
+
+    TMat4 TRenderer::VMat{};
+    TMat4 TRenderer::PMat{};
+
     // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
 
     void WindowReshapeCallback(GLFWwindow *window, const int newHeight, const int newWidth)
@@ -119,12 +132,12 @@ namespace RenderAPI
 
     void TRenderer::TranslateCameraLocation(const glm::mat4 &Transform)
     {
-        //CameraPos *= Transform;
+        // CameraPos *= Transform;
     }
 
     void TRenderer::LookAtCamera(const TVec3 &Position)
     {
-        //CameraPos *= glm::lookAt(CameraPos,Position,TVec3(0,0,1));
+        // CameraPos *= glm::lookAt(CameraPos,Position,TVec3(0,0,1));
     }
 
 #pragma endregion GLFW

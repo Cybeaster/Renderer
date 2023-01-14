@@ -4,7 +4,7 @@
 #include <gtc/type_ptr.hpp>
 namespace Test
 {
-    Test::Test(TPath shaderPath, TRenderer *RendererArg) : Shader(shaderPath), Renderer(RendererArg)
+    Test::Test(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> RendererArg) : Shader(shaderPath), Renderer(RendererArg)
     {
     }
 
@@ -23,6 +23,11 @@ namespace Test
     }
 
     void Test::EnableBuffer(const TBufferAttribVertexHandle &Handle)
+    {
+        Renderer->EnableBuffer(Handle);
+    }
+
+    void Test::EnableBuffer(const TDrawVertexHandle &Handle)
     {
         Renderer->EnableBuffer(Handle);
     }

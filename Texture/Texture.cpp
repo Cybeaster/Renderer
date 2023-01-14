@@ -2,7 +2,7 @@
 #include <iostream>
 #include "SOIL2.h"
 
-Texture::Texture(const TPath& path)
+TTexture::TTexture(const TPath& path)
 {
     textureID = SOIL_load_OGL_texture(
         path.string().c_str(),
@@ -13,18 +13,18 @@ Texture::Texture(const TPath& path)
         std::cerr << "Couldn't find texture file" << path << std::endl;
 }
 
-Texture::~Texture()
+TTexture::~TTexture()
 {
     GLCall(glDeleteTextures(1, &textureID));
 }
 
-void Texture::Bind(uint32 slot) const
+void TTexture::Bind(uint32 slot) const
 {
     GLCall(glActiveTexture(GL_TEXTURE0 + slot));
     GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
 }
 
-void Texture::Unbind()
+void TTexture::Unbind()
 {
     GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }

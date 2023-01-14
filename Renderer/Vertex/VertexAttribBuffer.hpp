@@ -8,24 +8,13 @@ namespace RenderAPI
     class TVertexAttribBuffer
     {
     public:
-        TVertexAttribBuffer(/* args */);
+        TVertexAttribBuffer(/* args */) = default;
 
         TVertexAttribBuffer(const TVertexContext &Context);
-
-        ~TVertexAttribBuffer();
 
         void EnableVertexAttribPointer();
 
     private:
         TVertexContext VertexContext;
     };
-
-    TVertexAttribBuffer::TVertexAttribBuffer(/* args */)
-    {
-    }
-
-    TVertexAttribBuffer::~TVertexAttribBuffer()
-    {
-    }
-
 } // namespace RendererAPI

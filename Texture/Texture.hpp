@@ -1,12 +1,12 @@
 #pragma once
 #include <Renderer.hpp>
 #include <string>
-class Texture
+class TTexture
 {
 
 public:
-    Texture(const TPath& path);
-    ~Texture();
+    TTexture(const TPath& path);
+    ~TTexture();
 
     void Bind(uint32 slot = 0) const;
     void Unbind();

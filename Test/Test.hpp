@@ -1,8 +1,9 @@
 #pragma once
+#include "GL/glew.h"
+
 #include "Math.hpp"
 #include "Vector.hpp"
 #include "Types.hpp"
-#include "GL/glew.h"
 #include "glfw3.h"
 #include "Shader.hpp"
 #include "SmartPtr.hpp"
@@ -28,7 +29,7 @@ namespace Test
     {
 
     public:
-        Test(TPath shaderPath, TRenderer *RendererArg);
+        Test(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> RendererArg);
         Test() = default;
         virtual ~Test();
 
@@ -51,7 +52,9 @@ namespace Test
         void EnableVertexArray(TBuffer &buffer);
 
         TDrawVertexHandle CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext);
-        void EnableBuffer(const TBufferAttribVertexHandle& Handle)
+        void EnableBuffer(const TBufferAttribVertexHandle &Handle);
+        void EnableBuffer(const TDrawVertexHandle &Handle);
+
         void DrawArrays(const TDrawVertexHandle &Handle);
 
     protected:

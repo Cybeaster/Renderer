@@ -38,6 +38,7 @@ add_executable(exec
 	main.cpp
 	Renderer/Renderer.cpp
 	Renderer/Vertex/Buffer.cpp
+	Renderer/Vertex/VertexAttribBuffer.cpp
 	Application/Application.cpp
 	Shader/Shader.cpp
 	Texture/Texture.cpp
@@ -47,7 +48,7 @@ add_executable(exec
 	Test/Particle/Particle.cpp
 	Test/Particle/TestParticles.cpp
 	Test/TestSimpleSolarSystem.cpp
-
+	
 	Renderer/Vertex/VertexArrayElem.cpp
 	Renderer/Vertex/VertexArray.cpp
 	Utils/Threads/ThreadPool/ThreadPool.cpp

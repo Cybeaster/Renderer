@@ -58,33 +58,31 @@ namespace Test
         GetMVStack().pop();
     }
 
-    TestSimpleSolarSystem::TestSimpleSolarSystem(TPath shaderPath, TRenderer *Renderer) : Test(shaderPath, Renderer)
+    TestSimpleSolarSystem::TestSimpleSolarSystem(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer) : Test(shaderPath, Renderer)
     {
         auto size = sizeof(cubePositions);
         auto data = cubePositions;
-        TVertexContext contextVertex(new TBuffer{data, size}, 0, 3, GL_FLOAT, false, 0);
+        TVertexContext contextVertex(new TBuffer{data, size}, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
 
         TDrawContext drawContext(GL_TRIANGLES,
                                  0,
                                  size / 3,
                                  GL_LEQUAL,
                                  GL_CCW,
-                                 GL_DEPTH_TEST,
-                                 0);
+                                 GL_DEPTH_TEST);
         cubeHandle = CreateVertexElement(contextVertex, drawContext);
 
         size = sizeof(pyramidPositions);
         data = pyramidPositions;
 
-        TVertexContext pyramidVertex(new TBuffer{pyramidPositions, sizeof(pyramidPositions)}, 0, 3, GL_FLOAT, false, 0);
-        
+        TVertexContext pyramidVertex(new TBuffer{pyramidPositions, sizeof(pyramidPositions)}, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
+
         TDrawContext pyramidDrawContext(GL_TRIANGLES,
                                         0,
                                         size / 3,
                                         GL_LEQUAL,
                                         GL_CCW,
-                                        GL_DEPTH_TEST,
-                                        0);
+                                        GL_DEPTH_TEST);
 
         pyramidHandle = CreateVertexElement(pyramidVertex, pyramidDrawContext);
     }

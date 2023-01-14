@@ -65,7 +65,7 @@ struct TVertexHandle
     }
 
 private:
-    uint64 Handle;
+    uint64 Handle = UINT64_MAX;
 };
 
 struct TDrawVertexHandle : TVertexHandle

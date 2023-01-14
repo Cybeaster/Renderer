@@ -8,7 +8,7 @@ namespace Test
     class TestTexture : public Test
     {
     public:
-        TestTexture(const TPath &filePath, const TPath &ShaderPath, TRenderer *Renderer);
+        TestTexture(const TPath &filePath, const TPath &ShaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer);
         ~TestTexture();
 
         virtual void OnUpdate(
@@ -53,7 +53,7 @@ namespace Test
 
         TBufferAttribVertexHandle pyramidHandle;
         TDrawVertexHandle textureHandle;
-        Texture texture;
+        TTexture Texture;
     };
 
 } // namespace test

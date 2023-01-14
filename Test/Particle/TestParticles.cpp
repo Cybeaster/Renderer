@@ -244,7 +244,7 @@ Mat4 calcTranslation(const Mat4 &vMat, const Vec3 position)
 namespace Test
 {
 
-    TestParticles::TestParticles(TPath shaderPath, TRenderer *Renderer) : Test(shaderPath, Renderer)
+    TestParticles::TestParticles(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer) : Test(shaderPath, Renderer)
     {
         AddParticle({-80, 20, 0}, 1, 1, Particles45StartVel);
 

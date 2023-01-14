@@ -37,7 +37,9 @@ namespace RenderAPI
         TDrawVertexHandle CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext);
 
         void DrawArrays(const TDrawVertexHandle &Handle) const;
+
         void EnableBuffer(const TBufferAttribVertexHandle &Handle);
+        void EnableBuffer(const TDrawVertexHandle &Handle);
 
         void AddVertexArray();
 

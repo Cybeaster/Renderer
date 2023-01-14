@@ -1,6 +1,5 @@
 
 #include "VertexAttribBuffer.hpp"
-#include "glfw3.h"
 #include "../Renderer.hpp"
 
 namespace RenderAPI
@@ -13,14 +12,14 @@ namespace RenderAPI
 
     void TVertexAttribBuffer::EnableVertexAttribPointer()
     {
-        VertexContext.Buffer->Bind();
-        glVertexAttribPointer(VertexContext.AttribIndex,
-                              VertexContext.BunchSize,
-                              VertexContext.Type,
+        VertexContext.BoundBuffer->Bind();
+        glVertexAttribPointer(VertexContext.VertexIndex,
+                              VertexContext.VertexSize,
+                              VertexContext.VertexType,
                               VertexContext.IsNormalized,
-                              VertexContext.Stride,
-                              VertexContext.Pointer);
+                              VertexContext.VertexStride,
+                              VertexContext.VertexPointer);
 
-        glEnableVertexAttribArray(VertexContext.AttribArrayIndex);
+        glEnableVertexAttribArray(VertexContext.VertexAttribArrayIndex);
     }
 } // namespace RenderAPI

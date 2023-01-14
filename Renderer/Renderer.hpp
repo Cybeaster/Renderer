@@ -67,6 +67,11 @@ namespace RenderAPI
             VertexArray.DrawArrays(Handle);
         }
 
+        void EnableBuffer(const TDrawVertexHandle &Handle)
+        {
+            VertexArray.EnableBuffer(Handle);
+        }
+
         void EnableBuffer(const TBufferAttribVertexHandle &Handle)
         {
             VertexArray.EnableBuffer(Handle);
@@ -75,18 +80,18 @@ namespace RenderAPI
         void Init();
         void PostInit();
 
-        static inline int ScreenWidth = 1920;
-        static inline int ScreenHeight = 1080;
+        static int ScreenWidth;
+        static int ScreenHeight;
 
-        static inline float Aspect{0};
-        static inline float DeltaTime{0};
-        static inline float LastFrame{0};
-        static inline float CurrentFrame{0};
-        static inline float Fovy{1.0472f};
-        static inline TVec3 CameraPos{0.f, 1.f, 0.f};
+        static float Aspect;
+        static float DeltaTime;
+        static float LastFrame;
+        static float CurrentFrame;
+        static float Fovy;
+        static TVec3 CameraPos;
 
-        static inline TMat4 VMat{};
-        static inline TMat4 PMat{};
+        static TMat4 VMat;
+        static TMat4 PMat;
 
         void TranslateCameraLocation(const glm::mat4 &Transform);
 
@@ -113,7 +118,7 @@ namespace RenderAPI
         void GLFWCalcPerspective(GLFWwindow *window);
         void PrintDebugInfo();
 
-        bool PrintFPS = true;
+        bool PrintFPS = false;
 
         TVertexArray VertexArray;
 

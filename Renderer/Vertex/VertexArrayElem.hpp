@@ -39,6 +39,11 @@ namespace RenderAPI
 
         void DrawArrays() const;
 
+        TBufferAttribVertexHandle GetBoundBufferHandle() const
+        {
+            return BoundBufferHandle;
+        }
+
     private:
         TBufferAttribVertexHandle BoundBufferHandle;
         TDrawContext DrawContext;

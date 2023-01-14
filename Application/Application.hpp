@@ -9,6 +9,36 @@ namespace RenderAPI
   class TRenderer;
 }
 
+struct TShaderName
+{
+  TShaderName() = default;
+
+  TShaderName(const TString &Str) : Name(Str)
+  {
+  }
+
+  TShaderName(const char Str[]) : Name(Str)
+  {
+  }
+
+  TShaderName(const TShaderName &Str) : Name(Str.Name)
+  {
+  }
+
+  TShaderName &operator=(const TString &Str)
+  {
+    Name = Str;
+    return *this;
+  }
+
+  operator TString()
+  {
+    return Name;
+  }
+
+  TString Name;
+};
+
 class Application
 {
 public:
@@ -25,13 +55,14 @@ public:
     }
   }
 
-  static auto GetShaderLocalPath()
+  static auto GetShaderLocalPathWith(const TShaderName &Name)
   {
-    return RootDirPath.concat(SimpleCubeShaderLocalPath.string());
+    return RootDirPath.string() + ShadersDir.string() + Name.Name;
   }
-  static auto GetResourceDirectory()
+
+  static auto GetResourceDirectoryWith(const TPath &Path)
   {
-    return ResourceDirectory;
+    return RootDirPath.string() + ResourceDirectory.string() + Path.string();
   }
 
   /**
@@ -49,6 +80,9 @@ private:
   static inline TPath DebugPath = current_path();
   static inline TPath RootDirPath = current_path().parent_path();
 
-  static inline TPath SimpleCubeShaderLocalPath = "\\Externals\\Shaders\\SimpleCube.shader";
+  static inline TPath ShadersDir = "\\Externals\\Shaders\\";
   static inline TPath ResourceDirectory = "\\Externals\\Resources\\";
+
+  static inline TShaderName SimpleCubeShader = "\\SimpleCube.shader";
+  static inline TShaderName SimpleTextureShader = "\\SimpeTexture.shader";
 };
