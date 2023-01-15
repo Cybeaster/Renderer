@@ -7,6 +7,8 @@
 #include "SmartPtr.hpp"
 #include "Vertex/VertexArray.hpp"
 #include "ThreadPool.hpp"
+#include "InputHandler.hpp"
+
 
 #define GLCall(x)   \
     GLClearError(); \
@@ -24,6 +26,8 @@ namespace RenderAPI
      * @brief Singleton class that creates the context, calculates perspective, frames etc.
      *
      */
+
+
     class TRenderer
     {
     public:
@@ -77,6 +81,18 @@ namespace RenderAPI
             VertexArray.EnableBuffer(Handle);
         }
 
+        TBufferAttribVertexHandle AddAttribBuffer(const TVertexAttribBuffer &Buffer)
+        {
+            return VertexArray.AddAttribBuffer(Buffer);
+        }
+
+        TBufferAttribVertexHandle AddAttributeBuffer(const TVertexContext &Context)
+        {
+            return VertexArray.AddAttribBuffer(Context);
+        }
+        void TranslateCameraLocation(const glm::mat4 &Transform);
+        void LookAtCamera(const TVec3 &Position);
+
         void Init();
         void PostInit();
 
@@ -97,21 +113,7 @@ namespace RenderAPI
         static TVec2 PressedMousePos;
 
         static TMat4 MouseCameraRotation;
-
-        void TranslateCameraLocation(const glm::mat4 &Transform);
-
-        void LookAtCamera(const TVec3 &Position);
-
-        TBufferAttribVertexHandle AddAttribBuffer(const TVertexAttribBuffer &Buffer)
-        {
-            return VertexArray.AddAttribBuffer(Buffer);
-        }
-
-        TBufferAttribVertexHandle AddAttributeBuffer(const TVertexContext &Context)
-        {
-            return VertexArray.AddAttribBuffer(Context);
-        }
-        
+        static float MRSDivideFactor;
 
     private:
         TRenderer() = default;

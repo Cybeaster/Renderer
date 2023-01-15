@@ -1,10 +1,11 @@
 #pragma once
+
 #include "GL/glew.h"
+#include "glfw3.h"
 
 #include "Math.hpp"
 #include "Vector.hpp"
 #include "Types.hpp"
-#include "glfw3.h"
 #include "Shader.hpp"
 #include "SmartPtr.hpp"
 #include <filesystem>

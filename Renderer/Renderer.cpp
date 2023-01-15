@@ -45,64 +45,11 @@ namespace RenderAPI
 
     bool TRenderer::RightMousePressed{false};
 
+    /// @brief Mouse Rotation Speed Divide Factor
+    float TRenderer::MRSDivideFactor{100.f};
+
     // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
 
-    void WindowReshapeCallback(GLFWwindow *window, const int newHeight, const int newWidth)
-    {
-        if (!window)
-            return;
-        glViewport(0, 0, newWidth, newHeight);
-
-        TRenderer::Aspect = static_cast<float>(newWidth / newHeight);
-        TRenderer::ScreenWidth = newWidth;
-        TRenderer::ScreenHeight = newHeight;
-        TRenderer::PMat = glm::perspective(TRenderer::Fovy, TRenderer::Aspect, 0.1f, 1000.f);
-    }
-
-    void CursorWheelInputCallback(GLFWwindow *window, double XOffset, double YOffset)
-    {
-        TRenderer::CameraPos.z -= YOffset;
-        if (DEBUG_MOUSE_WHEEL)
-        {
-            std::cout << glm::to_string(TRenderer::CameraPos) << std::endl;
-        }
-    }
-
-    void MouseInputCallback(GLFWwindow *window, int Button, int Action, int Mods)
-    {
-        if (Button == GLFW_MOUSE_BUTTON_RIGHT)
-        {
-            if (Action == GLFW_RELEASE)
-            {
-                TRenderer::RightMousePressed = false;
-
-                double xPos, yPos;
-                glfwGetCursorPos(window, &xPos, &yPos);
-                TRenderer::PressedMousePos = {xPos, yPos};
-            }
-            else if (Action == GLFW_PRESS)
-            {
-                TRenderer::RightMousePressed = true;
-            }
-        }
-    }
-
-    void MouseCursorMoveCallback(GLFWwindow *Window, double XPos, double YPos)
-    {
-        if (TRenderer::RightMousePressed)
-        {
-            auto pos = TVec2(XPos, YPos);
-            const auto delta = (TRenderer::PressedMousePos - pos);
-            TRenderer::CameraPos =
-                glm::rotate(TRenderer::CameraPos, glm::length(delta) / 100, TVec3(delta.y, delta.x, 0)); // inverted
-
-            TRenderer::PressedMousePos = pos;
-            if (DEBUG_MOUSE_POS)
-            {
-                std::cout << glm::to_string(delta) << std::endl;
-            }
-        }
-    }
 
     TRenderer::~TRenderer()
     {
