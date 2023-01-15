@@ -2,11 +2,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtx/rotate_vector.hpp>
 #include <gtc/type_ptr.hpp>
-#include <gtx/string_cast.hpp>
 #include <iostream>
-
-#define DEBUG_MOUSE_WHEEL false
-#define DEBUG_MOUSE_POS true
 #define DEBUG_FPS false
 
 void GLClearError()
@@ -50,7 +46,6 @@ namespace RenderAPI
 
     // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
 
-
     TRenderer::~TRenderer()
     {
         glfwDestroyWindow(Window);
@@ -64,9 +59,14 @@ namespace RenderAPI
         PostInit();
     }
 
-    void TRenderer::PostInit()
+      void TRenderer::PostInit()
     {
         VertexArray.AddVertexArray();
+    }
+
+    void TRenderer::SetInput()
+    {
+        
     }
 #pragma region GLFW
 
@@ -91,10 +91,8 @@ namespace RenderAPI
 
         GLCall(glEnable(GL_BLEND));
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-        glfwSetWindowSizeCallback(Window, WindowReshapeCallback);
-        glfwSetScrollCallback(Window, CursorWheelInputCallback);
-        glfwSetMouseButtonCallback(Window, MouseInputCallback);
-        glfwSetCursorPosCallback(Window, MouseCursorMoveCallback);
+
+        SetInput();
         return Window;
     }
 

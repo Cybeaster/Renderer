@@ -9,7 +9,6 @@
 #include "ThreadPool.hpp"
 #include "InputHandler.hpp"
 
-
 #define GLCall(x)   \
     GLClearError(); \
     x;              \
@@ -26,7 +25,6 @@ namespace RenderAPI
      * @brief Singleton class that creates the context, calculates perspective, frames etc.
      *
      */
-
 
     class TRenderer
     {
@@ -117,7 +115,6 @@ namespace RenderAPI
 
     private:
         TRenderer() = default;
-        Thread::TThreadPool RendererThreadPool;
 
         void GLFWRendererStart(float currentTime);
         void GLFWRendererEnd();
@@ -127,7 +124,12 @@ namespace RenderAPI
         void PrintDebugInfo();
         void CalcScene();
 
+        void SetInput();
+
+        Thread::TThreadPool RendererThreadPool;
         TVertexArray VertexArray;
+
+        TInputHandler InputHandler;
 
         GLFWwindow *Window;
         TTVector<Test::Test *> Tests;

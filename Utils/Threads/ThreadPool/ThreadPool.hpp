@@ -47,7 +47,7 @@ namespace RenderAPI
         class TThreadPool
         {
             using TCallableInterface = TFunctorBase::TCallableInterface;
-            using ThreadQueueElem = TTPair<TFunctorBase::TCallableInterface *, TTaskID>;
+            using ThreadQueueElem = TTPair<TCallableInterface *, TTaskID>;
 
         public:
             ~TThreadPool();

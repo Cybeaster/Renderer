@@ -2,7 +2,7 @@
 
 namespace RenderAPI
 {
-    class TBindableObjectInterface
+    class IBindableObject
     {
     public:
         virtual bool IsObjectValid() = 0;

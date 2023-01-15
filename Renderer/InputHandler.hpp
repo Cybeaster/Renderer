@@ -1,15 +1,22 @@
 #pragma once
 #include "../Test/Test.hpp"
 #include "Types.hpp"
+#include "Delegate.hpp"
 #include "KeyboardKeys.hpp"
 #include <Set.hpp>
 namespace RenderAPI
 {
+
+    struct TKeyState
+    {
+        TTDelegate<bool> Callback;
+        bool IsPressed = false;
+    };
+
     class TInputHandler
     {
     public:
-        TInputHandler(TTSharedPtr<TRenderer> RendererArg) : Renderer{RendererArg}
-        {}
+        TInputHandler()= default;
         
         ~TInputHandler();
 
@@ -22,10 +29,11 @@ namespace RenderAPI
         static void CursorWheelInputCallback(GLFWwindow *window, double XOffset, double YOffset);
         static void WindowReshapeCallback(GLFWwindow *window, const int newHeight, const int newWidth);
 
+        void SetInput(GLFWwindow* Window);
+
         void Tick(float DeltaTime);
     private:
-        TTSet<Ekeys> PressedKeys;
-        TTSharedPtr<TRenderer> Renderer;
+        static TTHashMap<EKeys,TKeyState> PressedKeys;
     };
 
 }
