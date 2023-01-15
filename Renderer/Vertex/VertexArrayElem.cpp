@@ -3,23 +3,14 @@
 namespace RenderAPI
 {
 
-    void TVertexArrayElem::DrawBuffer() const
+    void TVertexArrayElem::DrawArrays() const
     {
-        VertexContext.Bind();
+        //TRenderer::GetRenderer()->EnableBuffer(BoundBufferHandle);
 
-        GLCall(glVertexAttribPointer(
-            VertexContext.VertexIndex,
-            VertexContext.VertexSize,
-            VertexContext.VertexType,
-            VertexContext.IsNormalized,
-            VertexContext.VertexStride,
-            0));
+        //GLCall(glEnable(DrawContext.Flag.Flag));
+        //GLCall(glFrontFace(DrawContext.FrontFace.Flag));
 
-        GLCall(glEnableVertexAttribArray(DrawContext.AttributeArray));
-        GLCall(glEnable(DrawContext.Flag));
-        GLCall(glFrontFace(DrawContext.FrontFace));
-
-        GLCall(glDepthFunc(DrawContext.DepthFunction));
+      //  GLCall(glDepthFunc(DrawContext.DepthFunction.Flag));
 
         GLCall(glDrawArrays(DrawContext.DrawType,
                             DrawContext.FirstDrawIndex,

@@ -14,7 +14,7 @@ namespace Test
     class TestParticles : public Test
     {
     public:
-        TestParticles(TString shaderPath, TRenderer *Renderer);
+        TestParticles(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer);
 
         void OnUpdate(
             float deltaTime,
@@ -25,7 +25,7 @@ namespace Test
 
     private:
 
-        TVertexArrayHandle DefaultParticleHandle;
+        TDrawVertexHandle DefaultParticleHandle;
         void ChangeVelocity(Particle &particle);
         void AddField(const TVec3 &pos, const float &strenght, const TVec3 &chargeVec, const float &charge);
         void AddParticle(const TVec3 &startPos, const float &radius, const float &charge, const TVec3 &startVelocity);

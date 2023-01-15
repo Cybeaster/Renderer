@@ -7,6 +7,8 @@
 #include "SmartPtr.hpp"
 #include "Vertex/VertexArray.hpp"
 #include "ThreadPool.hpp"
+#include "InputHandler.hpp"
+
 
 #define GLCall(x)   \
     GLClearError(); \
@@ -24,6 +26,8 @@ namespace RenderAPI
      * @brief Singleton class that creates the context, calculates perspective, frames etc.
      *
      */
+
+
     class TRenderer
     {
     public:
@@ -54,34 +58,62 @@ namespace RenderAPI
         {
             return Tests;
         }
-        
+
         ~TRenderer();
 
-        TVertexArrayHandle CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext)
+        TDrawVertexHandle CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext)
         {
             return VertexArray.CreateVertexElement(VContext, RContext);
         }
 
-        void DrawBuffer(const TVertexArrayHandle &Handle)
+        void DrawArrays(const TDrawVertexHandle &Handle)
         {
-            VertexArray.DrawBuffer(Handle);
+            VertexArray.DrawArrays(Handle);
         }
+
+        void EnableBuffer(const TDrawVertexHandle &Handle)
+        {
+            VertexArray.EnableBuffer(Handle);
+        }
+
+        void EnableBuffer(const TBufferAttribVertexHandle &Handle)
+        {
+            VertexArray.EnableBuffer(Handle);
+        }
+
+        TBufferAttribVertexHandle AddAttribBuffer(const TVertexAttribBuffer &Buffer)
+        {
+            return VertexArray.AddAttribBuffer(Buffer);
+        }
+
+        TBufferAttribVertexHandle AddAttributeBuffer(const TVertexContext &Context)
+        {
+            return VertexArray.AddAttribBuffer(Context);
+        }
+        void TranslateCameraLocation(const glm::mat4 &Transform);
+        void LookAtCamera(const TVec3 &Position);
 
         void Init();
         void PostInit();
 
-        static constexpr uint32 ScreenWidth = 1920;
-        static constexpr uint32 ScreenHeight = 1080;
+        static int ScreenWidth;
+        static int ScreenHeight;
 
-        static inline float Aspect{0};
-        static inline float DeltaTime{0};
-        static inline float LastFrame{0};
-        static inline float CurrentFrame{0};
-        static inline float Fovy{1.0041};
-        static inline TVec3 CameraPos{0.f, 10.f, 100.f};
-        
-        static inline TMat4 VMat{};
-        static inline TMat4 PMat{};
+        static float Aspect;
+        static float DeltaTime;
+        static float LastFrame;
+        static float CurrentFrame;
+        static float Fovy;
+        static TVec3 CameraPos;
+
+        static TMat4 VMat;
+        static TMat4 PMat;
+
+        static bool RightMousePressed;
+        static TVec2 PressedMousePos;
+
+        static TMat4 MouseCameraRotation;
+        static float MRSDivideFactor;
 
     private:
         TRenderer() = default;
@@ -93,11 +125,7 @@ namespace RenderAPI
         void CleanScene();
         void GLFWCalcPerspective(GLFWwindow *window);
         void PrintDebugInfo();
-
-        GLint Height{0};
-        GLint Width{0};
-
-        bool PrintFPS = true;
+        void CalcScene();
 
         TVertexArray VertexArray;
 

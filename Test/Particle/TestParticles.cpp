@@ -244,28 +244,23 @@ Mat4 calcTranslation(const Mat4 &vMat, const Vec3 position)
 namespace Test
 {
 
-    TestParticles::TestParticles(TString shaderPath, TRenderer *Renderer) : Test(shaderPath, Renderer)
+    TestParticles::TestParticles(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer) : Test(shaderPath, Renderer)
     {
         AddParticle({-80, 20, 0}, 1, 1, Particles45StartVel);
-        //   EnableVertexArray(0);
-        //             GLCall(glEnable(GL_DEPTH_TEST));
-        //             GLCall(glFrontFace(GL_CCW));
-        //             GLCall(glDepthFunc(GL_LEQUAL));
-        //             GLCall(glDrawArrays(GL_TRIANGLES, 0, particle.getVertecies().size()));
 
         auto particle = Particles[0];
         auto size = sizeof(float) * Particles[0].getVertecies().size();
         auto data = particle.getVertecies().begin()._Ptr;
 
-        TVertexContext contextVertex({data, size}, 0, 3, GL_FLOAT, false, 0);
-        
+        TVertexContext contextVertex(new TBuffer{data, size}, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
+
         TDrawContext drawContext(GL_TRIANGLES,
                                  0,
-                                 particle.getVertecies().size(),
+                                 particle.getVertecies().size() / 3,
                                  GL_LEQUAL,
                                  GL_CCW,
-                                 GL_DEPTH_TEST,
-                                 0);
+                                 GL_DEPTH_TEST);
+
         DefaultParticleHandle = CreateVertexElement(contextVertex, drawContext);
 
         AddField({80.f, -10.f, -1.f}, DefaultFieldStrenght, {1.f, 0.f, 0.f}, 1);
@@ -294,7 +289,7 @@ namespace Test
 
         TMat4 translation = glm::translate(vMat, particle.getPosition());
         TMat4 rotation = particle.rotate(deltaTime);
-        getShader().SetUnformMat4f("mv_matrix", TMat4(translation * rotation));
+        GetShader().SetUnformMat4f("mv_matrix", TMat4(translation * rotation));
         particle.IncreaseRotSpeed(deltaTime * 10);
         particle.move();
     }
@@ -306,10 +301,9 @@ namespace Test
             MoveParticle(particle, deltaTime, vMat);
             particle.updateColor();
             TVec3 color = particle.getColor();
-            getShader().SetUniform4f("additionalColor", color.x, color.y, color.y, 1);
+            GetShader().SetUniform4f("additionalColor", color.x, color.y, color.y, 1);
 
-
-            DrawBuffer(DefaultParticleHandle);
+            DrawArrays(DefaultParticleHandle);
         }
     }
 
@@ -344,6 +338,8 @@ namespace Test
             float charge = rand() % 100 > 100 ? -1 : 1;
             const TVec3 velocity = rand() % 100 > 50 ? Particles45StartVel : ParticlesNegative45StartVel;
             AddParticle({-80, 20, 0}, rand() % 3, charge, velocity);
+
+            Renderer->LookAtCamera((Particles.end() - 1)->getPosition());
         }
         else
             ParticleSpawnTimer -= DeltaTime;
@@ -382,10 +378,10 @@ namespace Test
 
             field.particleField.IncreaseRotSpeed(10);
 
-            getShader().SetUnformMat4f("mv_matrix", (translation * rot));
-            getShader().SetUniform4f("additionalColor", 1, 0, 0, 1);
+            GetShader().SetUnformMat4f("mv_matrix", (translation * rot));
+            GetShader().SetUniform4f("additionalColor", 1, 0, 0, 1);
 
-            DrawBuffer(DefaultParticleHandle);
+            DrawArrays(DefaultParticleHandle);
         }
     }
 

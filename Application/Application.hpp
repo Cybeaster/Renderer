@@ -1,6 +1,6 @@
 #include <cstdint>
 #include <string>
-#include <filesystem>
+#include <Path.hpp>
 #include "SmartPtr.hpp"
 #include <Types.hpp>
 
@@ -8,7 +8,36 @@ namespace RenderAPI
 {
   class TRenderer;
 }
-using namespace std::filesystem;
+
+struct TShaderName
+{
+  TShaderName() = default;
+
+  TShaderName(const TString &Str) : Name(Str)
+  {
+  }
+
+  TShaderName(const char Str[]) : Name(Str)
+  {
+  }
+
+  TShaderName(const TShaderName &Str) : Name(Str.Name)
+  {
+  }
+
+  TShaderName &operator=(const TString &Str)
+  {
+    Name = Str;
+    return *this;
+  }
+
+  operator TString()
+  {
+    return Name;
+  }
+
+  TString Name;
+};
 
 class Application
 {
@@ -26,9 +55,14 @@ public:
     }
   }
 
-  static auto GetShaderLocalPath()
+  static auto GetShaderLocalPathWith(const TShaderName &Name)
   {
-    return RootDirPath.string() + SimpleCubeShaderLocalPath;
+    return RootDirPath.string() + ShadersDir.string() + Name.Name;
+  }
+
+  static auto GetResourceDirectoryWith(const TPath &Path)
+  {
+    return RootDirPath.string() + ResourceDirectory.string() + Path.string();
   }
 
   /**
@@ -43,8 +77,12 @@ private:
 
   static inline RenderAPI::TTSharedPtr<Application> application = nullptr;
 
-  static inline path DebugPath = current_path();
-  static inline path RootDirPath = current_path().parent_path().parent_path();
+  static inline TPath DebugPath = current_path();
+  static inline TPath RootDirPath = current_path().parent_path();
 
-  static inline TString SimpleCubeShaderLocalPath = "/Externals/Shaders/SimpleCube.shader";
+  static inline TPath ShadersDir = "\\Externals\\Shaders\\";
+  static inline TPath ResourceDirectory = "\\Externals\\Resources\\";
+
+  static inline TShaderName SimpleCubeShader = "\\SimpleCube.shader";
+  static inline TShaderName SimpleTextureShader = "\\SimpeTexture.shader";
 };
