@@ -4,43 +4,38 @@
 #include "../Types/SmartPtr.hpp"
 #include "../Functor/Functor.hpp"
 #include "../Types/MemberFunctionType.hpp"
+#include "../Functor/MemberFunctor.hpp"
 
 namespace RenderAPI
 {
 
-    // template <typename OwnerObject, typename... ArgTypes>
-    // class TTMemberDelegate
-    // {
-    //     using FunctionType = void(OwnerObject::*)(ArgTypes...);
+    template <typename... ArgTypes>
+    class TTMemberDelegate
+    {
+        TTMemberDelegate() = default;
 
-    // public:
-    //     TTMemberDelegate() = delete;
+    public:
+        template <typename ObjectType, typename... Args>
+        void Bind(ObjectType *Object, typename TTMemberFunctionType<ObjectType, void, Args...>::Type Function)
+        {
+            BoundFunctors.push_back(TMemberFunctorBase::Create(Object, Function));
+        }
+        
+        void Unbind();
 
-    //     template <typename ObjectType, typename... Args>
-    //     static TTSharedPtr<TTMemberDelegate> Create(ObjectType *Object, typename MemberFunctionType<ObjectType, void, Args...>::Type FunctionType, Args... Arguments)
-    //     {
-    //         return MakeShared(new TTMemberDelegate(Object, FunctionType, Arguments));
-    //     }
+        template <typename... FuncArgTypes>
+        void Execute(FuncArgTypes... Args)
+        {
+            for (auto callable : BoundFunctors)
+            {
+                callable.Call(Args...);
+            }
+        }
 
-    //     void Bind(IBindableObject *Object);
-    //     void Unbind();
-    //     void Execute()
-    //     {
-    //         for(auto& functor : BoundFunctors)
-    //         {
-    //             functor.Call();
-    //         }
-    //     }
-
-    // private:
-    //     template <typename ObjectType, typename... Args>
-    //     TTMemberDelegate(ObjectType *Object, MemberFunctionType<ObjectType, void, Args...>::Type FunctionArg, Args... Arguments)
-    //     {
-    //         BoundFunctors.push_back({Object,FunctionArg,Arguments...});
-    //     }
-
-    //     TTVector<TTMemberFunctor<OwnerObject, void, ArgTypes...>> BoundFunctors;
-    // };
+    private:
+        using SharedFunctor = TTSharedPtr<TMemberFunctorBase::TTCallableInterface<ArgTypes...>>;
+        TTVector<SharedFunctor> BoundFunctors;
+    };
 
     template <typename... ArgTypes>
     class TTDelegate
@@ -58,16 +53,26 @@ namespace RenderAPI
 
         template <typename FunctionType>
         void Bind(FunctionType Function);
-        
-        template <class ObjectType, typename Args>
-        void Bind(ObjectType *Object, MemberFunctionType<ObjectType, void, Args...>::Type FunctionArg);
+
+        template <class ObjectType, typename... Args>
+        void Bind(ObjectType *Object, typename TTMemberFunctionType<ObjectType, void, Args...>::Type FunctionArg)
+        {
+            BoundFunctions.push_back(Function);
+        }
 
         void Unbind();
-        
-        void Execute(ArgTypes ... Args);
+
+        template <typename... FuncArgTypes>
+        void Execute(FuncArgTypes... Args)
+        {
+            for (auto func : BoundFunctions)
+            {
+                func(Args...);
+            }
+        }
 
     private:
-        TTVector<FunctionType> BoundFunctions;
-
+        TTVector<FunctionType *> BoundFunctions;
     };
+
 } // namespace RenderAPI

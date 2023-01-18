@@ -52,10 +52,10 @@ add_executable(exec
 	Test/TestSimpleSolarSystem.cpp
 	Renderer/Vertex/VertexArrayElem.cpp
 	Renderer/Vertex/VertexArray.cpp
+
 	Utils/Threads/ThreadPool/ThreadPool.cpp
 	Utils/Threads/HierarchicalMutex/HierarchicalMutex.cpp
-
-	
+	Utils/Delegate/Delegate.cpp
 )
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
 set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)

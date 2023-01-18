@@ -11,6 +11,8 @@
 namespace RenderAPI
 {
 
+    TTHashMap<EKeys, TKeyState> TInputHandler::PressedKeys{};
+
     TInputHandler::~TInputHandler()
     {
     }
@@ -25,8 +27,6 @@ namespace RenderAPI
         glfwSetScrollCallback(Window, TInputHandler::CursorWheelInputCallback);
         glfwSetMouseButtonCallback(Window, TInputHandler::MouseInputCallback);
         glfwSetCursorPosCallback(Window, TInputHandler::MouseCursorMoveCallback);
-
-        
     }
 
     void TInputHandler::WindowReshapeCallback(GLFWwindow *window, const int newHeight, const int newWidth)
