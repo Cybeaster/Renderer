@@ -7,23 +7,23 @@ namespace RenderAPI
     struct TMemberFunctorBase
     {
 
-        template <typename... Args>
+        template <typename... ArgTypes>
         struct TTCallableInterface
         {
-            virtual void Call(Args... Arguments) = 0;
+            virtual void Call(ArgTypes... Arguments) = 0;
             virtual ~TTCallableInterface() = default;
         };
 
-        template <typename OwnerType, typename... Args>
-        struct CallableBase : TTCallableInterface<Args...>
+        template <typename OwnerType, typename... ArgTypes>
+        struct CallableBase : TTCallableInterface<ArgTypes...>
         {
-            using FuncType = void (OwnerType::*)(Args...);
-            CallableBase(OwnerType *Owner, FuncType Func) : OwnerType(MakeShared(Owner)),
-                                                            Function(Func)
+            using FuncType = void (OwnerType::*)(ArgTypes...);
+            CallableBase(OwnerType *OwnerPtr, FuncType Func) : Owner(MakeShared(OwnerPtr)),
+                                                               Function(Func)
             {
             }
 
-            virtual void Call(Args... Arguments) override
+            virtual void Call(ArgTypes... Arguments) override
             {
                 Owner->*Function(Arguments...);
             }
@@ -32,10 +32,10 @@ namespace RenderAPI
             FuncType Function;
         };
 
-        template <typename Owner, typename... Args>
-        static TTSharedPtr<TTCallableInterface<Args...>> Create(Owner *Object, typename TTMemberFunctionType<Owner, void, Args...>::Type Function)
+        template <typename Owner, typename... ArgTypes>
+        static TTSharedPtr<TTCallableInterface<ArgTypes...>> Create(Owner *Object, typename TTMemberFunctionType<Owner, void, ArgTypes...>::Type Function)
         {
-            return MakeShared(new CallableBase<Owner, Args...>(Object, Function));
+            return MakeShared(new CallableBase<Owner, ArgTypes...>(Object, Function));
         }
     };
 } // namespace RenderAPI

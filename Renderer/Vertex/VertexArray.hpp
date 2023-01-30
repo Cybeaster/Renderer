@@ -55,7 +55,7 @@ namespace RenderAPI
         TTHashMap<TDrawVertexHandle, TVertexArrayElem, TTSimpleHandleHash<TDrawVertexHandle>> VertexElements;
         TTHashMap<TBufferAttribVertexHandle, TVertexAttribBuffer, TTSimpleHandleHash<TBufferAttribVertexHandle>> VertexAttribBuffers;
 
-        TTVector<TSimpleVertexIndex> VertexIndicesArray;
+        TVector<TSimpleVertexIndex> VertexIndicesArray;
     };
 
 };

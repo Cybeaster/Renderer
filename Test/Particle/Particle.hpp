@@ -101,7 +101,7 @@ namespace Test
             return radius;
         }
 
-        inline TTVector<float> getVertecies() const
+        inline TVector<float> getVertecies() const
         {
             return vertices;
         }
@@ -128,7 +128,7 @@ namespace Test
         void addVertex(float x, float y, float z);
         void addTexCoord(float s, float t);
         void addIndices(unsigned int i1, unsigned int i2, unsigned int i3);
-        TTVector<float> computeFaceNormal(float x1, float y1, float z1,  // v1
+        TVector<float> computeFaceNormal(float x1, float y1, float z1,  // v1
                                           float x2, float y2, float z2,  // v2
                                           float x3, float y3, float z3); // v3
         void clearArrays();
@@ -147,11 +147,11 @@ namespace Test
         bool DidParticleMoveThroughField = true;
         float speed = 1.f;
 
-        TTVector<float> vertices;
-        TTVector<float> normals;
-        TTVector<float> texCoords;
-        TTVector<int32_t> indices;
-        TTVector<int32_t> lineIndices;
+        TVector<float> vertices;
+        TVector<float> normals;
+        TVector<float> texCoords;
+        TVector<int32_t> indices;
+        TVector<int32_t> lineIndices;
 
         float weight = 1.f;
         float currentRotationAngle = 0.f;
@@ -159,7 +159,7 @@ namespace Test
         float charge = -1.f;
 
         // interleaved
-        TTVector<float> interleavedVertices;
+        TVector<float> interleavedVertices;
         int interleavedStride;
     };
 

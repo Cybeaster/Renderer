@@ -70,7 +70,7 @@ namespace Test
         }
 
         std::stack<TMat4> mvStack;
-        TTVector<GLuint> vertexArray;
+        TVector<GLuint> vertexArray;
 
         TTSharedPtr<class TRenderer> Renderer;
 
@@ -87,7 +87,7 @@ namespace Test
          *
          */
         TShader Shader;
-        TTVector<TVertexHandle> Handles;
+        TVector<TVertexHandle> Handles;
     };
 
 }

@@ -3,5 +3,6 @@
 template <typename ObjectType, typename RetType, typename... ArgTypes>
 struct TTMemberFunctionType
 {
-    using Type = RetType (ObjectType::*)(ArgTypes...);
+    using TConstFunction = RetType (ObjectType::*)(ArgTypes...) const;
+    using TFunction = RetType (ObjectType::*)(ArgTypes...);
 };

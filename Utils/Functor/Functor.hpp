@@ -51,8 +51,8 @@ namespace RenderAPI
         template <typename FuncConstrType, typename... ArgsConstrTypes>
         TTFunctor(FuncConstrType FunctionType, ArgsConstrTypes... FuncArgs) : Function(FunctionType), Arguments(FuncArgs...) {}
 
-        template <typename RetType, typename... Args>
-        TTFunctor(TTFunctor<RetType(Args...)> &&Functor)
+        template <typename RetType, typename... ArgTypes>
+        TTFunctor(TTFunctor<RetType(ArgTypes...)> &&Functor)
         {
             Function = Functor.Function;
             Arguments = Move(Functor.Arguments);
@@ -61,15 +61,15 @@ namespace RenderAPI
             Functor.Function = nullptr;
         }
 
-        template <typename RetType, typename... Args>
-        TTFunctor(const TTFunctor<RetType(Args...)> &Functor)
+        template <typename RetType, typename... ArgTypes>
+        TTFunctor(const TTFunctor<RetType(ArgTypes...)> &Functor)
         {
             Function = Functor.Function;
             Arguments = Functor.Arguments;
         }
 
-        template <typename RetType, typename... Args>
-        TTFunctor &operator=(const TTFunctor<RetType(Args...)> &Functor)
+        template <typename RetType, typename... ArgTypes>
+        TTFunctor &operator=(const TTFunctor<RetType(ArgTypes...)> &Functor)
         {
             Function = Functor.Function;
             Arguments = Functor.Arguments;
@@ -77,8 +77,8 @@ namespace RenderAPI
             return *this;
         }
 
-        template <typename RetType, typename... Args>
-        TTFunctor &operator=(TTFunctor<RetType(Args...)> &&MovableFunctor)
+        template <typename RetType, typename... ArgTypes>
+        TTFunctor &operator=(TTFunctor<RetType(ArgTypes...)> &&MovableFunctor)
         {
             Function = MovableFunctor.Function;
             Arguments = MovableFunctor.Arguments;

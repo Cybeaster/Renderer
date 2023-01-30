@@ -2,6 +2,7 @@
 #include "../Test/Test.hpp"
 #include "Types.hpp"
 #include "Delegate.hpp"
+#include "Utils/Delegate/MulticastDelegate.hpp"
 #include "KeyboardKeys.hpp"
 #include <Set.hpp>
 namespace RenderAPI
@@ -9,15 +10,15 @@ namespace RenderAPI
 
     struct TKeyState
     {
-        TTDelegate<bool> Callback;
+        TTMemberDelegate<bool> Callback;
         bool IsPressed = false;
     };
 
     class TInputHandler
     {
     public:
-        TInputHandler()= default;
-        
+        TInputHandler() = default;
+
         ~TInputHandler();
 
         static void KeyboardInputPressed(GLFWwindow *window, EKeys key, int scancode, int mods);
@@ -29,11 +30,29 @@ namespace RenderAPI
         static void CursorWheelInputCallback(GLFWwindow *window, double XOffset, double YOffset);
         static void WindowReshapeCallback(GLFWwindow *window, const int newHeight, const int newWidth);
 
-        void SetInput(GLFWwindow* Window);
-
+        void SetInput(GLFWwindow *Window);
         void Tick(float DeltaTime);
+
+        template <typename ObjectType, typename... ArgTypes>
+        void AddListener(ObjectType *Object, typename TTMemberFunctionType<ObjectType, void, ArgTypes...>::Type Function, EKeys Key);
+
+        void InitRendererHandler(TVec3 &CameraPos)
+        {
+            RenderInputHandler.SetHandler(&CameraPos);
+        }
+
     private:
-        static TTHashMap<EKeys,TKeyState> PressedKeys;
+        TRendererInputHandler RenderInputHandler;
+
+        static TTHashMap<EKeys, TKeyState> KeyMap;
     };
 
+    template <typename ObjectType, typename... ArgTypes>
+    void TInputHandler::AddListener(ObjectType *Object, typename TTMemberFunctionType<ObjectType, void, ArgTypes...>::Type Function, EKeys Key)
+    {
+        if (Object != nullptr)
+        {
+            KeyMap[Key].Callback.Bind<ObjectType, ArgTypes...>(Object, Function);
+        }
+    }
 }

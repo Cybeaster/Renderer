@@ -59,14 +59,13 @@ namespace RenderAPI
         PostInit();
     }
 
-      void TRenderer::PostInit()
+    void TRenderer::PostInit()
     {
         VertexArray.AddVertexArray();
     }
 
     void TRenderer::SetInput()
     {
-        
     }
 #pragma region GLFW
 
@@ -94,6 +93,11 @@ namespace RenderAPI
 
         SetInput();
         return Window;
+    }
+
+    void TRenderer::MoveCamera(const TVec3 &Delta)
+    {
+        CameraPos += Delta;
     }
 
     void TRenderer::GLFWRendererStart(const float currentTime)

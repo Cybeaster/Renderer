@@ -32,7 +32,7 @@ namespace Test
         {
             float x, y, z, s, t;
         };
-        TTVector<Vertex> tmpVertices;
+        TVector<Vertex> tmpVertices;
 
         float sectorStep = 2 * PI / sectorCount;
         float stackStep = PI / stackCount;
@@ -65,7 +65,7 @@ namespace Test
         clearArrays();
 
         Vertex v1, v2, v3, v4; // 4 vertex positions and tex coords
-        TTVector<float> n;     // 1 face normal
+        TVector<float> n;     // 1 face normal
 
         int i, j, k, vi1, vi2;
         int index = 0; // index for vertex
@@ -204,13 +204,13 @@ namespace Test
         indices.push_back(i3);
     }
 
-    TTVector<float> Particle::computeFaceNormal(float x1, float y1, float z1, // v1
+    TVector<float> Particle::computeFaceNormal(float x1, float y1, float z1, // v1
                                                 float x2, float y2, float z2, // v2
                                                 float x3, float y3, float z3) // v3
     {
         const float EPSILON = 0.000001f;
 
-        TTVector<float> normal(3, 0.0f); // default return value (0,0,0)
+        TVector<float> normal(3, 0.0f); // default return value (0,0,0)
         float nx, ny, nz;
 
         // find 2 edge vectors: v1-v2, v1-v3

@@ -33,6 +33,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Utils/Types
 	${PROJECT_SOURCE_DIR}/Utils/Types/Tuple
 	${PROJECT_SOURCE_DIR}/Utils/Types/Queue
+	${PROJECT_BINARY_DIR}/Utils/Allocators
 )
 
 add_executable(exec
@@ -40,7 +41,8 @@ add_executable(exec
 	Renderer/Renderer.cpp
 	Renderer/Vertex/Buffer.cpp
 	Renderer/Vertex/VertexAttribBuffer.cpp
-	Renderer/InputHandler.cpp
+	Renderer/InputHandlers/InputHandler.cpp
+	Renderer/InputHandlers/RendererInputHandler.cpp
 	Application/Application.cpp
 	Shader/Shader.cpp
 	Texture/Texture.cpp
@@ -55,7 +57,6 @@ add_executable(exec
 
 	Utils/Threads/ThreadPool/ThreadPool.cpp
 	Utils/Threads/HierarchicalMutex/HierarchicalMutex.cpp
-	Utils/Delegate/Delegate.cpp
 )
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
 set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)

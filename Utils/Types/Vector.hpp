@@ -3,4 +3,4 @@
 #include <vector>
 
 template <typename T>
-using TTVector = std::vector<T>;
+using TVector = std::vector<T>;

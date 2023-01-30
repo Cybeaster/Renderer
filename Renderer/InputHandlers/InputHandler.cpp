@@ -11,7 +11,7 @@
 namespace RenderAPI
 {
 
-    TTHashMap<EKeys, TKeyState> TInputHandler::PressedKeys{};
+    TTHashMap<EKeys, TKeyState> TInputHandler::KeyMap{};
 
     TInputHandler::~TInputHandler()
     {
@@ -100,9 +100,9 @@ namespace RenderAPI
 
     void TInputHandler::KeyboardInputPressed(GLFWwindow *window, EKeys key, int scancode, int mods)
     {
-        if (PressedKeys.contains(key))
+        if (KeyMap.contains(key))
         {
-            auto state = PressedKeys[key];
+            auto state = KeyMap[key];
             state.IsPressed = true;
 
             state.Callback.Execute(state.IsPressed);
@@ -111,12 +111,14 @@ namespace RenderAPI
 
     void TInputHandler::KeyboardInputReleased(GLFWwindow *window, EKeys key, int scancode, int mods)
     {
-        if (PressedKeys.contains(key))
+        if (KeyMap.contains(key))
         {
-            auto state = PressedKeys[key];
+            auto state = KeyMap[key];
             state.IsPressed = false;
 
             state.Callback.Execute(state.IsPressed);
         }
     }
+   
+
 } // namespace RenderAPI

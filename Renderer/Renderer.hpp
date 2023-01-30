@@ -7,7 +7,8 @@
 #include "SmartPtr.hpp"
 #include "Vertex/VertexArray.hpp"
 #include "ThreadPool.hpp"
-#include "InputHandler.hpp"
+#include "InputHandlers/InputHandler.hpp"
+#include "InputHandlers/RendererInputHandler.hpp"
 
 #define GLCall(x)   \
     GLClearError(); \
@@ -52,12 +53,10 @@ namespace RenderAPI
 
         void AddTest(Test::Test *testPtr);
 
-        inline TTVector<Test::Test *> &getTests()
+        inline TVector<Test::Test *> &getTests()
         {
             return Tests;
         }
-
-        ~TRenderer();
 
         TDrawVertexHandle CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext)
         {
@@ -113,6 +112,10 @@ namespace RenderAPI
         static TMat4 MouseCameraRotation;
         static float MRSDivideFactor;
 
+        ~TRenderer();
+
+        void MoveCamera(const TVec3 &Delta);
+
     private:
         TRenderer() = default;
 
@@ -123,7 +126,6 @@ namespace RenderAPI
         void GLFWCalcPerspective(GLFWwindow *window);
         void PrintDebugInfo();
         void CalcScene();
-
         void SetInput();
 
         Thread::TThreadPool RendererThreadPool;
@@ -132,7 +134,7 @@ namespace RenderAPI
         TInputHandler InputHandler;
 
         GLFWwindow *Window;
-        TTVector<Test::Test *> Tests;
+        TVector<Test::Test *> Tests;
         static inline TTSharedPtr<TRenderer> SingletonRenderer = nullptr;
     };
 

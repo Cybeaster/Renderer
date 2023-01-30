@@ -71,12 +71,12 @@ namespace Test
          * @brief Already spawned particles.
          *
          */
-        TTVector<Particle> Particles;
+        TVector<Particle> Particles;
         /**
          * @brief Already spawned fields.
          *
          */
-        TTVector<GravityField> Fields;
+        TVector<GravityField> Fields;
 
         /**
          * @brief Timer for particles.
