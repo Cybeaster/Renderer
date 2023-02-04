@@ -86,8 +86,8 @@ namespace RenderAPI
                 return Handler.IsValid();
             }
 
-            template <typename... ArgTypes>
-            FORCEINLINE void Call(ArgTypes... Args)
+            template <typename... Types>
+            FORCEINLINE void Call(Types... Args)
             {
                 Delegate.Execute(Forward<Args>(Args)...);
             }
@@ -102,21 +102,21 @@ namespace RenderAPI
                 return Handler == Other;
             }
 
-            TDelegateHandlerPair() : Handler(false)
+            FDelegateHandlerPair() : Handler(false)
             {
             }
 
-            TDelegateHandlerPair(const FDelegateHandle &Handle, DelegateType &&Callback)
+            FDelegateHandlerPair(const FDelegateHandle &Handle, DelegateType &&Callback)
                 : Handler(Handle),
                   Delegate(Move(Callback))
             {
             }
-            TDelegateHandlerPair(const FDelegateHandle &Handle, const DelegateType &Callback)
+            FDelegateHandlerPair(const FDelegateHandle &Handle, const DelegateType &Callback)
                 : Handler(Handle),
                   Delegate(Callback)
             {
             }
-        }
+        };
 
         template <typename ObjectType, typename... PayloadArgs>
         using TConstMemberFunc =
@@ -134,18 +134,20 @@ namespace RenderAPI
         TMulticastDelegate(const TMulticastDelegate &Other) = default;
         TMulticastDelegate(TMulticastDelegate &&Other) : Events(Move(Other.Events)),
                                                          Locks(Move(Other.Locks))
-
         {
         }
 
         TMulticastDelegate &operator=(const TMulticastDelegate &Delegate) = default;
-
         TMutlicastDelegate &operator=(TMulticastDelegate &&Delegate)
         {
             Events = Move(Delegate.Events);
             Locks = Move(Delegate.Locks);
         }
 
+        template<typename ObjectType>
+        bool RemoveFrom(ObjectType* Object)
+
+        bool Remove(const FDelegateHandle& Handler)
         void IsBoundTo(FDelegateHandle& Handler);
         void RemoveAll();
         void Resize(const uint32 MaxSize = 0);
@@ -176,5 +178,23 @@ namespace RenderAPI
         TVector<TDelegateHandlerPair> Events;
         uint32 Locks;
     };
+
+
+    
+        template<typename ObjectType>
+        bool TMulticastDelegate::RemoveFrom(ObjectType* Object)
+        {
+            if(Object != nullptr)
+            {
+                for(auto event : Events)
+                {
+                    if(event.Delegate.GetOwner() == Object)
+                    {
+                        Events.
+                    }
+                }
+            }
+        }
+        
 
 } // namespace RenderAPI

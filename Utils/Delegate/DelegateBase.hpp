@@ -3,8 +3,8 @@
 namespace RenderAPI
 {
 
-    #define DELEGATE_NO_DISCARD [[nodicard("Delegate's function result has to be stored in value!")]]
-    #define DELEGATE_ASSERT(expr, ...) assert(expr)
+#define DELEGATE_NO_DISCARD [[nodicard("Delegate's function result has to be stored in value!")]]
+#define DELEGATE_ASSERT(expr, ...) assert(expr)
     class IDelegateBase
     {
         IDelegateBase() = default;
@@ -14,13 +14,13 @@ namespace RenderAPI
         {
             return nullptr;
         }
-        virtual void CopyTo(void* Destination) = 0;
+        virtual void CopyTo(void *Destination) = 0;
     };
 
-    template<typename RetValueType, typename ... ArgTypes>
+    template <typename RetValueType, typename... ArgTypes>
     class IDelegate : public IDelegateBase
     {
-        virtual RetValueType Execute(ArgTypes&&... Args) = 0;
+        virtual RetValueType Execute(ArgTypes &&...Args) = 0;
     }
 
     class TDelegateBase
@@ -65,7 +65,14 @@ namespace RenderAPI
 
         bool IsBoundTo(void *Object) const
         {
-            Object == nullptr || !Allocator.IsAlocated() ? return false : return GetDelegate()->GetOwner() == Object;
+            if (Object == nullptr || !Allocator.IsAlocated())
+            {
+                return false;
+            }
+            else
+            {
+                return GetDelegate()->GetOwner() == Object;
+            }
         }
 
         bool IsBound() const

@@ -25,11 +25,11 @@ namespace RenderAPI
 
     void TMulticastDelegate::IsBoundTo(FDelegateHandle &Handler)
     {
-        if(!IsLocked() && Handler.IsValid())
+        if (!IsLocked() && Handler.IsValid())
         {
-            for(const auto& event : Events)
+            for (const auto &event : Events)
             {
-                if(event.IsBoundTo(Handler))
+                if (event.IsBoundTo(Handler))
                 {
                     return true;
                 }
@@ -50,6 +50,29 @@ namespace RenderAPI
         else
         {
             Events.clear();
+        }
+    }
+    bool TMulticastDelegate::Remove(const FDelegateHandle &Handler)
+    {
+        if (Handler.IsValid())
+        {
+            for (auto event : Events)
+            {
+                if (event.Handler == Handler)
+                {
+                    if (IsLocked())
+                    {
+                        event.Clear();
+                    }
+                    else
+                    {
+                        std::swap(event, Events[Events.size() - 1]);
+                        Events.pop_back();
+                    }
+                    Handler.Reset();
+                    return true;
+                }
+            }
         }
     }
 
