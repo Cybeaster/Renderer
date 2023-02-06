@@ -1,200 +1,279 @@
 #pragma once
 #include "../Types/Types.hpp"
 #include "Delegate.hpp"
+#include "Vector.hpp"
+
+#include <vector>
+
 namespace RenderAPI
 {
 #define INVALID_ID UINT32_MAX
-    struct FDelegateHandle
-    {
+struct SDelegateHandle
+{
+public:
+	constexpr SDelegateHandle() noexcept
+	    : LocalID(INVALID_ID) {}
 
-    public:
-        constexpr FDelegateHandle() noexcept : LocalID(INVALID_ID) {}
+	explicit SDelegateHandle(bool GenID)
+	    : LocalID(GenID ? GetNewID() : INVALID_ID) {}
 
-        explicit FDelegateHandle(bool GenID) : LocalID(GenID ? GetNewID() : INVALID_ID)
-        {
-        }
+	SDelegateHandle& operator=(const SDelegateHandle& Other) = default;
+	~SDelegateHandle() noexcept = default;
 
-        FDelegateHandle &operator=(const FDelegateHandle &Other) = default;
-        FDelegateHandle::~FDelegateHandle() noexcept = default;
+	SDelegateHandle(SDelegateHandle&& Other) noexcept
+	    : LocalID(Other.LocalID)
+	{
+		Other.Reset();
+	}
 
-        FDelegateHandle(FDelegateHandle &&Other) : LocalID(Other.LocalID)
-        {
-            Other.Reset();
-        }
+	SDelegateHandle(const SDelegateHandle& Other) = default;
 
-        FDelegateHandle &operator=(FDelegateHandle &&Other) noexcept
-        {
-            LocalID = Other.LocalID;
-            Other.Reset();
-            return *this;
-        }
+	SDelegateHandle& operator=(SDelegateHandle&& Other) noexcept
+	{
+		LocalID = Other.LocalID;
+		Other.Reset();
+		return *this;
+	}
 
-        operator bool() const noexcept
-        {
-            return IsValid();
-        }
+	explicit operator bool() const noexcept { return IsValid(); }
 
-        bool operator<(const FDelegateHandle &Other) const noexcept
-        {
-            return LocalID < Other.LocalID;
-        }
+	bool operator<(const SDelegateHandle& Other) const noexcept
+	{
+		return LocalID < Other.LocalID;
+	}
 
-        bool operator==(const FDelegateHandle &Other) const noexcept
-        {
-            return LocalID == Other.LocalID;
-        }
+	bool operator==(const SDelegateHandle& Other) const noexcept
+	{
+		return LocalID == Other.LocalID;
+	}
 
-        bool IsValid() const
-        {
-            return LocalID != INVALID_ID;
-        }
+	[[nodiscard]] bool IsValid() const { return LocalID != INVALID_ID; }
 
-        void Reset() noexcept
-        {
-            LocalID = INVALID_ID;
-        }
+	void Reset() noexcept { LocalID = INVALID_ID; }
 
-    private:
-        uint32 LocalID;
-        static uint32 GlobalID;
+private:
+	uint32 LocalID;
+	static uint32 SGlobalID;
 
-        static uint32 GetNewID()
-        {
-            uint32 result = GlobalID++;
-            if (GlobalID == INVALID_ID)
-            {
-                GlobalID = 0;
-            }
-            return result;
-        }
-    };
+	static uint32 GetNewID()
+	{
+		uint32 result = SGlobalID++;
+		if (SGlobalID == INVALID_ID)
+		{
+			SGlobalID = 0;
+		}
+		return result;
+	}
+};
 
-    template <typename... ArgTypes>
-    class TMulticastDelegate
-    {
-    public:
-        using DelegateType = TDelegate<void, ArgTypes...>;
+template<typename... ArgTypes>
+class OMulticastDelegate
+{
+public:
+	using DelegateType = TDelegate<void, ArgTypes...>;
 
-    private:
-        struct FDelegateHandlerPair
-        {
-            FDelegateHandle Handler;
-            DelegateType Delegate;
+private:
+	struct SDelegateHandlerPair
+	{
+		SDelegateHandle Handler;
+		DelegateType Delegate;
 
-            FORCEINLINE bool IsValid() const
-            {
-                return Handler.IsValid();
-            }
+		NODISCARD FORCEINLINE bool IsValid() const { return Handler.IsValid(); }
 
-            template <typename... Types>
-            FORCEINLINE void Call(Types... Args)
-            {
-                Delegate.Execute(Forward<Args>(Args)...);
-            }
+		template<typename... Types>
+		FORCEINLINE void Call(Types... Args)
+		{
+			Delegate.Execute(Forward<Args>(Args)...);
+		}
 
-            FORCEINLINE void Clear()
-            {
-                Delegate.Clear();
-            }
+		FORCEINLINE void Clear() { Delegate.Clear(); }
 
-            FORCEINLINE bool IsBoundTo(const FDelegateHandle& Other)
-            {
-                return Handler == Other;
-            }
+		FORCEINLINE bool IsBoundTo(const SDelegateHandle& Other)
+		{
+			return Handler == Other;
+		}
 
-            FDelegateHandlerPair() : Handler(false)
-            {
-            }
+		SDelegateHandlerPair()
+		    : Handler(false) {}
 
-            FDelegateHandlerPair(const FDelegateHandle &Handle, DelegateType &&Callback)
-                : Handler(Handle),
-                  Delegate(Move(Callback))
-            {
-            }
-            FDelegateHandlerPair(const FDelegateHandle &Handle, const DelegateType &Callback)
-                : Handler(Handle),
-                  Delegate(Callback)
-            {
-            }
-        };
+		SDelegateHandlerPair(const SDelegateHandle& Handle, DelegateType&& Callback)
+		    : Handler(Move(Handle)), Delegate(Move(Callback)) {}
 
-        template <typename ObjectType, typename... PayloadArgs>
-        using TConstMemberFunc =
-            typename TTMemberFunctionType<ObjectType, RetValueType, ArgTypes..., PayloadArgs...>::TConstFunction;
+		SDelegateHandlerPair(const SDelegateHandle& Handle,
+		                     const DelegateType& Callback)
+		    : Handler(Handle), Delegate(Callback) {}
+	};
 
-        template <typename ObjectType, typename... PayloadArgs>
-        using TMemberFunc =
-            typename TTMemberFunctionType<ObjectType, RetValueType, ArgTypes..., PayloadArgs...>::TFunction;
+	template<typename ObjectType, typename... PayloadArgs>
+	using TConstMemberFunc =
+	    typename TTMemberFunctionType<ObjectType, void, ArgTypes...,
+	                                  PayloadArgs...>::TConstFunction;
 
-    public:
-        constexpr TMulticastDelegate() : Locks(0) {}
+	template<typename ObjectType, typename... PayloadArgs>
+	using TMemberFunc =
+	    typename TTMemberFunctionType<ObjectType, void, ArgTypes...,
+	                                  PayloadArgs...>::TFunction;
 
-        ~TMulticastDelegate() noexcept = default;
+public:
+	constexpr OMulticastDelegate() = default;
+	
+	~OMulticastDelegate() noexcept = default;
 
-        TMulticastDelegate(const TMulticastDelegate &Other) = default;
-        TMulticastDelegate(TMulticastDelegate &&Other) : Events(Move(Other.Events)),
-                                                         Locks(Move(Other.Locks))
-        {
-        }
+	OMulticastDelegate(const OMulticastDelegate& Other) = default;
 
-        TMulticastDelegate &operator=(const TMulticastDelegate &Delegate) = default;
-        TMutlicastDelegate &operator=(TMulticastDelegate &&Delegate)
-        {
-            Events = Move(Delegate.Events);
-            Locks = Move(Delegate.Locks);
-        }
+	OMulticastDelegate(OMulticastDelegate&& Other) noexcept
+	    : Events(Move(Other.Events)), Locks(Move(Other.Locks)) {}
 
-        template<typename ObjectType>
-        bool RemoveFrom(ObjectType* Object)
+	OMulticastDelegate& operator=(const OMulticastDelegate& Delegate) = default;
+	OMulticastDelegate& operator=(OMulticastDelegate&& Delegate) noexcept
+	{
+		Events = Move(Delegate.Events);
+		Locks = Move(Delegate.Locks);
+	}
 
-        bool Remove(const FDelegateHandle& Handler)
-        void IsBoundTo(FDelegateHandle& Handler);
-        void RemoveAll();
-        void Resize(const uint32 MaxSize = 0);
-        void Broadcast(ArgTypes... Args);
+	template<typename ObjectType>
+	bool RemoveFrom(ObjectType* Object);
 
-        FORCEINLINE void GetSize() const
-        {
-            return Events.size();
-        }
+	bool Remove(SDelegateHandle& Handler);
+	bool IsBoundTo(SDelegateHandle& Handler);
+	void RemoveAll();
+	void Resize(const uint32& MaxSize = 0);
+	void Broadcast(ArgTypes... Args);
 
-    private:
-        void Lock()
-        {
-            ++Locks;
-        }
+	FORCEINLINE void GetSize() const { return Events.size(); }
 
-        void Unlcok()
-        {
-            DELEGATE_ASSERT(Locks > 0);
-            --Locks;
-        }
+private:
+	void Lock() { ++Locks; }
 
-        bool IsLocked()
-        {
-            return Locks > 0;
-        }
+	void Unlcok()
+	{
+		DELEGATE_ASSERT(Locks > 0);
+		--Locks;
+	}
 
-        TVector<TDelegateHandlerPair> Events;
-        uint32 Locks;
-    };
+	bool IsLocked() { return Locks > 0; }
 
+	TVector<SDelegateHandlerPair> Events;
+	uint32 Locks{};
+};
 
-    
-        template<typename ObjectType>
-        bool TMulticastDelegate::RemoveFrom(ObjectType* Object)
-        {
-            if(Object != nullptr)
-            {
-                for(auto event : Events)
-                {
-                    if(event.Delegate.GetOwner() == Object)
-                    {
-                        Events.
-                    }
-                }
-            }
-        }
-        
+template<typename... ArgTypes>
+void OMulticastDelegate<ArgTypes...>::Resize(const uint32& MaxSize)
+{
+	if (!IsLocked())
+	{
+		uint32 toRemove = 0;
+		for (uint32 it = 0; it < Events.size() - toRemove; it++)
+		{
+			if (!Events[it].IsValid())
+			{
+				std::swap(Events[it], Events[toRemove]);
+				++toRemove;
+			}
+		}
+		if (toRemove > MaxSize)
+		{
+			Events.resize(Events.size() - toRemove);
+		}
+	}
+}
+
+template<typename... ArgTypes>
+bool OMulticastDelegate<ArgTypes...>::IsBoundTo(SDelegateHandle& Handler)
+{
+	if (!IsLocked() && Handler.IsValid())
+	{
+		for (const auto& event : Events)
+		{
+			if (event.IsBoundTo(Handler))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+template<typename... ArgTypes>
+void OMulticastDelegate<ArgTypes...>::RemoveAll()
+{
+	if (!IsLocked())
+	{
+		for (auto handler : Events)
+		{
+			handler.Clear();
+		}
+	}
+	else
+	{
+		Events.clear();
+	}
+}
+
+template<typename... ArgTypes>
+bool OMulticastDelegate<ArgTypes...>::Remove(SDelegateHandle& Handler)
+{
+	if (Handler.IsValid())
+	{
+		for (auto event : Events)
+		{
+			if (event.Handler == Handler)
+			{
+				if (IsLocked())
+				{
+					event.Clear();
+				}
+				else
+				{
+					std::swap(event, Events[Events.size() - 1]);
+					Events.pop_back();
+				}
+				Handler.Reset();
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+template<typename... ArgTypes>
+void OMulticastDelegate<ArgTypes...>::Broadcast(ArgTypes... Args)
+{
+	Lock();
+	for (auto event : Events)
+	{
+		if (event.IsValid())
+		{
+			event.Call(Args...);
+		}
+	}
+	Unlock();
+}
+
+template<typename... ArgTypes>
+template<typename ObjectType>
+bool OMulticastDelegate<ArgTypes...>::RemoveFrom(ObjectType* Object)
+{
+	if (Object != nullptr)
+	{
+		if (IsLocked())
+		{
+			for (const SDelegateHandlerPair& event : Events)
+			{
+				if (event.Delegate.GetOwner() == Object)
+				{
+					if (IsLocked())
+					{
+						event.Delegate.Clear();
+					}
+					else
+					{
+						std::swap(event);
+					}
+				}
+			}
+		}
+	}
+}
 
 } // namespace RenderAPI

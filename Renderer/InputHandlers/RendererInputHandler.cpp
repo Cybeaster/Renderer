@@ -2,19 +2,19 @@
 
 namespace RenderAPI
 {
-    void TRendererInputHandler::OnWKeyToggled(bool Pressed)
+    void ORendererInputHandler::OnWKeyToggled(bool Pressed)
     {
     }
 
-    void TRendererInputHandler::OnSKeyToggled(bool Pressed)
+    void ORendererInputHandler::OnSKeyToggled(bool Pressed)
     {
     }
 
-    void TRendererInputHandler::OnDKeyToggled(bool Pressed)
+    void ORendererInputHandler::OnDKeyToggled(bool Pressed)
     {
     }
 
-    void TRendererInputHandler::OnAKeyToggled(bool Pressed)
+    void ORendererInputHandler::OnAKeyToggled(bool Pressed)
     {
     }
 } // namespace RenderAPI

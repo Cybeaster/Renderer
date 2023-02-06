@@ -1,8 +1,9 @@
 #pragma once
 
+#include "cstdint"
+
 #include <iostream>
 #include <string>
-#include "cstdint"
 
 #ifdef __clang__
 
@@ -18,24 +19,26 @@
 
 #endif
 
-template <typename T, T... Indices>
-struct TIntegerSequenceWrapper
+#define NODISCARD [[nodiscard]]
+
+template<typename T, T... Indices>
+struct SIntegerSequenceWrapper
 {
 };
 
-template <typename T, T Size>
-using TTMakeIntegerSequence = __make_integer_seq<TIntegerSequenceWrapper, T, Size>;
+template<typename T, T Size>
+using TTMakeIntegerSequence = __make_integer_seq<SIntegerSequenceWrapper, T, Size>;
 
-template <typename T>
-T &&Move(T Arg)
+template<typename T>
+T&& Move(T Arg)
 {
-    return (T &&) Arg;
+	return static_cast<T&&>(Arg);
 }
 
-template <typename T>
-T &&Forward(T Arg)
+template<typename T>
+T&& Forward(T Arg)
 {
-    return std::forward(Arg);
+	return std::forward(Arg);
 }
 
 using TString = std::string;

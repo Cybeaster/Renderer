@@ -3,135 +3,114 @@
 #include "AllocatorUtils.hpp"
 namespace RenderAPI
 {
-#define SMALL_INLINE_ALLOC_STACK_SIZE_MSG "MaxStackSize is smaller or equal to the size of a pointer. '\n'" \
-                                          "This will make the use of an InlineAllocator pointless. '\n'"    \
-                                          "Please increase the MaxStackSize."
+#define SMALL_INLINE_ALLOC_STACK_SIZE_MSG                             \
+	"MaxStackSize is smaller or equal to the size of a pointer. '\n'" \
+	"This will make the use of an InlineAllocator pointless. '\n'"    \
+	"Please increase the MaxStackSize."
 
-    /// @brief Allows allocation on the stack
-    /// @tparam MaxStackSize Stack Size
-    template <size_t MaxStackSize>
-    class TInlineAllocator : public FInlineAllocatable
-    {
-    public:
-        TInlineAllocator() : AllocSize(0)
-        {
-            static_assert(MaxStackSize > sizeof(void *), SMALL_INLINE_ALLOC_STACK_SIZE);
-        }
-        ~TInlineAllocator() noexcept
-        {
-            Free();
-        }
+/// @brief Allows allocation on the stack
+/// @tparam MaxStackSize Stack Size
+template<size_t MaxStackSize>
+class OInlineAllocator : public SInlineAllocatable
+{
+public:
+	OInlineAllocator()
+	{
+		static_assert(MaxStackSize > sizeof(void*), SMALL_INLINE_ALLOC_STACK_SIZE_MSG);
+	}
+	
+	~OInlineAllocator() noexcept { Free(); }
 
-        TInlineAllocator(const TInlineAllocator &Other) noexcept
-            : AllocSize(0)
-        {
-            ConstructFrom(Other);
-        }
+	OInlineAllocator(const OInlineAllocator& Other) noexcept
+	{
+		ConstructFrom(Other);
+	}
 
-        TInlineAllocator &operator=(const TInlineAllocator &Other)
-        {
-            ConstructFrom(Other);
-            return &this;
-        }
+	OInlineAllocator& operator=(const OInlineAllocator& Other)
+	{
+		ConstructFrom(Other);
+		return *this;
+	}
 
-        TInlineAllocator(TInlineAllocator &&Other) noexcept
-            : AllocSize(Other.AllocSize)
-        {
-            Move(Other);
-        }
+	OInlineAllocator(OInlineAllocator&& Other) noexcept
+	    : AllocSize(Other.AllocSize)
+	{
+		Move(Other);
+	}
 
-        TInlineAllocator &operator=(TInlineAllocator &&Other) noexcept
-        {
-            Free();
-            AllocSize = Other.AllocSize;
-            MoveFrom(Other);
-            return *this;
-        }
+	OInlineAllocator& operator=(OInlineAllocator&& Other) noexcept
+	{
+		Free();
+		AllocSize = Other.AllocSize;
+		MoveFrom(Move(Other));
+		return *this;
+	}
 
-        void ConstructFrom(const TInlineAllocator &Other)
-        {
-            if (Other.IsAlocated())
-            {
-                AllocatorUtils::MemCopy(Allocate(Other.AllocSize), Other.GetAllocation(), Other.AllocSize);
-            }
-            AllocSize = Other.AllocSize;
-        }
-        void MoveFrom(TInlineAllocator &&Other)
-        {
-            Other.AllocSize = 0;
-            if (AllocSize > MaxStackSize)
-            {
-                AllocatorUtils::Swap(Pointer, Other.Pointer);
-            }
-            else
-            {
-                AllocatorUtils::MemCopy(Buffer, Other.Buffer, AllocSize);
-            }
-        }
+	void ConstructFrom(const OInlineAllocator& Other)
+	{
+		if (Other.IsAllocated())
+		{
+			SAllocatorUtils::MemCopy(Allocate(Other.AllocSize), Other.GetAllocation(), Other.AllocSize);
+		}
+		AllocSize = Other.AllocSize;
+	}
+	void MoveFrom(OInlineAllocator&& Other)
+	{
+		Other.AllocSize = 0;
+		if (AllocSize > MaxStackSize)
+		{
+			SAllocatorUtils::Swap(Pointer, Other.Pointer);
+		}
+		else
+		{
+			SAllocatorUtils::MemCopy(Buffer, Other.Buffer, AllocSize);
+		}
+	}
 
-        void *Allocate(const uint32 Size)
-        {
-            if (AllocSize != Size)
-            {
-                Free();
-                AllocSize = Size;
-                Pointer = AllocatorUtils::Allocate(Size);
-            }
-        }
+	void* Allocate(const uint32& Size)
+	{
+		if (AllocSize != Size)
+		{
+			Free();
+			AllocSize = Size;
+			Pointer = SAllocatorUtils::Allocate(Size);
+		}
+	}
 
-        void Free()
-        {
-            if (AllocSize > MaxStackSize)
-            {
-                AllocatorUtils::Free(Pointer);
-            }
-            AllocSize = 0;
-        }
+	void Free()
+	{
+		if (AllocSize > MaxStackSize)
+		{
+			SAllocatorUtils::Free(Pointer);
+		}
+		AllocSize = 0;
+	}
 
-        void *GetAllocation() const
-        {
-            if (HasAllocation())
-            {
-                return HasHeapAllocation() ? Pointer : (void *)Buffer;
-            }
-            else
-            {
-                return nullptr;
-            }
-        }
+	template<typename AllocationType>
+	NODISCARD AllocationType* GetAllocation() const
+	{
+		if (IsAllocated())
+		{
+			return HasHeapAllocation() ?
+			           static_cast<AllocationType*>(Pointer) :
+			           static_cast<AllocationType*>(Buffer);
+		}
 
-        uint32 GetSize() const
-        {
-            return AllocSize;
-        }
+		return nullptr;
+	}
 
-        bool IsAlocated() const
-        {
-            return AllocSize > 0;
-        }
+	NODISCARD uint32 GetSize() const { return AllocSize; }
+	NODISCARD bool IsAllocated() const { return AllocSize > 0; }
+	NODISCARD bool IsHeapAllocated() const { return AllocSize > MaxStackSize; }
 
-        bool IsHeapAllocated() const
-        {
-            AllocSize > MaxStackSize;
-        }
+private:
+	union
+	{
+		int8 Buffer[MaxStackSize];
+		void* Pointer;
+	};
 
-    private:
-        union
-        {
-            int8 Buffer[MaxStackSize];
-            void *Pointer;
-        };
-
-        uint32 AllocSize;
-    };
-
-    template <size_t MaxStackSize>
-    TInlineAllocator<MaxStackSize>::TInlineAllocator()
-    {
-    }
-
-    TInlineAllocator<MaxStackSize>::~TInlineAllocator()
-    {
-    }
+	uint32 AllocSize{};
+};
 
 } // namespace RenderAPI

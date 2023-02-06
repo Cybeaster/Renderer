@@ -1,131 +1,135 @@
 #pragma once
 #include "../Allocators/InlineAllocator.hpp"
+#include "Types.hpp"
 namespace RenderAPI
 {
 
-#define DELEGATE_NO_DISCARD [[nodicard("Delegate's function result has to be stored in value!")]]
+#define DELEGATE_NO_DISCARD [[nodiscard("Delegate's function result has to be stored in value!")]]
 #define DELEGATE_ASSERT(expr, ...) assert(expr)
-    class IDelegateBase
-    {
-        IDelegateBase() = default;
-        virtual ~IDelegateBase() = 0;
-        virtual void Destroy() = 0;
-        virtual const void *GetOwner() const
-        {
-            return nullptr;
-        }
-        virtual void CopyTo(void *Destination) = 0;
-    };
+class OIDelegateBase
+{
+public:
+	OIDelegateBase() = default;
+	virtual ~OIDelegateBase() = 0;
+	virtual void Destroy() = 0;
+	NODISCARD virtual const void* GetOwner() const
+	{
+		return nullptr;
+	}
+	virtual void CopyTo(void* Destination) = 0;
+};
 
-    template <typename RetValueType, typename... ArgTypes>
-    class IDelegate : public IDelegateBase
-    {
-        virtual RetValueType Execute(ArgTypes &&...Args) = 0;
-    }
+template<typename RetValueType, typename... ArgTypes>
+class OIDelegate : public OIDelegateBase
+{
+	virtual RetValueType Execute(ArgTypes&&... Args) = 0;
+};
 
-    class TDelegateBase
-    {
-    public:
-        TDelegateBase() noexcept : Allocator() {}
+class ODelegateBase
+{
+public:
+	ODelegateBase() = default;
 
-        TDelegateBase(TDelegateBase &&Other) noexcept : Allocator(Move(Other.Allocator))
-        {
-        }
+	ODelegateBase(ODelegateBase&& Other) noexcept
+	    : Allocator(Move(Other.Allocator))
+	{
+	}
 
-        virtual ~TDelegateBase() noexcept
-        {
-            Release();
-        }
-        TDelegateBase(const TDelegateBase &Other)
-        {
-            Copy(Other);
-        }
+	virtual ~ODelegateBase() noexcept
+	{
+		Release();
+	}
+	ODelegateBase(const ODelegateBase& Other)
+	{
+		Copy(Other);
+	}
 
-        TDelegateBase &operator=(const TDelegateBase &Other)
-        {
-            Release();
-            Copy(Other);
-            return *this;
-        }
+	ODelegateBase& operator=(const ODelegateBase& Other)
+	{
+		Release();
+		Copy(Other);
+		return *this;
+	}
 
-        TDelegateBase &operator=(TDelegateBase &&Other)
-        {
-            Release();
-            Move(Other);
-            return *this;
-        }
+	template<typename T>
+	ODelegateBase& operator=(T&& Other) noexcept
+	{
+		Release();
+		MoveDelegate(Other);
+		return *this;
+	}
 
-        const void *GetOwner() const
-        {
-            if (Allocator.IsAlocated())
-            {
-                return GetDelegate()->GetOwner();
-            }
-        }
+	template<typename OwnerType>
+	NODISCARD const OwnerType* GetOwner() const
+	{
+		if (Allocator.IsAllocated())
+		{
+			return GetDelegate()->GetOwner();
+		}
+		return nullptr;
+	}
 
-        bool IsBoundTo(void *Object) const
-        {
-            if (Object == nullptr || !Allocator.IsAlocated())
-            {
-                return false;
-            }
-            else
-            {
-                return GetDelegate()->GetOwner() == Object;
-            }
-        }
+	bool IsBoundTo(void* Object) const
+	{
+		if (Object == nullptr || !Allocator.IsAllocated())
+		{
+			return false;
+		}
 
-        bool IsBound() const
-        {
-            Allocator.IsAlocated();
-        }
+		return GetDelegate()->GetOwner() == Object;
+	}
 
-        void Clear()
-        {
-            Release();
-        }
+	NODISCARD bool IsBound() const
+	{
+		return Allocator.IsAllocated();
+	}
 
-        uint32 GetSize() const
-        {
-            return Allocator.GetSize();
-        }
+	void Clear()
+	{
+		Release();
+	}
 
-        void ClearIfBoundTo(void *Object)
-        {
-            if (Object != nullptr && IsBoundTo(Object))
-            {
-                Clear();
-            }
-        }
+	NODISCARD uint32 GetSize() const
+	{
+		return Allocator.GetSize();
+	}
 
-    private:
-        FORCEINLINE void Release()
-        {
-            if (Allocator.IsAlocated())
-            {
-                GetDelegate()->Destroy();
-            }
-        }
+	void ClearIfBoundTo(void* Object)
+	{
+		if (Object != nullptr && IsBoundTo(Object))
+		{
+			Clear();
+		}
+	}
 
-        FORCEINLINE void Copy(const TDelegateBase &Other)
-        {
-            if (Other.Allocator.IsAlocated())
-            {
-                Allocator.Allocate(Other.Allocator.GetSize());
-                Other.GetDelegate()->Copy(Allocator.GetAllocation());
-            }
-        }
+private:
+	FORCEINLINE void Release()
+	{
+		if (Allocator.IsAllocated())
+		{
+			GetDelegate()->Destroy();
+		}
+	}
 
-        FORCEINLINE void Move(TDelegateBase &&Other)
-        {
-            Allocator = Move(Other.Allocator);
-        }
+	FORCEINLINE void Copy(const ODelegateBase& Other)
+	{
+		if (Other.Allocator.IsAllocated())
+		{
+			Allocator.Allocate(Other.Allocator.GetSize());
+			Other.GetDelegate()->CopyTo(Allocator.GetAllocation());
+		}
+	}
 
-        IDelegateBase *GetDelegate() const
-        {
-            return static_cast<IDelegateBase *>(Allocator.GetAllocation());
-        }
+	FORCEINLINE void MoveDelegate(ODelegateBase&& Other)
+	{
+		Allocator = Move(Other.Allocator);
+	}
 
-        TInlineAllocator<FInlineAllocatable::StackSize::_16> Allocator;
-    };
+	NODISCARD OIDelegateBase* GetDelegate() const
+	{
+		return static_cast<OIDelegateBase*>(Allocator.GetAllocation());
+	}
+
+	OInlineAllocator<SInlineAllocatable::StackSize::_16> Allocator;
+};
 } // namespace RenderAPI

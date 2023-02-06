@@ -1,18 +1,16 @@
 #pragma once
 #include <Renderer.hpp>
 #include <string>
-class TTexture
+class OTexture
 {
-
 public:
-    TTexture(const TPath& path, bool IsAF_Enabled = false);
-    ~TTexture();
+	OTexture(const TPath& path, bool IsAF_Enabled = false);
+	~OTexture();
 
-    void Bind(uint32 slot = 0) const;
-    void Unbind();
+	void Bind(uint32 slot = 0) const;
+	void Unbind();
 
 private:
-
-    bool EnableAF = false;
-    uint32 textureID;
+	bool EnableAF = false;
+	uint32 textureID;
 };

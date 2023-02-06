@@ -34,6 +34,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Utils/Types/Tuple
 	${PROJECT_SOURCE_DIR}/Utils/Types/Queue
 	${PROJECT_BINARY_DIR}/Utils/Allocators
+	${PROJECT_BINARY_DIR}/Utils/Delegate
 )
 
 add_executable(exec
@@ -55,6 +56,8 @@ add_executable(exec
 	Renderer/Vertex/VertexArrayElem.cpp
 	Renderer/Vertex/VertexArray.cpp
 
+	Utils/Delegate/MulticastDelegate.hpp
+	Utils/Types/Vector.hpp
 	Utils/Threads/ThreadPool/ThreadPool.cpp
 	Utils/Threads/HierarchicalMutex/HierarchicalMutex.cpp
 )
