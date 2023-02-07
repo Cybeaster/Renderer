@@ -14,10 +14,9 @@
 #include <memory>
 #include <stack>
 
-
 namespace RenderAPI
 {
-class TRenderer;
+class ORenderer;
 }
 namespace Test
 {
@@ -30,7 +29,7 @@ using namespace RenderAPI;
 class OTest
 {
 public:
-	OTest(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> RendererArg);
+	OTest(TPath shaderPath, TTSharedPtr<RenderAPI::ORenderer> RendererArg);
 	OTest() = default;
 	virtual ~OTest();
 
@@ -70,9 +69,9 @@ protected:
 	}
 
 	std::stack<TMat4> mvStack;
-	TVector<GLuint> vertexArray;
+	OVector<GLuint> vertexArray;
 
-	TTSharedPtr<class TRenderer> Renderer;
+	TTSharedPtr<class ORenderer> Renderer;
 
 private:
 	TMat4
@@ -87,7 +86,7 @@ private:
 	 *
 	 */
 	TShader Shader;
-	TVector<TVertexHandle> Handles;
+	OVector<TVertexHandle> Handles;
 };
 
 } // namespace Test

@@ -13,25 +13,25 @@
 namespace RenderAPI
 {
 
-TTHashMap<EKeys, TKeyState> TInputHandler::KeyMap{};
+TTHashMap<EKeys, SKeyState> OInputHandler::KeyMap{};
 
-TInputHandler::~TInputHandler()
+OInputHandler::~OInputHandler()
 {
 }
 
-void TInputHandler::Tick(float DeltaTime)
+void OInputHandler::Tick(float DeltaTime)
 {
 }
 
-void TInputHandler::SetInput(GLFWwindow* Window)
+void OInputHandler::SetInput(GLFWwindow* Window)
 {
-	glfwSetWindowSizeCallback(Window, TInputHandler::WindowReshapeCallback);
-	glfwSetScrollCallback(Window, TInputHandler::CursorWheelInputCallback);
-	glfwSetMouseButtonCallback(Window, TInputHandler::MouseInputCallback);
-	glfwSetCursorPosCallback(Window, TInputHandler::MouseCursorMoveCallback);
+	glfwSetWindowSizeCallback(Window, OInputHandler::WindowReshapeCallback);
+	glfwSetScrollCallback(Window, OInputHandler::CursorWheelInputCallback);
+	glfwSetMouseButtonCallback(Window, OInputHandler::MouseInputCallback);
+	glfwSetCursorPosCallback(Window, OInputHandler::MouseCursorMoveCallback);
 }
 
-void TInputHandler::WindowReshapeCallback(GLFWwindow* window,
+void OInputHandler::WindowReshapeCallback(GLFWwindow* window,
                                           const int newHeight,
                                           const int newWidth)
 {
@@ -39,61 +39,61 @@ void TInputHandler::WindowReshapeCallback(GLFWwindow* window,
 		return;
 	glViewport(0, 0, newWidth, newHeight);
 
-	TRenderer::Aspect = static_cast<float>(newWidth / newHeight);
-	TRenderer::ScreenWidth = newWidth;
-	TRenderer::ScreenHeight = newHeight;
-	TRenderer::PMat = glm::perspective(TRenderer::Fovy, TRenderer::Aspect, 0.1f, 1000.f);
+	ORenderer::Aspect = static_cast<float>(newWidth / newHeight);
+	ORenderer::ScreenWidth = newWidth;
+	ORenderer::ScreenHeight = newHeight;
+	ORenderer::PMat = glm::perspective(ORenderer::Fovy, ORenderer::Aspect, 0.1f, 1000.f);
 }
 
-void TInputHandler::CursorWheelInputCallback(GLFWwindow* window, double XOffset,
+void OInputHandler::CursorWheelInputCallback(GLFWwindow* window, double XOffset,
                                              double YOffset)
 {
-	TRenderer::CameraPos.z -= YOffset;
+	ORenderer::CameraPos.z -= YOffset;
 	if (DEBUG_MOUSE_WHEEL)
 	{
-		std::cout << glm::to_string(TRenderer::CameraPos) << std::endl;
+		std::cout << glm::to_string(ORenderer::CameraPos) << std::endl;
 	}
 }
 
-void TInputHandler::MouseInputCallback(GLFWwindow* window, int Button,
+void OInputHandler::MouseInputCallback(GLFWwindow* window, int Button,
                                        int Action, int Mods)
 {
 	if (Button == GLFW_MOUSE_BUTTON_RIGHT)
 	{
 		if (Action == GLFW_RELEASE)
 		{
-			TRenderer::RightMousePressed = false;
+			ORenderer::RightMousePressed = false;
 
 			double xPos, yPos;
 			glfwGetCursorPos(window, &xPos, &yPos);
-			TRenderer::PressedMousePos = { xPos, yPos };
+			ORenderer::PressedMousePos = { xPos, yPos };
 		}
 		else if (Action == GLFW_PRESS)
 		{
-			TRenderer::RightMousePressed = true;
+			ORenderer::RightMousePressed = true;
 		}
 	}
 }
 
-void TInputHandler::MouseCursorMoveCallback(GLFWwindow* Window, double XPos,
+void OInputHandler::MouseCursorMoveCallback(GLFWwindow* Window, double XPos,
                                             double YPos)
 {
-	if (TRenderer::RightMousePressed)
+	if (ORenderer::RightMousePressed)
 	{
 		auto pos = TVec2(XPos, YPos);
-		const auto delta = (TRenderer::PressedMousePos - pos);
+		const auto delta = (ORenderer::PressedMousePos - pos);
 
-		TRenderer::CameraPos = glm::rotate(
-		    TRenderer::CameraPos, glm::length(delta) / TRenderer::MRSDivideFactor, TVec3(delta.y, delta.x, 0)); // inverted
+		ORenderer::CameraPos = glm::rotate(
+		    ORenderer::CameraPos, glm::length(delta) / ORenderer::MRSDivideFactor, TVec3(delta.y, delta.x, 0)); // inverted
 
-		TRenderer::PressedMousePos = pos;
+		ORenderer::PressedMousePos = pos;
 		if (DEBUG_MOUSE_POS)
 		{
 			std::cout << glm::to_string(delta) << std::endl;
 		}
 	}
 }
-void TInputHandler::KeyboardInputCallback(GLFWwindow* window, int key,
+void OInputHandler::KeyboardInputCallback(GLFWwindow* window, int key,
                                           int scancode, int action, int mods)
 {
 	if (action == GLFW_PRESS)
@@ -106,8 +106,8 @@ void TInputHandler::KeyboardInputCallback(GLFWwindow* window, int key,
 	}
 }
 
-void TInputHandler::KeyboardInputPressed(GLFWwindow* window, EKeys key,
-                                         int  /*scancode*/, int  /*mods*/)
+void OInputHandler::KeyboardInputPressed(GLFWwindow* window, EKeys key,
+                                         int /*scancode*/, int /*mods*/)
 {
 	if (KeyMap.contains(key))
 	{
@@ -118,8 +118,8 @@ void TInputHandler::KeyboardInputPressed(GLFWwindow* window, EKeys key,
 	}
 }
 
-void TInputHandler::KeyboardInputReleased(GLFWwindow*  /*window*/, EKeys key,
-                                          int  /*scancode*/, int  /*mods*/)
+void OInputHandler::KeyboardInputReleased(GLFWwindow* /*window*/, EKeys key,
+                                          int /*scancode*/, int /*mods*/)
 {
 	if (KeyMap.contains(key))
 	{

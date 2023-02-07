@@ -1,8 +1,8 @@
-#include "TestTexture.hpp"
+#include "OTestTexture.hpp"
 
 namespace Test
 {
-TestTexture::TestTexture(const TPath& TexturePath, const TPath& ShaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer)
+OTestTexture::OTestTexture(const TPath& TexturePath, const TPath& ShaderPath, TTSharedPtr<RenderAPI::ORenderer> Renderer)
     : Texture(TexturePath), OTest(ShaderPath, Renderer)
 {
 	pyramidHandle = Renderer->AddAttribBuffer(
@@ -13,7 +13,7 @@ TestTexture::TestTexture(const TPath& TexturePath, const TPath& ShaderPath, TTSh
 	    TDrawContext(GL_TRIANGLES, 0, 18, GL_LEQUAL, GL_CCW, GL_DEPTH_TEST));
 }
 
-void TestTexture::OnUpdate(
+void OTestTexture::OnUpdate(
     const float deltaTime,
     const float aspect,
     const TVec3& cameraPos,
@@ -34,7 +34,7 @@ void TestTexture::OnUpdate(
 	DrawArrays(textureHandle);
 }
 
-TestTexture::~TestTexture()
+OTestTexture::~OTestTexture()
 {
 }
 

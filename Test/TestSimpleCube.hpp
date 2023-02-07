@@ -3,12 +3,12 @@
 
 namespace Test
 {
-class TestSimpleCube : public OTest
+class OTestSimpleCube : public OTest
 {
 public:
-	TestSimpleCube(TPath ShaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer);
+	OTestSimpleCube(TPath ShaderPath, TTSharedPtr<RenderAPI::ORenderer> Renderer);
 
-	virtual void OnUpdate(
+	void OnUpdate(
 	    const float deltaTime,
 	    const float aspect,
 	    const TVec3& cameraPos,

@@ -4,7 +4,7 @@
 
 namespace Test
 {
-TestSimpleCube::TestSimpleCube(TPath ShaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer)
+OTestSimpleCube::OTestSimpleCube(TPath ShaderPath, TTSharedPtr<RenderAPI::ORenderer> Renderer)
     : OTest(ShaderPath, Renderer)
 {
 	TVertexContext contextVertex(
@@ -27,7 +27,7 @@ TestSimpleCube::TestSimpleCube(TPath ShaderPath, TTSharedPtr<RenderAPI::TRendere
 	handle = CreateVertexElement(contextVertex, drawContext);
 }
 
-void TestSimpleCube::OnUpdate(
+void OTestSimpleCube::OnUpdate(
     const float deltaTime,
     const float aspect,
     const TVec3& cameraPos,

@@ -70,7 +70,7 @@ template<typename... ArgTypes>
 class OMulticastDelegate
 {
 public:
-	using DelegateType = TDelegate<void, ArgTypes...>;
+	using DelegateType = ODelegate<void, ArgTypes...>;
 
 private:
 	struct SDelegateHandlerPair
@@ -116,7 +116,7 @@ private:
 
 public:
 	constexpr OMulticastDelegate() = default;
-	
+
 	~OMulticastDelegate() noexcept = default;
 
 	OMulticastDelegate(const OMulticastDelegate& Other) = default;
@@ -153,7 +153,7 @@ private:
 
 	bool IsLocked() { return Locks > 0; }
 
-	TVector<SDelegateHandlerPair> Events;
+	OVector<SDelegateHandlerPair> Events;
 	uint32 Locks{};
 };
 

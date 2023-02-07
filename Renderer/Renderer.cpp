@@ -25,53 +25,53 @@ bool GLLogCall(const char* func, const char* file, const int line)
 namespace RenderAPI
 {
 
-int TRenderer::ScreenWidth = 900;
-int TRenderer::ScreenHeight = 700;
+int ORenderer::ScreenWidth = 900;
+int ORenderer::ScreenHeight = 700;
 
-float TRenderer::Aspect{ 0 };
-float TRenderer::DeltaTime{ 0 };
-float TRenderer::LastFrame{ 0 };
-float TRenderer::CurrentFrame{ 0 };
-float TRenderer::Fovy{ 1.0472f };
-TVec3 TRenderer::CameraPos{ 0.f, 0.f, -2.f };
+float ORenderer::Aspect{ 0 };
+float ORenderer::DeltaTime{ 0 };
+float ORenderer::LastFrame{ 0 };
+float ORenderer::CurrentFrame{ 0 };
+float ORenderer::Fovy{ 1.0472f };
+TVec3 ORenderer::CameraPos{ 0.f, 0.f, -2.f };
 
-TMat4 TRenderer::VMat{};
-TMat4 TRenderer::PMat{};
+TMat4 ORenderer::VMat{};
+TMat4 ORenderer::PMat{};
 
-TVec2 TRenderer::PressedMousePos{ 0, 0 };
-TMat4 TRenderer::MouseCameraRotation{ TMat4(1.f) };
+TVec2 ORenderer::PressedMousePos{ 0, 0 };
+TMat4 ORenderer::MouseCameraRotation{ TMat4(1.f) };
 
-bool TRenderer::RightMousePressed{ false };
+bool ORenderer::RightMousePressed{ false };
 
 /// @brief Mouse Rotation Speed Divide Factor
-float TRenderer::MRSDivideFactor{ 100.f };
+float ORenderer::MRSDivideFactor{ 100.f };
 
 // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
 
-TRenderer::~TRenderer()
+ORenderer::~ORenderer()
 {
 	glfwDestroyWindow(Window);
 	glfwTerminate();
 }
 
-void TRenderer::Init()
+void ORenderer::Init()
 {
 	// Post Init has to be called after everything
 	PostInit();
 }
 
-void TRenderer::PostInit()
+void ORenderer::PostInit()
 {
 	VertexArray.AddVertexArray();
 }
 
-void TRenderer::SetInput()
+void ORenderer::SetInput()
 {
 }
 #pragma region GLFW
 
 GLFWwindow*
-TRenderer::GLFWInit()
+ORenderer::GLFWInit()
 {
 	/* Initialize the library */
 	assert(glfwInit());
@@ -96,12 +96,12 @@ TRenderer::GLFWInit()
 	return Window;
 }
 
-void TRenderer::MoveCamera(const TVec3& Delta)
+void ORenderer::MoveCamera(const TVec3& Delta)
 {
 	CameraPos += Delta;
 }
 
-void TRenderer::GLFWRendererStart(const float currentTime)
+void ORenderer::GLFWRendererStart(const float currentTime)
 {
 	CleanScene();
 	CalcScene();
@@ -110,20 +110,20 @@ void TRenderer::GLFWRendererStart(const float currentTime)
 	PrintDebugInfo();
 }
 
-void TRenderer::CalcScene()
+void ORenderer::CalcScene()
 {
 	PMat = glm::perspective(1.0472f, Aspect, 0.01f, 1000.f);
 	VMat = MouseCameraRotation * glm::translate(TMat4(1.0f), CameraPos * -1.f);
 }
 
-void TRenderer::GLFWRendererEnd()
+void ORenderer::GLFWRendererEnd()
 {
 	/* Swap front and back buffers */
 	glfwSwapBuffers(Window);
 	glfwPollEvents();
 }
 
-void TRenderer::GLFWRenderTickStart()
+void ORenderer::GLFWRenderTickStart()
 {
 	while (!glfwWindowShouldClose(Window))
 	{
@@ -134,7 +134,7 @@ void TRenderer::GLFWRenderTickStart()
 		GLFWRendererEnd();
 	}
 }
-void TRenderer::PrintDebugInfo()
+void ORenderer::PrintDebugInfo()
 {
 	if (DEBUG_FPS)
 	{
@@ -142,7 +142,7 @@ void TRenderer::PrintDebugInfo()
 	}
 }
 
-void TRenderer::GLFWCalcPerspective(GLFWwindow* window)
+void ORenderer::GLFWCalcPerspective(GLFWwindow* window)
 {
 	glfwGetFramebufferSize(window, &ScreenWidth, &ScreenHeight);
 	Aspect = static_cast<float>(ScreenWidth / ScreenHeight);
@@ -150,33 +150,33 @@ void TRenderer::GLFWCalcPerspective(GLFWwindow* window)
 	VMat = glm::translate(TMat4(1.0f), CameraPos * -1.f);
 }
 
-void TRenderer::TranslateCameraLocation(const glm::mat4& Transform)
+void ORenderer::TranslateCameraLocation(const glm::mat4& Transform)
 {
 	// CameraPos *= Transform;
 }
 
-void TRenderer::LookAtCamera(const TVec3& Position)
+void ORenderer::LookAtCamera(const TVec3& Position)
 {
 	// CameraPos *= glm::lookAt(CameraPos,Position,TVec3(0,0,1));
 }
 
 #pragma endregion GLFW
 
-void TRenderer::CleanScene()
+void ORenderer::CleanScene()
 {
 	GLCall(glClear(GL_COLOR_BUFFER_BIT));
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
 	GLCall(glEnable(GL_CULL_FACE));
 }
 
-void TRenderer::CalcDeltaTime(const float currentTime)
+void ORenderer::CalcDeltaTime(const float currentTime)
 {
 	CurrentFrame = currentTime;
 	DeltaTime = CurrentFrame - LastFrame;
 	LastFrame = CurrentFrame;
 }
 
-void TRenderer::AddTest(Test::OTest* testPtr)
+void ORenderer::AddTest(Test::OTest* testPtr)
 {
 	if (testPtr)
 	{

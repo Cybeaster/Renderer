@@ -3,7 +3,6 @@
 #include "Renderer.hpp"
 #include "glm.hpp"
 
-
 #ifdef USE_CUDA
 
 // Helper functions and utilities to work with CUDA
@@ -12,7 +11,6 @@
 #include <device_launch_parameters.h>
 #include <helper_cuda.h>
 #include <helper_functions.h>
-
 
 #pragma region CUDA
 __global__ void calcParticleVel(float* particlePos, float* inc, float* result, const float incMultiplier, bool UsePositiveDir)
@@ -234,7 +232,7 @@ Mat4 calcTranslation(const Mat4& vMat, const Vec3 position)
 namespace Test
 {
 
-TestParticles::TestParticles(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer)
+OTestParticles::OTestParticles(TPath shaderPath, TTSharedPtr<RenderAPI::ORenderer> Renderer)
     : OTest(shaderPath, Renderer)
 {
 	AddParticle({ -80, 20, 0 }, 1, 1, Particles45StartVel);
@@ -260,7 +258,7 @@ TestParticles::TestParticles(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer>
 	AddField({ -25.f, -20.f, -1.f }, DefaultFieldStrenght, { 1.f, 0.f, 0.f }, 1);
 }
 
-void TestParticles::OnUpdate(
+void OTestParticles::OnUpdate(
     float deltaTime,
     float aspect,
     const TVec3& cameraPos,
@@ -274,7 +272,7 @@ void TestParticles::OnUpdate(
 	DrawFields(deltaTime, vMat);
 }
 
-void TestParticles::MoveParticle(Particle& particle, float deltaTime, TMat4 vMat)
+void OTestParticles::MoveParticle(Particle& particle, float deltaTime, TMat4 vMat)
 {
 	ChangeVelocity(particle);
 
@@ -285,7 +283,7 @@ void TestParticles::MoveParticle(Particle& particle, float deltaTime, TMat4 vMat
 	particle.move();
 }
 
-void TestParticles::DrawParticles(float deltaTime, TMat4 vMat)
+void OTestParticles::DrawParticles(float deltaTime, TMat4 vMat)
 {
 	for (auto& particle : Particles)
 	{
@@ -298,7 +296,7 @@ void TestParticles::DrawParticles(float deltaTime, TMat4 vMat)
 	}
 }
 
-void TestParticles::ChangeVelocity(Particle& particle)
+void OTestParticles::ChangeVelocity(Particle& particle)
 {
 	for (auto& field : Fields) // Check distance to all fields to detect a collision.
 	{
@@ -321,7 +319,7 @@ void TestParticles::ChangeVelocity(Particle& particle)
 	}
 }
 
-void TestParticles::ParticleSpawnTick(float DeltaTime)
+void OTestParticles::ParticleSpawnTick(float DeltaTime)
 {
 	if (ParticleSpawnTimer <= 0)
 	{
@@ -336,14 +334,14 @@ void TestParticles::ParticleSpawnTick(float DeltaTime)
 		ParticleSpawnTimer -= DeltaTime;
 }
 
-void TestParticles::AddField(const TVec3& pos, const float& strenght, const TVec3& chargeVec, const float& charge)
+void OTestParticles::AddField(const TVec3& pos, const float& strenght, const TVec3& chargeVec, const float& charge)
 {
 	Particle particle(pos, {}, 76, 32, 1, -1);
 	GravityField field(35, strenght, particle, charge);
 	Fields.push_back(field);
 }
 
-void TestParticles::FieldSpawnTick(float DeltaTime)
+void OTestParticles::FieldSpawnTick(float DeltaTime)
 {
 	if (FieldSpawnTimer <= 0)
 	{
@@ -354,13 +352,13 @@ void TestParticles::FieldSpawnTick(float DeltaTime)
 		FieldSpawnTimer -= DeltaTime;
 }
 
-void TestParticles::AddParticle(const TVec3& startPos, const float& radius, const float& charge, const TVec3& startVelocity)
+void OTestParticles::AddParticle(const TVec3& startPos, const float& radius, const float& charge, const TVec3& startVelocity)
 {
 	TVec3 randPos{ float(rand() % 15), float(rand() % 15), 0.f };
 	Particles.push_back(Particle(startPos + randPos, startVelocity, 36, 18, radius, charge));
 }
 
-void TestParticles::DrawFields(float deltaTime, TMat4 vMat)
+void OTestParticles::DrawFields(float deltaTime, TMat4 vMat)
 {
 	for (auto& field : Fields)
 	{

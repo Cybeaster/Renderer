@@ -77,7 +77,7 @@ private:
 	TMutex QueueMutex;
 	TMutex CompletedTaskMutex;
 
-	TVector<JoiningThread> Threads;
+	OVector<JoiningThread> Threads;
 
 	TTAtomic<bool> Quite = false;
 	TTAtomic<int64> LastID{ 0 };

@@ -7,11 +7,11 @@
 class GLFWwindow;
 namespace Test
 {
-class TestTexture : public OTest
+class OTestTexture : public OTest
 {
 public:
-	TestTexture(const TPath& filePath, const TPath& ShaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer);
-	~TestTexture();
+	OTestTexture(const TPath& filePath, const TPath& ShaderPath, TTSharedPtr<RenderAPI::ORenderer> Renderer);
+	~OTestTexture();
 
 	virtual void OnUpdate(
 	    const float deltaTime,
@@ -22,52 +22,52 @@ public:
 
 private:
 	float pyramidPositions[54] = {
-		-1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 0.0f, // front face
-		1.0f,
-		-1.0f,
-		1.0f,
-		1.0f,
-		-1.0f,
-		-1.0f,
-		0.0f,
-		1.0f,
-		0.0f, // right face
-		1.0f,
-		-1.0f,
-		-1.0f,
-		-1.0f,
-		-1.0f,
-		-1.0f,
-		0.0f,
-		1.0f,
-		0.0f, // back face
-		-1.0f,
-		-1.0f,
-		-1.0f,
-		-1.0f,
-		-1.0f,
-		1.0f,
-		0.0f,
-		1.0f,
-		0.0f, // left face
-		-1.0f,
-		-1.0f,
-		-1.0f,
-		1.0f,
-		-1.0f,
-		1.0f,
-		-1.0f,
-		-1.0f,
-		1.0f, // base – left front
-		1.0f,
-		-1.0f,
-		1.0f,
-		-1.0f,
-		-1.0f,
-		-1.0f,
-		1.0f,
-		-1.0f,
-		-1.0f // base – right back
+		-1.0F, -1.0F, 1.0F, 1.0F, -1.0F, 1.0F, 0.0F, 1.0F, 0.0F, // front face
+		1.0F,
+		-1.0F,
+		1.0F,
+		1.0F,
+		-1.0F,
+		-1.0F,
+		0.0F,
+		1.0F,
+		0.0F, // right face
+		1.0F,
+		-1.0F,
+		-1.0F,
+		-1.0F,
+		-1.0F,
+		-1.0F,
+		0.0F,
+		1.0F,
+		0.0F, // back face
+		-1.0F,
+		-1.0F,
+		-1.0F,
+		-1.0F,
+		-1.0F,
+		1.0F,
+		0.0F,
+		1.0F,
+		0.0F, // left face
+		-1.0F,
+		-1.0F,
+		-1.0F,
+		1.0F,
+		-1.0F,
+		1.0F,
+		-1.0F,
+		-1.0F,
+		1.0F, // base – left front
+		1.0F,
+		-1.0F,
+		1.0F,
+		-1.0F,
+		-1.0F,
+		-1.0F,
+		1.0F,
+		-1.0F,
+		-1.0F // base – right back
 	};
 
 	float textureCoods[18]{

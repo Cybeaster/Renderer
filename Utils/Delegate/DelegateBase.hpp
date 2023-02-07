@@ -102,7 +102,7 @@ public:
 		}
 	}
 
-private:
+protected:
 	FORCEINLINE void Release()
 	{
 		if (Allocator.IsAllocated())

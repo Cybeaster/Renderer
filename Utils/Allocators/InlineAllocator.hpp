@@ -18,7 +18,7 @@ public:
 	{
 		static_assert(MaxStackSize > sizeof(void*), SMALL_INLINE_ALLOC_STACK_SIZE_MSG);
 	}
-	
+
 	~OInlineAllocator() noexcept { Free(); }
 
 	OInlineAllocator(const OInlineAllocator& Other) noexcept
@@ -86,7 +86,7 @@ public:
 		AllocSize = 0;
 	}
 
-	template<typename AllocationType>
+	template<typename AllocationType = void>
 	NODISCARD AllocationType* GetAllocation() const
 	{
 		if (IsAllocated())

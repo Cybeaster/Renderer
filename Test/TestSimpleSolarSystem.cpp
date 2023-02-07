@@ -5,11 +5,10 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-
 namespace Test
 {
 
-void TestSimpleSolarSystem::OnUpdate(
+void OTestSimpleSolarSystem::OnUpdate(
     float deltaTime,
     float aspect,
     const TVec3& cameraPos,
@@ -60,7 +59,7 @@ void TestSimpleSolarSystem::OnUpdate(
 	// GetMVStack().pop();
 }
 
-TestSimpleSolarSystem::TestSimpleSolarSystem(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer)
+OTestSimpleSolarSystem::OTestSimpleSolarSystem(TPath shaderPath, TTSharedPtr<RenderAPI::ORenderer> Renderer)
     : OTest(shaderPath, Renderer)
 {
 	// auto size = sizeof(cubePositions);

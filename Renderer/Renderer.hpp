@@ -28,20 +28,18 @@ namespace RenderAPI
  *
  */
 
-class TRenderer
+class ORenderer
 {
 public:
 	static auto GetRenderer()
 	{
 		if (!SingletonRenderer)
 		{
-			SingletonRenderer = TTSharedPtr<TRenderer>(new TRenderer());
+			SingletonRenderer = TTSharedPtr<ORenderer>(new ORenderer());
 			return SingletonRenderer;
 		}
-		else
-		{
-			return SingletonRenderer;
-		}
+
+		return SingletonRenderer;
 	}
 
 	/**
@@ -54,7 +52,7 @@ public:
 
 	void AddTest(Test::OTest* testPtr);
 
-	inline TVector<Test::Test*>& getTests()
+	inline OVector<Test::OTest*>& GetTests()
 	{
 		return Tests;
 	}
@@ -113,12 +111,12 @@ public:
 	static TMat4 MouseCameraRotation;
 	static float MRSDivideFactor;
 
-	~TRenderer();
+	~ORenderer();
 
 	void MoveCamera(const TVec3& Delta);
 
 private:
-	TRenderer() = default;
+	ORenderer() = default;
 
 	void GLFWRendererStart(float currentTime);
 	void GLFWRendererEnd();
@@ -132,11 +130,11 @@ private:
 	Thread::TThreadPool RendererThreadPool;
 	TVertexArray VertexArray;
 
-	TInputHandler InputHandler;
+	OInputHandler InputHandler;
 
 	GLFWwindow* Window;
 	TVector<Test::Test*> Tests;
-	static inline TTSharedPtr<TRenderer> SingletonRenderer = nullptr;
+	static inline TTSharedPtr<ORenderer> SingletonRenderer = nullptr;
 };
 
 } // namespace RenderAPI

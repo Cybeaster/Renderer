@@ -10,18 +10,18 @@
 namespace RenderAPI
 {
 
-struct TKeyState
+struct SKeyState
 {
 	OMulticastDelegate<bool> Callback;
 	bool IsPressed = false;
 };
 
-class TInputHandler
+class OInputHandler
 {
 public:
-	TInputHandler() = default;
+	OInputHandler() = default;
 
-	~TInputHandler();
+	~OInputHandler();
 
 	static void KeyboardInputPressed(GLFWwindow* window, EKeys key, int scancode, int mods);
 	static void KeyboardInputReleased(GLFWwindow* window, EKeys key, int scancode, int mods);
@@ -46,11 +46,11 @@ public:
 private:
 	ORendererInputHandler RenderInputHandler;
 
-	static TTHashMap<EKeys, TKeyState> KeyMap;
+	static TTHashMap<EKeys, SKeyState> KeyMap;
 };
 
 template<typename ObjectType, typename... ArgTypes>
-void TInputHandler::AddListener(ObjectType* Object, typename TTMemberFunctionType<ObjectType, void, ArgTypes...>::Type Function, EKeys Key)
+void OInputHandler::AddListener(ObjectType* Object, typename TTMemberFunctionType<ObjectType, void, ArgTypes...>::Type Function, EKeys Key)
 {
 	if (Object != nullptr)
 	{

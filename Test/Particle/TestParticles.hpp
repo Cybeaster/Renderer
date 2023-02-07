@@ -5,7 +5,6 @@
 
 #include <vector>
 
-
 namespace Test
 {
 /**
@@ -13,10 +12,10 @@ namespace Test
  *
  *
  */
-class TestParticles : public OTest
+class OTestParticles : public OTest
 {
 public:
-	TestParticles(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> Renderer);
+	OTestParticles(TPath shaderPath, TTSharedPtr<RenderAPI::ORenderer> Renderer);
 
 	void OnUpdate(
 	    float deltaTime,
@@ -72,12 +71,12 @@ private:
 	 * @brief Already spawned particles.
 	 *
 	 */
-	TVector<Particle> Particles;
+	OVector<Particle> Particles;
 	/**
 	 * @brief Already spawned fields.
 	 *
 	 */
-	TVector<GravityField> Fields;
+	OVector<GravityField> Fields;
 
 	/**
 	 * @brief Timer for particles.

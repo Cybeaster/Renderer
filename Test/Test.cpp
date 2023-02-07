@@ -6,7 +6,7 @@
 
 namespace Test
 {
-OTest::OTest(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> RendererArg)
+OTest::OTest(TPath shaderPath, TTSharedPtr<RenderAPI::ORenderer> RendererArg)
     : Shader(shaderPath), Renderer(RendererArg)
 {
 }
