@@ -1,10 +1,10 @@
 #include "Application/Application.hpp"
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-    auto app = Application::GetApplication();
-	app->Start(argc,argv);
-    return 0;
+	auto app = OApplication::GetApplication();
+	app->Start(argc, argv);
+	return 0;
 }
 
 // int PoolTestMain(int argc, char **argv)
@@ -14,13 +14,13 @@ int main(int argc, char **argv)
 
 //     RenderAPI::Thread::TThreadPool pool(3);
 
-//     TTVector<int> s1 = {1, 2, 3};
+//     TOVector<int> s1 = {1, 2, 3};
 //     int ans1 = 5;
 
-//     TTVector<int> s2 = {4, 5};
+//     TOVector<int> s2 = {4, 5};
 //     int ans2 = 0;
 
-//     TTVector<int> s3 = {8, 9, 10};
+//     TOVector<int> s3 = {8, 9, 10};
 //     int ans3 = 0;
 
 //     auto funcNoParam = TFunctorBase::Create(NoParamFunc);
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 
 //     auto id1 = pool.AddTask(funcNoParam);
 //     auto id2 = pool.AddTask(funcOneParam);
-    
+
 //     if(pool.IsDone(id1))
 //     {
 //         ///

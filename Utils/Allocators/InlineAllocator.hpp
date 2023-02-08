@@ -91,7 +91,7 @@ public:
 	{
 		if (IsAllocated())
 		{
-			return HasHeapAllocation() ?
+			return IsHeapAllocated() ?
 			           static_cast<AllocationType*>(Pointer) :
 			           static_cast<AllocationType*>(Buffer);
 		}

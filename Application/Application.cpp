@@ -1,7 +1,7 @@
 #define GLEW_STATIC
 #include "Application.hpp"
 
-#include "OTestTexture.hpp"
+#include "TestTexture.hpp"
 #include "Renderer.hpp"
 
 #include <Particle/TestParticles.hpp>
@@ -13,7 +13,7 @@
 
 #define DEBUG
 
-void OApplication::Start(int argc, char** argv)
+void OApplication::Start(int  /*argc*/, char**  /*argv*/)
 {
 	auto renderer = RenderAPI::ORenderer::GetRenderer();
 

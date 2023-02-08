@@ -35,7 +35,7 @@ public:
 	{
 		if (!SingletonRenderer)
 		{
-			SingletonRenderer = TTSharedPtr<ORenderer>(new ORenderer());
+			SingletonRenderer = OSharedPtr<ORenderer>(new ORenderer());
 			return SingletonRenderer;
 		}
 
@@ -133,8 +133,8 @@ private:
 	OInputHandler InputHandler;
 
 	GLFWwindow* Window;
-	TVector<Test::Test*> Tests;
-	static inline TTSharedPtr<ORenderer> SingletonRenderer = nullptr;
+	OVector<Test::OTest*> Tests;
+	static inline OSharedPtr<ORenderer> SingletonRenderer = nullptr;
 };
 
 } // namespace RenderAPI

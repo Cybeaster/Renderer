@@ -10,7 +10,7 @@ namespace Test
 class OTestTexture : public OTest
 {
 public:
-	OTestTexture(const TPath& filePath, const TPath& ShaderPath, TTSharedPtr<RenderAPI::ORenderer> Renderer);
+	OTestTexture(const TPath& filePath, const TPath& ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
 	~OTestTexture();
 
 	virtual void OnUpdate(

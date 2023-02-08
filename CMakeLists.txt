@@ -48,7 +48,7 @@ add_executable(exec
 	Shader/Shader.cpp
 	Texture/Texture.cpp
 	Test/Test.cpp
-	Test/OTestTexture.cpp
+	Test/TestTexture.cpp
 	Test/TestSimpleCube.cpp
 	Test/Particle/Particle.cpp
 	Test/Particle/TestParticles.cpp

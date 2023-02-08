@@ -15,7 +15,7 @@ namespace Test
 class OTestParticles : public OTest
 {
 public:
-	OTestParticles(TPath shaderPath, TTSharedPtr<RenderAPI::ORenderer> Renderer);
+	OTestParticles(TPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
 
 	void OnUpdate(
 	    float deltaTime,

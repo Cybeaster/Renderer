@@ -71,11 +71,11 @@ private:
 	TTQueue<ThreadQueueElem> TaskQueue;
 	TTSet<TTaskID> CompletedTasksIDs;
 
-	TConditionVariable QueueCV;
-	TConditionVariable CompletedTaskIdsCV;
+	OConditionVariable QueueCV;
+	OConditionVariable CompletedTaskIdsCV;
 
-	TMutex QueueMutex;
-	TMutex CompletedTaskMutex;
+	OMutex QueueMutex;
+	OMutex CompletedTaskMutex;
 
 	OVector<JoiningThread> Threads;
 

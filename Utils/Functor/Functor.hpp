@@ -46,7 +46,7 @@ template<typename ReturnType, typename... ArgTypes>
 class OFunctor<ReturnType(ArgTypes...)> : public SFunctorBase
 {
 	struct TCallableInterface;
-	using FuncType = ReturnType (ArgTypes...);
+	using FuncType = ReturnType(ArgTypes...);
 
 public:
 	template<typename FuncConstrType, typename... ArgsConstrTypes>
@@ -136,7 +136,7 @@ protected:
 //         }
 
 //     private:
-//         TTSharedPtr<OwnerType> Owner;
+//         OSharedPtr<OwnerType> Owner;
 //     };
 // #pragma endregion FuncWithOwner
 

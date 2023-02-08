@@ -50,7 +50,7 @@ public:
 	{
 		if (!application)
 		{
-			application = RenderAPI::TTSharedPtr<OApplication>(new OApplication());
+			application = RenderAPI::OSharedPtr<OApplication>(new OApplication());
 			return application;
 		}
 		else
@@ -79,7 +79,7 @@ public:
 private:
 	OApplication() = default;
 
-	static inline RenderAPI::TTSharedPtr<OApplication> application = nullptr;
+	static inline RenderAPI::OSharedPtr<OApplication> application = nullptr;
 
 	static inline TPath DebugPath = current_path();
 	static inline TPath RootDirPath = current_path().parent_path();

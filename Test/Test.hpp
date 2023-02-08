@@ -29,7 +29,7 @@ using namespace RenderAPI;
 class OTest
 {
 public:
-	OTest(TPath shaderPath, TTSharedPtr<RenderAPI::ORenderer> RendererArg);
+	OTest(TPath shaderPath, OSharedPtr<RenderAPI::ORenderer> RendererArg);
 	OTest() = default;
 	virtual ~OTest();
 
@@ -71,7 +71,7 @@ protected:
 	std::stack<TMat4> mvStack;
 	OVector<GLuint> vertexArray;
 
-	TTSharedPtr<class ORenderer> Renderer;
+	OSharedPtr<class ORenderer> Renderer;
 
 private:
 	TMat4

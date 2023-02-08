@@ -4,7 +4,7 @@
 
 namespace Test
 {
-OTestSimpleCube::OTestSimpleCube(TPath ShaderPath, TTSharedPtr<RenderAPI::ORenderer> Renderer)
+OTestSimpleCube::OTestSimpleCube(TPath ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
     : OTest(ShaderPath, Renderer)
 {
 	TVertexContext contextVertex(
