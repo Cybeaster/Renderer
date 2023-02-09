@@ -59,7 +59,7 @@ void OTestSimpleSolarSystem::OnUpdate(
 	// GetMVStack().pop();
 }
 
-OTestSimpleSolarSystem::OTestSimpleSolarSystem(TPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
+OTestSimpleSolarSystem::OTestSimpleSolarSystem(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
     : OTest(shaderPath, Renderer)
 {
 	// auto size = sizeof(cubePositions);
@@ -77,7 +77,7 @@ OTestSimpleSolarSystem::OTestSimpleSolarSystem(TPath shaderPath, OSharedPtr<Rend
 	auto size = sizeof(pyramidPositions);
 	auto data = pyramidPositions;
 
-	TVertexContext pyramidVertex(new TBuffer{ pyramidPositions, sizeof(pyramidPositions) }, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
+	TVertexContext pyramidVertex(new OBuffer{ pyramidPositions, sizeof(pyramidPositions) }, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
 
 	TDrawContext pyramidDrawContext(GL_TRIANGLES,
 	                                0,

@@ -15,7 +15,7 @@ template<typename Indices, typename... Types>
 struct TTupleBase;
 
 template<uint32... Indices, typename... Types>
-struct TTupleBase<SIntegerSequenceWrapper<uint32, Indices...>, Types...> : TTupleElem<Types, Indices, sizeof...(Types)>...
+struct TTupleBase<STIntegerSequenceWrapper<uint32, Indices...>, Types...> : TTupleElem<Types, Indices, sizeof...(Types)>...
 {
 	class TTFunctor;
 	friend TTFunctor;
@@ -110,9 +110,9 @@ template<typename... Types>
 class TTElemSequenceTuple;
 
 template<typename... Types>
-class TTElemSequenceTuple : public TTupleBase<TTMakeIntegerSequence<uint32, sizeof...(Types)>, Types...>
+class TTElemSequenceTuple : public TTupleBase<TMakeIntegerSequence<uint32, sizeof...(Types)>, Types...>
 {
-	using IntegerSequence = TTMakeIntegerSequence<uint32, sizeof...(Types)>;
+	using IntegerSequence = TMakeIntegerSequence<uint32, sizeof...(Types)>;
 	using Super = TTupleBase<IntegerSequence, Types...>;
 
 public:
@@ -131,7 +131,7 @@ public:
 	}
 
 	template<typename FirstTupleType, typename SecondTupleType, uint32... Indices>
-	static void Assign(FirstTupleType& FirstTuple, SecondTupleType&& SecondTuple, SIntegerSequenceWrapper<uint32, Indices...>)
+	static void Assign(FirstTupleType& FirstTuple, SecondTupleType&& SecondTuple, STIntegerSequenceWrapper<uint32, Indices...>)
 	{
 		// This should be implemented with a fold expression when our compilers support it
 		int Temp[] = { 0, (FirstTuple.template Get<Indices>() = SecondTupleType.template Get<Indices>(), 0)... };
@@ -139,7 +139,7 @@ public:
 	}
 
 	template<typename FirstTupleType, typename SecondTupleType, uint32... Indices>
-	static void Assign(FirstTupleType& FirstTuple, SecondTupleType& SecondTuple, SIntegerSequenceWrapper<uint32, Indices...>)
+	static void Assign(FirstTupleType& FirstTuple, SecondTupleType& SecondTuple, STIntegerSequenceWrapper<uint32, Indices...>)
 	{
 		// This should be implemented with a fold expression when our compilers support it
 		int Temp[] = { 0, (FirstTuple.template Get<Indices>() = std::forward<SecondTupleType>(SecondTuple).template Get<Indices>(), 0)... };

@@ -1,31 +1,28 @@
 #include "ThreadPool.hpp"
 
-namespace RenderAPI
+namespace RenderAPI::Thread
 {
-
-namespace Thread
-{
-TThreadPool::TThreadPool(uint32 NumOfThreads)
+OThreadPool::OThreadPool(uint32 NumOfThreads)
 {
 	Threads.reserve(NumOfThreads);
 	for (size_t i = 0; i < NumOfThreads; i++)
 	{
-		Threads.emplace_back(&TThreadPool::Run, this);
+		Threads.emplace_back(&OThreadPool::Run, this);
 	}
 }
 
-TTaskID TThreadPool::AddTask(TCallableInterface* Function)
+STaskID OThreadPool::AddTask(CallableInterfaceType* Function)
 {
 	int64 taskID = LastID++;
 	OMutexGuard queueLock(QueueMutex);
 
-	TaskQueue.emplace(std::make_pair(Function, TTaskID(taskID)));
+	TaskQueue.emplace(std::make_pair(Function, STaskID(taskID)));
 
 	QueueCV.notify_one();
-	return TTaskID(taskID);
+	return STaskID(taskID);
 }
 
-void TThreadPool::Run()
+void OThreadPool::Run()
 {
 	while (!Quite)
 	{
@@ -46,14 +43,14 @@ void TThreadPool::Run()
 		}
 	}
 }
-void TThreadPool::Wait(const TTaskID& ID)
+void OThreadPool::Wait(const STaskID& ID)
 {
 	OUniqueLock lock(CompletedTaskMutex);
 	// wait for notify in function run
 	CompletedTaskIdsCV.wait(lock, [this, ID]() -> bool
 	                        { return CompletedTasksIDs.find(ID) != CompletedTasksIDs.end(); });
 }
-void TThreadPool::WaitAll()
+void OThreadPool::WaitAll()
 {
 	OUniqueLock lock(QueueMutex);
 	CompletedTaskIdsCV.wait(lock, [this]() -> bool
@@ -62,7 +59,7 @@ void TThreadPool::WaitAll()
                                         return  TaskQueue.empty() && LastID == CompletedTasksIDs.size(); });
 }
 
-TThreadPool::~TThreadPool()
+OThreadPool::~OThreadPool()
 {
 	Quite = true;
 	for (auto&& thread : Threads)
@@ -72,20 +69,14 @@ TThreadPool::~TThreadPool()
 	}
 }
 
-bool TThreadPool::IsDone(const TTaskID& ID)
+bool OThreadPool::IsDone(const STaskID& ID)
 {
 	OMutexGuard lock(CompletedTaskMutex);
-	if (CompletedTasksIDs.find(ID) != CompletedTasksIDs.end())
-	{
-		return true;
-	}
-	return false;
+	return CompletedTasksIDs.find(ID) != CompletedTasksIDs.end();
 }
 
-void TThreadPool::CreateThread(JoiningThread&& Thread)
+void OThreadPool::CreateThread(JoiningThread&& Thread)
 {
 	Threads.push_back(std::move(Thread));
 }
-} // namespace Thread
-
-} // namespace RenderAPI
+} // namespace RenderAPI::Thread

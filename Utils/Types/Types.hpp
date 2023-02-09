@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <string>
+#include <type_traits>
+#include <utility>
 
 #ifdef __clang__
 
@@ -21,24 +23,45 @@
 
 #define NODISCARD [[nodiscard]]
 
+template<typename T>
+struct STRemoveRef
+{
+	using Type = T;
+	using ConstType = const T;
+};
+
+
+template<bool Flag, typename Arg = void>
+struct STEnableIf
+{
+};
+
+template<typename Arg>
+struct STEnableIf<true, Arg>
+{
+};
+
+template<typename T>
+using TRemoveRef = typename STRemoveRef<T>::Type;
+
 template<typename T, T... Indices>
-struct SIntegerSequenceWrapper
+struct STIntegerSequenceWrapper
 {
 };
 
 template<typename T, T Size>
-using TTMakeIntegerSequence = __make_integer_seq<SIntegerSequenceWrapper, T, Size>;
+using TMakeIntegerSequence = __make_integer_seq<STIntegerSequenceWrapper, T, Size>;
 
 template<typename T>
-T&& Move(T Arg)
+NODISCARD constexpr T&& Move(TRemoveRef<T>&& Arg) noexcept
 {
-	return static_cast<T&&>(Arg);
+	return static_cast<TRemoveRef<T>&&>(Arg);
 }
 
 template<typename T>
-T&& Forward(T Arg)
+NODISCARD constexpr T&& Forward(TRemoveRef<T>& Arg) noexcept
 {
-	return std::forward(Arg);
+	return static_cast<T&&>(Arg);
 }
 
 using TString = std::string;

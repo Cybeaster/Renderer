@@ -3,7 +3,6 @@
 #include "Types.hpp"
 #include "Vector.hpp"
 
-
 namespace Test
 {
 class Particle
@@ -16,7 +15,7 @@ public:
 	    uint32 _sectorCount,
 	    uint32 _radius,
 	    float _charge);
-
+	Particle() = default;
 	~Particle();
 
 	inline void setColor(const TVec3 _color)

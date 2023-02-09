@@ -64,7 +64,7 @@ public:
 		return RootDirPath.string() + ShadersDir.string() + Name.Name;
 	}
 
-	static auto GetResourceDirectoryWith(const TPath& Path)
+	static auto GetResourceDirectoryWith(const OPath& Path)
 	{
 		return RootDirPath.string() + ResourceDirectory.string() + Path.string();
 	}
@@ -81,11 +81,11 @@ private:
 
 	static inline RenderAPI::OSharedPtr<OApplication> application = nullptr;
 
-	static inline TPath DebugPath = current_path();
-	static inline TPath RootDirPath = current_path().parent_path();
+	static inline OPath DebugPath = current_path();
+	static inline OPath RootDirPath = current_path().parent_path();
 
-	static inline TPath ShadersDir = "\\Externals\\Shaders\\";
-	static inline TPath ResourceDirectory = "\\Externals\\Resources\\";
+	static inline OPath ShadersDir = "\\Externals\\Shaders\\";
+	static inline OPath ResourceDirectory = "\\Externals\\Resources\\";
 
 	static inline OShaderName SimpleCubeShader = "\\SimpleCube.shader";
 	static inline OShaderName SimpleTextureShader = "\\SimpeTexture.shader";

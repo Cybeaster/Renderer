@@ -4,7 +4,7 @@
 class OTexture
 {
 public:
-	OTexture(const TPath& path, bool IsAF_Enabled = false);
+	OTexture(const OPath& path, bool IsAF_Enabled = false);
 	~OTexture();
 
 	void Bind(uint32 slot = 0) const;

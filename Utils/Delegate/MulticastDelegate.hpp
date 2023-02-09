@@ -106,12 +106,12 @@ private:
 
 	template<typename ObjectType, typename... PayloadArgs>
 	using TConstMemberFunc =
-	    typename TTMemberFunctionType<ObjectType, void, ArgTypes...,
+	    typename STMemberFunctionType<ObjectType, void, ArgTypes...,
 	                                  PayloadArgs...>::TConstFunction;
 
 	template<typename ObjectType, typename... PayloadArgs>
 	using TMemberFunc =
-	    typename TTMemberFunctionType<ObjectType, void, ArgTypes...,
+	    typename STMemberFunctionType<ObjectType, void, ArgTypes...,
 	                                  PayloadArgs...>::TFunction;
 
 public:

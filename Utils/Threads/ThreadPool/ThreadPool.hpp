@@ -12,34 +12,30 @@
 #include <ThreadSafeQueue.hpp>
 #include <functional>
 
-namespace RenderAPI
+namespace RenderAPI::Thread
 {
-namespace Thread
+struct STaskID
 {
-using namespace RenderAPI;
-
-struct TTaskID
-{
-	TTaskID() = default;
-	TTaskID(const int64 IDArg) noexcept
+	STaskID() = default;
+	explicit STaskID(const int64 IDArg) noexcept
 	    : ID(IDArg) {}
-	TTaskID(const TTaskID& TaskID) noexcept
-	    : ID(TaskID.ID) {}
 
-	bool operator>(const TTaskID& Arg) noexcept { return ID > Arg.ID; }
-	bool operator<(const TTaskID& Arg) noexcept { return ID < Arg.ID; }
-	bool operator==(const TTaskID& Arg) noexcept { return ID == Arg.ID; }
+	STaskID(const STaskID& TaskID) = default;
 
-	bool operator>=(const TTaskID& Arg) noexcept { return ID >= Arg.ID; }
-	bool operator<=(const TTaskID& Arg) noexcept { return ID <= Arg.ID; }
-	bool operator!=(const TTaskID& Arg) noexcept { return ID != Arg.ID; }
+	bool operator>(const STaskID& Arg) const noexcept { return ID > Arg.ID; }
+	bool operator<(const STaskID& Arg) const noexcept { return ID < Arg.ID; }
+	bool operator==(const STaskID& Arg) const noexcept { return ID == Arg.ID; }
 
-	friend bool operator<(const TTaskID& FirstID, const TTaskID& SecondID)
+	bool operator>=(const STaskID& Arg) const noexcept { return ID >= Arg.ID; }
+	bool operator<=(const STaskID& Arg) const noexcept { return ID <= Arg.ID; }
+	bool operator!=(const STaskID& Arg) const noexcept { return ID != Arg.ID; }
+
+	friend bool operator<(const STaskID& FirstID, const STaskID& SecondID)
 	{
 		return FirstID.ID < SecondID.ID;
 	}
 
-	friend bool operator>(const TTaskID& FirstID, const TTaskID& SecondID)
+	friend bool operator>(const STaskID& FirstID, const STaskID& SecondID)
 	{
 		return FirstID.ID > SecondID.ID;
 	}
@@ -48,28 +44,28 @@ private:
 	int64 ID;
 };
 
-class TThreadPool
+class OThreadPool
 {
-	using TCallableInterface = OFunctorBase::TCallableInterface;
-	using ThreadQueueElem = TTPair<TCallableInterface*, TTaskID>;
+	using CallableInterfaceType = SFunctorBase::SICallableInterface;
+	using ThreadQueueElemType = OPair<CallableInterfaceType*, STaskID>;
 
 public:
-	~TThreadPool();
-	TThreadPool(uint32 NumOfThreads);
-	TThreadPool(/* args */) = default;
+	~OThreadPool();
+	explicit OThreadPool(uint32 NumOfThreads);
+	OThreadPool(/* args */) = default;
 
-	TTaskID AddTask(TCallableInterface* Function);
+	STaskID AddTask(CallableInterfaceType* Function);
 
 	void CreateThread(JoiningThread&& Thread);
-	void Wait(const TTaskID& ID);
+	void Wait(const STaskID& ID);
 	void WaitAll();
-	bool IsDone(const TTaskID& ID);
+	bool IsDone(const STaskID& ID);
 	void WaitAndShutDown();
 
 private:
 	void Run();
-	TTQueue<ThreadQueueElem> TaskQueue;
-	TTSet<TTaskID> CompletedTasksIDs;
+	OQueue<ThreadQueueElemType> TaskQueue;
+	OSet<STaskID> CompletedTasksIDs;
 
 	OConditionVariable QueueCV;
 	OConditionVariable CompletedTaskIdsCV;
@@ -79,9 +75,7 @@ private:
 
 	OVector<JoiningThread> Threads;
 
-	TTAtomic<bool> Quite = false;
-	TTAtomic<int64> LastID{ 0 };
+	OAtomic<bool> Quite = false;
+	OAtomic<int64> LastID{ 0 };
 };
-} // namespace Thread
-
-} // namespace RenderAPI
+} // namespace RenderAPI::Thread

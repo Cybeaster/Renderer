@@ -116,7 +116,7 @@ protected:
 		if (Other.Allocator.IsAllocated())
 		{
 			Allocator.Allocate(Other.Allocator.GetSize());
-			Other.GetDelegate()->CopyTo(Allocator.GetAllocation());
+			Other.GetDelegate()->CopyTo(Allocator.GetAllocation<void>());
 		}
 	}
 
@@ -127,7 +127,7 @@ protected:
 
 	NODISCARD OIDelegateBase* GetDelegate() const
 	{
-		return static_cast<OIDelegateBase*>(Allocator.GetAllocation());
+		return Allocator.GetAllocation<OIDelegateBase>();
 	}
 
 	OInlineAllocator<SInlineAllocatable::StackSize::_16> Allocator;

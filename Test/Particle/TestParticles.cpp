@@ -232,7 +232,7 @@ Mat4 calcTranslation(const Mat4& vMat, const Vec3 position)
 namespace Test
 {
 
-OTestParticles::OTestParticles(TPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
+OTestParticles::OTestParticles(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
     : OTest(shaderPath, Renderer)
 {
 	AddParticle({ -80, 20, 0 }, 1, 1, Particles45StartVel);
@@ -241,7 +241,7 @@ OTestParticles::OTestParticles(TPath shaderPath, OSharedPtr<RenderAPI::ORenderer
 	auto size = sizeof(float) * Particles[0].getVertecies().size();
 	auto data = particle.getVertecies().begin()._Ptr;
 
-	TVertexContext contextVertex(new TBuffer{ data, size }, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
+	TVertexContext contextVertex(new OBuffer{ data, size }, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
 
 	TDrawContext drawContext(GL_TRIANGLES,
 	                         0,
@@ -337,7 +337,7 @@ void OTestParticles::ParticleSpawnTick(float DeltaTime)
 void OTestParticles::AddField(const TVec3& pos, const float& strenght, const TVec3& chargeVec, const float& charge)
 {
 	Particle particle(pos, {}, 76, 32, 1, -1);
-	GravityField field(35, strenght, particle, charge);
+	SGravityField field(35, strenght, particle, charge);
 	Fields.push_back(field);
 }
 

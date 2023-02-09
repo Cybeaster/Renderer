@@ -1,6 +1,10 @@
 #pragma once
 
 #include "AllocatorUtils.hpp"
+#include "Types.hpp"
+
+#include <type_traits>
+
 namespace RenderAPI
 {
 #define SMALL_INLINE_ALLOC_STACK_SIZE_MSG                             \
@@ -86,7 +90,7 @@ public:
 		AllocSize = 0;
 	}
 
-	template<typename AllocationType = void>
+	template<typename AllocationType>
 	NODISCARD AllocationType* GetAllocation() const
 	{
 		if (IsAllocated())
@@ -95,13 +99,23 @@ public:
 			           static_cast<AllocationType*>(Pointer) :
 			           static_cast<AllocationType*>(Buffer);
 		}
-
 		return nullptr;
 	}
 
-	NODISCARD uint32 GetSize() const { return AllocSize; }
-	NODISCARD bool IsAllocated() const { return AllocSize > 0; }
-	NODISCARD bool IsHeapAllocated() const { return AllocSize > MaxStackSize; }
+	NODISCARD uint32 GetSize() const
+	{
+		return AllocSize;
+	}
+
+	NODISCARD bool IsAllocated() const
+	{
+		return AllocSize > 0;
+	}
+	
+	NODISCARD bool IsHeapAllocated() const
+	{
+		return AllocSize > MaxStackSize;
+	}
 
 private:
 	union

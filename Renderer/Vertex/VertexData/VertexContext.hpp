@@ -21,7 +21,7 @@ struct TVertexContext
 
 	TVertexContext() = default;
 
-	TVertexContext(TBuffer* Buffer,
+	TVertexContext(OBuffer* Buffer,
 	               const uint32 Index,
 	               const uint32 Size,
 	               const uint32 Type,
@@ -48,7 +48,7 @@ struct TVertexContext
 	}
 
 	// vertex options
-	OSharedPtr<TBuffer> BoundBuffer;
+	OSharedPtr<OBuffer> BoundBuffer;
 	uint32 VertexIndex;
 	uint32 VertexSize;
 	uint32 VertexType;

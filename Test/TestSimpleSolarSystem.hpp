@@ -14,7 +14,7 @@ class OTestSimpleSolarSystem : public OTest
 {
 public:
 	OTestSimpleSolarSystem() = default;
-	OTestSimpleSolarSystem(TPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
+	OTestSimpleSolarSystem(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
 
 	void OnUpdate(
 	    float deltaTime,

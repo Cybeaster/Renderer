@@ -127,7 +127,7 @@ private:
 	void CalcScene();
 	void SetInput();
 
-	Thread::TThreadPool RendererThreadPool;
+	Thread::OThreadPool RendererThreadPool;
 	TVertexArray VertexArray;
 
 	OInputHandler InputHandler;

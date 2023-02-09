@@ -4,11 +4,11 @@
 
 namespace Test
 {
-OTestSimpleCube::OTestSimpleCube(TPath ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
+OTestSimpleCube::OTestSimpleCube(OPath ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
     : OTest(ShaderPath, Renderer)
 {
 	TVertexContext contextVertex(
-	    new TBuffer{ cubePositions, sizeof(cubePositions) },
+	    new OBuffer{ cubePositions, sizeof(cubePositions) },
 	    0,
 	    3,
 	    GL_FLOAT,

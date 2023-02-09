@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-OTexture::OTexture(const TPath& path, bool IsAF_Enabled)
+OTexture::OTexture(const OPath& path, bool IsAF_Enabled)
 {
 	EnableAF = IsAF_Enabled && glewIsSupported("GL_EXT_texture_filter_anisotropic");
 	textureID = SOIL_load_OGL_texture(

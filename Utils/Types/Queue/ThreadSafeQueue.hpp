@@ -7,15 +7,15 @@
 namespace RenderAPI
 {
 template<typename T>
-class OhreadSafeQueue
+class OThreadSafeQueue
 {
 public:
-	OhreadSafeQueue(const OhreadSafeQueue& Queue)
+	OThreadSafeQueue(const OThreadSafeQueue& Queue)
 	{
 		OMutexGuard guard(Mutex);
 		InternalQueue = Queue.InternalQueue;
 	}
-	~OhreadSafeQueue();
+	~OThreadSafeQueue();
 
 	void Push(T Value);
 
@@ -26,12 +26,12 @@ public:
 
 private:
 	mutable OMutex Mutex;
-	TTQueue<T> InternalQueue;
+	OQueue<T> InternalQueue;
 	OConditionVariable PushCondition;
 };
 
 template<typename T>
-void OhreadSafeQueue<T>::Push(T Value)
+void OThreadSafeQueue<T>::Push(T Value)
 {
 	OMutexGuard guard(Mutex);
 	InternalQueue.push(Value);
@@ -39,7 +39,7 @@ void OhreadSafeQueue<T>::Push(T Value)
 }
 
 template<typename T>
-void OhreadSafeQueue<T>::Pop(T& Value)
+void OThreadSafeQueue<T>::Pop(T& Value)
 {
 	OUniqueLock lock(Mutex);
 	PushCondition.wait(lock, [this]()
@@ -50,7 +50,7 @@ void OhreadSafeQueue<T>::Pop(T& Value)
 }
 
 template<typename T>
-OSharedPtr<T> OhreadSafeQueue<T>::Pop()
+OSharedPtr<T> OThreadSafeQueue<T>::Pop()
 {
 	OUniqueLock lock(Mutex);
 	PushCondition.wait(lock, [this]()
@@ -61,7 +61,7 @@ OSharedPtr<T> OhreadSafeQueue<T>::Pop()
 }
 
 template<typename T>
-bool OhreadSafeQueue<T>::Empty()
+bool OThreadSafeQueue<T>::Empty()
 {
 	OMutexGuard guard(Mutex);
 	return InternalQueue.empty();

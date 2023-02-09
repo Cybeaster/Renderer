@@ -11,11 +11,11 @@ class ODelegate : public ODelegateBase
 private:
 	template<typename ObjectType, typename... PayloadArgs>
 	using ConstMemberFunc =
-	    typename TTMemberFunctionType<ObjectType, RetValueType, ArgTypes..., PayloadArgs...>::TConstFunction;
+	    typename STMemberFunctionType<ObjectType, RetValueType, ArgTypes..., PayloadArgs...>::TConstFunction;
 
 	template<typename ObjectType, typename... PayloadArgs>
 	using MemberFunc =
-	    typename TTMemberFunctionType<ObjectType, RetValueType, ArgTypes..., PayloadArgs...>::TFunction;
+	    typename STMemberFunctionType<ObjectType, RetValueType, ArgTypes..., PayloadArgs...>::TFunction;
 
 public:
 	using TDelegateType = OIDelegate<RetValueType, ArgTypes...>;

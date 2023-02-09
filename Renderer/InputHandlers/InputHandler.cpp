@@ -32,8 +32,8 @@ void OInputHandler::SetInput(GLFWwindow* Window)
 }
 
 void OInputHandler::WindowReshapeCallback(GLFWwindow* window,
-                                          const int newHeight,
-                                          const int newWidth)
+                                          const int& newHeight,
+                                          const int& newWidth)
 {
 	if (!window)
 		return;

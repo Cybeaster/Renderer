@@ -29,7 +29,7 @@ using namespace RenderAPI;
 class OTest
 {
 public:
-	OTest(TPath shaderPath, OSharedPtr<RenderAPI::ORenderer> RendererArg);
+	OTest(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> RendererArg);
 	OTest() = default;
 	virtual ~OTest();
 
@@ -49,7 +49,7 @@ public:
 
 	virtual void InitShader(TString shaderPath);
 
-	void EnableVertexArray(TBuffer& buffer);
+	void EnableVertexArray(OBuffer& buffer);
 
 	TDrawVertexHandle CreateVertexElement(const TVertexContext& VContext, const TDrawContext& RContext);
 	void EnableBuffer(const TBufferAttribVertexHandle& Handle);

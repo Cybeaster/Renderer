@@ -1,17 +1,21 @@
 #pragma once
-#include <glm.hpp>
 #include "Particle.hpp"
 
-struct GravityField
+#include <glm.hpp>
+
+
+struct SGravityField
 {
-    float radius = 500.f;
-    float fieldStrenght;
+	float radius = 500.f;
+	float fieldStrenght;
 
-    Test::Particle particleField;
+	Test::Particle particleField;
 
-    GravityField() = default;
-    GravityField(const float &rad, const float &strenght, const Test::Particle &particle, const float &charge) : radius(rad), fieldStrenght(strenght), particleField(particle)
-    {
-        particleField.SetCharge(charge);
-    }
+	SGravityField() = default;
+    
+	SGravityField(const float& rad, const float& strenght, const Test::Particle& particle, const float& charge)
+	    : radius(rad), fieldStrenght(strenght), particleField(particle)
+	{
+		particleField.SetCharge(charge);
+	}
 };

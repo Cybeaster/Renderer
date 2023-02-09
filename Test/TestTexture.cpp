@@ -1,8 +1,8 @@
-#include "OTestTexture.hpp"
+#include "TestTexture.hpp"
 
 namespace Test
 {
-OTestTexture::OTestTexture(const TPath& TexturePath, const TPath& ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
+OTestTexture::OTestTexture(const OPath& TexturePath, const OPath& ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
     : Texture(TexturePath), OTest(ShaderPath, Renderer)
 {
 	pyramidHandle = Renderer->AddAttribBuffer(
