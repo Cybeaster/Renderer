@@ -266,8 +266,10 @@ bool OMulticastDelegate<ArgTypes...>::RemoveFrom(ObjectType* Object)
 	{
 		if (IsLocked())
 		{
-			for (const SDelegateHandlerPair& event : Events)
+			for (size_t it = 0; it < Events.size(); it++)
 			{
+				const auto& event = Events[it];
+				auto& last = Events[Events.size() - 1];
 				if (event.Delegate.GetOwner() == Object)
 				{
 					if (IsLocked())
@@ -276,7 +278,8 @@ bool OMulticastDelegate<ArgTypes...>::RemoveFrom(ObjectType* Object)
 					}
 					else
 					{
-						std::swap(event);
+						std::swap(Events[it], last);
+						Events.pop_back();
 					}
 				}
 			}

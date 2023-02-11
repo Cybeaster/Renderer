@@ -1,9 +1,10 @@
 #pragma once
-#include <tuple>
 #include "Tuple/Tuple.hpp"
+
+#include <tuple>
 
 namespace RenderAPI
 {
-    template <typename... Types>
-    using TTuple = TTElemSequenceTuple<Types...>;
+template<typename... Types>
+using OTuple = OTElemSequenceTuple<Types...>;
 }
