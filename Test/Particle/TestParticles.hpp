@@ -18,17 +18,17 @@ public:
 	OTestParticles(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
 
 	void OnUpdate(
-	    float deltaTime,
-	    float aspect,
-	    const TVec3& cameraPos,
-	    TMat4& pMat,
-	    TMat4& vMat) override;
+	    const float& DeltaTime,
+	    const float& Aspect,
+	    const OVec3& CameraPos,
+	    OMat4& PMat,
+	    OMat4& VMat) override;
 
 private:
 	TDrawVertexHandle DefaultParticleHandle;
 	void ChangeVelocity(Particle& particle);
-	void AddField(const TVec3& pos, const float& strenght, const TVec3& chargeVec, const float& charge);
-	void AddParticle(const TVec3& startPos, const float& radius, const float& charge, const TVec3& startVelocity);
+	void AddField(const OVec3& pos, const float& strenght, const OVec3& chargeVec, const float& charge);
+	void AddParticle(const OVec3& startPos, const float& radius, const float& charge, const OVec3& startVelocity);
 	/**
 	 * @brief Calculates timer for spawning particles.
 	 *
@@ -49,14 +49,14 @@ private:
 	 * @param deltaTime Time between frames.
 	 * @param vMat Camera matrix.
 	 */
-	void DrawParticles(float deltaTime, TMat4 vMat);
+	void DrawParticles(float deltaTime, OMat4 vMat);
 
 	/**
 	 * @brief Draws fiels.
 	 * @param deltaTime Time between frames.
 	 * @param vMat Camera matrix.
 	 */
-	void DrawFields(float deltaTime, TMat4 vMat);
+	void DrawFields(float deltaTime, OMat4 vMat);
 
 	/**
 	 * @brief Moves a particle each frame.
@@ -65,7 +65,7 @@ private:
 	 * @param deltaTime Time between frames.
 	 * @param vMat Camera matrix.
 	 */
-	void MoveParticle(Particle& particle, float deltaTime, TMat4 vMat);
+	void MoveParticle(Particle& particle, float deltaTime, OMat4 vMat);
 
 	/**
 	 * @brief Already spawned particles.
@@ -82,32 +82,32 @@ private:
 	 * @brief Timer for particles.
 	 *
 	 */
-	float ParticleSpawnTimer = 0.f;
+	float ParticleSpawnTimer = 0.F;
 	/**
 	 * @brief Time that is required to spawn each particle.
 	 *
 	 */
-	float ParticleSpawnTime = 0.05f;
+	float ParticleSpawnTime = 0.05F;
 
 	/**
 	 * @brief Timer for fields.
 	 *
 	 */
-	float FieldSpawnTimer = 0.f;
+	float FieldSpawnTimer = 0.F;
 	/**
 	 * @brief Time for spawning fields
 	 *
 	 */
-	float FieldSpawnTime = 100.f;
+	float FieldSpawnTime = 100.F;
 
 	/**
 	 * @brief Start speed for particles.
 	 *
 	 */
-	const TVec3 Particles45StartVel{ 0.95f, 0.1f, 0 };
-	const TVec3 ParticlesNegative45StartVel{ 0.95f, -0.5f, 0 };
+	const OVec3 Particles45StartVel{ 0.95F, 0.1F, 0 };
+	const OVec3 ParticlesNegative45StartVel{ 0.95F, -0.5F, 0 };
 
-	const float DefaultFieldStrenght = 1.1f;
+	const float DefaultFieldStrenght = 1.1F;
 };
 
 } // namespace Test

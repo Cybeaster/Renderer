@@ -1,6 +1,7 @@
 #pragma once
 #include "../Test/Test.hpp"
 #include "Delegate.hpp"
+#include "Hash.hpp"
 #include "KeyboardKeys.hpp"
 #include "RendererInputHandler.hpp"
 #include "Types.hpp"
@@ -22,7 +23,7 @@ class OInputHandler
 public:
 	OInputHandler() = default;
 
-	~OInputHandler();
+	~OInputHandler() = default;
 
 	static void KeyboardInputPressed(GLFWwindow* window, EKeys key, int scancode, int mods);
 	static void KeyboardInputReleased(GLFWwindow* window, EKeys key, int scancode, int mods);
@@ -39,7 +40,7 @@ public:
 	template<typename ObjectType, typename... ArgTypes>
 	void AddListener(ObjectType* Object, typename STMemberFunctionType<ObjectType, void, ArgTypes...>::Type Function, EKeys Key);
 
-	void InitRendererHandler(TVec3& CameraPos)
+	void InitRendererHandler(OVec3& CameraPos)
 	{
 		RenderInputHandler.SetHandler(&CameraPos);
 	}
@@ -47,15 +48,14 @@ public:
 private:
 	ORendererInputHandler RenderInputHandler;
 
-	static TTHashMap<EKeys, SKeyState> KeyMap;
+	static OTHashMap<EKeys, SKeyState> KeyMap;
 };
 
 template<typename ObjectType, typename... ArgTypes>
-void OInputHandler::AddListener(ObjectType* Object, typename STMemberFunctionType<ObjectType, void, ArgTypes...>::Type  /*Function*/, EKeys Key)
+void OInputHandler::AddListener(ObjectType* Object, typename STMemberFunctionType<ObjectType, void, ArgTypes...>::Type /*Function*/, EKeys Key)
 {
 	if (Object != nullptr)
 	{
-		KeyMap[Key].Callback.Bind<ObjectType, ArgTypes...>(Object, Function);
 	}
 }
 } // namespace RenderAPI

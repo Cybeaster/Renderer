@@ -22,6 +22,7 @@ public:
 template<typename RetValueType, typename... ArgTypes>
 class OIDelegate : public OIDelegateBase
 {
+public:
 	virtual RetValueType Execute(ArgTypes&&... Args) = 0;
 };
 

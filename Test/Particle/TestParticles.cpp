@@ -241,7 +241,7 @@ OTestParticles::OTestParticles(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer
 	auto size = sizeof(float) * Particles[0].getVertecies().size();
 	auto data = particle.getVertecies().begin()._Ptr;
 
-	TVertexContext contextVertex(new OBuffer{ data, size }, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
+	SVertexContext contextVertex(new OBuffer{ data, size }, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
 
 	TDrawContext drawContext(GL_TRIANGLES,
 	                         0,
@@ -259,37 +259,37 @@ OTestParticles::OTestParticles(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer
 }
 
 void OTestParticles::OnUpdate(
-    float deltaTime,
-    float aspect,
-    const TVec3& cameraPos,
-    TMat4& pMat,
-    TMat4& vMat)
+    const float& DeltaTime,
+    const float& Aspect,
+    const OVec3& CameraPos,
+    OMat4& PMat,
+    OMat4& VMat)
 {
-	OTest::OnUpdate(deltaTime, aspect, cameraPos, pMat, vMat);
+	OTest::OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
 
-	ParticleSpawnTick(deltaTime);
-	DrawParticles(deltaTime, vMat);
-	DrawFields(deltaTime, vMat);
+	ParticleSpawnTick(DeltaTime);
+	DrawParticles(DeltaTime, VMat);
+	DrawFields(DeltaTime, VMat);
 }
 
-void OTestParticles::MoveParticle(Particle& particle, float deltaTime, TMat4 vMat)
+void OTestParticles::MoveParticle(Particle& particle, float deltaTime, OMat4 vMat)
 {
 	ChangeVelocity(particle);
 
-	TMat4 translation = glm::translate(vMat, particle.getPosition());
-	TMat4 rotation = particle.rotate(deltaTime);
-	GetShader().SetUnformMat4f("mv_matrix", TMat4(translation * rotation));
+	OMat4 translation = glm::translate(vMat, particle.getPosition());
+	OMat4 rotation = particle.rotate(deltaTime);
+	GetShader().SetUnformMat4f("mv_matrix", OMat4(translation * rotation));
 	particle.IncreaseRotSpeed(deltaTime * 10);
 	particle.move();
 }
 
-void OTestParticles::DrawParticles(float deltaTime, TMat4 vMat)
+void OTestParticles::DrawParticles(float deltaTime, OMat4 vMat)
 {
 	for (auto& particle : Particles)
 	{
 		MoveParticle(particle, deltaTime, vMat);
 		particle.updateColor();
-		TVec3 color = particle.getColor();
+		OVec3 color = particle.getColor();
 		GetShader().SetUniform4f("additionalColor", color.x, color.y, color.y, 1);
 
 		DrawArrays(DefaultParticleHandle);
@@ -305,14 +305,14 @@ void OTestParticles::ChangeVelocity(Particle& particle)
 		{
 			if (particle.getCharge() == field.particleField.getCharge()) // If the particle and field have the same charge - Move particle in opossite dir.
 			{
-				TVec3 inc = (field.particleField.getPosition() - particle.getPosition()) * field.fieldStrenght / pointsDist;
-				TVec3 res = glm::mix(particle.getPosition(), inc, 1.f);
+				OVec3 inc = (field.particleField.getPosition() - particle.getPosition()) * field.fieldStrenght / pointsDist;
+				OVec3 res = glm::mix(particle.getPosition(), inc, 1.f);
 				particle.incVelocity(res);
 			}
 			else
 			{
-				TVec3 inc = (particle.getPosition() - field.particleField.getPosition()) * field.fieldStrenght / pointsDist;
-				TVec3 res = glm::mix(particle.getPosition(), inc, 1.f);
+				OVec3 inc = (particle.getPosition() - field.particleField.getPosition()) * field.fieldStrenght / pointsDist;
+				OVec3 res = glm::mix(particle.getPosition(), inc, 1.f);
 				particle.incVelocity(res);
 			}
 		}
@@ -325,7 +325,7 @@ void OTestParticles::ParticleSpawnTick(float DeltaTime)
 	{
 		ParticleSpawnTimer = ParticleSpawnTime;
 		float charge = rand() % 100 > 100 ? -1 : 1;
-		const TVec3 velocity = rand() % 100 > 50 ? Particles45StartVel : ParticlesNegative45StartVel;
+		const OVec3 velocity = rand() % 100 > 50 ? Particles45StartVel : ParticlesNegative45StartVel;
 		AddParticle({ -80, 20, 0 }, rand() % 3, charge, velocity);
 
 		Renderer->LookAtCamera((Particles.end() - 1)->getPosition());
@@ -334,7 +334,7 @@ void OTestParticles::ParticleSpawnTick(float DeltaTime)
 		ParticleSpawnTimer -= DeltaTime;
 }
 
-void OTestParticles::AddField(const TVec3& pos, const float& strenght, const TVec3& chargeVec, const float& charge)
+void OTestParticles::AddField(const OVec3& pos, const float& strenght, const OVec3& chargeVec, const float& charge)
 {
 	Particle particle(pos, {}, 76, 32, 1, -1);
 	SGravityField field(35, strenght, particle, charge);
@@ -352,18 +352,18 @@ void OTestParticles::FieldSpawnTick(float DeltaTime)
 		FieldSpawnTimer -= DeltaTime;
 }
 
-void OTestParticles::AddParticle(const TVec3& startPos, const float& radius, const float& charge, const TVec3& startVelocity)
+void OTestParticles::AddParticle(const OVec3& startPos, const float& radius, const float& charge, const OVec3& startVelocity)
 {
-	TVec3 randPos{ float(rand() % 15), float(rand() % 15), 0.f };
+	OVec3 randPos{ float(rand() % 15), float(rand() % 15), 0.f };
 	Particles.push_back(Particle(startPos + randPos, startVelocity, 36, 18, radius, charge));
 }
 
-void OTestParticles::DrawFields(float deltaTime, TMat4 vMat)
+void OTestParticles::DrawFields(float deltaTime, OMat4 vMat)
 {
 	for (auto& field : Fields)
 	{
-		TMat4 rot = field.particleField.rotate(deltaTime);
-		TMat4 translation = glm::translate(vMat, field.particleField.getPosition());
+		OMat4 rot = field.particleField.rotate(deltaTime);
+		OMat4 translation = glm::translate(vMat, field.particleField.getPosition());
 
 		field.particleField.IncreaseRotSpeed(10);
 

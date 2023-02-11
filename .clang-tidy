@@ -30,7 +30,6 @@ Checks: >
   -bugprone-unchecked-optional-access
 # Turn all the warnings from the checks above into errors. Intentionaly.
 WarningsAsErrors: "*"
-
 CheckOptions:
   - { key: readability-identifier-naming.NamespaceCase,          value: CamelCase }
   - { key: readability-identifier-naming.ClassCase,              value: CamelCase  }

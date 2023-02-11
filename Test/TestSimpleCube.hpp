@@ -9,18 +9,18 @@ public:
 	OTestSimpleCube(OPath ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
 
 	void OnUpdate(
-	    const float deltaTime,
-	    const float aspect,
-	    const TVec3& cameraPos,
-	    TMat4& pMat,
-	    TMat4& vMat) override;
+	    const float& deltaTime,
+	    const float& aspect,
+	    const OVec3& cameraPos,
+	    OMat4& pMat,
+	    OMat4& vMat) override;
 
 private:
 	uint32 buffer;
 
-	TVec3 cubePos = { 0, -2, 0 };
-	TMat4 mMatrix = TMat4(1);
-	TMat4 mvMatrix = TMat4(1);
+	OVec3 cubePos = { 0, -2, 0 };
+	OMat4 mMatrix = OMat4(1);
+	OMat4 mvMatrix = OMat4(1);
 
 	TDrawVertexHandle handle;
 	float cubePositions[108] = {

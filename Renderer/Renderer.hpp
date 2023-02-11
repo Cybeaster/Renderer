@@ -57,7 +57,7 @@ public:
 		return Tests;
 	}
 
-	TDrawVertexHandle CreateVertexElement(const TVertexContext& VContext, const TDrawContext& RContext)
+	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const TDrawContext& RContext)
 	{
 		return VertexArray.CreateVertexElement(VContext, RContext);
 	}
@@ -82,12 +82,12 @@ public:
 		return VertexArray.AddAttribBuffer(Buffer);
 	}
 
-	TBufferAttribVertexHandle AddAttributeBuffer(const TVertexContext& Context)
+	TBufferAttribVertexHandle AddAttributeBuffer(const SVertexContext& Context)
 	{
 		return VertexArray.AddAttribBuffer(Context);
 	}
 	void TranslateCameraLocation(const glm::mat4& Transform);
-	void LookAtCamera(const TVec3& Position);
+	void LookAtCamera(const OVec3& Position);
 
 	void Init();
 	void PostInit();
@@ -100,20 +100,20 @@ public:
 	static float LastFrame;
 	static float CurrentFrame;
 	static float Fovy;
-	static TVec3 CameraPos;
+	static OVec3 CameraPos;
 
-	static TMat4 VMat;
-	static TMat4 PMat;
+	static OMat4 VMat;
+	static OMat4 PMat;
 
 	static bool RightMousePressed;
-	static TVec2 PressedMousePos;
+	static OVec2 PressedMousePos;
 
-	static TMat4 MouseCameraRotation;
+	static OMat4 MouseCameraRotation;
 	static float MRSDivideFactor;
 
 	~ORenderer();
 
-	void MoveCamera(const TVec3& Delta);
+	void MoveCamera(const OVec3& Delta);
 
 private:
 	ORenderer() = default;

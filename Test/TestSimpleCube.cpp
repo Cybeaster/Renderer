@@ -7,7 +7,7 @@ namespace Test
 OTestSimpleCube::OTestSimpleCube(OPath ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
     : OTest(ShaderPath, Renderer)
 {
-	TVertexContext contextVertex(
+	SVertexContext contextVertex(
 	    new OBuffer{ cubePositions, sizeof(cubePositions) },
 	    0,
 	    3,
@@ -30,13 +30,13 @@ OTestSimpleCube::OTestSimpleCube(OPath ShaderPath, OSharedPtr<RenderAPI::ORender
 void OTestSimpleCube::OnUpdate(
     const float deltaTime,
     const float aspect,
-    const TVec3& cameraPos,
-    TMat4& pMat,
-    TMat4& vMat)
+    const OVec3& cameraPos,
+    OMat4& pMat,
+    OMat4& vMat)
 {
 	OTest::OnUpdate(deltaTime, aspect, cameraPos, pMat, vMat);
 
-	mMatrix = glm::translate(TMat4(1), cubePos);
+	mMatrix = glm::translate(OMat4(1), cubePos);
 	mvMatrix = mMatrix * vMat;
 	GetShader().SetUnformMat4f("mv_matrix", mvMatrix);
 	GetShader().SetUniform4f("additionalColor", 1, 1, 1, 1);

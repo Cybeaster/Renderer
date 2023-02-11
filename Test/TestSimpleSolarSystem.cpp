@@ -1,4 +1,5 @@
 
+#include "Math.hpp"
 #include "glfw3.h"
 
 #include <TestSimpleSolarSystem.hpp>
@@ -9,21 +10,21 @@ namespace Test
 {
 
 void OTestSimpleSolarSystem::OnUpdate(
-    float deltaTime,
-    float aspect,
-    const TVec3& cameraPos,
-    TMat4& pMat,
-    TMat4& vMat)
+    const float& DeltaTime,
+    const float& Aspect,
+    const OVec3& CameraPos,
+    OMat4& PMat,
+    OMat4& VMat)
 {
-	OTest::OnUpdate(deltaTime, aspect, cameraPos, pMat, vMat);
+	OTest::OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
 
-	GetMVStack().push(vMat);
+	GetMVStack().push(VMat);
 	GetMVStack().push(GetMVStack().top());
 
-	GetMVStack().top() *= glm::translate(TMat4(1.0f), TVec3(0.0, 0.0, 0.0));
+	GetMVStack().top() *= glm::translate(OMat4(1.0f), OVec3(0.0, 0.0, 0.0));
 	GetMVStack().push(GetMVStack().top());
 
-	GetMVStack().top() *= glm::rotate(TMat4(1.0f), float(deltaTime), TVec3(1.0, 0.0, 0.0));
+	GetMVStack().top() *= glm::rotate(OMat4(1.0f), float(DeltaTime), OVec3(1.0, 0.0, 0.0));
 	GetShader().SetUnformMat4f("mv_matrix", GetMVStack().top());
 
 	DrawArrays(pyramidHandle);
@@ -34,9 +35,9 @@ void OTestSimpleSolarSystem::OnUpdate(
 	// // cube
 
 	// GetMVStack().push(GetMVStack().top());
-	// GetMVStack().top() *= glm::translate(TMat4(1.0f), TVec3(sin(float(deltaTime)) * 4.0f, 0.0f, cos(float(deltaTime) * 4.0)));
+	// GetMVStack().top() *= glm::translate(OMat4(1.0f), OVec3(sin(float(DeltaTime)) * 4.0f, 0.0f, cos(float(DeltaTime) * 4.0)));
 	// GetMVStack().push(GetMVStack().top());
-	// GetMVStack().top() *= glm::rotate(TMat4(1.0f), float(deltaTime), TVec3(0.0, 1.0, 0.0));
+	// GetMVStack().top() *= glm::rotate(OMat4(1.0f), float(DeltaTime), OVec3(0.0, 1.0, 0.0));
 	// GetShader().SetUnformMat4f("mv_matrix", GetMVStack().top());
 
 	// DrawArrays(cubeHandle);
@@ -46,9 +47,9 @@ void OTestSimpleSolarSystem::OnUpdate(
 	// // smaller cube
 
 	// GetMVStack().push(GetMVStack().top());
-	// GetMVStack().top() *= glm::translate(TMat4(1.0f), TVec3(0.f, sin(deltaTime) * 2.0, cos(float(deltaTime) * 2.0)));
-	// GetMVStack().top() *= glm::rotate(TMat4(1.0f), float(deltaTime), TVec3(0.0, 0.0, 1.0));
-	// GetMVStack().top() *= glm::scale(TMat4(1.0), TVec3(0.25f, 0.25f, 0.25f));
+	// GetMVStack().top() *= glm::translate(OMat4(1.0f), OVec3(0.f, sin(DeltaTime) * 2.0, cos(float(DeltaTime) * 2.0)));
+	// GetMVStack().top() *= glm::rotate(OMat4(1.0f), float(DeltaTime), OVec3(0.0, 0.0, 1.0));
+	// GetMVStack().top() *= glm::scale(OMat4(1.0), OVec3(0.25f, 0.25f, 0.25f));
 	// GetShader().SetUnformMat4f("mv_matrix", GetMVStack().top());
 
 	// DrawArrays(cubeHandle);
@@ -77,7 +78,7 @@ OTestSimpleSolarSystem::OTestSimpleSolarSystem(OPath shaderPath, OSharedPtr<Rend
 	auto size = sizeof(pyramidPositions);
 	auto data = pyramidPositions;
 
-	TVertexContext pyramidVertex(new OBuffer{ pyramidPositions, sizeof(pyramidPositions) }, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
+	SVertexContext pyramidVertex(new OBuffer{ pyramidPositions, sizeof(pyramidPositions) }, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
 
 	TDrawContext pyramidDrawContext(GL_TRIANGLES,
 	                                0,

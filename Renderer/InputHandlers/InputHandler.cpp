@@ -6,6 +6,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtx/rotate_vector.hpp>
 #include <gtx/string_cast.hpp>
+#include <iostream>
 
 #define DEBUG_MOUSE_WHEEL false
 #define DEBUG_MOUSE_POS true
@@ -13,11 +14,7 @@
 namespace RenderAPI
 {
 
-TTHashMap<EKeys, SKeyState> OInputHandler::KeyMap{};
-
-OInputHandler::~OInputHandler()
-{
-}
+OTHashMap<EKeys, SKeyState> OInputHandler::KeyMap{};
 
 void OInputHandler::Tick(float DeltaTime)
 {
@@ -42,10 +39,10 @@ void OInputHandler::WindowReshapeCallback(GLFWwindow* window,
 	ORenderer::Aspect = static_cast<float>(newWidth / newHeight);
 	ORenderer::ScreenWidth = newWidth;
 	ORenderer::ScreenHeight = newHeight;
-	ORenderer::PMat = glm::perspective(ORenderer::Fovy, ORenderer::Aspect, 0.1f, 1000.f);
+	ORenderer::PMat = glm::perspective(ORenderer::Fovy, ORenderer::Aspect, 0.1F, 1000.F);
 }
 
-void OInputHandler::CursorWheelInputCallback(GLFWwindow* window, double XOffset,
+void OInputHandler::CursorWheelInputCallback(GLFWwindow*  /*window*/, double  /*XOffset*/,
                                              double YOffset)
 {
 	ORenderer::CameraPos.z -= YOffset;
@@ -56,7 +53,7 @@ void OInputHandler::CursorWheelInputCallback(GLFWwindow* window, double XOffset,
 }
 
 void OInputHandler::MouseInputCallback(GLFWwindow* window, int Button,
-                                       int Action, int Mods)
+                                       int Action, int  /*Mods*/)
 {
 	if (Button == GLFW_MOUSE_BUTTON_RIGHT)
 	{
@@ -64,7 +61,8 @@ void OInputHandler::MouseInputCallback(GLFWwindow* window, int Button,
 		{
 			ORenderer::RightMousePressed = false;
 
-			double xPos, yPos;
+			double xPos;
+			double yPos;
 			glfwGetCursorPos(window, &xPos, &yPos);
 			ORenderer::PressedMousePos = { xPos, yPos };
 		}
@@ -75,16 +73,16 @@ void OInputHandler::MouseInputCallback(GLFWwindow* window, int Button,
 	}
 }
 
-void OInputHandler::MouseCursorMoveCallback(GLFWwindow* Window, double XPos,
+void OInputHandler::MouseCursorMoveCallback(GLFWwindow*  /*Window*/, double XPos,
                                             double YPos)
 {
 	if (ORenderer::RightMousePressed)
 	{
-		auto pos = TVec2(XPos, YPos);
-		const auto delta = (ORenderer::PressedMousePos - pos);
+		auto pos = OVec2(XPos, YPos);
+		auto delta = (ORenderer::PressedMousePos - pos);
 
 		ORenderer::CameraPos = glm::rotate(
-		    ORenderer::CameraPos, glm::length(delta) / ORenderer::MRSDivideFactor, TVec3(delta.y, delta.x, 0)); // inverted
+		    ORenderer::CameraPos, glm::length(delta) / ORenderer::MRSDivideFactor, OVec3(delta.y, delta.x, 0)); // inverted
 
 		ORenderer::PressedMousePos = pos;
 		if (DEBUG_MOUSE_POS)
@@ -106,7 +104,7 @@ void OInputHandler::KeyboardInputCallback(GLFWwindow* window, int key,
 	}
 }
 
-void OInputHandler::KeyboardInputPressed(GLFWwindow* window, EKeys key,
+void OInputHandler::KeyboardInputPressed(GLFWwindow* /*window*/, EKeys key,
                                          int /*scancode*/, int /*mods*/)
 {
 	if (KeyMap.contains(key))
@@ -126,7 +124,7 @@ void OInputHandler::KeyboardInputReleased(GLFWwindow* /*window*/, EKeys key,
 		auto state = KeyMap[key];
 		state.IsPressed = false;
 
-		state.Callback.Execute(state.IsPressed);
+		// state.Callback.Execute(state.IsPressed);
 	}
 }
 

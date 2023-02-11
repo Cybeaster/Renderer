@@ -6,7 +6,6 @@
 #include <iostream>
 #include <sstream>
 
-
 namespace RenderAPI
 {
 TShader::TShader(const OPath Source)
@@ -26,17 +25,17 @@ void TShader::Init(const OPath Source)
 	RendererID = CreateShader(shaderSource.vertexShader, shaderSource.fragmentShader);
 }
 
-void TShader::SetUniform1i(const TString name, int32_t v0)
+void TShader::SetUniform1i(const OString name, int32_t v0)
 {
 	GLCall(glUniform1i(GetUnformLocation(name), v0));
 }
 
-void TShader::SetUniform1f(const TString name, float v0)
+void TShader::SetUniform1f(const OString name, float v0)
 {
 	GLCall(glUniform1f(GetUnformLocation(name), v0));
 }
 
-uint32 TShader::GetUnformLocation(const TString& name)
+uint32 TShader::GetUnformLocation(const OString& name)
 {
 	if (LocationCache.find(name) != LocationCache.end())
 		return LocationCache[name];
@@ -48,12 +47,12 @@ uint32 TShader::GetUnformLocation(const TString& name)
 	LocationCache[name] = location;
 	return location;
 }
-void TShader::SetUnformMat4f(const TString name, TMat4&& matrix)
+void TShader::SetUnformMat4f(const OString name, OMat4&& matrix)
 {
 	GLCall(glUniformMatrix4fv(GetUnformLocation(name), 1, GL_FALSE, &matrix[0][0]));
 }
 
-void TShader::SetUnformMat4f(const TString name, const TMat4& matrix)
+void TShader::SetUnformMat4f(const OString name, const OMat4& matrix)
 {
 	GLCall(glUniformMatrix4fv(GetUnformLocation(name), 1, GL_FALSE, &matrix[0][0]));
 }
@@ -68,12 +67,12 @@ void TShader::Unbind() const
 	GLCall(glUseProgram(0));
 }
 
-void TShader::SetUniform4f(const TString name, float v0, float v1, float v2, float v3)
+void TShader::SetUniform4f(const OString name, float v0, float v1, float v2, float v3)
 {
 	GLCall(glUniform4f(GetUnformLocation(name), v0, v1, v2, v3));
 }
 
-uint32 TShader::CompileShader(uint32 type, const TString& Source)
+uint32 TShader::CompileShader(uint32 type, const OString& Source)
 {
 	uint32 id = glCreateShader(type);
 	const char* src = Source.c_str();
@@ -102,18 +101,18 @@ ShaderSource TShader::ParseShader(const OPath& filePath)
 	if (stream.is_open())
 	{
 		ShaderType currentType = ShaderType::NONE;
-		TString line;
+		OString line;
 		std::stringstream stringStream[2];
 
 		while (getline(stream, line))
 		{
-			if (line.find("#shader") != TString::npos)
+			if (line.find("#shader") != OString::npos)
 			{
-				if (line.find("vertex") != TString::npos)
+				if (line.find("vertex") != OString::npos)
 				{
 					currentType = ShaderType::VERTEX;
 				}
-				else if (line.find("fragment") != TString::npos)
+				else if (line.find("fragment") != OString::npos)
 				{
 					currentType = ShaderType::FRAGMENT;
 				}
@@ -130,7 +129,7 @@ ShaderSource TShader::ParseShader(const OPath& filePath)
 	return {};
 }
 
-int TShader::CreateShader(const TString& vertexShader, const TString& fragmentShader)
+int TShader::CreateShader(const OString& vertexShader, const OString& fragmentShader)
 {
 	uint32 program = glCreateProgram();
 	uint32 vs = CompileShader(GL_VERTEX_SHADER, vertexShader);

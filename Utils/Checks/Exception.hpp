@@ -10,7 +10,7 @@ class OException : std::exception
 public:
 	explicit OException(const char* Msg)
 	    : Message(Msg) {}
-	explicit OException(const TString& Msg)
+	explicit OException(const OString& Msg)
 	    : Message(std::move(Msg)){};
 
 	virtual ~OException() {}

@@ -4,8 +4,8 @@ namespace Test
 {
 
 Particle::Particle(
-    TVec3 pos,
-    TVec3 vel,
+    OVec3 pos,
+    OVec3 vel,
     uint32 _stackCount,
     uint32 _sectorCount,
     uint32 _radius,

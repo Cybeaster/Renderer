@@ -1,9 +1,12 @@
+#pragma once
+
 #include "../../Utils/Types/Math.hpp"
-#include "InputHandler.hpp"
 #include "KeyboardKeys.hpp"
+#include "SmartPtr.hpp"
+
 namespace RenderAPI
 {
-
+class OInputHandler;
 class ORendererInputHandler
 {
 public:
@@ -12,8 +15,8 @@ public:
 	void OnDKeyToggled(bool Pressed);
 	void OnAKeyToggled(bool Pressed);
 
-	ORendererInputHandler(TVec3& Camera, OInputHandler* Handler)
-	    : CameraRef(MakeShared(&Camera)), InputHandler(MakeShared(Handler))
+	ORendererInputHandler(OVec3& Camera, OInputHandler* Handler)
+	//: CameraRef(MakeShared(&Camera)), InputHandler(MakeShared(Handler))
 	{
 		// InputHandler->AddListener<ORendererInputHandler, bool>(
 		//     this, &ORendererInputHandler::OnWKeyToggled, EKeys::KEY_W);
@@ -27,10 +30,10 @@ public:
 
 	ORendererInputHandler() = default;
 
-	void SetHandler(TVec3* Camera) { CameraRef = MakeShared(Camera); }
+	void SetHandler(OVec3* Camera) { CameraRef = MakeShared(Camera); }
 
 private:
-	OSharedPtr<TVec3> CameraRef;
+	OSharedPtr<OVec3> CameraRef;
 	OSharedPtr<OInputHandler> InputHandler;
 };
 

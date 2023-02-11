@@ -83,7 +83,7 @@ private:
 		template<typename... Types>
 		FORCEINLINE void Call(Types... Args)
 		{
-			Delegate.Execute(Forward<Args>(Args)...);
+			Delegate.Execute(Forward<Types>(Args)...);
 		}
 
 		FORCEINLINE void Clear() { Delegate.Clear(); }
@@ -99,9 +99,11 @@ private:
 		SDelegateHandlerPair(const SDelegateHandle& Handle, DelegateType&& Callback)
 		    : Handler(Move(Handle)), Delegate(Move(Callback)) {}
 
-		SDelegateHandlerPair(const SDelegateHandle& Handle,
+		SDelegateHandlerPair(const SDelegateHandle& Handle, // NOLINT
 		                     const DelegateType& Callback)
-		    : Handler(Handle), Delegate(Callback) {}
+		    : Handler(Handle), Delegate(Callback)
+		{
+		}
 	};
 
 	template<typename ObjectType, typename... PayloadArgs>
@@ -145,7 +147,7 @@ public:
 private:
 	void Lock() { ++Locks; }
 
-	void Unlcok()
+	void Unlock()
 	{
 		DELEGATE_ASSERT(Locks > 0);
 		--Locks;

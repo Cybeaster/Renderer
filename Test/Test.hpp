@@ -20,7 +20,9 @@ class ORenderer;
 }
 namespace Test
 {
-using namespace RenderAPI;
+using RenderAPI::ORenderer;
+using RenderAPI::OSharedPtr;
+using RenderAPI::SVertexContext;
 /**
  * @brief Base class for all tests.
  * @details Each test is an abstract modul, receiving as input base parameters(camera location, frame rate, aspect ration, perspective matrix)
@@ -29,29 +31,29 @@ using namespace RenderAPI;
 class OTest
 {
 public:
-	OTest(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> RendererArg);
+	OTest(const OPath& shaderPath, const OSharedPtr<RenderAPI::ORenderer>& RendererArg);
 	OTest() = default;
 	virtual ~OTest();
 
-	void Init(const TMat4& pMatRef)
+	void Init(const OMat4& pMatRef)
 	{
 		pMat = pMatRef;
 	}
 
 	virtual void OnUpdate(
-	    const float deltaTime,
-	    const float aspect,
-	    const TVec3& cameraPos,
-	    TMat4& pMat,
-	    TMat4& vMat);
+	    const float& DeltaTime,
+	    const float& Aspect,
+	    const OVec3& CameraPos,
+	    OMat4& PMat,
+	    OMat4& VMat);
 
 	virtual void OnTestEnd() {}
 
-	virtual void InitShader(TString shaderPath);
+	virtual void InitShader(const OString& shaderPath);
 
 	void EnableVertexArray(OBuffer& buffer);
 
-	TDrawVertexHandle CreateVertexElement(const TVertexContext& VContext, const TDrawContext& RContext);
+	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const TDrawContext& RContext);
 	void EnableBuffer(const TBufferAttribVertexHandle& Handle);
 	void EnableBuffer(const TDrawVertexHandle& Handle);
 
@@ -63,18 +65,18 @@ protected:
 		return Shader;
 	}
 
-	std::stack<TMat4>& GetMVStack()
+	std::stack<OMat4>& GetMVStack()
 	{
 		return mvStack;
 	}
 
-	std::stack<TMat4> mvStack;
+	std::stack<OMat4> mvStack;
 	OVector<GLuint> vertexArray;
 
 	OSharedPtr<class ORenderer> Renderer;
 
 private:
-	TMat4
+	OMat4
 	    pMat,
 	    mMat,
 	    mvMat,

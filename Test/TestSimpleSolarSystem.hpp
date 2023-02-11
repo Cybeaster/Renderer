@@ -17,11 +17,11 @@ public:
 	OTestSimpleSolarSystem(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
 
 	void OnUpdate(
-	    float deltaTime,
-	    float aspect,
-	    const TVec3& cameraPos,
-	    TMat4& pMat,
-	    TMat4& vMat) override;
+	    const float& DeltaTime,
+	    const float& Aspect,
+	    const OVec3& CameraPos,
+	    OMat4& PMat,
+	    OMat4& VMat) override;
 
 private:
 	TDrawVertexHandle cubeHandle;

@@ -23,14 +23,6 @@
 
 #define NODISCARD [[nodiscard]]
 
-template<typename T>
-struct STRemoveRef
-{
-	using Type = T;
-	using ConstType = const T;
-};
-
-
 template<bool Flag, typename Arg = void>
 struct STEnableIf
 {
@@ -41,8 +33,33 @@ struct STEnableIf<true, Arg>
 {
 };
 
+#pragma region RemoveRef
+
+template<typename T>
+struct STRemoveRef
+{
+	using Type = T;
+	using ConstType = const T;
+};
+
+template<typename T>
+struct STRemoveRef<T&>
+{
+	using Type = T;
+	using ConstType = const T;
+};
+
+template<typename T>
+struct STRemoveRef<T&&>
+{
+	using Type = T;
+	using ConstType = const T;
+};
+
 template<typename T>
 using TRemoveRef = typename STRemoveRef<T>::Type;
+
+#pragma endregion RemoveRef
 
 template<typename T, T... Indices>
 struct STIntegerSequenceWrapper
@@ -53,10 +70,16 @@ template<typename T, T Size>
 using TMakeIntegerSequence = __make_integer_seq<STIntegerSequenceWrapper, T, Size>;
 
 template<typename T>
-NODISCARD constexpr T&& Move(TRemoveRef<T>&& Arg) noexcept
+NODISCARD constexpr TRemoveRef<T>&& Move(T&& Arg) noexcept
 {
 	return static_cast<TRemoveRef<T>&&>(Arg);
 }
+
+template<typename>
+constexpr bool TIsLValueRef = false;
+
+template<typename T>
+constexpr bool TIsLValueRef<T&> = true;
 
 template<typename T>
 NODISCARD constexpr T&& Forward(TRemoveRef<T>& Arg) noexcept
@@ -64,7 +87,14 @@ NODISCARD constexpr T&& Forward(TRemoveRef<T>& Arg) noexcept
 	return static_cast<T&&>(Arg);
 }
 
-using TString = std::string;
+template<typename T>
+NODISCARD constexpr T&& Forward(TRemoveRef<T>&& Arg) noexcept
+{
+	static_assert(TIsLValueRef<T>, "Bad forward call");
+	return static_cast<T&&>(Arg);
+}
+
+using OString = std::string;
 
 using int32 = int32_t;
 using int64 = int64_t;

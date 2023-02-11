@@ -33,13 +33,13 @@ float ORenderer::DeltaTime{ 0 };
 float ORenderer::LastFrame{ 0 };
 float ORenderer::CurrentFrame{ 0 };
 float ORenderer::Fovy{ 1.0472f };
-TVec3 ORenderer::CameraPos{ 0.f, 0.f, -2.f };
+OVec3 ORenderer::CameraPos{ 0.f, 0.f, -2.f };
 
-TMat4 ORenderer::VMat{};
-TMat4 ORenderer::PMat{};
+OMat4 ORenderer::VMat{};
+OMat4 ORenderer::PMat{};
 
-TVec2 ORenderer::PressedMousePos{ 0, 0 };
-TMat4 ORenderer::MouseCameraRotation{ TMat4(1.f) };
+OVec2 ORenderer::PressedMousePos{ 0, 0 };
+OMat4 ORenderer::MouseCameraRotation{ OMat4(1.f) };
 
 bool ORenderer::RightMousePressed{ false };
 
@@ -96,7 +96,7 @@ ORenderer::GLFWInit()
 	return Window;
 }
 
-void ORenderer::MoveCamera(const TVec3& Delta)
+void ORenderer::MoveCamera(const OVec3& Delta)
 {
 	CameraPos += Delta;
 }
@@ -113,7 +113,7 @@ void ORenderer::GLFWRendererStart(const float currentTime)
 void ORenderer::CalcScene()
 {
 	PMat = glm::perspective(1.0472f, Aspect, 0.01f, 1000.f);
-	VMat = MouseCameraRotation * glm::translate(TMat4(1.0f), CameraPos * -1.f);
+	VMat = MouseCameraRotation * glm::translate(OMat4(1.0f), CameraPos * -1.f);
 }
 
 void ORenderer::GLFWRendererEnd()
@@ -147,7 +147,7 @@ void ORenderer::GLFWCalcPerspective(GLFWwindow* window)
 	glfwGetFramebufferSize(window, &ScreenWidth, &ScreenHeight);
 	Aspect = static_cast<float>(ScreenWidth / ScreenHeight);
 	PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.f);
-	VMat = glm::translate(TMat4(1.0f), CameraPos * -1.f);
+	VMat = glm::translate(OMat4(1.0f), CameraPos * -1.f);
 }
 
 void ORenderer::TranslateCameraLocation(const glm::mat4& Transform)
@@ -155,9 +155,9 @@ void ORenderer::TranslateCameraLocation(const glm::mat4& Transform)
 	// CameraPos *= Transform;
 }
 
-void ORenderer::LookAtCamera(const TVec3& Position)
+void ORenderer::LookAtCamera(const OVec3& Position)
 {
-	// CameraPos *= glm::lookAt(CameraPos,Position,TVec3(0,0,1));
+	// CameraPos *= glm::lookAt(CameraPos,Position,OVec3(0,0,1));
 }
 
 #pragma endregion GLFW

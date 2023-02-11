@@ -3,11 +3,10 @@
 
 #include "../Renderer.hpp"
 
-
 namespace RenderAPI
 {
 
-TVertexAttribBuffer::TVertexAttribBuffer(const TVertexContext& Context)
+TVertexAttribBuffer::TVertexAttribBuffer(const SVertexContext& Context)
     : VertexContext(Context)
 {
 	RenderAPI::ORenderer::GetRenderer()->AddAttribBuffer(*this);

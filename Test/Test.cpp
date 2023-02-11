@@ -6,14 +6,14 @@
 
 namespace Test
 {
-OTest::OTest(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> RendererArg)
-    : Shader(shaderPath), Renderer(RendererArg)
+OTest::OTest(const OPath& ShaderPath, const OSharedPtr<RenderAPI::ORenderer>& RendererArg)
+    : Shader(ShaderPath), Renderer(RendererArg)
 {
 }
 
-void OTest::InitShader(TString shaderPath)
+void OTest::InitShader(const OString& ShaderPath)
 {
-	Shader.Init(shaderPath);
+	Shader.Init(ShaderPath);
 }
 
 void OTest::DrawArrays(const TDrawVertexHandle& Handle)
@@ -31,20 +31,20 @@ void OTest::EnableBuffer(const TDrawVertexHandle& Handle)
 	Renderer->EnableBuffer(Handle);
 }
 
-TDrawVertexHandle OTest::CreateVertexElement(const TVertexContext& VContext, const TDrawContext& RContext)
+TDrawVertexHandle OTest::CreateVertexElement(const SVertexContext& VContext, const TDrawContext& RContext)
 {
 	return Renderer->CreateVertexElement(VContext, RContext);
 }
 
 void OTest::OnUpdate(
-    const float deltaTime,
-    const float aspect,
-    const TVec3& cameraPos,
-    TMat4& pMat,
-    TMat4& vMat)
+    const float& /*DeltaTime*/,
+    const float& /*Aspect*/,
+    const OVec3& /*CameraPos*/,
+    OMat4& PMat,
+    OMat4& /*VMat*/)
 {
 	Shader.Bind();
-	Shader.SetUnformMat4f("proj_matrix", std::move(pMat));
+	Shader.SetUnformMat4f("proj_matrix", Move(PMat));
 }
 
 } // namespace Test

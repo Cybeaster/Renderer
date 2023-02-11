@@ -6,22 +6,17 @@
 namespace RenderAPI
 {
 
-struct TVertexContext
+struct SVertexContext
 {
 	inline void Bind() const
 	{
 		BoundBuffer->Bind();
 	}
 
-	TVertexContext(const TVertexContext& Context)
-	    : BoundBuffer(Context.BoundBuffer), VertexIndex(Context.VertexIndex), VertexSize(Context.VertexSize), VertexType(Context.VertexType), IsNormalized(Context.IsNormalized), VertexStride(Context.VertexStride), VertexPointer(Context.VertexPointer), VertexAttribArrayIndex(Context.VertexAttribArrayIndex)
+	SVertexContext(const SVertexContext& Context) = default;
+	SVertexContext() = default;
 
-	{
-	}
-
-	TVertexContext() = default;
-
-	TVertexContext(OBuffer* Buffer,
+	SVertexContext(OBuffer* Buffer,
 	               const uint32 Index,
 	               const uint32 Size,
 	               const uint32 Type,
@@ -33,7 +28,7 @@ struct TVertexContext
 	{
 	}
 
-	TVertexContext& operator=(const TVertexContext& Elem)
+	SVertexContext& operator=(const SVertexContext& Elem)
 	{
 		BoundBuffer = Elem.BoundBuffer;
 		VertexIndex = Elem.VertexIndex;

@@ -38,9 +38,7 @@ public:
 
 	OInlineAllocator(OInlineAllocator&& Other) noexcept
 	    : AllocSize(Other.AllocSize)
-	{
-		Move(Other);
-	}
+	{}
 
 	OInlineAllocator& operator=(OInlineAllocator&& Other) noexcept
 	{
@@ -95,9 +93,9 @@ public:
 	{
 		if (IsAllocated())
 		{
-			return IsHeapAllocated() ?
-			           static_cast<AllocationType*>(Pointer) :
-			           static_cast<AllocationType*>(Buffer);
+			return IsHeapAllocated() ? // NOLINT
+			           (AllocationType*)Pointer : // NOLINT
+			           (AllocationType*)Buffer; // NOLINT
 		}
 		return nullptr;
 	}
@@ -111,7 +109,7 @@ public:
 	{
 		return AllocSize > 0;
 	}
-	
+
 	NODISCARD bool IsHeapAllocated() const
 	{
 		return AllocSize > MaxStackSize;

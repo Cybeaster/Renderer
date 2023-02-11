@@ -14,17 +14,17 @@ OTestTexture::OTestTexture(const OPath& TexturePath, const OPath& ShaderPath, OS
 }
 
 void OTestTexture::OnUpdate(
-    const float deltaTime,
-    const float aspect,
-    const TVec3& cameraPos,
-    TMat4& pMat,
-    TMat4& vMat)
+    const float& DeltaTime,
+    const float& Aspect,
+    const OVec3& CameraPos,
+    OMat4& PMat,
+    OMat4& VMat)
 {
-	OTest::OnUpdate(deltaTime, aspect, cameraPos, pMat, vMat);
+	OTest::OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
 
 	GetShader().SetUnformMat4f(
 	    "mv_matrix",
-	    vMat);
+	    VMat);
 
 	EnableBuffer(pyramidHandle);
 	EnableBuffer(textureHandle);
@@ -33,9 +33,4 @@ void OTestTexture::OnUpdate(
 
 	DrawArrays(textureHandle);
 }
-
-OTestTexture::~OTestTexture()
-{
-}
-
 } // namespace Test

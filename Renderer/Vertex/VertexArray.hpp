@@ -35,7 +35,7 @@ public:
 	TVertexArray(/* args */);
 	~TVertexArray();
 
-	TDrawVertexHandle CreateVertexElement(const TVertexContext& VContext, const TDrawContext& RContext);
+	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const TDrawContext& RContext);
 
 	void DrawArrays(const TDrawVertexHandle& Handle) const;
 
@@ -45,7 +45,7 @@ public:
 	void AddVertexArray();
 
 	TBufferAttribVertexHandle AddAttribBuffer(const TVertexAttribBuffer& Buffer);
-	TBufferAttribVertexHandle AddAttribBuffer(const TVertexContext& VContext);
+	TBufferAttribVertexHandle AddAttribBuffer(const SVertexContext& VContext);
 
 private:
 	TBufferAttribVertexHandle AddAttribBufferImpl(const TVertexAttribBuffer& Buffer);

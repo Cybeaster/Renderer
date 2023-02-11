@@ -9,8 +9,8 @@ class Particle
 {
 public:
 	Particle(
-	    TVec3 pos,
-	    TVec3 vel,
+	    OVec3 pos,
+	    OVec3 vel,
 	    uint32 _stackCount,
 	    uint32 _sectorCount,
 	    uint32 _radius,
@@ -18,12 +18,12 @@ public:
 	Particle() = default;
 	~Particle();
 
-	inline void setColor(const TVec3 _color)
+	inline void setColor(const OVec3 _color)
 	{
 		color = _color;
 	}
 
-	inline const TVec3& getColor() const
+	inline const OVec3& getColor() const
 	{
 		return color;
 	}
@@ -48,22 +48,22 @@ public:
 		position += velocity * speed;
 	}
 
-	inline void movePosition(TVec3 vel)
+	inline void movePosition(OVec3 vel)
 	{
 		position += vel;
 	}
 
-	inline void incVelocity(TVec3 inc)
+	inline void incVelocity(OVec3 inc)
 	{
 		velocity += inc;
 	}
 
-	inline void setVelocity(TVec3 inc)
+	inline void setVelocity(OVec3 inc)
 	{
 		velocity = inc;
 	}
 
-	inline TVec3 getVeclocity() const
+	inline OVec3 getVeclocity() const
 	{
 		return velocity;
 	}
@@ -73,15 +73,15 @@ public:
 		return speed;
 	}
 
-	inline TMat4 rotate(float deltaTime)
+	inline OMat4 rotate(float deltaTime)
 	{
 		currentRotationAngle += deltaTime * rotationSpeed;
 		if (currentRotationAngle > 360)
 			currentRotationAngle = 0;
-		return glm::rotate(TMat4(1.0f), float(currentRotationAngle), TVec3(1.0, 1.0, 1.0));
+		return glm::rotate(OMat4(1.0f), float(currentRotationAngle), OVec3(1.0, 1.0, 1.0));
 	}
 
-	inline const TVec3& getPosition() const
+	inline const OVec3& getPosition() const
 	{
 		return position;
 	}
@@ -136,9 +136,9 @@ private:
 	void createVertecies();
 	void buildInterleavedVertices();
 
-	TVec3 color{ 1.f, 1.f, 1.f };
-	TVec3 position{ 0.f, 0.f, 0.f };
-	TVec3 velocity;
+	OVec3 color{ 1.f, 1.f, 1.f };
+	OVec3 position{ 0.f, 0.f, 0.f };
+	OVec3 velocity;
 
 	uint32 stackCount = 12;
 	uint32 sectorCount = 36;

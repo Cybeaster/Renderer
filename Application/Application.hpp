@@ -10,37 +10,37 @@ namespace RenderAPI
 class ORenderer;
 }
 
-struct OShaderName
+struct SShaderName
 {
-	OShaderName() = default;
+	SShaderName() = default;
 
-	OShaderName(const TString& Str)
+	explicit SShaderName(const OString& Str)
 	    : Name(Str)
 	{
 	}
 
-	OShaderName(const char Str[])
+	SShaderName(const char Str[])
 	    : Name(Str)
 	{
 	}
 
-	OShaderName(const OShaderName& Str)
+	SShaderName(const SShaderName& Str)
 	    : Name(Str.Name)
 	{
 	}
 
-	OShaderName& operator=(const TString& Str)
+	SShaderName& operator=(const OString& Str)
 	{
 		Name = Str;
 		return *this;
 	}
 
-	operator TString()
+	explicit operator OString() const
 	{
 		return Name;
 	}
 
-	TString Name;
+	OString Name;
 };
 
 class OApplication
@@ -48,18 +48,16 @@ class OApplication
 public:
 	static auto GetApplication()
 	{
-		if (!application)
+		if (!Application)
 		{
-			application = RenderAPI::OSharedPtr<OApplication>(new OApplication());
-			return application;
+			Application = RenderAPI::OSharedPtr<OApplication>(new OApplication());
+			return Application;
 		}
-		else
-		{
-			return application;
-		}
+
+		return Application;
 	}
 
-	static auto GetShaderLocalPathWith(const OShaderName& Name)
+	static auto GetShaderLocalPathWith(const SShaderName& Name)
 	{
 		return RootDirPath.string() + ShadersDir.string() + Name.Name;
 	}
@@ -79,14 +77,14 @@ public:
 private:
 	OApplication() = default;
 
-	static inline RenderAPI::OSharedPtr<OApplication> application = nullptr;
+	static inline RenderAPI::OSharedPtr<OApplication> Application = nullptr;
 
 	static inline OPath DebugPath = current_path();
 	static inline OPath RootDirPath = current_path().parent_path();
 
-	static inline OPath ShadersDir = "\\Externals\\Shaders\\";
-	static inline OPath ResourceDirectory = "\\Externals\\Resources\\";
+	static inline OPath ShadersDir = R"(\Externals\Shaders\)";
+	static inline OPath ResourceDirectory = R"(\Externals\Resources\)";
 
-	static inline OShaderName SimpleCubeShader = "\\SimpleCube.shader";
-	static inline OShaderName SimpleTextureShader = "\\SimpeTexture.shader";
+	static inline SShaderName SimpleCubeShader = "\\SimpleCube.shader";
+	static inline SShaderName SimpleTextureShader = "\\SimpeTexture.shader";
 };

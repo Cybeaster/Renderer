@@ -11,14 +11,14 @@ class OTestTexture : public OTest
 {
 public:
 	OTestTexture(const OPath& filePath, const OPath& ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
-	~OTestTexture();
+	~OTestTexture() = default;
 
-	virtual void OnUpdate(
-	    const float deltaTime,
-	    const float aspect,
-	    const TVec3& cameraPos,
-	    TMat4& pMat,
-	    TMat4& vMat) override;
+	void OnUpdate(
+	    const float& DeltaTime,
+	    const float& Aspect,
+	    const OVec3& CameraPos,
+	    OMat4& PMat,
+	    OMat4& VMat) override;
 
 private:
 	float pyramidPositions[54] = {
