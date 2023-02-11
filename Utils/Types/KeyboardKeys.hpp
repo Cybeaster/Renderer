@@ -1,7 +1,7 @@
 #pragma once
 #include "Types.hpp"
 
-enum class Ekeys : uint16
+enum class EKeys : uint16
 {
     KEY_0 = 48,
     KEY_1 = 49,

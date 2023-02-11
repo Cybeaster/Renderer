@@ -1,20 +1,22 @@
 #pragma once
 #include "Buffer.hpp"
-#include <SmartPtr.hpp>
 #include "VertexData/VertexContext.hpp"
+
+#include <SmartPtr.hpp>
 #include <Types.hpp>
+
 namespace RenderAPI
 {
-    class TVertexAttribBuffer
-    {
-    public:
-        TVertexAttribBuffer(/* args */) = default;
+class TVertexAttribBuffer
+{
+public:
+	TVertexAttribBuffer(/* args */) = default;
 
-        TVertexAttribBuffer(const TVertexContext &Context);
+	TVertexAttribBuffer(const SVertexContext& Context);
 
-        void EnableVertexAttribPointer();
+	void EnableVertexAttribPointer();
 
-    private:
-        TVertexContext VertexContext;
-    };
-} // namespace RendererAPI
+private:
+	SVertexContext VertexContext;
+};
+} // namespace RenderAPI

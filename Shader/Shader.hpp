@@ -1,51 +1,53 @@
 #pragma once
-#include <unordered_map>
 #include "Math.hpp"
-#include "Vector.hpp"
 #include "Types.hpp"
+#include "Vector.hpp"
+
 #include <Path.hpp>
-struct ShaderSource
+#include <unordered_map>
+
+struct SHaderSource
 {
-    TString vertexShader;
-    TString fragmentShader;
+	OString vertexShader;
+	OString fragmentShader;
 };
 
 enum class ShaderType
 {
-    NONE = -1,
-    VERTEX = 0,
-    FRAGMENT = 1
+	NONE = -1,
+	VERTEX = 0,
+	FRAGMENT = 1
 };
 
 namespace RenderAPI
 {
-    class TShader
-    {
-    public:
-        void Init(const TPath source);
+class OShader
+{
+public:
+	void Init(const OPath& source);
 
-        void Bind() const;
-        void Unbind() const;
-        void SetUniform4f(const TString name, float v0, float v1, float v2, float v3);
+	void Bind() const;
+	void Unbind() const;
+	void SetUniform4f(const OString& name, float v0, float v1, float v2, float v3);
 
-        void SetUniform1f(const TString name, float v0);
-        void SetUniform1i(const TString name, int32_t v0);
-        void SetUnformMat4f(const TString name, TMat4 &&matrix);
-        void SetUnformMat4f(const TString name, const TMat4 &matrix);
+	void SetUniform1f(const OString& name, float v0);
+	void SetUniform1i(const OString& name, int32_t v0);
+	void SetUnformMat4f(const OString& name, OMat4&& matrix);
+	void SetUnformMat4f(const OString& name, const OMat4& matrix);
 
-        TShader() = default;
-        TShader(const TPath source);
-        ~TShader();
+	OShader() = default;
+	explicit OShader(const OPath& source);
+	~OShader();
 
-    private:
-        uint32 CompileShader(uint32 type, const TString &source);
-        uint32 GetUnformLocation(const TString &name);
-        int CreateShader(const TString &vertexShader, const TString &fragmentShader);
-        ShaderSource ParseShader(const TPath &filePath);
-        bool CompileShader();
+private:
+	uint32 CompileShader(uint32 type, const OString& source);
+	uint32 GetUnformLocation(const OString& name);
+	int CreateShader(const OString& vertexShader, const OString& fragmentShader);
+	SHaderSource ParseShader(const OPath& filePath);
+	bool CompileShader();
 
-        TPath FilePath;
-        uint32 RendererID = 277;
-        std::unordered_map<TString, int32_t> LocationCache;
-    };
-} // RenderAPI
+	OPath FilePath;
+	uint32 RendererID = 277;
+	std::unordered_map<OString, int32_t> LocationCache;
+};
+} // namespace RenderAPI

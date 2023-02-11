@@ -1,93 +1,98 @@
 #pragma once
 
-#include "GL/glew.h"
-#include "glfw3.h"
-
+// clang-format off
+#include "GL.hpp"
 #include "Math.hpp"
-#include "Vector.hpp"
-#include "Types.hpp"
 #include "Shader.hpp"
 #include "SmartPtr.hpp"
-#include <filesystem>
+#include "Types.hpp"
+#include "Vector.hpp"
 #include "Vertex/VertexArray.hpp"
-#include <stack>
-#include <memory>
+#include "Vertex/VertexData/DrawContext.hpp"
 #include <Path.hpp>
+#include <filesystem>
+#include <memory>
+#include <stack>
+
+// clang-format on
 
 namespace RenderAPI
 {
-    class TRenderer;
+class ORenderer;
 }
 namespace Test
 {
-    using namespace RenderAPI;
-    /**
-     * @brief Base class for all tests.
-     * @details Each test is an abstract modul, receiving as input base parameters(camera location, frame rate, aspect ration, perspective matrix)
-     *
-     */
-    class Test
-    {
+using RenderAPI::ORenderer;
+using RenderAPI::OShader;
+using RenderAPI::OSharedPtr;
+using RenderAPI::SDrawContext;
+using RenderAPI::SVertexContext;
+/**
+ * @brief Base class for all tests.
+ * @details Each test is an abstract modul, receiving as input base parameters(camera location, frame rate, aspect ration, perspective matrix)
+ *
+ */
+class OTest
+{
+public:
+	OTest(const OPath& shaderPath, const OSharedPtr<RenderAPI::ORenderer>& RendererArg);
+	OTest() = default;
+	virtual ~OTest() = default;
 
-    public:
-        Test(TPath shaderPath, TTSharedPtr<RenderAPI::TRenderer> RendererArg);
-        Test() = default;
-        virtual ~Test();
+	void Init(const OMat4& pMatRef)
+	{
+		pMat = pMatRef;
+	}
 
-        void Init(const TMat4 &pMatRef)
-        {
-            pMat = pMatRef;
-        }
+	virtual void OnUpdate(
+	    const float& DeltaTime,
+	    const float& Aspect,
+	    const OVec3& CameraPos,
+	    OMat4& PMat,
+	    OMat4& VMat);
 
-        virtual void OnUpdate(
-            const float deltaTime,
-            const float aspect,
-            const TVec3 &cameraPos,
-            TMat4 &pMat,
-            TMat4 &vMat);
+	virtual void OnTestEnd() {}
 
-        virtual void OnTestEnd() {}
+	virtual void InitShader(const OString& shaderPath);
 
-        virtual void InitShader(TString shaderPath);
+	void EnableVertexArray(OBuffer& buffer);
 
-        void EnableVertexArray(TBuffer &buffer);
+	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext);
+	void EnableBuffer(const OBufferAttribVertexHandle& Handle);
+	void EnableBuffer(const TDrawVertexHandle& Handle);
 
-        TDrawVertexHandle CreateVertexElement(const TVertexContext &VContext, const TDrawContext &RContext);
-        void EnableBuffer(const TBufferAttribVertexHandle &Handle);
-        void EnableBuffer(const TDrawVertexHandle &Handle);
+	void DrawArrays(const TDrawVertexHandle& Handle);
 
-        void DrawArrays(const TDrawVertexHandle &Handle);
+protected:
+	OShader& GetShader()
+	{
+		return Shader;
+	}
 
-    protected:
-        TShader &GetShader()
-        {
-            return Shader;
-        }
+	std::stack<OMat4>& GetMVStack()
+	{
+		return mvStack;
+	}
 
-        std::stack<TMat4> &GetMVStack()
-        {
-            return mvStack;
-        }
+	std::stack<OMat4> mvStack;
+	OVector<GLuint> vertexArray;
 
-        std::stack<TMat4> mvStack;
-        TTVector<GLuint> vertexArray;
+	OSharedPtr<class ORenderer> Renderer;
 
-        TTSharedPtr<class TRenderer> Renderer;
+private:
+	OMat4
+	    pMat,
+	    mMat,
+	    mvMat,
+	    tMat,
+	    rMat;
 
-    private:
-        TMat4
-            pMat,
-            mMat,
-            mvMat,
-            tMat,
-            rMat;
+	/**
+	 * @brief Shader that is used for pipeline.
+	 *
+	 */
+	OShader Shader;
+	OVector<TVertexHandle> Handles;
+};
 
-        /**
-         * @brief Shader that is used for pipeline.
-         *
-         */
-        TShader Shader;
-        TTVector<TVertexHandle> Handles;
-    };
-
-}
+} // namespace Test

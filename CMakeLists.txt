@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.21)
 
 project(RenderAPI LANGUAGES CXX)
 
@@ -28,10 +28,13 @@ include_directories(
 	${PROJECT_SOURCE_DIR}/Utils/Threads/ThreadPool
 	${PROJECT_SOURCE_DIR}/Threads
 	${PROJECT_SOURCE_DIR}/Utils/Threads/HierarchicalMutex
+	${PROJECT_SOURCE_DIR}/Utils/Delegate
 	${PROJECT_SOURCE_DIR}/Utils/Checks
 	${PROJECT_SOURCE_DIR}/Utils/Types
 	${PROJECT_SOURCE_DIR}/Utils/Types/Tuple
 	${PROJECT_SOURCE_DIR}/Utils/Types/Queue
+	${PROJECT_BINARY_DIR}/Utils/Allocators
+	${PROJECT_BINARY_DIR}/Utils/Delegate
 )
 
 add_executable(exec
@@ -39,6 +42,8 @@ add_executable(exec
 	Renderer/Renderer.cpp
 	Renderer/Vertex/Buffer.cpp
 	Renderer/Vertex/VertexAttribBuffer.cpp
+	Renderer/InputHandlers/InputHandler.cpp
+	Renderer/InputHandlers/RendererInputHandler.cpp
 	Application/Application.cpp
 	Shader/Shader.cpp
 	Texture/Texture.cpp
@@ -48,43 +53,13 @@ add_executable(exec
 	Test/Particle/Particle.cpp
 	Test/Particle/TestParticles.cpp
 	Test/TestSimpleSolarSystem.cpp
-	
 	Renderer/Vertex/VertexArrayElem.cpp
 	Renderer/Vertex/VertexArray.cpp
+
+	Utils/Delegate/MulticastDelegate.hpp
+	Utils/Types/Vector.hpp
 	Utils/Threads/ThreadPool/ThreadPool.cpp
 	Utils/Threads/HierarchicalMutex/HierarchicalMutex.cpp
-
-	Renderer/Renderer.hpp
-	Renderer/Vertex/Buffer.hpp
-	Renderer/Vertex/VertexArrayElem.hpp
-	Renderer/Vertex/VertexArray.hpp
-	Application/Application.hpp
-	Shader/Shader.hpp
-	Texture/Texture.hpp
-	Test/Test.hpp
-	Test/TestTexture.hpp
-	Test/TestSimpleCube.hpp
-	Test/Particle/Particle.hpp
-	Test/Particle/ElectroField.hpp
-	Test/Particle/TestParticles.hpp
-
-	Utils/Threads/ThreadPool/ThreadPool.hpp
-	Utils/Threads/HierarchicalMutex/HierarchicalMutex.hpp
-	Utils/Checks/Exception.hpp
-	Utils/Checks/Assert.hpp
-	Utils/Functor/Functor.hpp
-	Utils/Types/Math.hpp
-	Utils/Types/Queue.hpp
-	Utils/Types/Thread.hpp
-	Utils/Types/Types.hpp
-	Utils/Types/Vector.hpp
-	Utils/Types/Hash.hpp
-	Utils/Types/Pair.hpp
-	Utils/Types/Tuple.hpp
-	Utils/Types/Tuple/Tuple.hpp
-	Utils/Delegate/Delegate.hpp
-
-	Utils/Types/Queue/ThreadSafeQueue.hpp
 )
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
 set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)

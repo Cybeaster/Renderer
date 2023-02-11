@@ -2,4 +2,4 @@
 #include <queue>
 
 template<typename T>
-using TTQueue = std::queue<T>;
+using OQueue = std::queue<T>;

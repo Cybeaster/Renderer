@@ -1,88 +1,90 @@
+#include "SmartPtr.hpp"
+
+#include <Path.hpp>
+#include <Types.hpp>
 #include <cstdint>
 #include <string>
-#include <Path.hpp>
-#include "SmartPtr.hpp"
-#include <Types.hpp>
 
 namespace RenderAPI
 {
-  class TRenderer;
+class ORenderer;
 }
 
-struct TShaderName
+struct SShaderName
 {
-  TShaderName() = default;
+	SShaderName() = default;
 
-  TShaderName(const TString &Str) : Name(Str)
-  {
-  }
+	explicit SShaderName(const OString& Str)
+	    : Name(Str)
+	{
+	}
 
-  TShaderName(const char Str[]) : Name(Str)
-  {
-  }
+	SShaderName(const char Str[])
+	    : Name(Str)
+	{
+	}
 
-  TShaderName(const TShaderName &Str) : Name(Str.Name)
-  {
-  }
+	SShaderName(const SShaderName& Str)
+	    : Name(Str.Name)
+	{
+	}
 
-  TShaderName &operator=(const TString &Str)
-  {
-    Name = Str;
-    return *this;
-  }
+	SShaderName& operator=(const OString& Str)
+	{
+		Name = Str;
+		return *this;
+	}
 
-  operator TString()
-  {
-    return Name;
-  }
+	explicit operator OString() const
+	{
+		return Name;
+	}
 
-  TString Name;
+	OString Name;
 };
 
-class Application
+class OApplication
 {
 public:
-  static auto GetApplication()
-  {
-    if (!application)
-    {
-      application = RenderAPI::TTSharedPtr<Application>(new Application());
-      return application;
-    }
-    else
-    {
-      return application;
-    }
-  }
+	static auto GetApplication()
+	{
+		if (!Application)
+		{
+			Application = RenderAPI::OSharedPtr<OApplication>(new OApplication());
+			return Application;
+		}
 
-  static auto GetShaderLocalPathWith(const TShaderName &Name)
-  {
-    return RootDirPath.string() + ShadersDir.string() + Name.Name;
-  }
+		return Application;
+	}
 
-  static auto GetResourceDirectoryWith(const TPath &Path)
-  {
-    return RootDirPath.string() + ResourceDirectory.string() + Path.string();
-  }
+	static auto GetShaderLocalPathWith(const SShaderName& Name)
+	{
+		return RootDirPath.string() + ShadersDir.string() + Name.Name;
+	}
 
-  /**
-   * @brief Programm start.
-   * @details Initializes Renderer class.
-   *
-   */
-  void Start(int argc, char **argv);
+	static auto GetResourceDirectoryWith(const OPath& Path)
+	{
+		return RootDirPath.string() + ResourceDirectory.string() + Path.string();
+	}
+
+	/**
+	 * @brief Programm start.
+	 * @details Initializes Renderer class.
+	 *
+	 */
+	void Start(int argc, char** argv);
 
 private:
-  Application() = default;
+	OApplication() = default;
 
-  static inline RenderAPI::TTSharedPtr<Application> application = nullptr;
+	static inline RenderAPI::OSharedPtr<OApplication> Application = nullptr;
 
-  static inline TPath DebugPath = current_path();
-  static inline TPath RootDirPath = current_path().parent_path();
+	static inline OPath DebugPath = current_path();
+	static inline OPath RootDirPath = current_path().parent_path();
 
-  static inline TPath ShadersDir = "\\Externals\\Shaders\\";
-  static inline TPath ResourceDirectory = "\\Externals\\Resources\\";
+	static inline OPath ShadersDir = R"(\Externals\Shaders\)";
+	static inline OPath ResourceDirectory = R"(\Externals\Resources\)";
 
-  static inline TShaderName SimpleCubeShader = "\\SimpleCube.shader";
-  static inline TShaderName SimpleTextureShader = "\\SimpeTexture.shader";
+	static inline SShaderName SimpleCubeShader = "\\SimpleCube.shader";
+	static inline SShaderName SimpleTextureShader = "\\SimpeTexture.shader";
 };

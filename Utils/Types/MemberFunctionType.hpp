@@ -1,8 +1,8 @@
 #pragma once
 
-
-template<typename ObjectType, typename RetType, typename ... ArgTypes>
-struct MemberFunctionType
+template<typename ObjectType, typename RetType, typename... ArgTypes>
+struct STMemberFunctionType
 {
-    using Type = RetType(ObjectType::*)(ArgTypes...);
+	using TConstFunction = RetType (ObjectType::*)(ArgTypes...) const;
+	using TFunction = RetType (ObjectType::*)(ArgTypes...);
 };

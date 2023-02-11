@@ -1,83 +1,71 @@
 #pragma once
 #include "../JoiningThread.hpp"
 #include "Functor/Functor.hpp"
+#include "Hash.hpp"
+#include "Pair.hpp"
+#include "Queue.hpp"
+#include "Set.hpp"
+#include "Thread.hpp"
 #include "Types.hpp"
 #include "Vector.hpp"
-#include "Queue.hpp"
-#include "Thread.hpp"
-#include "Pair.hpp"
-#include "Hash.hpp"
-#include <functional>
+
 #include <ThreadSafeQueue.hpp>
-#include "Set.hpp"
-namespace RenderAPI
+#include <functional>
+
+namespace RenderAPI::Thread
 {
-    namespace Thread
-    {
-        using namespace RenderAPI;
+struct STaskID
+{
+	STaskID() = default;
+	explicit STaskID(const int64 IDArg) noexcept
+	    : ID(IDArg) {}
 
-        struct TTaskID
-        {
-            TTaskID() = default;
-            TTaskID(const int64 IDArg) noexcept : ID(IDArg) {}
-            TTaskID(const TTaskID &TaskID) noexcept : ID(TaskID.ID) {}
+	STaskID(const STaskID& TaskID) = default;
 
-            bool operator>(const TTaskID &Arg) noexcept { return ID > Arg.ID; }
-            bool operator<(const TTaskID &Arg) noexcept { return ID < Arg.ID; }
-            bool operator==(const TTaskID &Arg) noexcept { return ID == Arg.ID; }
+	bool operator>(const STaskID& Arg) const noexcept { return ID > Arg.ID; }
+	bool operator<(const STaskID& Arg) const noexcept { return ID < Arg.ID; }
+	bool operator==(const STaskID& Arg) const noexcept { return ID == Arg.ID; }
 
-            bool operator>=(const TTaskID &Arg) noexcept { return ID >= Arg.ID; }
-            bool operator<=(const TTaskID &Arg) noexcept { return ID <= Arg.ID; }
-            bool operator!=(const TTaskID &Arg) noexcept { return ID != Arg.ID; }
+	bool operator>=(const STaskID& Arg) const noexcept { return ID >= Arg.ID; }
+	bool operator<=(const STaskID& Arg) const noexcept { return ID <= Arg.ID; }
+	bool operator!=(const STaskID& Arg) const noexcept { return ID != Arg.ID; }
 
-            friend bool operator<(const TTaskID &FirstID, const TTaskID &SecondID)
-            {
-                return FirstID.ID < SecondID.ID;
-            }
+private:
+	int64 ID;
+};
 
-            friend bool operator>(const TTaskID &FirstID, const TTaskID &SecondID)
-            {
-                return FirstID.ID > SecondID.ID;
-            }
+class OThreadPool
+{
+	using CallableInterfaceType = SFunctorBase::SICallableInterface;
+	using ThreadQueueElemType = OPair<CallableInterfaceType*, STaskID>;
 
-        private:
-            int64 ID;
-        };
+public:
+	~OThreadPool();
+	explicit OThreadPool(uint32 NumOfThreads);
+	OThreadPool(/* args */) = default;
 
-        class TThreadPool
-        {
-            using TCallableInterface = TFunctorBase::TCallableInterface;
-            using ThreadQueueElem = TTPair<TFunctorBase::TCallableInterface *, TTaskID>;
+	STaskID AddTask(CallableInterfaceType* Function);
 
-        public:
-            ~TThreadPool();
-            TThreadPool(uint32 NumOfThreads);
-            TThreadPool(/* args */) = default;
+	void CreateThread(JoiningThread&& Thread);
+	void Wait(const STaskID& ID);
+	void WaitAll();
+	bool IsDone(const STaskID& ID);
+	void WaitAndShutDown();
 
-            TTaskID AddTask(TCallableInterface *Function);
+private:
+	void Run();
+	OQueue<ThreadQueueElemType> TaskQueue;
+	OSet<STaskID> CompletedTasksIDs;
 
-            void CreateThread(JoiningThread &&Thread);
-            void Wait(const TTaskID &ID);
-            void WaitAll();
-            bool IsDone(const TTaskID &ID);
-            void WaitAndShutDown();
+	OConditionVariable QueueCV;
+	OConditionVariable CompletedTaskIdsCV;
 
-        private:
-            void Run();
-            TTQueue<ThreadQueueElem> TaskQueue;
-            TTSet<TTaskID> CompletedTasksIDs;
+	OMutex QueueMutex;
+	OMutex CompletedTaskMutex;
 
-            TConditionVariable QueueCV;
-            TConditionVariable CompletedTaskIdsCV;
+	OVector<JoiningThread> Threads;
 
-            TMutex QueueMutex;
-            TMutex CompletedTaskMutex;
-
-            TTVector<JoiningThread> Threads;
-
-            TTAtomic<bool> Quite = false;
-            TTAtomic<int64> LastID{0};
-        };
-    } // namespace Thread
-
-} // namespace RenderAPI
+	OAtomic<bool> Quite = false;
+	OAtomic<int64> LastID{ 0 };
+};
+} // namespace RenderAPI::Thread

@@ -3,25 +3,27 @@
 
 namespace RenderAPI
 {
-    namespace Exceptions
-    {
-        class TException : std::exception
-        {
-        public:
-            explicit TException(const char* Msg) : Message(Msg){}
-            explicit TException(const TString& Msg) : Message(std::move(Msg)){};
+namespace Exceptions
+{
+class OException : std::exception
+{
+public:
+	explicit OException(const char* Msg)
+	    : Message(Msg) {}
+	explicit OException(const OString& Msg)
+	    : Message(std::move(Msg)){};
 
-            virtual ~TException(){}
+	virtual ~OException() {}
 
-            virtual const char* what()const noexcept
-            {
-                return Message.c_str();
-            }
-        private:
-            TString Message;
-       
-        };
-        
-    } // namespace Exceptions
-    
+	virtual const char* What() const noexcept
+	{
+		return Message.c_str();
+	}
+
+private:
+	OString Message;
+};
+
+} // namespace Exceptions
+
 } // namespace RenderAPI

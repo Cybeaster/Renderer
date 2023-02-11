@@ -1,70 +1,45 @@
 #pragma once
-#include "../Types/Vector.hpp"
-#include "../Types/BindableObject.hpp"
-#include "../Types/SmartPtr.hpp"
-#include "../Functor/Functor.hpp"
 #include "../Types/MemberFunctionType.hpp"
-
+#include "DelegateBase.hpp"
+#include "Types.hpp"
 namespace RenderAPI
 {
 
-    template <typename OwnerObject, typename RetType, typename... ArgTypes>
-    class TTMemberDelegate
-    {
-        using FunctionType = ReturnType (OwnerObject::*)(ArgTypes...);
+template<typename RetValueType, typename... ArgTypes>
+class ODelegate : public ODelegateBase
+{
+private:
+	template<typename ObjectType, typename... PayloadArgs>
+	using ConstMemberFunc =
+	    typename STMemberFunctionType<ObjectType, RetValueType, ArgTypes..., PayloadArgs...>::TConstFunction;
 
-    public:
-        TTMemberDelegate() = delete;
+	template<typename ObjectType, typename... PayloadArgs>
+	using MemberFunc =
+	    typename STMemberFunctionType<ObjectType, RetValueType, ArgTypes..., PayloadArgs...>::TFunction;
 
-        template <typename ObjectType, typename RetType, typename... Args>
-        static friend TTSharedPtr<TTMemberDelegate> Create(ObjectType *Object, MemberFunctionType<ObjectType, RetType, Args...>::Type FunctionType, Args... Arguments)
-        {
-            return MakeShared(new TTMemberDelegate(Object, FunctionType, Arguments));
-        }
+public:
+	using TDelegateType = OIDelegate<RetValueType, ArgTypes...>;
 
-        void Bind(TBindableObjectInterface *Object, );
-        void Unbind();
-        void Execute()
-        {
-            for(auto& functor : BoundFunctors)
-            {
-                functor.Call();
-            }
-        }
+	template<typename ObjectType, typename... PayloadTypes>
+	DELEGATE_NO_DISCARD static ODelegate AddRaw(ObjectType* Object, MemberFunc<ObjectType, PayloadTypes...> Function, PayloadTypes... Payload)
+	{
+		ODelegate delegate;
+	}
 
-    private:
-        template <typename ObjectType, typename RetType, typename... Args, >
-        TTMemberDelegate(ObjectType *Object, MemberFunctionType<ObjectType, RetType, Args...>::Type FunctionArg, Args... Arguments)
-        {
-            BoundFunctors.push_back({Object,FunctionArg,Arguments...});
-        }
+	void Execute(ArgTypes&&... Args)
+	{
+		DELEGATE_ASSERT(Allocator.IsAllocated());
+		(static_cast<TDelegateType*>(GetDelegate()))->Execute(Forward<ArgTypes>(Args)...);
+	}
 
-        TTVector<TTMemberFunctor<OwnerObject, RetType, ArgTypes...>> BoundFunctors;
-    };
+private:
+	template<typename ObjectType, typename... PayloadTypes>
+	void Bind(PayloadTypes&&... Args)
+	{
+		Release();
+		void* bunch = Allocator.Allocate(sizeof(ObjectType));
+		new (bunch) ObjectType(std::forward(Args...));
+	}
+};
 
-    template <typename ReturnType, typename... ArgTypes>
-    class TTDelegate
-    {
-        using FunctionType = ReturnType(ArgTypes...);
-
-    public:
-        TTDelegate() = delete;
-
-        template <typename RetType, typename... Args>
-        static TTSharedPtr<TTDelegate> Create(RetType(FunctionType)(Args...), Args... Arguments)
-        {
-            return MakeShared(new TTDelegate(std::forward<RetType(Args...)>(FunctionType), std::forward<Args>(Arguments)...));
-        }
-
-        void Bind(TBindableObjectInterface *Object, );
-        void Unbind();
-        void Execute();
-
-    private:
-        template <typename RetType, typename... Args, >
-        TTDelegate(FunctionType FunctionArg, Args... Arguments) : Function(FunctionArg, Arguments...) {}
-
-        TTVector<TTWeakPtr<TBindableObjectInterface>> BoundObjects;
-        TTFunctor<FunctionType> Function;
-    };
 } // namespace RenderAPI

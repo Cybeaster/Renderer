@@ -3,10 +3,10 @@
 #include <map>
 
 template<typename Key,typename Value, class Hasher = std::hash<Key>>
-using TTHashMap = std::unordered_map<Key,Value,Hasher>;
+using OTHashMap = std::unordered_map<Key,Value,Hasher>;
 
 template<typename Key,typename Value>
-using TTUniqueHashMap = std::map<Key,Value>;
+using OTUniqueHashMap = std::map<Key,Value>;
 
 
 template<typename HashType>

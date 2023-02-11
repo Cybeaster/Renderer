@@ -1,51 +1,50 @@
 #pragma once
-#include <Types/Types.hpp>
-#include <Hash.hpp>
-#include "VertexData/DrawContext.hpp"
 #include "Buffer.hpp"
-#include "GL/glew.h"
-#include <SmartPtr.hpp>
 #include "SimpleVertexHandle.hpp"
+#include "VertexData/DrawContext.hpp"
+
+#include <Hash.hpp>
+#include <SmartPtr.hpp>
+#include <Types/Types.hpp>
+
 namespace RenderAPI
 {
-    class TVertexArrayElem
-    {
-        using TBufferHandle = TBufferAttribVertexHandle;
+class OVertexArrayElem
+{
+	using OBufferHandle = OBufferAttribVertexHandle;
 
-    public:
-        TVertexArrayElem(const TBufferHandle &Handle, const TDrawContext &Draw) noexcept
-            : DrawContext(Draw),
-              BoundBufferHandle(Handle)
-        {
-        }
+public:
+	OVertexArrayElem(const OBufferHandle& Handle, const SDrawContext& Draw) noexcept
+	    : DrawContext(Draw), BoundBufferHandle(Handle)
+	{
+	}
 
-        TVertexArrayElem(const TVertexArrayElem &Elem) noexcept
-            : DrawContext(Elem.DrawContext),
-              BoundBufferHandle(Elem.BoundBufferHandle)
-        {
-        }
+	OVertexArrayElem(const OVertexArrayElem& Elem) noexcept
+	    : DrawContext(Elem.DrawContext), BoundBufferHandle(Elem.BoundBufferHandle)
+	{
+	}
 
-        TVertexArrayElem() = default;
-        ~TVertexArrayElem() noexcept
-        {
-        }
+	OVertexArrayElem() = default;
+	~OVertexArrayElem() noexcept
+	{
+	}
 
-        TVertexArrayElem &operator=(const TVertexArrayElem &Elem)
-        {
-            DrawContext = Elem.DrawContext;
-            BoundBufferHandle = Elem.BoundBufferHandle;
-            return *this;
-        }
+	OVertexArrayElem& operator=(const OVertexArrayElem& Elem)
+	{
+		DrawContext = Elem.DrawContext;
+		BoundBufferHandle = Elem.BoundBufferHandle;
+		return *this;
+	}
 
-        void DrawArrays() const;
+	void DrawArrays() const;
 
-        TBufferAttribVertexHandle GetBoundBufferHandle() const
-        {
-            return BoundBufferHandle;
-        }
+	OBufferAttribVertexHandle GetBoundBufferHandle() const
+	{
+		return BoundBufferHandle;
+	}
 
-    private:
-        TBufferAttribVertexHandle BoundBufferHandle;
-        TDrawContext DrawContext;
-    };
+private:
+	OBufferAttribVertexHandle BoundBufferHandle;
+	SDrawContext DrawContext;
+};
 } // namespace RenderAPI

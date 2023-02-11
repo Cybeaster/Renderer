@@ -1,184 +1,187 @@
 #include "Renderer.hpp"
+
 #include <gtc/matrix_transform.hpp>
-#include <gtx/rotate_vector.hpp>
 #include <gtc/type_ptr.hpp>
-#include <gtx/string_cast.hpp>
+#include <gtx/rotate_vector.hpp>
 #include <iostream>
 
-#define DEBUG_MOUSE_WHEEL false
-#define DEBUG_MOUSE_POS true
 #define DEBUG_FPS false
 
 void GLClearError()
 {
-    while (glGetError() != GL_NO_ERROR)
-        ;
+	while (glGetError() != GL_NO_ERROR)
+		;
 }
 
-bool GLLogCall(const char *func, const char *file, const int line)
+bool GLLogCall(const char* func, const char* file, const int line)
 {
-    while (const GLenum error = glGetError())
-    {
-        std::cout << "[Opengl Error] (" << std::hex << error << ") :" << func << '\t' << line << '\t' << file << std::endl;
-        return false;
-    }
-    return true;
+	while (const GLenum error = glGetError())
+	{
+		std::cout << "[Opengl Error] (" << std::hex << error << ") :" << func << '\t' << line << '\t' << file << std::endl;
+		return false;
+	}
+	return true;
 }
 namespace RenderAPI
 {
 
-    int TRenderer::ScreenWidth = 900;
-    int TRenderer::ScreenHeight = 700;
+int ORenderer::ScreenWidth = 900;
+int ORenderer::ScreenHeight = 700;
 
-    float TRenderer::Aspect{0};
-    float TRenderer::DeltaTime{0};
-    float TRenderer::LastFrame{0};
-    float TRenderer::CurrentFrame{0};
-    float TRenderer::Fovy{1.0472f};
-    TVec3 TRenderer::CameraPos{0.f, 0.f, -2.f};
+float ORenderer::Aspect{ 0 };
+float ORenderer::DeltaTime{ 0 };
+float ORenderer::LastFrame{ 0 };
+float ORenderer::CurrentFrame{ 0 };
+float ORenderer::Fovy{ 1.0472f };
+OVec3 ORenderer::CameraPos{ 0.f, 0.f, -2.f };
 
-    TMat4 TRenderer::VMat{};
-    TMat4 TRenderer::PMat{};
+OMat4 ORenderer::VMat{};
+OMat4 ORenderer::PMat{};
 
-    TVec2 TRenderer::PressedMousePos{0, 0};
-    TMat4 TRenderer::MouseCameraRotation{TMat4(1.f)};
+OVec2 ORenderer::PressedMousePos{ 0, 0 };
+OMat4 ORenderer::MouseCameraRotation{ OMat4(1.f) };
 
-    bool TRenderer::RightMousePressed{false};
+bool ORenderer::RightMousePressed{ false };
 
-    /// @brief Mouse Rotation Speed Divide Factor
-    float TRenderer::MRSDivideFactor{100.f};
+/// @brief Mouse Rotation Speed Divide Factor
+float ORenderer::MRSDivideFactor{ 100.f };
 
-    // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
+// std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
 
+ORenderer::~ORenderer()
+{
+	glfwDestroyWindow(Window);
+	glfwTerminate();
+}
 
-    TRenderer::~TRenderer()
-    {
-        glfwDestroyWindow(Window);
-        glfwTerminate();
-    }
+void ORenderer::Init()
+{
+	// Post Init has to be called after everything
+	PostInit();
+}
 
-    void TRenderer::Init()
-    {
+void ORenderer::PostInit()
+{
+	VertexArray.AddVertexArray();
+}
 
-        // Post Init has to be called after everything
-        PostInit();
-    }
-
-    void TRenderer::PostInit()
-    {
-        VertexArray.AddVertexArray();
-    }
+void ORenderer::SetInput()
+{
+}
 #pragma region GLFW
 
-    GLFWwindow *
-    TRenderer::GLFWInit()
-    {
-        /* Initialize the library */
-        assert(glfwInit());
+GLFWwindow*
+ORenderer::GLFWInit()
+{
+	/* Initialize the library */
+	assert(glfwInit());
 
-        /* Create a windowed mode window and its OpenGL context */
-        Window = glfwCreateWindow(ScreenWidth, ScreenHeight, "Renderer", NULL, NULL);
+	/* Create a windowed mode window and its OpenGL context */
+	Window = glfwCreateWindow(ScreenWidth, ScreenHeight, "Renderer", NULL, NULL);
 
-        if (!Window)
-            glfwTerminate();
+	if (!Window)
+		glfwTerminate();
 
-        /* Make the window's context current */
-        glfwMakeContextCurrent(Window);
-        glfwSwapInterval(1);
+	/* Make the window's context current */
+	glfwMakeContextCurrent(Window);
+	glfwSwapInterval(1);
 
-        if (glewInit() != GLEW_OK)
-            std::cout << "Error with glewInit()" << std::endl;
+	if (glewInit() != GLEW_OK)
+		std::cout << "Error with glewInit()" << std::endl;
 
-        GLCall(glEnable(GL_BLEND));
-        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-        glfwSetWindowSizeCallback(Window, WindowReshapeCallback);
-        glfwSetScrollCallback(Window, CursorWheelInputCallback);
-        glfwSetMouseButtonCallback(Window, MouseInputCallback);
-        glfwSetCursorPosCallback(Window, MouseCursorMoveCallback);
-        return Window;
-    }
+	GLCall(glEnable(GL_BLEND));
+	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-    void TRenderer::GLFWRendererStart(const float currentTime)
-    {
-        CleanScene();
-        CalcScene();
-        GLFWCalcPerspective(Window);
-        CalcDeltaTime(currentTime);
-        PrintDebugInfo();
-    }
+	SetInput();
+	return Window;
+}
 
-    void TRenderer::CalcScene()
-    {
-        PMat = glm::perspective(1.0472f, Aspect, 0.01f, 1000.f);
-        VMat = MouseCameraRotation * glm::translate(TMat4(1.0f), CameraPos * -1.f);
-    }
+void ORenderer::MoveCamera(const OVec3& Delta)
+{
+	CameraPos += Delta;
+}
 
-    void TRenderer::GLFWRendererEnd()
-    {
-        /* Swap front and back buffers */
-        glfwSwapBuffers(Window);
-        glfwPollEvents();
-    }
+void ORenderer::GLFWRendererStart(const float currentTime)
+{
+	CleanScene();
+	CalcScene();
+	GLFWCalcPerspective(Window);
+	CalcDeltaTime(currentTime);
+	PrintDebugInfo();
+}
 
-    void TRenderer::GLFWRenderTickStart()
-    {
-        while (!glfwWindowShouldClose(Window))
-        {
-            GLFWRendererStart(glfwGetTime());
-            for (auto *const test : Tests)
-                if (test)
-                    test->OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
-            GLFWRendererEnd();
-        }
-    }
-    void TRenderer::PrintDebugInfo()
-    {
-        if (DEBUG_FPS)
-        {
-            std::cout << "Current FPS is " << 1 / DeltaTime << '\n';
-        }
-    }
+void ORenderer::CalcScene()
+{
+	PMat = glm::perspective(1.0472f, Aspect, 0.01f, 1000.f);
+	VMat = MouseCameraRotation * glm::translate(OMat4(1.0f), CameraPos * -1.f);
+}
 
-    void TRenderer::GLFWCalcPerspective(GLFWwindow *window)
-    {
-        glfwGetFramebufferSize(window, &ScreenWidth, &ScreenHeight);
-        Aspect = static_cast<float>(ScreenWidth / ScreenHeight);
-        PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.f);
-        VMat = glm::translate(TMat4(1.0f), CameraPos * -1.f);
-    }
+void ORenderer::GLFWRendererEnd()
+{
+	/* Swap front and back buffers */
+	glfwSwapBuffers(Window);
+	glfwPollEvents();
+}
 
-    void TRenderer::TranslateCameraLocation(const glm::mat4 &Transform)
-    {
-        // CameraPos *= Transform;
-    }
+void ORenderer::GLFWRenderTickStart()
+{
+	while (!glfwWindowShouldClose(Window))
+	{
+		GLFWRendererStart(glfwGetTime());
+		for (auto* const test : Tests)
+			if (test)
+				test->OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
+		GLFWRendererEnd();
+	}
+}
+void ORenderer::PrintDebugInfo()
+{
+	if (DEBUG_FPS)
+	{
+		std::cout << "Current FPS is " << 1 / DeltaTime << '\n';
+	}
+}
 
-    void TRenderer::LookAtCamera(const TVec3 &Position)
-    {
-        // CameraPos *= glm::lookAt(CameraPos,Position,TVec3(0,0,1));
-    }
+void ORenderer::GLFWCalcPerspective(GLFWwindow* window)
+{
+	glfwGetFramebufferSize(window, &ScreenWidth, &ScreenHeight);
+	Aspect = static_cast<float>(ScreenWidth / ScreenHeight);
+	PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.f);
+	VMat = glm::translate(OMat4(1.0f), CameraPos * -1.f);
+}
+
+void ORenderer::TranslateCameraLocation(const glm::mat4& Transform)
+{
+	// CameraPos *= Transform;
+}
+
+void ORenderer::LookAtCamera(const OVec3& Position)
+{
+	// CameraPos *= glm::lookAt(CameraPos,Position,OVec3(0,0,1));
+}
 
 #pragma endregion GLFW
 
-    void TRenderer::CleanScene()
-    {
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
-        GLCall(glClear(GL_DEPTH_BUFFER_BIT));
-        GLCall(glEnable(GL_CULL_FACE));
-    }
+void ORenderer::CleanScene()
+{
+	GLCall(glClear(GL_COLOR_BUFFER_BIT));
+	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
+	GLCall(glEnable(GL_CULL_FACE));
+}
 
-    void TRenderer::CalcDeltaTime(const float currentTime)
-    {
-        CurrentFrame = currentTime;
-        DeltaTime = CurrentFrame - LastFrame;
-        LastFrame = CurrentFrame;
-    }
+void ORenderer::CalcDeltaTime(const float currentTime)
+{
+	CurrentFrame = currentTime;
+	DeltaTime = CurrentFrame - LastFrame;
+	LastFrame = CurrentFrame;
+}
 
-    void TRenderer::AddTest(Test::Test *testPtr)
-    {
-        if (testPtr)
-        {
-            testPtr->Init(PMat);
-            Tests.push_back(testPtr);
-        }
-    }
+void ORenderer::AddTest(Test::OTest* testPtr)
+{
+	if (testPtr)
+	{
+		testPtr->Init(PMat);
+		Tests.push_back(testPtr);
+	}
+}
 } // namespace RenderAPI

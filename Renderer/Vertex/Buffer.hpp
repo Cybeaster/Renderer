@@ -1,28 +1,20 @@
 #pragma once
 #include <Types.hpp>
-class TBuffer
+class OBuffer
 {
-
 public:
-    TBuffer(const void *Data, size_t size);
+	OBuffer(const void* Data, size_t size);
 
-    TBuffer(const TBuffer& Buffer) : BufferID(Buffer.BufferID)
-    {
-    }
+	OBuffer(const OBuffer& Buffer) = default;
+	OBuffer& operator=(const OBuffer& Buffer) = default;
+    
+	OBuffer() = default;
 
-    TBuffer &operator=(const TBuffer &Buffer)
-    {
-        BufferID = Buffer.BufferID;
-        return *this;
-    }
+	~OBuffer();
 
-    TBuffer() = default;
-
-    ~TBuffer();
-
-    void Bind() const;
-    void Unbind() const;
+	void Bind() const;
+	void Unbind() const;
 
 private:
-    uint32 BufferID;
+	uint32 BufferID;
 };

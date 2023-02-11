@@ -1,18 +1,19 @@
 #pragma once
 #include "../Utils/Threads/JoiningThread.hpp"
-#include <mutex>
+
 #include <atomic>
 #include <future>
+#include <mutex>
 
-using TMutex = std::mutex;
+using OMutex = std::mutex;
 
-using TMutexGuard = std::lock_guard<TMutex>;
-using TUniqueLock = std::unique_lock<TMutex>;
+using OMutexGuard = std::lock_guard<OMutex>;
+using OUniqueLock = std::unique_lock<OMutex>;
 
-template <typename T>
-using TTFuture = std::future<T>;
+template<typename T>
+using OFuture = std::future<T>;
 
-using TConditionVariable = std::condition_variable;
+using OConditionVariable = std::condition_variable;
 
-template <typename T>
-using TTAtomic = std::atomic<T>;
+template<typename T>
+using OAtomic = std::atomic<T>;

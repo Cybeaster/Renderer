@@ -1,23 +1,25 @@
 #include "Buffer.hpp"
+
 #include "Renderer.hpp"
 
-TBuffer::TBuffer(const void *Data, size_t size)
+
+OBuffer::OBuffer(const void* Data, size_t size)
 {
-    GLCall(glGenBuffers(1, &BufferID));
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, BufferID));
-    GLCall(glBufferData(GL_ARRAY_BUFFER, size, Data, GL_STATIC_DRAW));
+	GLCall(glGenBuffers(1, &BufferID));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, BufferID));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, size, Data, GL_STATIC_DRAW));
 }
 
-TBuffer::~TBuffer()
+OBuffer::~OBuffer()
 {
-    GLCall(glDeleteBuffers(1, &BufferID));
+	GLCall(glDeleteBuffers(1, &BufferID));
 }
 
-void TBuffer::Bind() const
+void OBuffer::Bind() const
 {
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, BufferID));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, BufferID));
 }
-void TBuffer::Unbind() const
+void OBuffer::Unbind() const
 {
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
