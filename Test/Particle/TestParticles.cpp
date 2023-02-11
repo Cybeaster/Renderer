@@ -243,7 +243,7 @@ OTestParticles::OTestParticles(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer
 
 	SVertexContext contextVertex(new OBuffer{ data, size }, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
 
-	TDrawContext drawContext(GL_TRIANGLES,
+	SDrawContext drawContext(GL_TRIANGLES,
 	                         0,
 	                         particle.getVertecies().size() / 3,
 	                         GL_LEQUAL,

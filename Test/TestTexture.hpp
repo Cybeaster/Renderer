@@ -8,10 +8,10 @@ class GLFWwindow;
 namespace Test
 {
 class OTestTexture : public OTest
-{
+{	
 public:
 	OTestTexture(const OPath& filePath, const OPath& ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
-	~OTestTexture() = default;
+	~OTestTexture() override = default;
 
 	void OnUpdate(
 	    const float& DeltaTime,
@@ -74,7 +74,7 @@ private:
 		0, 0, 1, 0, .5, 1, 0, 0, 1, 0, .5, 0, 0, 0, 1, 0, 0.5, 1
 	};
 
-	TBufferAttribVertexHandle pyramidHandle;
+	OBufferAttribVertexHandle pyramidHandle;
 	TDrawVertexHandle textureHandle;
 	OTexture Texture;
 };

@@ -251,7 +251,7 @@ void Particle::addNormal(float nx, float ny, float nz)
 
 void Particle::buildInterleavedVertices()
 {
-	TOVector<float>().swap(interleavedVertices);
+	OVector<float>().swap(interleavedVertices);
 
 	std::size_t i, j;
 	std::size_t count = vertices.size();

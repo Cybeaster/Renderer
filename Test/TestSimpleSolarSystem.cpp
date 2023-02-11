@@ -1,7 +1,5 @@
 
 #include "Math.hpp"
-#include "glfw3.h"
-
 #include <TestSimpleSolarSystem.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
@@ -65,9 +63,9 @@ OTestSimpleSolarSystem::OTestSimpleSolarSystem(OPath shaderPath, OSharedPtr<Rend
 {
 	// auto size = sizeof(cubePositions);
 	// auto data = cubePositions;
-	// TVertexContext contextVertex(new TBuffer{data, size}, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
+	// SVertexContext contextVertex(new OBuffer{data, size}, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
 
-	// TDrawContext drawContext(GL_TRIANGLES,
+	// SDrawContext drawContext(GL_TRIANGLES,
 	//                          0,
 	//                          size / 3,
 	//                          GL_LEQUAL,
@@ -80,7 +78,7 @@ OTestSimpleSolarSystem::OTestSimpleSolarSystem(OPath shaderPath, OSharedPtr<Rend
 
 	SVertexContext pyramidVertex(new OBuffer{ pyramidPositions, sizeof(pyramidPositions) }, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
 
-	TDrawContext pyramidDrawContext(GL_TRIANGLES,
+	SDrawContext pyramidDrawContext(GL_TRIANGLES,
 	                                0,
 	                                54 / 3,
 	                                GL_LEQUAL,

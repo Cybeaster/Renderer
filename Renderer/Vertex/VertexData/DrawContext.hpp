@@ -4,60 +4,51 @@
 namespace RenderAPI
 {
 
-    struct TDrawFlag
-    {
-        TDrawFlag() = default;
+struct SDrawFlag
+{
+	SDrawFlag() = default;
 
-        TDrawFlag(uint32 Arg)
-        {
-            Flag = Arg;
-        }
+	explicit SDrawFlag(uint32 Arg)
+	{
+		Flag = Arg;
+	}
 
-        operator const uint32&()
-        {
-            return Flag;
-        }
+	explicit operator const uint32&() const noexcept
+	{
+		return Flag;
+	}
 
-        uint32 Flag = UINT32_MAX;
-    };
+	uint32 Flag = UINT32_MAX;
+};
 
-    struct TDrawContext
-    {
+struct SDrawContext
+{
+	SDrawContext(const SDrawContext& Context) = default;
 
-        TDrawContext(const TDrawContext &Context) :
+	SDrawContext() = default;
 
-                                                    DrawType(Context.DrawType),
-                                                    FirstDrawIndex(Context.FirstDrawIndex),
-                                                    DrawSize(Context.DrawSize),
-                                                    DepthFunction(Context.DepthFunction),
-                                                    FrontFace(Context.FrontFace),
-                                                    Flag(Context.Flag)
-        {
-        }
+	SDrawContext(const uint32 Type,
+	             const uint32 Index,
+	             const uint32 Size,
+	             const uint32 Function,
+	             const uint32 FrontFaceArg,
+	             const uint32 FlagArg)
+	    :
 
-        TDrawContext() = default;
+	    DrawType(Type)
+	    , FirstDrawIndex(Index)
+	    , DrawSize(Size)
+	    , DepthFunction(Function)
+	    , FrontFace(FrontFaceArg)
+	    , Flag(FlagArg)
+	{
+	}
 
-        TDrawContext(const uint32 Type,
-                     const uint32 Index,
-                     const uint32 Size,
-                     const uint32 Function,
-                     const uint32 FrontFaceArg,
-                     const uint32 FlagArg) :
-
-                                             DrawType(Type),
-                                             FirstDrawIndex(Index),
-                                             DrawSize(Size),
-                                             DepthFunction(Function),
-                                             FrontFace(FrontFaceArg),
-                                             Flag(FlagArg)
-        {
-        }
-
-        uint32 DrawType = UINT32_MAX;
-        uint32 FirstDrawIndex = UINT32_MAX;
-        uint32 DrawSize = UINT32_MAX;
-        uint32 DepthFunction = UINT32_MAX;
-        uint32 FrontFace = UINT32_MAX;
-        uint32 Flag = UINT32_MAX;
-    };
+	uint32 DrawType = UINT32_MAX;
+	uint32 FirstDrawIndex = UINT32_MAX;
+	uint32 DrawSize = UINT32_MAX;
+	uint32 DepthFunction = UINT32_MAX;
+	uint32 FrontFace = UINT32_MAX;
+	uint32 Flag = UINT32_MAX;
+};
 } // namespace RenderAPI

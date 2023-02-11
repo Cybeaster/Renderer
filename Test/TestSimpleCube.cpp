@@ -17,7 +17,7 @@ OTestSimpleCube::OTestSimpleCube(OPath ShaderPath, OSharedPtr<RenderAPI::ORender
 	    0,
 	    nullptr);
 
-	TDrawContext drawContext(GL_TRIANGLES,
+	SDrawContext drawContext(GL_TRIANGLES,
 	                         0,
 	                         108 / 3,
 	                         GL_LEQUAL,
@@ -28,16 +28,16 @@ OTestSimpleCube::OTestSimpleCube(OPath ShaderPath, OSharedPtr<RenderAPI::ORender
 }
 
 void OTestSimpleCube::OnUpdate(
-    const float deltaTime,
-    const float aspect,
-    const OVec3& cameraPos,
-    OMat4& pMat,
-    OMat4& vMat)
+    const float& DeltaTime,
+    const float& Aspect,
+    const OVec3& CameraPos,
+    OMat4& PMat,
+    OMat4& VMat)
 {
-	OTest::OnUpdate(deltaTime, aspect, cameraPos, pMat, vMat);
+	OTest::OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
 
 	mMatrix = glm::translate(OMat4(1), cubePos);
-	mvMatrix = mMatrix * vMat;
+	mvMatrix = mMatrix * VMat;
 	GetShader().SetUnformMat4f("mv_matrix", mvMatrix);
 	GetShader().SetUniform4f("additionalColor", 1, 1, 1, 1);
 

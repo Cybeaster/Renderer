@@ -86,7 +86,10 @@ private:
 			Delegate.Execute(Forward<Types>(Args)...);
 		}
 
-		FORCEINLINE void Clear() { Delegate.Clear(); }
+		FORCEINLINE void Clear()
+		{
+			Delegate.Clear();
+		}
 
 		FORCEINLINE bool IsBoundTo(const SDelegateHandle& Other)
 		{
@@ -142,7 +145,10 @@ public:
 	void Resize(const uint32& MaxSize = 0);
 	void Broadcast(ArgTypes... Args);
 
-	FORCEINLINE void GetSize() const { return Events.size(); }
+	FORCEINLINE void GetSize() const
+	{
+		return Events.size();
+	}
 
 private:
 	void Lock() { ++Locks; }

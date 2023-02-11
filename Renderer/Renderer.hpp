@@ -57,7 +57,7 @@ public:
 		return Tests;
 	}
 
-	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const TDrawContext& RContext)
+	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext)
 	{
 		return VertexArray.CreateVertexElement(VContext, RContext);
 	}
@@ -72,17 +72,17 @@ public:
 		VertexArray.EnableBuffer(Handle);
 	}
 
-	void EnableBuffer(const TBufferAttribVertexHandle& Handle)
+	void EnableBuffer(const OBufferAttribVertexHandle& Handle)
 	{
 		VertexArray.EnableBuffer(Handle);
 	}
 
-	TBufferAttribVertexHandle AddAttribBuffer(const TVertexAttribBuffer& Buffer)
+	OBufferAttribVertexHandle AddAttribBuffer(const TVertexAttribBuffer& Buffer)
 	{
 		return VertexArray.AddAttribBuffer(Buffer);
 	}
 
-	TBufferAttribVertexHandle AddAttributeBuffer(const SVertexContext& Context)
+	OBufferAttribVertexHandle AddAttributeBuffer(const SVertexContext& Context)
 	{
 		return VertexArray.AddAttribBuffer(Context);
 	}
@@ -128,8 +128,8 @@ private:
 	void SetInput();
 
 	Thread::OThreadPool RendererThreadPool;
-	TVertexArray VertexArray;
 
+	OVertexArray VertexArray;
 	OInputHandler InputHandler;
 
 	GLFWwindow* Window;

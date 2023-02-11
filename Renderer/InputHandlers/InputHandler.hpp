@@ -32,7 +32,7 @@ public:
 	static void MouseCursorMoveCallback(GLFWwindow* Window, double XPos, double YPos);
 	static void MouseInputCallback(GLFWwindow* window, int Button, int Action, int Mods);
 	static void CursorWheelInputCallback(GLFWwindow* window, double XOffset, double YOffset);
-	static void WindowReshapeCallback(GLFWwindow* window, const int& newHeight, const int& newWidth);
+	static void WindowReshapeCallback(GLFWwindow* window, int newHeight, int newWidth);
 
 	void SetInput(GLFWwindow* Window);
 	void Tick(float DeltaTime);
@@ -40,13 +40,8 @@ public:
 	template<typename ObjectType, typename... ArgTypes>
 	void AddListener(ObjectType* Object, typename STMemberFunctionType<ObjectType, void, ArgTypes...>::Type Function, EKeys Key);
 
-	void InitRendererHandler(OVec3& CameraPos)
-	{
-		RenderInputHandler.SetHandler(&CameraPos);
-	}
-
 private:
-	ORendererInputHandler RenderInputHandler;
+	ORendererInputHandler RenderInputHandler{ this };
 
 	static OTHashMap<EKeys, SKeyState> KeyMap;
 };

@@ -9,19 +9,19 @@
 
 namespace RenderAPI
 {
-struct TSimpleVertexIndex
+struct STSimpleVertexIndex
 {
-	explicit TSimpleVertexIndex(uint32 Value)
+	explicit STSimpleVertexIndex(uint32 Value)
 	    : Index(Value)
 	{
 	}
 
-	TSimpleVertexIndex() = default;
+	STSimpleVertexIndex() = default;
 	uint32 Index = 0;
 };
 
 template<typename T>
-struct TTSimpleHandleHash
+struct STSimpleHandleHash
 {
 	auto operator()(const T& FHandle) const
 	{
@@ -29,34 +29,34 @@ struct TTSimpleHandleHash
 	}
 };
 
-class TVertexArray
+class OVertexArray
 {
 public:
-	TVertexArray(/* args */);
-	~TVertexArray();
+	OVertexArray(/* args */);
+	~OVertexArray();
 
-	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const TDrawContext& RContext);
+	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext);
 
 	void DrawArrays(const TDrawVertexHandle& Handle) const;
 
-	void EnableBuffer(const TBufferAttribVertexHandle& Handle);
+	void EnableBuffer(const OBufferAttribVertexHandle& Handle);
 	void EnableBuffer(const TDrawVertexHandle& Handle);
 
 	void AddVertexArray();
 
-	TBufferAttribVertexHandle AddAttribBuffer(const TVertexAttribBuffer& Buffer);
-	TBufferAttribVertexHandle AddAttribBuffer(const SVertexContext& VContext);
+	OBufferAttribVertexHandle AddAttribBuffer(const TVertexAttribBuffer& Buffer);
+	OBufferAttribVertexHandle AddAttribBuffer(const SVertexContext& VContext);
 
 private:
-	TBufferAttribVertexHandle AddAttribBufferImpl(const TVertexAttribBuffer& Buffer);
+	OBufferAttribVertexHandle AddAttribBufferImpl(const TVertexAttribBuffer& Buffer);
 
 	static inline uint64 ElementsCounter = 0;
 	static inline uint64 AttribBuffersCounter = 0;
 
-	TTHashMap<TDrawVertexHandle, TVertexArrayElem, TTSimpleHandleHash<TDrawVertexHandle>> VertexElements;
-	TTHashMap<TBufferAttribVertexHandle, TVertexAttribBuffer, TTSimpleHandleHash<TBufferAttribVertexHandle>> VertexAttribBuffers;
+	OTHashMap<TDrawVertexHandle, OVertexArrayElem, STSimpleHandleHash<TDrawVertexHandle>> VertexElements;
+	OTHashMap<OBufferAttribVertexHandle, TVertexAttribBuffer, STSimpleHandleHash<OBufferAttribVertexHandle>> VertexAttribBuffers;
 
-	OVector<TSimpleVertexIndex> VertexIndicesArray;
+	OVector<STSimpleVertexIndex> VertexIndicesArray;
 };
 
 }; // namespace RenderAPI

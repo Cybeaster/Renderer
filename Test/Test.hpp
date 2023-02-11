@@ -1,18 +1,20 @@
 #pragma once
 
-#include "GL/glew.h"
+// clang-format off
+#include "GL.hpp"
 #include "Math.hpp"
 #include "Shader.hpp"
 #include "SmartPtr.hpp"
 #include "Types.hpp"
 #include "Vector.hpp"
 #include "Vertex/VertexArray.hpp"
-#include "glfw3.h"
-
+#include "Vertex/VertexData/DrawContext.hpp"
 #include <Path.hpp>
 #include <filesystem>
 #include <memory>
 #include <stack>
+
+// clang-format on
 
 namespace RenderAPI
 {
@@ -21,7 +23,9 @@ class ORenderer;
 namespace Test
 {
 using RenderAPI::ORenderer;
+using RenderAPI::OShader;
 using RenderAPI::OSharedPtr;
+using RenderAPI::SDrawContext;
 using RenderAPI::SVertexContext;
 /**
  * @brief Base class for all tests.
@@ -33,7 +37,7 @@ class OTest
 public:
 	OTest(const OPath& shaderPath, const OSharedPtr<RenderAPI::ORenderer>& RendererArg);
 	OTest() = default;
-	virtual ~OTest();
+	virtual ~OTest() = default;
 
 	void Init(const OMat4& pMatRef)
 	{
@@ -53,14 +57,14 @@ public:
 
 	void EnableVertexArray(OBuffer& buffer);
 
-	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const TDrawContext& RContext);
-	void EnableBuffer(const TBufferAttribVertexHandle& Handle);
+	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext);
+	void EnableBuffer(const OBufferAttribVertexHandle& Handle);
 	void EnableBuffer(const TDrawVertexHandle& Handle);
 
 	void DrawArrays(const TDrawVertexHandle& Handle);
 
 protected:
-	TShader& GetShader()
+	OShader& GetShader()
 	{
 		return Shader;
 	}
@@ -87,7 +91,7 @@ private:
 	 * @brief Shader that is used for pipeline.
 	 *
 	 */
-	TShader Shader;
+	OShader Shader;
 	OVector<TVertexHandle> Handles;
 };
 

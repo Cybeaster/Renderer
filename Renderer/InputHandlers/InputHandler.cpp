@@ -29,8 +29,8 @@ void OInputHandler::SetInput(GLFWwindow* Window)
 }
 
 void OInputHandler::WindowReshapeCallback(GLFWwindow* window,
-                                          const int& newHeight,
-                                          const int& newWidth)
+                                          int newHeight,
+                                          int newWidth)
 {
 	if (!window)
 		return;
@@ -42,7 +42,7 @@ void OInputHandler::WindowReshapeCallback(GLFWwindow* window,
 	ORenderer::PMat = glm::perspective(ORenderer::Fovy, ORenderer::Aspect, 0.1F, 1000.F);
 }
 
-void OInputHandler::CursorWheelInputCallback(GLFWwindow*  /*window*/, double  /*XOffset*/,
+void OInputHandler::CursorWheelInputCallback(GLFWwindow* /*window*/, double /*XOffset*/,
                                              double YOffset)
 {
 	ORenderer::CameraPos.z -= YOffset;
@@ -53,7 +53,7 @@ void OInputHandler::CursorWheelInputCallback(GLFWwindow*  /*window*/, double  /*
 }
 
 void OInputHandler::MouseInputCallback(GLFWwindow* window, int Button,
-                                       int Action, int  /*Mods*/)
+                                       int Action, int /*Mods*/)
 {
 	if (Button == GLFW_MOUSE_BUTTON_RIGHT)
 	{
@@ -73,7 +73,7 @@ void OInputHandler::MouseInputCallback(GLFWwindow* window, int Button,
 	}
 }
 
-void OInputHandler::MouseCursorMoveCallback(GLFWwindow*  /*Window*/, double XPos,
+void OInputHandler::MouseCursorMoveCallback(GLFWwindow* /*Window*/, double XPos,
                                             double YPos)
 {
 	if (ORenderer::RightMousePressed)

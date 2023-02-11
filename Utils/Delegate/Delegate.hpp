@@ -29,7 +29,7 @@ public:
 	void Execute(ArgTypes&&... Args)
 	{
 		DELEGATE_ASSERT(Allocator.IsAllocated());
-		(static_cast<TDelegateType*>(GetDelegate()))->Execute(Forward(Args)...);
+		(static_cast<TDelegateType*>(GetDelegate()))->Execute(Forward<ArgTypes>(Args)...);
 	}
 
 private:

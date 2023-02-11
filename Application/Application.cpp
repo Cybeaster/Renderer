@@ -1,19 +1,19 @@
 #define GLEW_STATIC
 #include "Application.hpp"
 
-#include "TestTexture.hpp"
 #include "Renderer.hpp"
+#include "TestTexture.hpp"
 
 #include <Particle/TestParticles.hpp>
 #include <TestSimpleCube.hpp>
 #include <TestSimpleSolarSystem.hpp>
-#include <Windows.h>
 #include <iostream>
 #include <string>
 
+
 #define DEBUG
 
-void OApplication::Start(int  /*argc*/, char**  /*argv*/)
+void OApplication::Start(int /*argc*/, char** /*argv*/)
 {
 	auto renderer = RenderAPI::ORenderer::GetRenderer();
 

@@ -8,34 +8,34 @@
 
 namespace RenderAPI
 {
-TShader::TShader(const OPath Source)
+OShader::OShader(const OPath& Source)
 {
 	Init(Source);
 }
 
-TShader::~TShader()
+OShader::~OShader()
 {
 	GLCall(glDeleteProgram(RendererID));
 }
 
-void TShader::Init(const OPath Source)
+void OShader::Init(const OPath& Source)
 {
 	FilePath = Source;
-	ShaderSource shaderSource = ParseShader(Source);
+	SHaderSource shaderSource = ParseShader(Source);
 	RendererID = CreateShader(shaderSource.vertexShader, shaderSource.fragmentShader);
 }
 
-void TShader::SetUniform1i(const OString name, int32_t v0)
+void OShader::SetUniform1i(const OString& name, int32_t v0)
 {
 	GLCall(glUniform1i(GetUnformLocation(name), v0));
 }
 
-void TShader::SetUniform1f(const OString name, float v0)
+void OShader::SetUniform1f(const OString& name, float v0)
 {
 	GLCall(glUniform1f(GetUnformLocation(name), v0));
 }
 
-uint32 TShader::GetUnformLocation(const OString& name)
+uint32 OShader::GetUnformLocation(const OString& name)
 {
 	if (LocationCache.find(name) != LocationCache.end())
 		return LocationCache[name];
@@ -47,32 +47,32 @@ uint32 TShader::GetUnformLocation(const OString& name)
 	LocationCache[name] = location;
 	return location;
 }
-void TShader::SetUnformMat4f(const OString name, OMat4&& matrix)
+void OShader::SetUnformMat4f(const OString& name, OMat4&& matrix)
 {
 	GLCall(glUniformMatrix4fv(GetUnformLocation(name), 1, GL_FALSE, &matrix[0][0]));
 }
 
-void TShader::SetUnformMat4f(const OString name, const OMat4& matrix)
+void OShader::SetUnformMat4f(const OString& name, const OMat4& matrix)
 {
 	GLCall(glUniformMatrix4fv(GetUnformLocation(name), 1, GL_FALSE, &matrix[0][0]));
 }
 
-void TShader::Bind() const
+void OShader::Bind() const
 {
 	GLCall(glUseProgram(RendererID));
 }
 
-void TShader::Unbind() const
+void OShader::Unbind() const
 {
 	GLCall(glUseProgram(0));
 }
 
-void TShader::SetUniform4f(const OString name, float v0, float v1, float v2, float v3)
+void OShader::SetUniform4f(const OString& name, float v0, float v1, float v2, float v3)
 {
 	GLCall(glUniform4f(GetUnformLocation(name), v0, v1, v2, v3));
 }
 
-uint32 TShader::CompileShader(uint32 type, const OString& Source)
+uint32 OShader::CompileShader(uint32 type, const OString& Source)
 {
 	uint32 id = glCreateShader(type);
 	const char* src = Source.c_str();
@@ -95,7 +95,7 @@ uint32 TShader::CompileShader(uint32 type, const OString& Source)
 	return id;
 }
 
-ShaderSource TShader::ParseShader(const OPath& filePath)
+SHaderSource OShader::ParseShader(const OPath& filePath)
 {
 	std::fstream stream(filePath);
 	if (stream.is_open())
@@ -129,7 +129,7 @@ ShaderSource TShader::ParseShader(const OPath& filePath)
 	return {};
 }
 
-int TShader::CreateShader(const OString& vertexShader, const OString& fragmentShader)
+int OShader::CreateShader(const OString& vertexShader, const OString& fragmentShader)
 {
 	uint32 program = glCreateProgram();
 	uint32 vs = CompileShader(GL_VERTEX_SHADER, vertexShader);

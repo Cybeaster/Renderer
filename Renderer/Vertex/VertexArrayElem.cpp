@@ -5,7 +5,7 @@
 namespace RenderAPI
 {
 
-void TVertexArrayElem::DrawArrays() const
+void OVertexArrayElem::DrawArrays() const
 {
 	// ORenderer::GetRenderer()->EnableBuffer(BoundBufferHandle);
 

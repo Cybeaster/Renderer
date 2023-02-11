@@ -21,23 +21,23 @@ enum class ShaderType
 
 namespace RenderAPI
 {
-class TShader
+class OShader
 {
 public:
-	void Init(const OPath source);
+	void Init(const OPath& source);
 
 	void Bind() const;
 	void Unbind() const;
-	void SetUniform4f(const OString name, float v0, float v1, float v2, float v3);
+	void SetUniform4f(const OString& name, float v0, float v1, float v2, float v3);
 
-	void SetUniform1f(const OString name, float v0);
-	void SetUniform1i(const OString name, int32_t v0);
-	void SetUnformMat4f(const OString name, OMat4&& matrix);
-	void SetUnformMat4f(const OString name, const OMat4& matrix);
+	void SetUniform1f(const OString& name, float v0);
+	void SetUniform1i(const OString& name, int32_t v0);
+	void SetUnformMat4f(const OString& name, OMat4&& matrix);
+	void SetUnformMat4f(const OString& name, const OMat4& matrix);
 
-	TShader() = default;
-	TShader(const OPath source);
-	~TShader();
+	OShader() = default;
+	explicit OShader(const OPath& source);
+	~OShader();
 
 private:
 	uint32 CompileShader(uint32 type, const OString& source);

@@ -6,69 +6,69 @@
 
 namespace RenderAPI
 {
-TVertexArray::TVertexArray(/* args */)
+OVertexArray::OVertexArray(/* args */)
 {
 }
 
-void TVertexArray::AddVertexArray()
+void OVertexArray::AddVertexArray()
 {
-	TSimpleVertexIndex id;
+	STSimpleVertexIndex id;
 	GLCall(glGenVertexArrays(1, &id.Index));
 	GLCall(glBindVertexArray(id.Index));
 
 	VertexIndicesArray.push_back(id);
 }
 
-TDrawVertexHandle TVertexArray::CreateVertexElement(const SVertexContext& VContext, const TDrawContext& RContext)
+TDrawVertexHandle OVertexArray::CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext)
 {
 	++ElementsCounter;
 
 	auto elementsHandle = TDrawVertexHandle(ElementsCounter);
 	auto bufferAttribHandle = AddAttribBufferImpl(VContext);
 
-	VertexElements[elementsHandle] = TVertexArrayElem(bufferAttribHandle, RContext);
+	VertexElements[elementsHandle] = OVertexArrayElem(bufferAttribHandle, RContext);
 
 	return elementsHandle;
 }
 
-TBufferAttribVertexHandle TVertexArray::AddAttribBufferImpl(const TVertexAttribBuffer& Buffer)
+OBufferAttribVertexHandle OVertexArray::AddAttribBufferImpl(const TVertexAttribBuffer& Buffer)
 {
 	++AttribBuffersCounter;
-	auto bufferAttribHandle = TBufferAttribVertexHandle(AttribBuffersCounter);
+	auto bufferAttribHandle = OBufferAttribVertexHandle(AttribBuffersCounter);
 	VertexAttribBuffers[bufferAttribHandle] = Buffer;
 
 	return bufferAttribHandle;
 }
 
-TBufferAttribVertexHandle TVertexArray::AddAttribBuffer(const SVertexContext& VContext)
+OBufferAttribVertexHandle OVertexArray::AddAttribBuffer(const SVertexContext& VContext)
 {
 	return AddAttribBufferImpl(TVertexAttribBuffer(VContext));
 }
 
-TBufferAttribVertexHandle TVertexArray::AddAttribBuffer(const TVertexAttribBuffer& Buffer)
+OBufferAttribVertexHandle OVertexArray::AddAttribBuffer(const TVertexAttribBuffer& Buffer)
 {
 	return AddAttribBufferImpl(Buffer);
 }
 
-void TVertexArray::DrawArrays(const TDrawVertexHandle& Handle) const
+void OVertexArray::DrawArrays(const TDrawVertexHandle& Handle) const
 {
 	auto elem = VertexElements.find(Handle);
 	elem->second.DrawArrays();
 }
 
-void TVertexArray::EnableBuffer(const TDrawVertexHandle& Handle)
+void OVertexArray::EnableBuffer(const TDrawVertexHandle& Handle)
 {
 	auto elem = VertexElements.find(Handle);
 	EnableBuffer(elem->second.GetBoundBufferHandle());
 }
 
-void TVertexArray::EnableBuffer(const TBufferAttribVertexHandle& Handle)
+void OVertexArray::EnableBuffer(const OBufferAttribVertexHandle& Handle)
 {
 	auto elem = VertexAttribBuffers[Handle];
 	elem.EnableVertexAttribPointer();
 }
 
-TVertexArray::~TVertexArray()
+OVertexArray::~OVertexArray()
 {
 }
 } // namespace RenderAPI

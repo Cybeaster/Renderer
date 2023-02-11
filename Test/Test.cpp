@@ -21,7 +21,7 @@ void OTest::DrawArrays(const TDrawVertexHandle& Handle)
 	Renderer->DrawArrays(Handle);
 }
 
-void OTest::EnableBuffer(const TBufferAttribVertexHandle& Handle)
+void OTest::EnableBuffer(const OBufferAttribVertexHandle& Handle)
 {
 	Renderer->EnableBuffer(Handle);
 }
@@ -31,7 +31,7 @@ void OTest::EnableBuffer(const TDrawVertexHandle& Handle)
 	Renderer->EnableBuffer(Handle);
 }
 
-TDrawVertexHandle OTest::CreateVertexElement(const SVertexContext& VContext, const TDrawContext& RContext)
+TDrawVertexHandle OTest::CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext)
 {
 	return Renderer->CreateVertexElement(VContext, RContext);
 }

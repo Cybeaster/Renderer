@@ -30,16 +30,6 @@ struct STaskID
 	bool operator<=(const STaskID& Arg) const noexcept { return ID <= Arg.ID; }
 	bool operator!=(const STaskID& Arg) const noexcept { return ID != Arg.ID; }
 
-	friend bool operator<(const STaskID& FirstID, const STaskID& SecondID)
-	{
-		return FirstID.ID < SecondID.ID;
-	}
-
-	friend bool operator>(const STaskID& FirstID, const STaskID& SecondID)
-	{
-		return FirstID.ID > SecondID.ID;
-	}
-
 private:
 	int64 ID;
 };

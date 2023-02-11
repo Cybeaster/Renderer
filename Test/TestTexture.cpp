@@ -6,11 +6,11 @@ OTestTexture::OTestTexture(const OPath& TexturePath, const OPath& ShaderPath, OS
     : Texture(TexturePath), OTest(ShaderPath, Renderer)
 {
 	pyramidHandle = Renderer->AddAttribBuffer(
-	    TVertexContext(new TBuffer(pyramidPositions, sizeof(pyramidPositions)), 0, 3, GL_FLOAT, false, 0, 0, 0));
+	    SVertexContext(new OBuffer(pyramidPositions, sizeof(pyramidPositions)), 0, 3, GL_FLOAT, false, 0, 0, 0));
 
 	textureHandle = CreateVertexElement(
-	    TVertexContext(new TBuffer(textureCoods, sizeof(textureCoods)), 1, 2, GL_FLOAT, false, 0, 1, 0),
-	    TDrawContext(GL_TRIANGLES, 0, 18, GL_LEQUAL, GL_CCW, GL_DEPTH_TEST));
+	    SVertexContext(new OBuffer(textureCoods, sizeof(textureCoods)), 1, 2, GL_FLOAT, false, 0, 1, 0),
+	    SDrawContext(GL_TRIANGLES, 0, 18, GL_LEQUAL, GL_CCW, GL_DEPTH_TEST));
 }
 
 void OTestTexture::OnUpdate(

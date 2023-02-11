@@ -13,6 +13,7 @@ namespace Test
 class OTestSimpleSolarSystem : public OTest
 {
 public:
+	~OTestSimpleSolarSystem() override = default;
 	OTestSimpleSolarSystem() = default;
 	OTestSimpleSolarSystem(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
 
