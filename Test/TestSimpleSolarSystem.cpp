@@ -1,8 +1,10 @@
 
 #include "Math.hpp"
+
 #include <TestSimpleSolarSystem.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
+
 
 namespace Test
 {
@@ -58,7 +60,7 @@ void OTestSimpleSolarSystem::OnUpdate(
 	// GetMVStack().pop();
 }
 
-OTestSimpleSolarSystem::OTestSimpleSolarSystem(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
+OTestSimpleSolarSystem::OTestSimpleSolarSystem(OPath shaderPath, OTSharedPtr<RenderAPI::ORenderer> Renderer)
     : OTest(shaderPath, Renderer)
 {
 	// auto size = sizeof(cubePositions);

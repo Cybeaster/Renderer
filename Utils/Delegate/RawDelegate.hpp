@@ -7,6 +7,8 @@
 #include "TypeTraits.hpp"
 #include "Types.hpp"
 
+#include <vcruntime.h>
+
 namespace RenderAPI
 {
 template<typename IsConst, class Type, typename RetType, typename... Args2>
@@ -16,9 +18,9 @@ template<typename IsConst, class ObjectType, typename RetType, typename... Args,
 class OTRawDelegate<IsConst, ObjectType, RetType(Args...), Args2...> : public OIDelegate<RetType, Args...>
 {
 public:
-	using FunctionType = typename STMemberFunctionType<ObjectType, RetType, Args..., Args2...>::Type;
+	using TFunctionType = typename STMemberFunctionType<ObjectType, RetType, Args..., Args2...>::Type;
 
-	OTRawDelegate(ObjectType* Object, FunctionType Function, Args2&&... Arguments)
+	OTRawDelegate(ObjectType* Object, TFunctionType Function, Args2&&... Arguments)
 	{
 	}
 
@@ -27,7 +29,7 @@ public:
 	{
 	}
 
-	OTRawDelegate(ObjectType* Object, FunctionType Function, OTuple<Args2...>&& Arguments)
+	OTRawDelegate(ObjectType* Object, TFunctionType Function, OTuple<Args2...>&& Arguments)
 	    : OwningObject(Object), Callable(Function), Payload(Move(Arguments))
 	{
 	}
@@ -37,13 +39,25 @@ public:
 		return ExecuteImpl(Forward(NewPayload)..., TMakeIndexSequence<Args2...>());
 	}
 
-private:
-	virtual RetType ExecuteImpl(Args2&&... NewPayload)
+	void* GetOwner() override
 	{
+		return OwningObject.get();
+	}
+
+	void CopyTo(void* Destination)
+	{
+		new (Destination) OTRawDelegate(OwningObject, Callable, Payload);
+	}
+
+private:
+	template<size_t... Sequence>
+	RetType ExecuteImpl(Args2&&... NewPayload, TIndexSequence<Sequence...>)
+	{
+		OwningObject->*Callable(Forward(NewPayload)...,Payload.template Get<Sequence>()...);
 	}
 
 	OTWeakPtr<ObjectType> OwningObject;
-	FunctionType* Callable;
+	TFunctionType* Callable;
 	OTuple<Args2...> Payload;
 };
 

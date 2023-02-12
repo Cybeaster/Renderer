@@ -43,7 +43,7 @@ struct SVertexContext
 	}
 
 	// vertex options
-	OSharedPtr<OBuffer> BoundBuffer;
+	OTSharedPtr<OBuffer> BoundBuffer;
 	uint32 VertexIndex;
 	uint32 VertexSize;
 	uint32 VertexType;

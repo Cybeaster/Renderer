@@ -37,7 +37,7 @@ public:
 	}
 
 private:
-	OSharedPtr<OInputHandler> Owner;
+	OTSharedPtr<OInputHandler> Owner;
 };
 
 } // namespace RenderAPI

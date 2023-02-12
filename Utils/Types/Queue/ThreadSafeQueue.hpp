@@ -20,7 +20,7 @@ public:
 	void Push(T Value);
 
 	void Pop(T& Value);
-	OSharedPtr<T> Pop();
+	OTSharedPtr<T> Pop();
 
 	bool Empty();
 
@@ -50,7 +50,7 @@ void OThreadSafeQueue<T>::Pop(T& Value)
 }
 
 template<typename T>
-OSharedPtr<T> OThreadSafeQueue<T>::Pop()
+OTSharedPtr<T> OThreadSafeQueue<T>::Pop()
 {
 	OUniqueLock lock(Mutex);
 	PushCondition.wait(lock, [this]()

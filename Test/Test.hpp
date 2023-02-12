@@ -24,7 +24,7 @@ namespace Test
 {
 using RenderAPI::ORenderer;
 using RenderAPI::OShader;
-using RenderAPI::OSharedPtr;
+using RenderAPI::OTSharedPtr;
 using RenderAPI::SDrawContext;
 using RenderAPI::SVertexContext;
 /**
@@ -35,7 +35,7 @@ using RenderAPI::SVertexContext;
 class OTest
 {
 public:
-	OTest(const OPath& shaderPath, const OSharedPtr<RenderAPI::ORenderer>& RendererArg);
+	OTest(const OPath& shaderPath, const OTSharedPtr<RenderAPI::ORenderer>& RendererArg);
 	OTest() = default;
 	virtual ~OTest() = default;
 
@@ -77,7 +77,7 @@ protected:
 	std::stack<OMat4> mvStack;
 	OVector<GLuint> vertexArray;
 
-	OSharedPtr<class ORenderer> Renderer;
+	OTSharedPtr<class ORenderer> Renderer;
 
 private:
 	OMat4

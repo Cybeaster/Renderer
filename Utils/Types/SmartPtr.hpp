@@ -3,7 +3,6 @@
 
 #include <memory>
 
-
 namespace RenderAPI
 {
 
@@ -23,7 +22,7 @@ template<typename T>
 using OTWeakPtr = std::weak_ptr<T>;
 
 template<typename T>
-using OSharedPtr = std::shared_ptr<T>;
+using OTSharedPtr = std::shared_ptr<T>;
 
 template<typename T>
 using OTUniquePtr = std::unique_ptr<T>;
