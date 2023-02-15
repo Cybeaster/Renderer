@@ -56,7 +56,7 @@ private:
 	OTHashMap<TDrawVertexHandle, OVertexArrayElem, STSimpleHandleHash<TDrawVertexHandle>> VertexElements;
 	OTHashMap<OBufferAttribVertexHandle, TVertexAttribBuffer, STSimpleHandleHash<OBufferAttribVertexHandle>> VertexAttribBuffers;
 
-	OVector<STSimpleVertexIndex> VertexIndicesArray;
+	OTVector<STSimpleVertexIndex> VertexIndicesArray;
 };
 
 }; // namespace RenderAPI

@@ -232,7 +232,7 @@ Mat4 calcTranslation(const Mat4& vMat, const Vec3 position)
 namespace Test
 {
 
-OTestParticles::OTestParticles(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
+OTestParticles::OTestParticles(OPath shaderPath, OTSharedPtr<RenderAPI::ORenderer> Renderer)
     : OTest(shaderPath, Renderer)
 {
 	AddParticle({ -80, 20, 0 }, 1, 1, Particles45StartVel);

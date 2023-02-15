@@ -110,7 +110,7 @@ protected:
 	{
 	}
 
-	TTuple<ArgTypes...> Arguments;
+	OTuple<ArgTypes...> Arguments;
 	FuncType* Function;
 };
 

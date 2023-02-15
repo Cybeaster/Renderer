@@ -50,7 +50,7 @@ public:
 	{
 		if (!Application)
 		{
-			Application = RenderAPI::OSharedPtr<OApplication>(new OApplication());
+			Application = RenderAPI::OTSharedPtr<OApplication>(new OApplication());
 			return Application;
 		}
 
@@ -77,7 +77,7 @@ public:
 private:
 	OApplication() = default;
 
-	static inline RenderAPI::OSharedPtr<OApplication> Application = nullptr;
+	static inline RenderAPI::OTSharedPtr<OApplication> Application = nullptr;
 
 	static inline OPath DebugPath = current_path();
 	static inline OPath RootDirPath = current_path().parent_path();

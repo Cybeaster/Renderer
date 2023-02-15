@@ -1,5 +1,5 @@
 #pragma once
-
+#include "TypeTraits.hpp"
 #include "cstdint"
 
 #include <iostream>
@@ -21,53 +21,7 @@
 
 #endif
 
-#define NODISCARD [[nodiscard]]
 
-template<bool Flag, typename Arg = void>
-struct STEnableIf
-{
-};
-
-template<typename Arg>
-struct STEnableIf<true, Arg>
-{
-};
-
-#pragma region RemoveRef
-
-template<typename T>
-struct STRemoveRef
-{
-	using Type = T;
-	using ConstType = const T;
-};
-
-template<typename T>
-struct STRemoveRef<T&>
-{
-	using Type = T;
-	using ConstType = const T;
-};
-
-template<typename T>
-struct STRemoveRef<T&&>
-{
-	using Type = T;
-	using ConstType = const T;
-};
-
-template<typename T>
-using TRemoveRef = typename STRemoveRef<T>::Type;
-
-#pragma endregion RemoveRef
-
-template<typename T, T... Indices>
-struct STIntegerSequenceWrapper
-{
-};
-
-template<typename T, T Size>
-using TMakeIntegerSequence = __make_integer_seq<STIntegerSequenceWrapper, T, Size>;
 
 template<typename T>
 NODISCARD constexpr TRemoveRef<T>&& Move(T&& Arg) noexcept
@@ -95,13 +49,3 @@ NODISCARD constexpr T&& Forward(TRemoveRef<T>&& Arg) noexcept
 }
 
 using OString = std::string;
-
-using int32 = int32_t;
-using int64 = int64_t;
-
-using uint32 = uint32_t;
-using uint64 = uint64_t;
-using uint16 = uint16_t;
-
-using uint8 = uint8_t;
-using int8 = int8_t;

@@ -15,7 +15,7 @@ namespace Test
 class OTestParticles : public OTest
 {
 public:
-	OTestParticles(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
+	OTestParticles(OPath shaderPath, OTSharedPtr<RenderAPI::ORenderer> Renderer);
 
 	void OnUpdate(
 	    const float& DeltaTime,
@@ -71,12 +71,12 @@ private:
 	 * @brief Already spawned particles.
 	 *
 	 */
-	OVector<Particle> Particles;
+	OTVector<Particle> Particles;
 	/**
 	 * @brief Already spawned fields.
 	 *
 	 */
-	OVector<SGravityField> Fields;
+	OTVector<SGravityField> Fields;
 
 	/**
 	 * @brief Timer for particles.

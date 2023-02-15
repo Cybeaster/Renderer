@@ -6,7 +6,7 @@ namespace Test
 class OTestSimpleCube : public OTest
 {
 public:
-	OTestSimpleCube(OPath ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
+	OTestSimpleCube(OPath ShaderPath, OTSharedPtr<RenderAPI::ORenderer> Renderer);
 
 	void OnUpdate(
 	    const float& deltaTime,
