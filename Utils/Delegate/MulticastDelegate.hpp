@@ -1,6 +1,8 @@
 #pragma once
 #include "../Types/Types.hpp"
 #include "Delegate.hpp"
+#include "RawDelegate.hpp"
+#include "SmartPtr.hpp"
 #include "Vector.hpp"
 
 #include <vector>
@@ -111,12 +113,12 @@ private:
 
 	template<typename ObjectType, typename... PayloadArgs>
 	using TConstMemberFunc =
-	    typename STMemberFunctionType<ObjectType, void, ArgTypes...,
+	    typename STMemberFunctionType<true, ObjectType, void, ArgTypes...,
 	                                  PayloadArgs...>::TConstFunction;
 
 	template<typename ObjectType, typename... PayloadArgs>
-	using TMemberFunc =
-	    typename STMemberFunctionType<ObjectType, void, ArgTypes...,
+	using TNonConstMemberFunc =
+	    typename STMemberFunctionType<false, ObjectType, void, ArgTypes...,
 	                                  PayloadArgs...>::TFunction;
 
 public:
@@ -136,9 +138,59 @@ public:
 		Locks = Move(Delegate.Locks);
 	}
 
+	const SDelegateHandle& Add(DelegateType&& Delegate)
+	{
+		for (auto& delegate : Events)
+		{
+			if (!delegate.Handler.IsValid())
+			{
+				delegate = SDelegateHandlerPair(SDelegateHandle(true), Move(Delegate));
+				return delegate.Handler;
+			}
+		}
+		auto delegate = SDelegateHandlerPair(SDelegateHandle(true), Move(Delegate));
+		Events.emplace_back(delegate);
+		return delegate.Handler;
+	}
+
+	template<typename ObjectType, typename... Args2>
+	SDelegateHandle AddRaw(ObjectType* Object, TNonConstMemberFunc<ObjectType, Args2...> Function, Args2&&... Args)
+	{
+		return Add(DelegateType::CreateRaw(Object, Function, Forward<Args2>(Args)...));
+	}
+
+	template<typename ObjectType, typename... Args2>
+	SDelegateHandle AddRaw(ObjectType* Object, TConstMemberFunc<ObjectType, Args2...> Function, Args2&&... Args)
+	{
+		return Add(DelegateType::CreateRaw(Object, Function, Forward<Args2>(Args)...));
+	}
+
+	template<typename... Args2>
+	SDelegateHandle AddStatic(void(Function)(ArgTypes..., Args2...), Args2&&... Args)
+	{
+		return Add(DelegateType::CreateStatic(Function, Forward<Args2>(Args)...));
+	}
+
+	template<typename LambdaType, typename... Args2>
+	SDelegateHandle AddLambda(LambdaType&& Lambda, Args2&&... Args)
+	{
+		return Add(DelegateType::CreateLambda(Forward<LambdaType>(Lambda), Forward<Args2>(Args)...));
+	}
+
+	template<typename ObjectType, typename... Args2>
+	SDelegateHandle AddSP(OTSharedPtr<ObjectType> Object, TNonConstMemberFunc<ObjectType, Args2...> Function, Args2&&... Args)
+	{
+		return Add(DelegateType::CreateSP(Object, Function, Forward<Args2>(Args)...));
+	}
+
+	template<typename ObjectType, typename... Args2>
+	SDelegateHandle AddRaw(OTSharedPtr<ObjectType> Object, TConstMemberFunc<ObjectType, Args2...> Function, Args2&&... Args)
+	{
+		return Add(DelegateType::CreateSP(Object, Function, Forward<Args2>(Args)...));
+	}
+
 	template<typename ObjectType>
 	bool RemoveFrom(ObjectType* Object);
-
 	bool Remove(SDelegateHandle& Handler);
 	bool IsBoundTo(SDelegateHandle& Handler);
 	void RemoveAll();
@@ -161,7 +213,7 @@ private:
 
 	bool IsLocked() { return Locks > 0; }
 
-	OVector<SDelegateHandlerPair> Events;
+	OTVector<SDelegateHandlerPair> Events;
 	uint32 Locks{};
 };
 

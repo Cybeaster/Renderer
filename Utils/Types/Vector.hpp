@@ -3,4 +3,4 @@
 #include <vector>
 
 template<typename T>
-using OVector = std::vector<T>;
+using OTVector = std::vector<T>;

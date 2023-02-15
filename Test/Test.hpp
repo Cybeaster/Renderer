@@ -75,7 +75,7 @@ protected:
 	}
 
 	std::stack<OMat4> mvStack;
-	OVector<GLuint> vertexArray;
+	OTVector<GLuint> vertexArray;
 
 	OTSharedPtr<class ORenderer> Renderer;
 
@@ -92,7 +92,7 @@ private:
 	 *
 	 */
 	OShader Shader;
-	OVector<TVertexHandle> Handles;
+	OTVector<TVertexHandle> Handles;
 };
 
 } // namespace Test

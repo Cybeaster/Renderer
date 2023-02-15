@@ -63,7 +63,7 @@ private:
 	OMutex QueueMutex;
 	OMutex CompletedTaskMutex;
 
-	OVector<JoiningThread> Threads;
+	OTVector<JoiningThread> Threads;
 
 	OAtomic<bool> Quite = false;
 	OAtomic<int64> LastID{ 0 };

@@ -101,7 +101,7 @@ public:
 		return radius;
 	}
 
-	inline OVector<float> getVertecies() const
+	inline OTVector<float> getVertecies() const
 	{
 		return vertices;
 	}
@@ -128,9 +128,9 @@ private:
 	void addVertex(float x, float y, float z);
 	void addTexCoord(float s, float t);
 	void addIndices(unsigned int i1, unsigned int i2, unsigned int i3);
-	OVector<float> computeFaceNormal(float x1, float y1, float z1, // v1
-	                                 float x2, float y2, float z2, // v2
-	                                 float x3, float y3, float z3); // v3
+	OTVector<float> computeFaceNormal(float x1, float y1, float z1, // v1
+	                                  float x2, float y2, float z2, // v2
+	                                  float x3, float y3, float z3); // v3
 	void clearArrays();
 	void addNormal(float nx, float ny, float nz);
 	void createVertecies();
@@ -147,11 +147,11 @@ private:
 	bool DidParticleMoveThroughField = true;
 	float speed = 1.f;
 
-	OVector<float> vertices;
-	OVector<float> normals;
-	OVector<float> texCoords;
-	OVector<int32_t> indices;
-	OVector<int32_t> lineIndices;
+	OTVector<float> vertices;
+	OTVector<float> normals;
+	OTVector<float> texCoords;
+	OTVector<int32_t> indices;
+	OTVector<int32_t> lineIndices;
 
 	float weight = 1.f;
 	float currentRotationAngle = 0.f;
@@ -159,7 +159,7 @@ private:
 	float charge = -1.f;
 
 	// interleaved
-	OVector<float> interleavedVertices;
+	OTVector<float> interleavedVertices;
 	int interleavedStride;
 };
 

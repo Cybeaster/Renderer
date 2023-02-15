@@ -27,7 +27,7 @@ void Particle::createVertecies()
 	{
 		float x, y, z, s, t;
 	};
-	OVector<Vertex> tmpVertices;
+	OTVector<Vertex> tmpVertices;
 
 	float sectorStep = 2 * PI / sectorCount;
 	float stackStep = PI / stackCount;
@@ -60,7 +60,7 @@ void Particle::createVertecies()
 	clearArrays();
 
 	Vertex v1, v2, v3, v4; // 4 vertex positions and tex coords
-	OVector<float> n; // 1 face normal
+	OTVector<float> n; // 1 face normal
 
 	int i, j, k, vi1, vi2;
 	int index = 0; // index for vertex
@@ -199,13 +199,13 @@ void Particle::addIndices(unsigned int i1, unsigned int i2, unsigned int i3)
 	indices.push_back(i3);
 }
 
-OVector<float> Particle::computeFaceNormal(float x1, float y1, float z1, // v1
-                                           float x2, float y2, float z2, // v2
-                                           float x3, float y3, float z3) // v3
+OTVector<float> Particle::computeFaceNormal(float x1, float y1, float z1, // v1
+                                            float x2, float y2, float z2, // v2
+                                            float x3, float y3, float z3) // v3
 {
 	const float EPSILON = 0.000001f;
 
-	OVector<float> normal(3, 0.0f); // default return value (0,0,0)
+	OTVector<float> normal(3, 0.0f); // default return value (0,0,0)
 	float nx, ny, nz;
 
 	// find 2 edge vectors: v1-v2, v1-v3
@@ -251,7 +251,7 @@ void Particle::addNormal(float nx, float ny, float nz)
 
 void Particle::buildInterleavedVertices()
 {
-	OVector<float>().swap(interleavedVertices);
+	OTVector<float>().swap(interleavedVertices);
 
 	std::size_t i, j;
 	std::size_t count = vertices.size();

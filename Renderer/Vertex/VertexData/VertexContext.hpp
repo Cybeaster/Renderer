@@ -28,19 +28,7 @@ struct SVertexContext
 	{
 	}
 
-	SVertexContext& operator=(const SVertexContext& Elem)
-	{
-		BoundBuffer = Elem.BoundBuffer;
-		VertexIndex = Elem.VertexIndex;
-		VertexSize = Elem.VertexSize;
-		VertexType = Elem.VertexType;
-		IsNormalized = Elem.IsNormalized;
-		VertexStride = Elem.VertexStride;
-		VertexPointer = Elem.VertexPointer;
-		VertexAttribArrayIndex = Elem.VertexAttribArrayIndex;
-
-		return *this;
-	}
+	SVertexContext& operator=(const SVertexContext& Elem) = default;
 
 	// vertex options
 	OTSharedPtr<OBuffer> BoundBuffer;

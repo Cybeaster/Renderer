@@ -5,6 +5,7 @@
 #include "LamdaDelegate.hpp"
 #include "RawDelegate.hpp"
 #include "SPDelegate.hpp"
+#include "SmartPtr.hpp"
 #include "StaticDelegate.hpp"
 #include "Types.hpp"
 namespace RenderAPI
@@ -79,6 +80,42 @@ public:
 		ODelegate delegate;
 		delegate.Bind<OTLambdaDelegate<LambdaType, RetValueType(ArgTypes...), PayloadTypes...>>(Forward(Lambda), Forward<PayloadTypes>(Args2)...);
 		return delegate;
+	}
+
+	template<typename ObjectType, typename... Args2>
+	void BindRaw(ObjectType* Object, TNonConstMemberFunc<ObjectType, Args2...> Function, Args2&&... Args)
+	{
+		*this = CreateRaw(Object, Function, Forward<Args2>(Args)...);
+	}
+
+	template<typename ObjectType, typename... Args2>
+	void BindRaw(ObjectType* Object, TConstMemberFunc<ObjectType, Args2...> Function, Args2&&... Args)
+	{
+		*this = CreateRaw(Object, Function, Forward<Args2>(Args)...);
+	}
+
+	template<typename... Args2>
+	void BindStatic(RetValueType(Function)(ArgTypes..., Args2...), Args2&&... Args)
+	{
+		*this = CreateStatic(Function, Forward<Args2>(Args)...);
+	}
+
+	template<typename LambdaType, typename... Payload>
+	void BindLambda(LambdaType&& Lambda, Payload&&... Args2)
+	{
+		*this = CreateLambda(Forward<LambdaType>(Lambda), Forward<Payload>(Args2)...);
+	}
+
+	template<class ObjectType, typename... Payload>
+	void BindSP(OTSharedPtr<ObjectType> Object, TConstMemberFunc<ObjectType, Payload...> Function, Payload&&... Args2)
+	{
+		*this = CreateSP(Object, Function, Forward<Payload>(Args2)...);
+	}
+
+	template<class ObjectType, typename... Payload>
+	void BindSP(OTSharedPtr<ObjectType> Object, TNonConstMemberFunc<ObjectType, Payload...> Function, Payload&&... Args2)
+	{
+		*this = CreateSP(Object, Function, Forward<Payload>(Args2)...);
 	}
 
 	void Execute(ArgTypes&&... Args)
