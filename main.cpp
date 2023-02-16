@@ -14,13 +14,13 @@ int main(int argc, char** argv)
 
 //     RenderAPI::Thread::TThreadPool pool(3);
 
-//     TOVector<int> s1 = {1, 2, 3};
+//     TOTVector<int> s1 = {1, 2, 3};
 //     int ans1 = 5;
 
-//     TOVector<int> s2 = {4, 5};
+//     TOTVector<int> s2 = {4, 5};
 //     int ans2 = 0;
 
-//     TOVector<int> s3 = {8, 9, 10};
+//     TOTVector<int> s3 = {8, 9, 10};
 //     int ans3 = 0;
 
 //     auto funcNoParam = TFunctorBase::Create(NoParamFunc);

@@ -2,7 +2,6 @@
 #include "../Types/MemberFunctionType.hpp"
 #include "DelegateBase.hpp"
 #include "LambdaDelegate.hpp"
-#include "LamdaDelegate.hpp"
 #include "RawDelegate.hpp"
 #include "SPDelegate.hpp"
 #include "SmartPtr.hpp"
@@ -17,11 +16,11 @@ class ODelegate : public ODelegateBase
 private:
 	template<typename ObjectType, typename... PayloadArgs>
 	using TConstMemberFunc =
-	    typename STMemberFunctionType<true, ObjectType, RetValueType, ArgTypes..., PayloadArgs...>::TConstFunction;
+	    typename STMemberFunctionType<true, ObjectType, RetValueType, ArgTypes..., PayloadArgs...>::Type;
 
 	template<typename ObjectType, typename... PayloadArgs>
 	using TNonConstMemberFunc =
-	    typename STMemberFunctionType<false, ObjectType, RetValueType, ArgTypes..., PayloadArgs...>::TFunction;
+	    typename STMemberFunctionType<false, ObjectType, RetValueType, ArgTypes..., PayloadArgs...>::Type;
 
 public:
 	using TDelegateType = OIDelegate<RetValueType, ArgTypes...>;
@@ -130,7 +129,7 @@ private:
 	{
 		Release();
 		void* bunch = Allocator.Allocate(sizeof(ObjectType));
-		new (bunch) ObjectType(std::forward(Args...));
+		new (bunch) ObjectType(Forward<PayloadTypes>(Args)...);
 	}
 };
 

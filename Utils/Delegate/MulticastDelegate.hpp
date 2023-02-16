@@ -49,13 +49,13 @@ public:
 		return LocalID == Other.LocalID;
 	}
 
-	[[nodiscard]] bool IsValid() const { return LocalID != INVALID_ID; }
+	NODISCARD bool IsValid() const { return LocalID != INVALID_ID; }
 
 	void Reset() noexcept { LocalID = INVALID_ID; }
 
 private:
 	uint32 LocalID;
-	static uint32 SGlobalID;
+	inline static uint32 SGlobalID = 0;
 
 	static uint32 GetNewID()
 	{
@@ -69,7 +69,7 @@ private:
 };
 
 template<typename... ArgTypes>
-class OMulticastDelegate
+class OTMulticastDelegate
 {
 public:
 	using DelegateType = ODelegate<void, ArgTypes...>;
@@ -113,26 +113,24 @@ private:
 
 	template<typename ObjectType, typename... PayloadArgs>
 	using TConstMemberFunc =
-	    typename STMemberFunctionType<true, ObjectType, void, ArgTypes...,
-	                                  PayloadArgs...>::TConstFunction;
+	    typename STMemberFunctionType<true, ObjectType, void, ArgTypes..., PayloadArgs...>::Type;
 
 	template<typename ObjectType, typename... PayloadArgs>
 	using TNonConstMemberFunc =
-	    typename STMemberFunctionType<false, ObjectType, void, ArgTypes...,
-	                                  PayloadArgs...>::TFunction;
+	    typename STMemberFunctionType<false, ObjectType, void, ArgTypes..., PayloadArgs...>::Type;
 
 public:
-	constexpr OMulticastDelegate() = default;
+	constexpr OTMulticastDelegate() = default;
 
-	~OMulticastDelegate() noexcept = default;
+	~OTMulticastDelegate() noexcept = default;
 
-	OMulticastDelegate(const OMulticastDelegate& Other) = default;
+	OTMulticastDelegate(const OTMulticastDelegate& Other) = default;
 
-	OMulticastDelegate(OMulticastDelegate&& Other) noexcept
+	OTMulticastDelegate(OTMulticastDelegate&& Other) noexcept
 	    : Events(Move(Other.Events)), Locks(Move(Other.Locks)) {}
 
-	OMulticastDelegate& operator=(const OMulticastDelegate& Delegate) = default;
-	OMulticastDelegate& operator=(OMulticastDelegate&& Delegate) noexcept
+	OTMulticastDelegate& operator=(const OTMulticastDelegate& Delegate) = default;
+	OTMulticastDelegate& operator=(OTMulticastDelegate&& Delegate) noexcept
 	{
 		Events = Move(Delegate.Events);
 		Locks = Move(Delegate.Locks);
@@ -218,7 +216,7 @@ private:
 };
 
 template<typename... ArgTypes>
-void OMulticastDelegate<ArgTypes...>::Resize(const uint32& MaxSize)
+void OTMulticastDelegate<ArgTypes...>::Resize(const uint32& MaxSize)
 {
 	if (!IsLocked())
 	{
@@ -239,7 +237,7 @@ void OMulticastDelegate<ArgTypes...>::Resize(const uint32& MaxSize)
 }
 
 template<typename... ArgTypes>
-bool OMulticastDelegate<ArgTypes...>::IsBoundTo(SDelegateHandle& Handler)
+bool OTMulticastDelegate<ArgTypes...>::IsBoundTo(SDelegateHandle& Handler)
 {
 	if (!IsLocked() && Handler.IsValid())
 	{
@@ -255,7 +253,7 @@ bool OMulticastDelegate<ArgTypes...>::IsBoundTo(SDelegateHandle& Handler)
 }
 
 template<typename... ArgTypes>
-void OMulticastDelegate<ArgTypes...>::RemoveAll()
+void OTMulticastDelegate<ArgTypes...>::RemoveAll()
 {
 	if (!IsLocked())
 	{
@@ -271,7 +269,7 @@ void OMulticastDelegate<ArgTypes...>::RemoveAll()
 }
 
 template<typename... ArgTypes>
-bool OMulticastDelegate<ArgTypes...>::Remove(SDelegateHandle& Handler)
+bool OTMulticastDelegate<ArgTypes...>::Remove(SDelegateHandle& Handler)
 {
 	if (Handler.IsValid())
 	{
@@ -297,7 +295,7 @@ bool OMulticastDelegate<ArgTypes...>::Remove(SDelegateHandle& Handler)
 }
 
 template<typename... ArgTypes>
-void OMulticastDelegate<ArgTypes...>::Broadcast(ArgTypes... Args)
+void OTMulticastDelegate<ArgTypes...>::Broadcast(ArgTypes... Args)
 {
 	Lock();
 	for (auto event : Events)
@@ -312,7 +310,7 @@ void OMulticastDelegate<ArgTypes...>::Broadcast(ArgTypes... Args)
 
 template<typename... ArgTypes>
 template<typename ObjectType>
-bool OMulticastDelegate<ArgTypes...>::RemoveFrom(ObjectType* Object)
+bool OTMulticastDelegate<ArgTypes...>::RemoveFrom(ObjectType* Object)
 {
 	if (Object != nullptr)
 	{

@@ -10,8 +10,7 @@ class OIDelegateBase
 {
 public:
 	OIDelegateBase() = default;
-	virtual ~OIDelegateBase() = 0;
-	virtual void Destroy() = 0;
+	virtual ~OIDelegateBase() noexcept = default;
 	NODISCARD virtual const void* GetOwner() const
 	{
 		return nullptr;
@@ -56,7 +55,7 @@ public:
 	ODelegateBase& operator=(T&& Other) noexcept
 	{
 		Release();
-		MoveDelegate(Other);
+		MoveDelegate(Move(Other));
 		return *this;
 	}
 
@@ -108,7 +107,7 @@ protected:
 	{
 		if (Allocator.IsAllocated())
 		{
-			GetDelegate()->Destroy();
+			GetDelegate()->~OIDelegateBase();
 		}
 	}
 

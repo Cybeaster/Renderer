@@ -4,6 +4,8 @@
 #include "Hash.hpp"
 #include "KeyboardKeys.hpp"
 #include "RendererInputHandler.hpp"
+#include "SmartPtr.hpp"
+#include "TypeTraits.hpp"
 #include "Types.hpp"
 #include "Utils/Delegate/MulticastDelegate.hpp"
 
@@ -14,16 +16,26 @@ namespace RenderAPI
 
 struct SKeyState
 {
-	OMulticastDelegate<bool> Callback;
+	OTMulticastDelegate<bool> Callback;
 	bool IsPressed = false;
 };
 
-class OInputHandler
+class OIInputHandler
+{
+	NODISCARD virtual ORenderer* GetRenderer() const = 0;
+};
+
+class ORenderer;
+class OInputHandler : public OIInputHandler
 {
 public:
 	OInputHandler() = default;
-
 	~OInputHandler() = default;
+
+	explicit OInputHandler(ORenderer* OwningRender)
+	    : Renderer(OwningRender)
+	{
+	}
 
 	static void KeyboardInputPressed(GLFWwindow* window, EKeys key, int scancode, int mods);
 	static void KeyboardInputReleased(GLFWwindow* window, EKeys key, int scancode, int mods);
@@ -37,20 +49,34 @@ public:
 	void SetInput(GLFWwindow* Window);
 	void Tick(float DeltaTime);
 
-	template<typename ObjectType, typename... ArgTypes>
-	void AddListener(ObjectType* Object, typename STMemberFunctionType<ObjectType, void, ArgTypes...>::Type Function, EKeys Key);
+	template<typename ObjectType, typename FunctionType, typename... ArgTypes>
+	void AddRawListener(ObjectType* Object, FunctionType Function, EKeys Key)
+	{
+		if (Object != nullptr)
+		{
+			KeyMap[Key].Callback.AddRaw<ObjectType>(Object, Function);
+		}
+	}
+
+	template<typename ObjectType, typename FunctionType, typename... ArgTypes>
+	void AddSharedListener(OTSharedPtr<ObjectType> Object, FunctionType Function, EKeys Key)
+	{
+		if (Object != nullptr)
+		{
+			KeyMap[Key].Callback.AddSP(Object, Function);
+		}
+	}
+
+	NODISCARD ORenderer* GetRenderer() const override
+	{
+		return Renderer;
+	}
 
 private:
+	ORenderer* Renderer;
 	ORendererInputHandler RenderInputHandler{ this };
 
 	static OTHashMap<EKeys, SKeyState> KeyMap;
 };
 
-template<typename ObjectType, typename... ArgTypes>
-void OInputHandler::AddListener(ObjectType* Object, typename STMemberFunctionType<ObjectType, void, ArgTypes...>::Type /*Function*/, EKeys Key)
-{
-	if (Object != nullptr)
-	{
-	}
-}
 } // namespace RenderAPI

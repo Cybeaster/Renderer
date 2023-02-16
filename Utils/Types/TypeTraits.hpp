@@ -2,6 +2,7 @@
 
 #include "TypeTraits.hpp"
 
+#include <algorithm>
 #include <stdint.h>
 #include <type_traits>
 #include <vcruntime.h>
@@ -105,9 +106,8 @@ using TBoolConstant = STIntegralConstant<bool, Value>;
 using TFalse = TBoolConstant<false>;
 
 template<typename First, typename Second>
-struct STIsSame
+struct STIsSame : TBoolConstant<__is_same(First, Second)>
 {
-	using IsTheSame = TBoolConstant<__is_same(First, Second)>;
 };
 
 template<bool Value, typename First, typename... Remaining>
@@ -157,11 +157,14 @@ struct STIntegerSequenceWrapper
 	}
 };
 
+template<size_t... Indices>
+using TIndexSequenceWrapper = STIntegerSequenceWrapper<size_t, Indices...>;
+
 template<typename T, T Size>
 using TMakeIntegerSequence = __make_integer_seq<STIntegerSequenceWrapper, T, Size>;
 
-template<size_t... Indices>
-using TIndexSequence = typename STIntegerSequenceWrapper<size_t, Indices...>::ValueType;
+template<size_t Size>
+using TMakeIndexSequence = TMakeIntegerSequence<size_t, Size>;
 
 template<typename... Types>
-using TMakeIndexSequence = TMakeIntegerSequence<size_t, sizeof...(Types)>;
+using TMakeIndexSequenceFor = TMakeIndexSequence<sizeof...(Types)>;

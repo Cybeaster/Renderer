@@ -1,7 +1,6 @@
 #pragma once
 #include "Checks/Assert.hpp"
 #include "InputHandlers/InputHandler.hpp"
-#include "InputHandlers/RendererInputHandler.hpp"
 #include "Math.hpp"
 #include "SmartPtr.hpp"
 #include "ThreadPool.hpp"
@@ -52,7 +51,7 @@ public:
 
 	void AddTest(Test::OTest* testPtr);
 
-	inline OVector<Test::OTest*>& GetTests()
+	inline OTVector<Test::OTest*>& GetTests()
 	{
 		return Tests;
 	}
@@ -133,7 +132,7 @@ private:
 	OInputHandler InputHandler;
 
 	GLFWwindow* Window;
-	OVector<Test::OTest*> Tests;
+	OTVector<Test::OTest*> Tests;
 	static inline OTSharedPtr<ORenderer> SingletonRenderer = nullptr;
 };
 
