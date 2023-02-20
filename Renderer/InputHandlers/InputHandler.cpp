@@ -1,6 +1,8 @@
 #include "InputHandler.hpp"
 
+#include "InputHandlers/InputHandler.hpp"
 #include "Renderer.hpp"
+#include "glfw3.h"
 
 #include <Delegate.hpp>
 #include <gtc/matrix_transform.hpp>
@@ -16,6 +18,21 @@ namespace RenderAPI
 
 OTHashMap<EKeys, SKeyState> OInputHandler::KeyMap{};
 
+OInputHandler::OInputHandler(ORenderer* OwningRender, bool Enable)
+    : Renderer(OwningRender)
+{
+	if (Enable)
+	{
+		InitHandlerWith(OwningRender);
+	}
+}
+
+void OInputHandler::InitHandlerWith(ORenderer* Owner)
+{
+	SetInput(Owner->GetWindowContext());
+	RenderInputHandler.BindKeys();
+}
+
 void OInputHandler::Tick(float DeltaTime)
 {
 }
@@ -26,6 +43,7 @@ void OInputHandler::SetInput(GLFWwindow* Window)
 	glfwSetScrollCallback(Window, OInputHandler::CursorWheelInputCallback);
 	glfwSetMouseButtonCallback(Window, OInputHandler::MouseInputCallback);
 	glfwSetCursorPosCallback(Window, OInputHandler::MouseCursorMoveCallback);
+	glfwSetKeyCallback(Window, OInputHandler::KeyboardInputCallback);
 }
 
 void OInputHandler::WindowReshapeCallback(GLFWwindow* window,
@@ -124,7 +142,7 @@ void OInputHandler::KeyboardInputReleased(GLFWwindow* /*window*/, EKeys key,
 		auto state = KeyMap[key];
 		state.IsPressed = false;
 
-		// state.Callback.Execute(state.IsPressed);
+		state.Callback.Broadcast(state.IsPressed);
 	}
 }
 

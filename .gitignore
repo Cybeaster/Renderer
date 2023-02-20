@@ -1,6 +1,9 @@
-.build
 .vs
+vs
 .vscode
+vscode
 .cache
-
+cache
 build
+.build
+

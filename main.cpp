@@ -1,43 +1,33 @@
 #include "Application/Application.hpp"
+#include "MulticastDelegate.hpp"
+
 
 int main(int argc, char** argv)
 {
 	auto app = OApplication::GetApplication();
 	app->Start(argc, argv);
+	
+	// object ob;
+	// RenderAPI::OTMulticastDelegate<bool> delegate;
+
+
+	
+	// delegate.AddRaw(&ob, &object::print);
+	// delegate.Broadcast(false);
+
 	return 0;
 }
 
-// int PoolTestMain(int argc, char **argv)
+
+// int main(int argc, char** argv)
 // {
-//     DECLARE_FUNCTOR(NoParamFunctor, void);
-//     DECLARE_FUNCTOR_OneParam(FunctorOneParam, void, int);
+	// object ob;
+	// RenderAPI::OTMulticastDelegate<bool> delegate;
 
-//     RenderAPI::Thread::TThreadPool pool(3);
 
-//     TOTVector<int> s1 = {1, 2, 3};
-//     int ans1 = 5;
+	
+	// delegate.AddRaw(&ob, &object::print);
+	// delegate.Broadcast(false);
 
-//     TOTVector<int> s2 = {4, 5};
-//     int ans2 = 0;
-
-//     TOTVector<int> s3 = {8, 9, 10};
-//     int ans3 = 0;
-
-//     auto funcNoParam = TFunctorBase::Create(NoParamFunc);
-//     auto funcOneParam = TFunctorBase::Create(OneParamFunc, ans1);
-
-//     auto id1 = pool.AddTask(funcNoParam);
-//     auto id2 = pool.AddTask(funcOneParam);
-
-//     if(pool.IsDone(id1))
-//     {
-//         ///
-//     }
-//     else
-//     {
-//         pool.Wait(id1);
-//     }
-//     pool.WaitAll();
-
-//     return 0;
+// 	return 0;
 // }

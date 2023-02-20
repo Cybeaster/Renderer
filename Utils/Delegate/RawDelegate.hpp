@@ -9,6 +9,8 @@
 
 #include <vcruntime.h>
 
+#pragma optimize("", off)
+
 namespace RenderAPI
 {
 template<bool IsConst, class ObjectType, typename RetType, typename... Args2>
@@ -21,6 +23,7 @@ public:
 	using TFunctionType = typename STMemberFunctionType<IsConst, ObjectType, RetType, Args..., Args2...>::Type;
 
 	OTRawDelegate(ObjectType* Object, TFunctionType Function, Args2&&... Arguments)
+	:OwningObject(Object), Callable(Function), Payload(Forward<Args2>(Arguments)...)
 	{
 	}
 
@@ -62,3 +65,4 @@ private:
 };
 
 } // namespace RenderAPI
+#pragma optimize("", on)

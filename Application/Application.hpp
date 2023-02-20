@@ -13,23 +13,33 @@ class ORenderer;
 struct SShaderName
 {
 	SShaderName() = default;
+	SShaderName(const SShaderName& Str) = default;
 
-	explicit SShaderName(const OString& Str)
+	explicit SShaderName(const OString& Str)// NOLINT
 	    : Name(Str)
 	{
 	}
 
-	SShaderName(const char Str[])
+	SShaderName(OString&& Str) noexcept // NOLINT
+	    : Name(Move(Str))
+	{
+	}
+
+	SShaderName(const char* Str) // NOLINT
 	    : Name(Str)
 	{
 	}
 
-	SShaderName(const SShaderName& Str)
-	    : Name(Str.Name)
-	{
-	}
+	SShaderName(SShaderName&& Str) noexcept
+	    : Name(Move(Str)) {}
 
 	SShaderName& operator=(const OString& Str)
+	{
+		Name = Str;
+		return *this;
+	}
+
+	SShaderName& operator=(const char* const Str)
 	{
 		Name = Str;
 		return *this;

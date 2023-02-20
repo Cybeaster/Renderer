@@ -7,21 +7,6 @@
 
 #define DEBUG_FPS false
 
-void GLClearError()
-{
-	while (glGetError() != GL_NO_ERROR)
-		;
-}
-
-bool GLLogCall(const char* func, const char* file, const int line)
-{
-	while (const GLenum error = glGetError())
-	{
-		std::cout << "[Opengl Error] (" << std::hex << error << ") :" << func << '\t' << line << '\t' << file << std::endl;
-		return false;
-	}
-	return true;
-}
 namespace RenderAPI
 {
 
@@ -56,6 +41,8 @@ ORenderer::~ORenderer()
 
 void ORenderer::Init()
 {
+	SetInput();
+
 	// Post Init has to be called after everything
 	PostInit();
 }
@@ -67,7 +54,9 @@ void ORenderer::PostInit()
 
 void ORenderer::SetInput()
 {
+	InputHandler.InitHandlerWith(this);
 }
+
 #pragma region GLFW
 
 GLFWwindow*

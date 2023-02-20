@@ -1,6 +1,8 @@
 #pragma once
 
 #include "AllocatorUtils.hpp"
+#include "Assert.hpp"
+#include "Debug/Log.hpp"
 #include "Types.hpp"
 
 #include <type_traits>
@@ -37,8 +39,9 @@ public:
 	}
 
 	OInlineAllocator(OInlineAllocator&& Other) noexcept
-	    : AllocSize(Other.AllocSize)
-	{}
+	    : AllocSize(Move(Other.AllocSize))
+	{
+	}
 
 	OInlineAllocator& operator=(OInlineAllocator&& Other) noexcept
 	{
@@ -58,6 +61,7 @@ public:
 	}
 	void MoveFrom(OInlineAllocator&& Other)
 	{
+		AllocSize = Other.AllocSize;
 		Other.AllocSize = 0;
 		if (AllocSize > MaxStackSize)
 		{
@@ -75,8 +79,13 @@ public:
 		{
 			Free();
 			AllocSize = Size;
-			Pointer = SAllocatorUtils::Allocate(Size);
+			if (MaxStackSize < Size)
+			{
+				Pointer = SAllocatorUtils::Allocate(Size);
+				return Pointer;
+			}
 		}
+		return (void*)Buffer;
 	}
 
 	void Free()
@@ -88,14 +97,13 @@ public:
 		AllocSize = 0;
 	}
 
-	template<typename AllocationType>
-	NODISCARD AllocationType* GetAllocation() const
+	NODISCARD void* GetAllocation() const
 	{
-		if (IsAllocated())
+		if (ENSURE(IsAllocated(), "GetAllocation() returned nullptr! Did you forget to allocate it first?"))
 		{
 			return IsHeapAllocated() ? // NOLINT
-			           (AllocationType*)Pointer : // NOLINT
-			           (AllocationType*)Buffer; // NOLINT
+			           Pointer : // NOLINT
+			           (void*)Buffer; // NOLINT
 		}
 		return nullptr;
 	}
@@ -118,7 +126,7 @@ public:
 private:
 	union
 	{
-		int8 Buffer[MaxStackSize];
+		char Buffer[MaxStackSize];
 		void* Pointer;
 	};
 

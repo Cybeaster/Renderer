@@ -7,16 +7,9 @@
 #include "Types.hpp"
 #include "Vector.hpp"
 #include "Vertex/VertexArray.hpp"
+#include "glfw3.h"
 
 #include <Test.hpp>
-
-#define GLCall(x)   \
-	GLClearError(); \
-	x;              \
-	ASSERT(GLLogCall(#x, __FILE__, __LINE__))
-
-void GLClearError();
-bool GLLogCall(const char* func, const char* file, int line);
 
 struct GLFWwindow;
 class Application;
@@ -30,6 +23,8 @@ namespace RenderAPI
 class ORenderer
 {
 public:
+	~ORenderer();
+
 	static auto GetRenderer()
 	{
 		if (!SingletonRenderer)
@@ -110,9 +105,12 @@ public:
 	static OMat4 MouseCameraRotation;
 	static float MRSDivideFactor;
 
-	~ORenderer();
-
 	void MoveCamera(const OVec3& Delta);
+
+	FORCEINLINE GLFWwindow* GetWindowContext() const
+	{
+		return Window;
+	}
 
 private:
 	ORenderer() = default;

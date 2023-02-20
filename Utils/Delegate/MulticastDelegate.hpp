@@ -146,9 +146,8 @@ public:
 				return delegate.Handler;
 			}
 		}
-		auto delegate = SDelegateHandlerPair(SDelegateHandle(true), Move(Delegate));
-		Events.emplace_back(delegate);
-		return delegate.Handler;
+		Events.emplace_back(SDelegateHandlerPair(SDelegateHandle(true), Move(Delegate)));
+		return Events.back().Handler;
 	}
 
 	template<typename ObjectType, typename... Args2>

@@ -1,6 +1,10 @@
 #pragma once
 #include "../Allocators/InlineAllocator.hpp"
+#include "Assert.hpp"
+#include "Debug/Log.hpp"
 #include "Types.hpp"
+
+#pragma optimize("", off)
 namespace RenderAPI
 {
 
@@ -107,16 +111,26 @@ protected:
 	{
 		if (Allocator.IsAllocated())
 		{
-			GetDelegate()->~OIDelegateBase();
+			auto* delegate = GetDelegate();
+			if (ENSURE(delegate != nullptr))
+			{
+				delegate->~OIDelegateBase();
+				Allocator.Free();
+			}
 		}
 	}
 
-	FORCEINLINE void Copy(const ODelegateBase& Other)
+	void Copy(const ODelegateBase& Other)
 	{
 		if (Other.Allocator.IsAllocated())
 		{
+			auto* delegate = Other.GetDelegate();
 			Allocator.Allocate(Other.Allocator.GetSize());
-			Other.GetDelegate()->CopyTo(Allocator.GetAllocation<void>());
+			assert(delegate != nullptr);
+			if (ENSURE(delegate != nullptr))
+			{
+				Other.GetDelegate()->CopyTo(Allocator.GetAllocation());
+			}
 		}
 	}
 
@@ -127,9 +141,11 @@ protected:
 
 	NODISCARD OIDelegateBase* GetDelegate() const
 	{
-		return Allocator.GetAllocation<OIDelegateBase>();
+		return static_cast<OIDelegateBase*>(Allocator.GetAllocation());
 	}
 
-	OInlineAllocator<SInlineAllocatable::StackSize::_16> Allocator;
+	OInlineAllocator<SInlineAllocatable::StackSize::_32> Allocator;
 };
 } // namespace RenderAPI
+
+#pragma optimize("", on)
