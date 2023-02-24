@@ -112,7 +112,7 @@ void OInputHandler::MouseCursorMoveCallback(GLFWwindow* /*Window*/, double XPos,
 void OInputHandler::KeyboardInputCallback(GLFWwindow* window, int key,
                                           int scancode, int action, int mods)
 {
-	if (action == GLFW_PRESS)
+	if (action == GLFW_PRESS || action == GLFW_REPEAT)
 	{
 		KeyboardInputPressed(window, static_cast<EKeys>(key), scancode, mods);
 	}
@@ -144,6 +144,10 @@ void OInputHandler::KeyboardInputReleased(GLFWwindow* /*window*/, EKeys key,
 
 		state.Callback.Broadcast(state.IsPressed);
 	}
+}
+void OInputHandler::AddCameraOffset(OVec3&& Offset)
+{
+	Renderer->MoveCamera(Move(Offset));
 }
 
 } // namespace RenderAPI

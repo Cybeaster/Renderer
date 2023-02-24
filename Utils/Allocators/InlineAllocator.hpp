@@ -39,8 +39,8 @@ public:
 	}
 
 	OInlineAllocator(OInlineAllocator&& Other) noexcept
-	    : AllocSize(Move(Other.AllocSize))
 	{
+		MoveFrom(Move(Other));
 	}
 
 	OInlineAllocator& operator=(OInlineAllocator&& Other) noexcept
@@ -59,6 +59,7 @@ public:
 		}
 		AllocSize = Other.AllocSize;
 	}
+
 	void MoveFrom(OInlineAllocator&& Other)
 	{
 		AllocSize = Other.AllocSize;

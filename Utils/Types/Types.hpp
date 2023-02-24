@@ -7,6 +7,9 @@
 #include <type_traits>
 #include <utility>
 
+
+#ifdef NDEBUG
+
 #ifdef __clang__
 
 #define FORCEINLINE [[clang::always_inline]]
@@ -21,7 +24,11 @@
 
 #endif
 
+#else
 
+#define FORCEINLINE inline
+
+#endif
 
 template<typename T>
 NODISCARD constexpr TRemoveRef<T>&& Move(T&& Arg) noexcept

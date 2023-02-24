@@ -1,13 +1,20 @@
 #pragma once
 
+#include "Math.hpp"
 #include "Types.hpp"
 
 #include <format>
+#include <gtx/string_cast.hpp>
 #include <iostream>
 #include <ostream>
 
 #define RAPI_LOG(LogType, String, ...) \
-	ODebugUtils::Log(std::printf(String, __VA_ARGS__), ELogType::LogType);
+	ODebugUtils::Log(ODebugUtils::Format(String, __VA_ARGS__), ELogType::LogType);
+
+#define TEXT(Arg) \
+	L##Arg
+#define TO_C_STRING(Value) \
+	ODebugUtils::ToCString(Value)
 
 #define TO_STRING(Value) \
 	ODebugUtils::ToString(Value)
@@ -51,9 +58,53 @@ public:
 			break;
 		}
 	}
-	
-	FORCEINLINE static OString ToString(bool Value) noexcept
+
+	FORCEINLINE static CCharPTR ToCString(const OString& String)
+	{
+		return String.c_str();
+	}
+
+	FORCEINLINE static CCharPTR ToCString(CCharPTR String)
+	{
+		return String;
+	}
+
+	template<typename... ArgTypes>
+	static void Printf(const OString& Str, ArgTypes&&... Args) noexcept
+	{
+		std::printf(Str.c_str(), ToCString(Args)...);
+	}
+
+	template<typename... ArgTypes>
+	static OString Format(std::string_view Str, ArgTypes&&... Args) noexcept
+	{
+		try
+		{
+			return std::vformat(Str, std::make_format_args(Args...));
+		}
+		catch (std::format_error Error)
+		{
+			return Error.what() + OString(Str);
+		}
+	}
+
+	static OString Format(OString Str) noexcept
+	{
+		return Str;
+	}
+
+	static OString Format(CCharPTR Str) noexcept
+	{
+		return OString(Str);
+	}
+
+	static OString ToString(bool Value) noexcept
 	{
 		return Value ? "True" : "False";
+	}
+
+	static OString ToString(const OVec3& Vector) noexcept
+	{
+		return glm::to_string(Vector);
 	}
 };

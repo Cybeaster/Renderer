@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <stdint.h>
 #include <type_traits>
-#include <vcruntime.h>
 
 #define NODISCARD [[nodiscard]]
 
@@ -24,6 +23,9 @@ using char8 = char8_t;
 using char16 = char16_t;
 using char32 = char32_t;
 using wchar = wchar_t;
+
+using CWCharPTR = const wchar*;
+using CCharPTR = const char*;
 
 template<bool Flag, typename Arg = void>
 struct STEnableIf

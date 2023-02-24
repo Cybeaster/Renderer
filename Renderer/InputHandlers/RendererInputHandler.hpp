@@ -28,8 +28,12 @@ public:
 	void OnSKeyToggled(bool Pressed);
 	void OnDKeyToggled(bool Pressed);
 	void OnAKeyToggled(bool Pressed);
-
+	void OnEKeyToggled(bool Pressed);
+	void OnQKeyToggled(bool Pressed);
 private:
+
+	float InputStepOffset = 0.1F;
+
 	OInputHandler* Owner; // should be shared ref
 };
 

@@ -3,7 +3,6 @@
 #include "Debug/Log.hpp"
 #include "Types.hpp"
 #include "Types/GL.hpp"
-
 #include <cassert>
 
 #define ASSERT(x) \

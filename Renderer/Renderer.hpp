@@ -61,10 +61,7 @@ public:
 		VertexArray.DrawArrays(Handle);
 	}
 
-	void EnableBuffer(const TDrawVertexHandle& Handle)
-	{
-		VertexArray.EnableBuffer(Handle);
-	}
+	void EnableBuffer(const TDrawVertexHandle& Handle);
 
 	void EnableBuffer(const OBufferAttribVertexHandle& Handle)
 	{
@@ -76,10 +73,9 @@ public:
 		return VertexArray.AddAttribBuffer(Buffer);
 	}
 
-	OBufferAttribVertexHandle AddAttributeBuffer(const SVertexContext& Context)
-	{
-		return VertexArray.AddAttribBuffer(Context);
-	}
+	OBufferAttribVertexHandle AddAttributeBuffer(const SVertexContext& Context);
+
+
 	void TranslateCameraLocation(const glm::mat4& Transform);
 	void LookAtCamera(const OVec3& Position);
 

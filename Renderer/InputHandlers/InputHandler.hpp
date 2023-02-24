@@ -29,6 +29,8 @@ class OIInputHandler
 class ORenderer;
 class OInputHandler : public OIInputHandler
 {
+
+	friend ORendererInputHandler;
 public:
 	OInputHandler() = default;
 	~OInputHandler() = default;
@@ -67,8 +69,11 @@ public:
 	{
 		return Renderer;
 	}
-	void InitHandlerWith(ORenderer* Owner);
 
+	void InitHandlerWith(ORenderer* Owner);
+protected:
+
+	void AddCameraOffset(OVec3&& Offset);
 private:
 	void SetInput(GLFWwindow* Window);
 

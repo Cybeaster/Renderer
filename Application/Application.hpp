@@ -15,7 +15,7 @@ struct SShaderName
 	SShaderName() = default;
 	SShaderName(const SShaderName& Str) = default;
 
-	explicit SShaderName(const OString& Str)// NOLINT
+	explicit SShaderName(const OString& Str) // NOLINT
 	    : Name(Str)
 	{
 	}
@@ -90,7 +90,7 @@ private:
 	static inline RenderAPI::OTSharedPtr<OApplication> Application = nullptr;
 
 	static inline OPath DebugPath = current_path();
-	static inline OPath RootDirPath = current_path().parent_path();
+	static inline OPath RootDirPath = current_path();
 
 	static inline OPath ShadersDir = R"(\Externals\Shaders\)";
 	static inline OPath ResourceDirectory = R"(\Externals\Resources\)";

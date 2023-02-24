@@ -13,6 +13,7 @@ namespace RenderAPI
 int ORenderer::ScreenWidth = 900;
 int ORenderer::ScreenHeight = 700;
 
+
 float ORenderer::Aspect{ 0 };
 float ORenderer::DeltaTime{ 0 };
 float ORenderer::LastFrame{ 0 };
@@ -173,4 +174,14 @@ void ORenderer::AddTest(Test::OTest* testPtr)
 		Tests.push_back(testPtr);
 	}
 }
+OBufferAttribVertexHandle ORenderer::AddAttributeBuffer(const SVertexContext& Context)
+{
+	return VertexArray.AddAttribBuffer(Context);
+}
+
+void ORenderer::EnableBuffer(const TDrawVertexHandle& Handle)
+{
+	VertexArray.EnableBuffer(Handle);
+}
+
 } // namespace RenderAPI
