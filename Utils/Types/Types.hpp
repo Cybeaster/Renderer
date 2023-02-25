@@ -7,7 +7,6 @@
 #include <type_traits>
 #include <utility>
 
-
 #ifdef NDEBUG
 
 #ifdef __clang__

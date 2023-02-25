@@ -31,7 +31,7 @@ TDrawVertexHandle OVertexArray::CreateVertexElement(const SVertexContext& VConte
 	return elementsHandle;
 }
 
-OBufferAttribVertexHandle OVertexArray::AddAttribBufferImpl(const TVertexAttribBuffer& Buffer)
+OBufferAttribVertexHandle OVertexArray::AddAttribBufferImpl(const OVertexAttribBuffer& Buffer)
 {
 	++AttribBuffersCounter;
 	auto bufferAttribHandle = OBufferAttribVertexHandle(AttribBuffersCounter);
@@ -42,10 +42,10 @@ OBufferAttribVertexHandle OVertexArray::AddAttribBufferImpl(const TVertexAttribB
 
 OBufferAttribVertexHandle OVertexArray::AddAttribBuffer(const SVertexContext& VContext)
 {
-	return AddAttribBufferImpl(TVertexAttribBuffer(VContext));
+	return AddAttribBufferImpl(OVertexAttribBuffer(VContext));
 }
 
-OBufferAttribVertexHandle OVertexArray::AddAttribBuffer(const TVertexAttribBuffer& Buffer)
+OBufferAttribVertexHandle OVertexArray::AddAttribBuffer(const OVertexAttribBuffer& Buffer)
 {
 	return AddAttribBufferImpl(Buffer);
 }

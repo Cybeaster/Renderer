@@ -1,5 +1,6 @@
 #pragma once
 #include "../Renderer/Vertex/SimpleVertexHandle.hpp"
+#include "Models/Sphere.hpp"
 
 #include <Test.hpp>
 #include <Texture.hpp>
@@ -73,6 +74,12 @@ private:
 	float textureCoods[18]{
 		0, 0, 1, 0, .5, 1, 0, 0, 1, 0, .5, 0, 0, 0, 1, 0, 0.5, 1
 	};
+
+	RenderAPI::OSphere Sphere{ 48 };
+
+	OBufferAttribVertexHandle VerticesSphereHandle;
+	OBufferAttribVertexHandle NormalsSphereHandle;
+	OBufferAttribVertexHandle TexturesSphereHandle;
 
 	OBufferAttribVertexHandle pyramidHandle;
 	TDrawVertexHandle textureHandle;

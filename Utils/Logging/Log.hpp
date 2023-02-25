@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Math.hpp"
+#include "Printer.hpp"
 #include "Types.hpp"
 
 #include <format>
@@ -30,31 +31,32 @@ enum class ELogType
 struct SLogUtils
 {
 public:
-	static inline std::ostream& DebugOutput = std::cout;
+	inline static OPrinter Printer;
+
 
 	template<typename Object>
-	FORCEINLINE static void Log(Object&& String, ELogType Type = ELogType::Log) noexcept
+	FORCEINLINE static void Log(const Object& String, ELogType Type = ELogType::Log) noexcept
 	{
 		switch (Type)
 		{
 		case ELogType::Log:
-			DebugOutput << "\n"
-			            << "Log: \t" << String << std::endl;
+			std::cout << "\n"
+			        << "Log: \t" << String << std::endl;
 			break;
 
 		case ELogType::Warning:
-			DebugOutput << "\n"
-			            << "Warning: \t" << String << std::endl;
+			std::cout << "\n"
+			        << "Warning: \t" << String << std::endl;
 			break;
 
 		case ELogType::Error:
-			DebugOutput << "\n \t \t"
-			            << "Error: \t" << String << std::endl;
+			std::cout << "\n \t \t"
+			        << "Error: \t" << String << std::endl;
 			break;
 
 		case ELogType::Critical:
-			DebugOutput << "\n \t \t"
-			            << "Critical: \t" << String << std::endl;
+			std::cout << "\n \t \t"
+			        << "Critical: \t" << String << std::endl;
 			break;
 		}
 	}

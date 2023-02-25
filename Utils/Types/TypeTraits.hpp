@@ -3,7 +3,7 @@
 #include "TypeTraits.hpp"
 
 #include <algorithm>
-#include <stdint.h>
+#include <cstdint>
 #include <type_traits>
 
 #define NODISCARD [[nodiscard]]

@@ -7,12 +7,12 @@
 
 namespace RenderAPI
 {
-class TVertexAttribBuffer
+class OVertexAttribBuffer
 {
 public:
-	TVertexAttribBuffer(/* args */) = default;
+	OVertexAttribBuffer(/* args */) = default;
 
-	TVertexAttribBuffer(const SVertexContext& Context);
+	explicit OVertexAttribBuffer(const SVertexContext& Context);
 
 	void EnableVertexAttribPointer();
 

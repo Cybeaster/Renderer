@@ -6,7 +6,7 @@
 namespace RenderAPI
 {
 
-TVertexAttribBuffer::TVertexAttribBuffer(const SVertexContext& Context)
+TVertexAttribBuffer::OVertexAttribBuffer(const SVertexContext& Context)
     : VertexContext(Context)
 {
 	RenderAPI::ORenderer::GetRenderer()->AddAttribBuffer(*this);

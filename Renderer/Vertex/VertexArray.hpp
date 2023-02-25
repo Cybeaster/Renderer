@@ -44,17 +44,18 @@ public:
 
 	void AddVertexArray();
 
-	OBufferAttribVertexHandle AddAttribBuffer(const TVertexAttribBuffer& Buffer);
+	//TODO Create move adding
+	OBufferAttribVertexHandle AddAttribBuffer(const OVertexAttribBuffer& Buffer);
 	OBufferAttribVertexHandle AddAttribBuffer(const SVertexContext& VContext);
 
 private:
-	OBufferAttribVertexHandle AddAttribBufferImpl(const TVertexAttribBuffer& Buffer);
+	OBufferAttribVertexHandle AddAttribBufferImpl(const OVertexAttribBuffer& Buffer);
 
 	static inline uint64 ElementsCounter = 0;
 	static inline uint64 AttribBuffersCounter = 0;
 
 	OTHashMap<TDrawVertexHandle, OVertexArrayElem, STSimpleHandleHash<TDrawVertexHandle>> VertexElements;
-	OTHashMap<OBufferAttribVertexHandle, TVertexAttribBuffer, STSimpleHandleHash<OBufferAttribVertexHandle>> VertexAttribBuffers;
+	OTHashMap<OBufferAttribVertexHandle, OVertexAttribBuffer, STSimpleHandleHash<OBufferAttribVertexHandle>> VertexAttribBuffers;
 
 	OTVector<STSimpleVertexIndex> VertexIndicesArray;
 };

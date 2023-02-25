@@ -68,7 +68,8 @@ public:
 		VertexArray.EnableBuffer(Handle);
 	}
 
-	OBufferAttribVertexHandle AddAttribBuffer(const TVertexAttribBuffer& Buffer)
+	// TODO Create move adding
+	OBufferAttribVertexHandle AddAttribBuffer(const OVertexAttribBuffer& Buffer)
 	{
 		return VertexArray.AddAttribBuffer(Buffer);
 	}
