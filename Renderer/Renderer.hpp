@@ -75,7 +75,6 @@ public:
 
 	OBufferAttribVertexHandle AddAttributeBuffer(const SVertexContext& Context);
 
-
 	void TranslateCameraLocation(const glm::mat4& Transform);
 	void LookAtCamera(const OVec3& Position);
 
@@ -102,6 +101,7 @@ public:
 	static float MRSDivideFactor;
 
 	void MoveCamera(const OVec3& Delta);
+	void MoveCameraByInput(const OVec3& Dir) const;
 
 	FORCEINLINE GLFWwindow* GetWindowContext() const
 	{
@@ -122,8 +122,10 @@ private:
 
 	Thread::OThreadPool RendererThreadPool;
 
+	float InputStepOffset = 0.1F;
+
 	OVertexArray VertexArray;
-	OInputHandler InputHandler;
+	OInputHandler InputHandler{ this };
 
 	GLFWwindow* Window;
 	OTVector<Test::OTest*> Tests;

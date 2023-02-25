@@ -204,7 +204,7 @@ private:
 
 	void Unlock()
 	{
-		DELEGATE_ASSERT(Locks > 0);
+		ASSERT(Locks > 0);
 		--Locks;
 	}
 

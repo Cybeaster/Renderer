@@ -9,7 +9,7 @@
 #include <ostream>
 
 #define RAPI_LOG(LogType, String, ...) \
-	ODebugUtils::Log(ODebugUtils::Format(String, __VA_ARGS__), ELogType::LogType);
+	SLogUtils::Log(SLogUtils::Format(String, __VA_ARGS__), ELogType::LogType);
 
 #define TEXT(Arg) \
 	L##Arg
@@ -17,7 +17,7 @@
 	ODebugUtils::ToCString(Value)
 
 #define TO_STRING(Value) \
-	ODebugUtils::ToString(Value)
+	SLogUtils::ToString(Value)
 
 enum class ELogType
 {
@@ -27,7 +27,7 @@ enum class ELogType
 	Critical
 };
 
-class ODebugUtils
+struct SLogUtils
 {
 public:
 	static inline std::ostream& DebugOutput = std::cout;
@@ -82,9 +82,9 @@ public:
 		{
 			return std::vformat(Str, std::make_format_args(Args...));
 		}
-		catch (std::format_error Error)
+		catch (const std::format_error& error)
 		{
-			return Error.what() + OString(Str);
+			return error.what() + OString(Str);
 		}
 	}
 

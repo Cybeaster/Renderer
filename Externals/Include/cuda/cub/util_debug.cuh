@@ -36,25 +36,22 @@
 
 #pragma once
 
-#include <stdio.h>
-#include "util_namespace.cuh"
 #include "util_arch.cuh"
+#include "util_namespace.cuh"
+
+#include <stdio.h>
 
 CUB_NAMESPACE_BEGIN
-
 
 /**
  * \addtogroup UtilMgmt
  * @{
  */
 
-
 /// CUB error reporting macro (prints error messages to stderr)
 #if (defined(DEBUG) || defined(_DEBUG)) && !defined(CUB_STDERR)
-    #define CUB_STDERR
+#define CUB_STDERR
 #endif
-
-
 
 /**
  * \brief If \p CUB_STDERR is defined and \p error is not \p cudaSuccess, the corresponding error message is printed to \p stderr (or \p stdout in device code) along with the supplied source context.
@@ -62,96 +59,101 @@ CUB_NAMESPACE_BEGIN
  * \return The CUDA error.
  */
 __host__ __device__ __forceinline__ cudaError_t Debug(
-    cudaError_t     error,
-    const char*     filename,
-    int             line)
+    cudaError_t error,
+    const char* filename,
+    int line)
 {
-    (void)filename;
-    (void)line;
+	(void)filename;
+	(void)line;
 
 #ifdef CUB_RUNTIME_ENABLED
-    // Clear the global CUDA error state which may have been set by the last
-    // call. Otherwise, errors may "leak" to unrelated kernel launches.
-    cudaGetLastError();
+	// Clear the global CUDA error state which may have been set by the last
+	// call. Otherwise, errors may "leak" to unrelated kernel launches.
+	cudaGetLastError();
 #endif
 
 #ifdef CUB_STDERR
-    if (error)
-    {
-        if (CUB_IS_HOST_CODE) {
-            #if CUB_INCLUDE_HOST_CODE
-                fprintf(stderr, "CUDA error %d [%s, %d]: %s\n", error, filename, line, cudaGetErrorString(error));
-                fflush(stderr);
-            #endif
-        } else {
-            #if CUB_INCLUDE_DEVICE_CODE
-                printf("CUDA error %d [block (%d,%d,%d) thread (%d,%d,%d), %s, %d]\n", error, blockIdx.z, blockIdx.y, blockIdx.x, threadIdx.z, threadIdx.y, threadIdx.x, filename, line);
-            #endif
-        }
-    }
+	if (error)
+	{
+		if (CUB_IS_HOST_CODE)
+		{
+#if CUB_INCLUDE_HOST_CODE
+			fprintf(stderr, "CUDA error %d [%s, %d]: %s\n", error, filename, line, cudaGetErrorString(error));
+			fflush(stderr);
 #endif
-    return error;
+		}
+		else
+		{
+#if CUB_INCLUDE_DEVICE_CODE
+			printf("CUDA error %d [block (%d,%d,%d) thread (%d,%d,%d), %s, %d]\n", error, blockIdx.z, blockIdx.y, blockIdx.x, threadIdx.z, threadIdx.y, threadIdx.x, filename, line);
+#endif
+		}
+	}
+#endif
+	return error;
 }
 
-
 /**
- * \brief Debug macro
+ * \brief Logging macro
  */
 #ifndef CubDebug
-    #define CubDebug(e) CUB_NS_QUALIFIER::Debug((cudaError_t) (e), __FILE__, __LINE__)
+#define CubDebug(e) CUB_NS_QUALIFIER::Debug((cudaError_t)(e), __FILE__, __LINE__)
 #endif
-
 
 /**
- * \brief Debug macro with exit
+ * \brief Logging macro with exit
  */
 #ifndef CubDebugExit
-    #define CubDebugExit(e) if (CUB_NS_QUALIFIER::Debug((cudaError_t) (e), __FILE__, __LINE__)) { exit(1); }
+#define CubDebugExit(e)                                                \
+	if (CUB_NS_QUALIFIER::Debug((cudaError_t)(e), __FILE__, __LINE__)) \
+	{                                                                  \
+		exit(1);                                                       \
+	}
 #endif
-
 
 /**
  * \brief Log macro for printf statements.
  */
 #if !defined(_CubLog)
-    #if defined(__NVCOMPILER_CUDA__)
-        #define _CubLog(format, ...) (__builtin_is_device_code() \
-            ? printf("[block (%d,%d,%d), thread (%d,%d,%d)]: " format, \
-                     blockIdx.z, blockIdx.y, blockIdx.x, \
-                     threadIdx.z, threadIdx.y, threadIdx.x, __VA_ARGS__) \
-            : printf(format, __VA_ARGS__));
-    #elif !(defined(__clang__) && defined(__CUDA__))
-        #if (CUB_PTX_ARCH == 0)
-            #define _CubLog(format, ...) printf(format,__VA_ARGS__);
-        #elif (CUB_PTX_ARCH >= 200)
-            #define _CubLog(format, ...) printf("[block (%d,%d,%d), thread (%d,%d,%d)]: " format, blockIdx.z, blockIdx.y, blockIdx.x, threadIdx.z, threadIdx.y, threadIdx.x, __VA_ARGS__);
-        #endif
-    #else
-        // XXX shameless hack for clang around variadic printf...
-        //     Compilies w/o supplying -std=c++11 but shows warning,
-        //     so we sielence them :)
-        #pragma clang diagnostic ignored "-Wc++11-extensions"
-        #pragma clang diagnostic ignored "-Wunnamed-type-template-args"
-            template <class... Args>
-            inline __host__ __device__ void va_printf(char const* format, Args const&... args)
-            {
-        #ifdef __CUDA_ARCH__
-              printf(format, blockIdx.z, blockIdx.y, blockIdx.x, threadIdx.z, threadIdx.y, threadIdx.x, args...);
-        #else
-              printf(format, args...);
-        #endif
-            }
-        #ifndef __CUDA_ARCH__
-            #define _CubLog(format, ...) CUB_NS_QUALIFIER::va_printf(format,__VA_ARGS__);
-        #else
-            #define _CubLog(format, ...) CUB_NS_QUALIFIER::va_printf("[block (%d,%d,%d), thread (%d,%d,%d)]: " format, __VA_ARGS__);
-        #endif
-    #endif
+#if defined(__NVCOMPILER_CUDA__)
+#define _CubLog(format, ...) (__builtin_is_device_code() ? printf("[block (%d,%d,%d), thread (%d,%d,%d)]: " format, \
+	                                                              blockIdx.z,                                       \
+	                                                              blockIdx.y,                                       \
+	                                                              blockIdx.x,                                       \
+	                                                              threadIdx.z,                                      \
+	                                                              threadIdx.y,                                      \
+	                                                              threadIdx.x,                                      \
+	                                                              __VA_ARGS__) :                                    \
+	                                                       printf(format, __VA_ARGS__));
+#elif !(defined(__clang__) && defined(__CUDA__))
+#if (CUB_PTX_ARCH == 0)
+#define _CubLog(format, ...) printf(format, __VA_ARGS__);
+#elif (CUB_PTX_ARCH >= 200)
+#define _CubLog(format, ...) printf("[block (%d,%d,%d), thread (%d,%d,%d)]: " format, blockIdx.z, blockIdx.y, blockIdx.x, threadIdx.z, threadIdx.y, threadIdx.x, __VA_ARGS__);
+#endif
+#else
+// XXX shameless hack for clang around variadic printf...
+//     Compilies w/o supplying -std=c++11 but shows warning,
+//     so we sielence them :)
+#pragma clang diagnostic ignored "-Wc++11-extensions"
+#pragma clang diagnostic ignored "-Wunnamed-type-template-args"
+template<class... Args>
+inline __host__ __device__ void va_printf(char const* format, Args const&... args)
+{
+#ifdef __CUDA_ARCH__
+	printf(format, blockIdx.z, blockIdx.y, blockIdx.x, threadIdx.z, threadIdx.y, threadIdx.x, args...);
+#else
+	printf(format, args...);
+#endif
+}
+#ifndef __CUDA_ARCH__
+#define _CubLog(format, ...) CUB_NS_QUALIFIER::va_printf(format, __VA_ARGS__);
+#else
+#define _CubLog(format, ...) CUB_NS_QUALIFIER::va_printf("[block (%d,%d,%d), thread (%d,%d,%d)]: " format, __VA_ARGS__);
+#endif
+#endif
 #endif
 
-
-
-
-/** @} */       // end group UtilMgmt
+/** @} */ // end group UtilMgmt
 
 CUB_NAMESPACE_END

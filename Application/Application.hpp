@@ -96,5 +96,5 @@ private:
 	static inline OPath ResourceDirectory = R"(\Externals\Resources\)";
 
 	static inline SShaderName SimpleCubeShader = "\\SimpleCube.shader";
-	static inline SShaderName SimpleTextureShader = "\\SimpeTexture.shader";
+	static inline SShaderName SimpleTextureShader = "\\SimpleTexture.shader";
 };

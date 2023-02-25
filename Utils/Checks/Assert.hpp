@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Debug/Log.hpp"
+#include "Logging/Log.hpp"
 #include "Types.hpp"
 #include "Types/GL.hpp"
+
 #include <cassert>
 
 #define ASSERT(x) \
-	if ((!x))     \
-		assert(false);
+	assert(x);
 
 #ifdef NDEBUG
 #define ENSURE(x, ...) \

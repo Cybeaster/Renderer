@@ -1,15 +1,12 @@
 #pragma once
 #include "../Allocators/InlineAllocator.hpp"
 #include "Assert.hpp"
-#include "Debug/Log.hpp"
 #include "Types.hpp"
 
 #pragma optimize("", off)
 namespace RenderAPI
 {
 
-#define DELEGATE_NO_DISCARD [[nodiscard("Delegate's function result has to be stored in value!")]]
-#define DELEGATE_ASSERT(expr, ...) assert(expr)
 class OIDelegateBase
 {
 public:

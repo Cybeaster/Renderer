@@ -145,9 +145,9 @@ void OInputHandler::KeyboardInputReleased(GLFWwindow* /*window*/, EKeys key,
 		state.Callback.Broadcast(state.IsPressed);
 	}
 }
-void OInputHandler::AddCameraOffset(OVec3&& Offset)
+void OInputHandler::MoveCamera(const OVec3& Dir)
 {
-	Renderer->MoveCamera(Move(Offset));
+	Renderer->MoveCameraByInput(Dir);
 }
 
 } // namespace RenderAPI

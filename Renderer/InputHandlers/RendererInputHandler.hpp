@@ -30,10 +30,8 @@ public:
 	void OnAKeyToggled(bool Pressed);
 	void OnEKeyToggled(bool Pressed);
 	void OnQKeyToggled(bool Pressed);
+
 private:
-
-	float InputStepOffset = 0.1F;
-
 	OInputHandler* Owner; // should be shared ref
 };
 
