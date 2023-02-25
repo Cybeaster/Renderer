@@ -1,23 +1,15 @@
 #pragma once
 #include "Checks/Assert.hpp"
 #include "InputHandlers/InputHandler.hpp"
-#include "InputHandlers/RendererInputHandler.hpp"
 #include "Math.hpp"
 #include "SmartPtr.hpp"
 #include "ThreadPool.hpp"
 #include "Types.hpp"
 #include "Vector.hpp"
 #include "Vertex/VertexArray.hpp"
+#include "glfw3.h"
 
 #include <Test.hpp>
-
-#define GLCall(x)   \
-	GLClearError(); \
-	x;              \
-	ASSERT(GLLogCall(#x, __FILE__, __LINE__))
-
-void GLClearError();
-bool GLLogCall(const char* func, const char* file, int line);
 
 struct GLFWwindow;
 class Application;
@@ -31,6 +23,8 @@ namespace RenderAPI
 class ORenderer
 {
 public:
+	~ORenderer();
+
 	static auto GetRenderer()
 	{
 		if (!SingletonRenderer)
@@ -52,7 +46,7 @@ public:
 
 	void AddTest(Test::OTest* testPtr);
 
-	inline OVector<Test::OTest*>& GetTests()
+	inline OTVector<Test::OTest*>& GetTests()
 	{
 		return Tests;
 	}
@@ -67,10 +61,7 @@ public:
 		VertexArray.DrawArrays(Handle);
 	}
 
-	void EnableBuffer(const TDrawVertexHandle& Handle)
-	{
-		VertexArray.EnableBuffer(Handle);
-	}
+	void EnableBuffer(const TDrawVertexHandle& Handle);
 
 	void EnableBuffer(const OBufferAttribVertexHandle& Handle)
 	{
@@ -82,10 +73,8 @@ public:
 		return VertexArray.AddAttribBuffer(Buffer);
 	}
 
-	OBufferAttribVertexHandle AddAttributeBuffer(const SVertexContext& Context)
-	{
-		return VertexArray.AddAttribBuffer(Context);
-	}
+	OBufferAttribVertexHandle AddAttributeBuffer(const SVertexContext& Context);
+
 	void TranslateCameraLocation(const glm::mat4& Transform);
 	void LookAtCamera(const OVec3& Position);
 
@@ -111,9 +100,13 @@ public:
 	static OMat4 MouseCameraRotation;
 	static float MRSDivideFactor;
 
-	~ORenderer();
-
 	void MoveCamera(const OVec3& Delta);
+	void MoveCameraByInput(const OVec3& Dir) const;
+
+	FORCEINLINE GLFWwindow* GetWindowContext() const
+	{
+		return Window;
+	}
 
 private:
 	ORenderer() = default;
@@ -129,11 +122,13 @@ private:
 
 	Thread::OThreadPool RendererThreadPool;
 
+	float InputStepOffset = 0.1F;
+
 	OVertexArray VertexArray;
-	OInputHandler InputHandler;
+	OInputHandler InputHandler{ this };
 
 	GLFWwindow* Window;
-	OVector<Test::OTest*> Tests;
+	OTVector<Test::OTest*> Tests;
 	static inline OTSharedPtr<ORenderer> SingletonRenderer = nullptr;
 };
 

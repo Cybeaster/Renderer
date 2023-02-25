@@ -7,21 +7,6 @@
 
 #define DEBUG_FPS false
 
-void GLClearError()
-{
-	while (glGetError() != GL_NO_ERROR)
-		;
-}
-
-bool GLLogCall(const char* func, const char* file, const int line)
-{
-	while (const GLenum error = glGetError())
-	{
-		std::cout << "[Opengl Error] (" << std::hex << error << ") :" << func << '\t' << line << '\t' << file << std::endl;
-		return false;
-	}
-	return true;
-}
 namespace RenderAPI
 {
 
@@ -32,19 +17,19 @@ float ORenderer::Aspect{ 0 };
 float ORenderer::DeltaTime{ 0 };
 float ORenderer::LastFrame{ 0 };
 float ORenderer::CurrentFrame{ 0 };
-float ORenderer::Fovy{ 1.0472f };
-OVec3 ORenderer::CameraPos{ 0.f, 0.f, -2.f };
+float ORenderer::Fovy{ 1.0472F };
+OVec3 ORenderer::CameraPos{ 0.F, 0.F, 3.F };
 
 OMat4 ORenderer::VMat{};
 OMat4 ORenderer::PMat{};
 
 OVec2 ORenderer::PressedMousePos{ 0, 0 };
-OMat4 ORenderer::MouseCameraRotation{ OMat4(1.f) };
+OMat4 ORenderer::MouseCameraRotation{ OMat4(1.F) };
 
 bool ORenderer::RightMousePressed{ false };
 
 /// @brief Mouse Rotation Speed Divide Factor
-float ORenderer::MRSDivideFactor{ 100.f };
+float ORenderer::MRSDivideFactor{ 100.F };
 
 // std::unique_ptr<Renderer> Renderer::SingletonRenderer = nullptr;
 
@@ -56,6 +41,8 @@ ORenderer::~ORenderer()
 
 void ORenderer::Init()
 {
+	SetInput();
+
 	// Post Init has to be called after everything
 	PostInit();
 }
@@ -67,7 +54,9 @@ void ORenderer::PostInit()
 
 void ORenderer::SetInput()
 {
+	InputHandler.InitHandlerWith(this);
 }
+
 #pragma region GLFW
 
 GLFWwindow*
@@ -101,6 +90,11 @@ void ORenderer::MoveCamera(const OVec3& Delta)
 	CameraPos += Delta;
 }
 
+void ORenderer::MoveCameraByInput(const OVec3& Dir) const
+{
+	CameraPos += glm::normalize(Dir) * InputStepOffset;
+}
+
 void ORenderer::GLFWRendererStart(const float currentTime)
 {
 	CleanScene();
@@ -112,8 +106,8 @@ void ORenderer::GLFWRendererStart(const float currentTime)
 
 void ORenderer::CalcScene()
 {
-	PMat = glm::perspective(1.0472f, Aspect, 0.01f, 1000.f);
-	VMat = MouseCameraRotation * glm::translate(OMat4(1.0f), CameraPos * -1.f);
+	PMat = glm::perspective(1.0472f, Aspect, 0.01f, 1000.F);
+	VMat = MouseCameraRotation * glm::translate(OMat4(1.0f), CameraPos * -1.F);
 }
 
 void ORenderer::GLFWRendererEnd()
@@ -146,8 +140,8 @@ void ORenderer::GLFWCalcPerspective(GLFWwindow* window)
 {
 	glfwGetFramebufferSize(window, &ScreenWidth, &ScreenHeight);
 	Aspect = static_cast<float>(ScreenWidth / ScreenHeight);
-	PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.f);
-	VMat = glm::translate(OMat4(1.0f), CameraPos * -1.f);
+	PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.F);
+	VMat = glm::translate(OMat4(1.0f), CameraPos * -1.F);
 }
 
 void ORenderer::TranslateCameraLocation(const glm::mat4& Transform)
@@ -184,4 +178,14 @@ void ORenderer::AddTest(Test::OTest* testPtr)
 		Tests.push_back(testPtr);
 	}
 }
+OBufferAttribVertexHandle ORenderer::AddAttributeBuffer(const SVertexContext& Context)
+{
+	return VertexArray.AddAttribBuffer(Context);
+}
+
+void ORenderer::EnableBuffer(const TDrawVertexHandle& Handle)
+{
+	VertexArray.EnableBuffer(Handle);
+}
+
 } // namespace RenderAPI

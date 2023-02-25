@@ -2,11 +2,12 @@
 
 #include "TypeTraits.hpp"
 
+#include <algorithm>
 #include <stdint.h>
 #include <type_traits>
-#include <vcruntime.h>
 
 #define NODISCARD [[nodiscard]]
+#define DELEGATE_NODISCARD [[nodiscard("Delegate's function result has to be stored in value!")]]
 
 using int32 = int32_t;
 using int64 = int64_t;
@@ -23,6 +24,9 @@ using char8 = char8_t;
 using char16 = char16_t;
 using char32 = char32_t;
 using wchar = wchar_t;
+
+using CWCharPTR = const wchar*;
+using CCharPTR = const char*;
 
 template<bool Flag, typename Arg = void>
 struct STEnableIf
@@ -105,9 +109,8 @@ using TBoolConstant = STIntegralConstant<bool, Value>;
 using TFalse = TBoolConstant<false>;
 
 template<typename First, typename Second>
-struct STIsSame
+struct STIsSame : TBoolConstant<__is_same(First, Second)>
 {
-	using IsTheSame = TBoolConstant<__is_same(First, Second)>;
 };
 
 template<bool Value, typename First, typename... Remaining>
@@ -157,11 +160,14 @@ struct STIntegerSequenceWrapper
 	}
 };
 
+template<size_t... Indices>
+using TIndexSequenceWrapper = STIntegerSequenceWrapper<size_t, Indices...>;
+
 template<typename T, T Size>
 using TMakeIntegerSequence = __make_integer_seq<STIntegerSequenceWrapper, T, Size>;
 
-template<size_t... Indices>
-using TIndexSequence = typename STIntegerSequenceWrapper<size_t, Indices...>::ValueType;
+template<size_t Size>
+using TMakeIndexSequence = TMakeIntegerSequence<size_t, Size>;
 
 template<typename... Types>
-using TMakeIndexSequence = TMakeIntegerSequence<size_t, sizeof...(Types)>;
+using TMakeIndexSequenceFor = TMakeIndexSequence<sizeof...(Types)>;

@@ -40,7 +40,7 @@ public:
 
 private:
 	template<size_t... Indices>
-	RetType ExecuteImpl(Args&&... Arguments, TIndexSequence<Indices...>);
+	RetType ExecuteImpl(Args&&... Arguments, TIndexSequenceWrapper<Indices...>)
 	{
 		return Function(Forward<Args>(Arguments)..., (Payload.template Get<Indices>())...);
 	}

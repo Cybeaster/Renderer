@@ -1,17 +1,17 @@
 #pragma once
 #include "../Allocators/InlineAllocator.hpp"
+#include "Assert.hpp"
 #include "Types.hpp"
+
+#pragma optimize("", off)
 namespace RenderAPI
 {
 
-#define DELEGATE_NO_DISCARD [[nodiscard("Delegate's function result has to be stored in value!")]]
-#define DELEGATE_ASSERT(expr, ...) assert(expr)
 class OIDelegateBase
 {
 public:
 	OIDelegateBase() = default;
-	virtual ~OIDelegateBase() = 0;
-	virtual void Destroy() = 0;
+	virtual ~OIDelegateBase() noexcept = default;
 	NODISCARD virtual const void* GetOwner() const
 	{
 		return nullptr;
@@ -56,7 +56,7 @@ public:
 	ODelegateBase& operator=(T&& Other) noexcept
 	{
 		Release();
-		MoveDelegate(Other);
+		MoveDelegate(Move(Other));
 		return *this;
 	}
 
@@ -108,16 +108,26 @@ protected:
 	{
 		if (Allocator.IsAllocated())
 		{
-			GetDelegate()->Destroy();
+			auto* delegate = GetDelegate();
+			if (ENSURE(delegate != nullptr))
+			{
+				delegate->~OIDelegateBase();
+				Allocator.Free();
+			}
 		}
 	}
 
-	FORCEINLINE void Copy(const ODelegateBase& Other)
+	void Copy(const ODelegateBase& Other)
 	{
 		if (Other.Allocator.IsAllocated())
 		{
+			auto* delegate = Other.GetDelegate();
 			Allocator.Allocate(Other.Allocator.GetSize());
-			Other.GetDelegate()->CopyTo(Allocator.GetAllocation<void>());
+			assert(delegate != nullptr);
+			if (ENSURE(delegate != nullptr))
+			{
+				Other.GetDelegate()->CopyTo(Allocator.GetAllocation());
+			}
 		}
 	}
 
@@ -128,9 +138,11 @@ protected:
 
 	NODISCARD OIDelegateBase* GetDelegate() const
 	{
-		return Allocator.GetAllocation<OIDelegateBase>();
+		return static_cast<OIDelegateBase*>(Allocator.GetAllocation());
 	}
 
-	OInlineAllocator<SInlineAllocatable::StackSize::_16> Allocator;
+	OInlineAllocator<SInlineAllocatable::StackSize::_32> Allocator;
 };
 } // namespace RenderAPI
+
+#pragma optimize("", on)

@@ -20,7 +20,7 @@ public:
 	~HierarchicalMutex() noexcept;
 
 private:
-	void CheckForHierarchyViolation();
+	bool CheckForHierarchyViolation();
 	void UpdateHierarchyValue();
 
 	uint64 HierarchyValue;

@@ -9,22 +9,25 @@
 
 #include <vcruntime.h>
 
+#pragma optimize("", off)
+
 namespace RenderAPI
 {
-template<typename IsConst, class Type, typename RetType, typename... Args2>
+template<bool IsConst, class ObjectType, typename RetType, typename... Args2>
 class OTRawDelegate;
 
-template<typename IsConst, class ObjectType, typename RetType, typename... Args, typename... Args2>
+template<bool IsConst, class ObjectType, typename RetType, typename... Args, typename... Args2>
 class OTRawDelegate<IsConst, ObjectType, RetType(Args...), Args2...> : public OIDelegate<RetType, Args...>
 {
 public:
-	using TFunctionType = typename STMemberFunctionType<ObjectType, RetType, Args..., Args2...>::Type;
+	using TFunctionType = typename STMemberFunctionType<IsConst, ObjectType, RetType, Args..., Args2...>::Type;
 
 	OTRawDelegate(ObjectType* Object, TFunctionType Function, Args2&&... Arguments)
+	:OwningObject(Object), Callable(Function), Payload(Forward<Args2>(Arguments)...)
 	{
 	}
 
-	OTRawDelegate(ObjectType* Object, FunctionType Function, const OTuple<Args2...>& Arguments)
+	OTRawDelegate(ObjectType* Object, TFunctionType Function, const OTuple<Args2...>& Arguments)
 	    : OwningObject(Object), Callable(Function), Payload(Arguments)
 	{
 	}
@@ -36,29 +39,30 @@ public:
 
 	RetType Execute(Args&&... NewPayload) override
 	{
-		return ExecuteImpl(Forward(NewPayload)..., TMakeIndexSequence<Args2...>());
+		return ExecuteImpl(Forward<Args>(NewPayload)..., TMakeIndexSequenceFor<Args2...>());
 	}
 
-	void* GetOwner() override
+	NODISCARD const void* GetOwner() const override
 	{
-		return OwningObject.get();
+		return OwningObject;
 	}
 
-	void CopyTo(void* Destination)
+	void CopyTo(void* Destination) override
 	{
 		new (Destination) OTRawDelegate(OwningObject, Callable, Payload);
 	}
 
 private:
 	template<size_t... Sequence>
-	RetType ExecuteImpl(Args2&&... NewPayload, TIndexSequence<Sequence...>)
+	RetType ExecuteImpl(Args&&... NewPayload, TIndexSequenceWrapper<Sequence...>)
 	{
-		OwningObject->*Callable(Forward(NewPayload)...,Payload.template Get<Sequence>()...);
+		(OwningObject->*Callable)(Forward<Args>(NewPayload)..., Payload.template Get<Sequence>()...);
 	}
 
-	OTWeakPtr<ObjectType> OwningObject;
-	TFunctionType* Callable;
+	ObjectType* OwningObject;
+	TFunctionType Callable;
 	OTuple<Args2...> Payload;
 };
 
 } // namespace RenderAPI
+#pragma optimize("", on)

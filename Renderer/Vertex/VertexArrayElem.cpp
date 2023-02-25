@@ -10,9 +10,9 @@ void OVertexArrayElem::DrawArrays() const
 	// ORenderer::GetRenderer()->EnableBuffer(BoundBufferHandle);
 
 	// GLCall(glEnable(DrawContext.Flag.Flag));
-	// GLCall(glFrontFace(DrawContext.FrontFace.Flag));
+	GLCall(glFrontFace(DrawContext.FrontFace));
 
-	//  GLCall(glDepthFunc(DrawContext.DepthFunction.Flag));
+	GLCall(glDepthFunc(DrawContext.DepthFunction));
 
 	GLCall(glDrawArrays(DrawContext.DrawType,
 	                    DrawContext.FirstDrawIndex,

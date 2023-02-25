@@ -10,19 +10,19 @@ struct SAllocatorUtils
 {
 	static void Free(void* Ptr)
 	{
-		free(Ptr);
+		std::free(Ptr);
 	}
 
 	static void* Allocate(uint32 Size)
 	{
-		return malloc(Size);
+		return std::malloc(Size);
 	}
 
 	static void Swap(void* FPtr, void* SPtr)
 	{
 		std::swap(FPtr, SPtr);
 	}
-	
+
 	static void MemCopy(void* FBuffer, void const* SBuffer, uint32 Size)
 	{
 		std::memcpy(FBuffer, SBuffer, Size);

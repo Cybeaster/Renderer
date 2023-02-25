@@ -3,15 +3,11 @@
 
 #include "Renderer.hpp"
 #include "TestTexture.hpp"
-
-#include <Particle/TestParticles.hpp>
-#include <TestSimpleCube.hpp>
 #include <TestSimpleSolarSystem.hpp>
 #include <iostream>
 #include <string>
 
 
-#define DEBUG
 
 void OApplication::Start(int /*argc*/, char** /*argv*/)
 {
@@ -24,7 +20,7 @@ void OApplication::Start(int /*argc*/, char** /*argv*/)
 	const auto textureShaderPath = GetShaderLocalPathWith(SimpleTextureShader);
 	const auto simpleCubeShader = GetShaderLocalPathWith(SimpleCubeShader);
 	auto brickTexture = GetResourceDirectoryWith("BrickWall.jpg");
-#ifdef DEBUG
+#ifndef NDEBUG
 
 	std::cout << textureShaderPath << std::endl;
 

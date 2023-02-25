@@ -4,6 +4,7 @@
 #include "Tuple.hpp"
 #include "TypeTraits.hpp"
 
+#include <type_traits>
 #include <vcruntime.h>
 
 namespace RenderAPI
@@ -35,14 +36,14 @@ public:
 
 	RetType Execute(Args&&... Arguments)
 	{
-		return ExecuteImpl(Forward(Arguments)..., TMakeIndexSequence<Args2...>());
+		return ExecuteImpl(Forward(Arguments)..., TMakeIndexSequenceFor<Args2...>());
 	}
 
 private:
 	template<size_t... Indices>
-	RetType ExecuteImpl(Args&&... Arguments, TIndexSequence<Indices...>)
+	RetType ExecuteImpl(Args&&... Arguments, TIndexSequenceWrapper<Indices...>)
 	{
-		return (RetType)((Lamda)(Forward(Arguments)..., Payload.Get<Indices>()...));
+		return (RetType)((Lamda)(Forward(Arguments)..., Payload.template Get<Indices>()...));
 	}
 
 	OTuple<Args2...> Payload;
