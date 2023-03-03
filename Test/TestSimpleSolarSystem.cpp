@@ -5,7 +5,6 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-
 namespace Test
 {
 
@@ -27,7 +26,7 @@ void OTestSimpleSolarSystem::OnUpdate(
 	GetMVStack().top() *= glm::rotate(OMat4(1.0f), float(DeltaTime), OVec3(1.0, 0.0, 0.0));
 	GetShader().SetUnformMat4f("mv_matrix", GetMVStack().top());
 
-	DrawArrays(pyramidHandle);
+	Draw(pyramidHandle);
 
 	GetMVStack().pop();
 	// // pyr
@@ -76,9 +75,9 @@ OTestSimpleSolarSystem::OTestSimpleSolarSystem(OPath shaderPath, OTSharedPtr<Ren
 	// cubeHandle = CreateVertexElement(contextVertex, drawContext);
 
 	auto size = sizeof(pyramidPositions);
-	auto data = pyramidPositions;
+	auto* data = pyramidPositions;
 
-	SVertexContext pyramidVertex(new OBuffer{ pyramidPositions, sizeof(pyramidPositions) }, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
+	SVertexContext pyramidVertex(AddBuffer(pyramidPositions, sizeof(pyramidPositions)), 0, 3, GL_FLOAT, false, 0, 0, nullptr);
 
 	SDrawContext pyramidDrawContext(GL_TRIANGLES,
 	                                0,

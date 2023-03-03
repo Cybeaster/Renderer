@@ -55,13 +55,18 @@ public:
 
 	virtual void InitShader(const OString& shaderPath);
 
-	void EnableVertexArray(OBuffer& buffer);
+	void EnableVertexArray(const RenderAPI::OVertexAttribBuffer& VContext);
+	void Draw(const SDrawVertexHandle& Handle);
+	void BindBuffer(const SBufferHandle& Handle);
 
-	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext);
-	void EnableBuffer(const OBufferAttribVertexHandle& Handle);
-	void EnableBuffer(const TDrawVertexHandle& Handle);
+	SDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext);
+	SBufferAttribVertexHandle AddAttribBuffer(const RenderAPI::OVertexAttribBuffer& AttribBuffer);
 
-	void DrawArrays(const TDrawVertexHandle& Handle);
+	SBufferHandle AddBuffer(const void* Data, size_t Size);
+	SBufferHandle AddBuffer(SBufferContext&& Context);
+
+	void EnableAttribArrayBuffer(const SBufferAttribVertexHandle& Handle);
+	void EnableAttribArrayBuffer(const SDrawVertexHandle& Handle);
 
 protected:
 	OShader& GetShader()
@@ -92,7 +97,7 @@ private:
 	 *
 	 */
 	OShader Shader;
-	OTVector<TVertexHandle> Handles;
+	OTVector<SVertexHandle> Handles;
 };
 
 } // namespace Test

@@ -32,30 +32,55 @@ struct STSimpleHandleHash
 class OVertexArray
 {
 public:
-	OVertexArray(/* args */);
-	~OVertexArray();
+	OVertexArray(/* args */) = default;
+	~OVertexArray() = default;
 
-	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext);
+	SDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext);
 
-	void DrawArrays(const TDrawVertexHandle& Handle) const;
+	void Draw(const SDrawVertexHandle& Handle) const;
 
-	void EnableBuffer(const OBufferAttribVertexHandle& Handle);
-	void EnableBuffer(const TDrawVertexHandle& Handle);
+	void EnableBufferAttribArray(const SBufferAttribVertexHandle& Handle);
+	/*
+	 * Uses draw context to find attrib array.
+	 * */
+	void EnableBufferAttribArray(const SDrawVertexHandle& Handle);
 
 	void AddVertexArray();
 
-	//TODO Create move adding
-	OBufferAttribVertexHandle AddAttribBuffer(const OVertexAttribBuffer& Buffer);
-	OBufferAttribVertexHandle AddAttribBuffer(const SVertexContext& VContext);
+	SBufferAttribVertexHandle AddAttribBuffer(const OVertexAttribBuffer& Buffer);
+	SBufferAttribVertexHandle AddAttribBuffer(const SVertexContext& VContext);
+
+	SBufferAttribVertexHandle AddAttribBuffer(OVertexAttribBuffer&& Buffer);
+	SBufferAttribVertexHandle AddAttribBuffer(SVertexContext&& VContext);
+
+	SBufferHandle AddBuffer(const void* Data, size_t Size);
+	SBufferHandle AddBuffer(SBufferContext&& Context);
+
+	void BindBuffer(const SBufferHandle& Handle);
 
 private:
-	OBufferAttribVertexHandle AddAttribBufferImpl(const OVertexAttribBuffer& Buffer);
+	FORCEINLINE static SBufferAttribVertexHandle CreateNewVertexHandle()
+	{
+		++AttribBuffersCounter;
+		return SBufferAttribVertexHandle(AttribBuffersCounter);
+	}
+
+	FORCEINLINE static SBufferHandle CreateNewBufferHandle()
+	{
+		++BufferCounter;
+		return SBufferHandle(BufferCounter);
+	}
+
+	SBufferAttribVertexHandle AddAttribBufferImpl(const OVertexAttribBuffer& Buffer);
+	SBufferAttribVertexHandle AddAttribBufferImpl(OVertexAttribBuffer&& Buffer);
 
 	static inline uint64 ElementsCounter = 0;
 	static inline uint64 AttribBuffersCounter = 0;
+	static inline uint64 BufferCounter = 0;
 
-	OTHashMap<TDrawVertexHandle, OVertexArrayElem, STSimpleHandleHash<TDrawVertexHandle>> VertexElements;
-	OTHashMap<OBufferAttribVertexHandle, OVertexAttribBuffer, STSimpleHandleHash<OBufferAttribVertexHandle>> VertexAttribBuffers;
+	OTHashMap<SDrawVertexHandle, OVertexArrayElem, STSimpleHandleHash<SDrawVertexHandle>> VertexElements;
+	OTHashMap<SBufferAttribVertexHandle, OVertexAttribBuffer, STSimpleHandleHash<SBufferAttribVertexHandle>> VertexAttribBuffers;
+	OTHashMap<SBufferHandle, OTSharedPtr<OBuffer>, STSimpleHandleHash<SBufferHandle>> BufferStorage;
 
 	OTVector<STSimpleVertexIndex> VertexIndicesArray;
 };

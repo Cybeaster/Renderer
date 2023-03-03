@@ -2,12 +2,24 @@
 
 #include "Renderer.hpp"
 
+OBuffer::OBuffer(const void* Data, size_t Size)
+{
+	RAPI_LOG(Log, "Default Buffer initialization is used!");
+	Init(Data, Size);
+}
 
-OBuffer::OBuffer(const void* Data, size_t size)
+OBuffer::OBuffer(const SBufferContext& Context)
+{
+	BufferOption = Context.Option;
+	BufferType = Context.Type;
+	Init(Context.Data, Context.Size);
+}
+
+void OBuffer::Init(const void* Data, size_t Size)
 {
 	GLCall(glGenBuffers(1, &BufferID));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, BufferID));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, size, Data, GL_STATIC_DRAW));
+	GLCall(glBindBuffer(BufferType, BufferID));
+	GLCall(glBufferData(BufferType, Size, Data, BufferOption));
 }
 
 OBuffer::~OBuffer()

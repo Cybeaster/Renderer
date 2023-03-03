@@ -8,7 +8,7 @@ OTestSimpleCube::OTestSimpleCube(OPath ShaderPath, OTSharedPtr<RenderAPI::ORende
     : OTest(ShaderPath, Renderer)
 {
 	SVertexContext contextVertex(
-	    new OBuffer{ cubePositions, sizeof(cubePositions) },
+	    AddBuffer(cubePositions, sizeof(cubePositions)),
 	    0,
 	    3,
 	    GL_FLOAT,
@@ -41,7 +41,7 @@ void OTestSimpleCube::OnUpdate(
 	GetShader().SetUnformMat4f("mv_matrix", mvMatrix);
 	GetShader().SetUniform4f("additionalColor", 1, 1, 1, 1);
 
-	DrawArrays(handle);
+	Draw(handle);
 	// GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0));
 	// GLCall(glEnableVertexAttribArray(0));
 

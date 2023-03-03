@@ -12,10 +12,16 @@ FORCEINLINE auto MakeUnique(T* Arg)
 	return std::make_unique<T>(Arg);
 }
 
-template<typename T>
-FORCEINLINE auto MakeShared(T* Arg)
+template<class Type, typename... Payload>
+FORCEINLINE auto MakeShared(Payload&&... Args)
 {
-	return std::make_shared<T>(Arg);
+	return std::make_shared<Type>(Args...);
+}
+
+template<class Type>
+FORCEINLINE auto MakeShared(Type* Arg)
+{
+	return std::make_shared<Type>(Arg);
 }
 
 template<typename T>

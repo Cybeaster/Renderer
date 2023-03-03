@@ -3,6 +3,7 @@
 #define RENDERAPI_SPHERE_HPP
 
 #include "Math.hpp"
+#include "Model.hpp"
 #include "Tuple.hpp"
 #include "TypeTraits.hpp"
 #include "Types.hpp"
@@ -10,36 +11,15 @@
 namespace RenderAPI
 {
 
-class OSphere
+class OSphere final : public OModel
 {
 public:
-	OSphere();
-	explicit OSphere(uint32 Precision);
+	explicit OSphere(uint32 Precision)
+	    : OModel(Precision) {}
 
-	NODISCARD FORCEINLINE uint32 GetNumVertices() const
-	{
-		return NumVertices;
-	}
-
-	NODISCARD FORCEINLINE uint32 GetNumIndices() const
-	{
-		return NumIndices;
-	}
-
-	void GetVertexTextureNormalPositions(OTVector<float>& OutVertex, OTVector<float>& OutTexture, OTVector<float>& OutNormals);
-
+	void Init(int32) noexcept override;
+	
 private:
-	void Init(int32) noexcept;
-
-	uint32 NumVertices;
-	uint32 NumIndices;
-
-	const uint32 DefaultPrecision = 48;
-
-	OTVector<int32> Indices;
-	OTVector<OVec3> Vertices;
-	OTVector<OVec2> TexCoords;
-	OTVector<OVec3> Normals;
 };
 
 } // namespace RenderAPI

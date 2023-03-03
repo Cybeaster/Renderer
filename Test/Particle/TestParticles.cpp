@@ -241,7 +241,7 @@ OTestParticles::OTestParticles(OPath shaderPath, OTSharedPtr<RenderAPI::ORendere
 	auto size = sizeof(float) * Particles[0].getVertecies().size();
 	auto data = particle.getVertecies().begin()._Ptr;
 
-	SVertexContext contextVertex(new OBuffer{ data, size }, 0, 3, GL_FLOAT, false, 0, 0, nullptr);
+	SVertexContext contextVertex(AddBuffer(data, size), 0, 3, GL_FLOAT, false, 0, 0, nullptr);
 
 	SDrawContext drawContext(GL_TRIANGLES,
 	                         0,
@@ -292,7 +292,7 @@ void OTestParticles::DrawParticles(float deltaTime, OMat4 vMat)
 		OVec3 color = particle.getColor();
 		GetShader().SetUniform4f("additionalColor", color.x, color.y, color.y, 1);
 
-		DrawArrays(DefaultParticleHandle);
+		Draw(DefaultParticleHandle);
 	}
 }
 
@@ -370,7 +370,7 @@ void OTestParticles::DrawFields(float deltaTime, OMat4 vMat)
 		GetShader().SetUnformMat4f("mv_matrix", (translation * rot));
 		GetShader().SetUniform4f("additionalColor", 1, 0, 0, 1);
 
-		DrawArrays(DefaultParticleHandle);
+		Draw(DefaultParticleHandle);
 	}
 }
 

@@ -178,14 +178,41 @@ void ORenderer::AddTest(Test::OTest* testPtr)
 		Tests.push_back(testPtr);
 	}
 }
-OBufferAttribVertexHandle ORenderer::AddAttributeBuffer(const SVertexContext& Context)
+SBufferAttribVertexHandle ORenderer::AddAttributeBuffer(const SVertexContext& Context)
 {
 	return VertexArray.AddAttribBuffer(Context);
 }
 
-void ORenderer::EnableBuffer(const TDrawVertexHandle& Handle)
+void ORenderer::EnableBufferAttribArray(const SDrawVertexHandle& Handle)
 {
-	VertexArray.EnableBuffer(Handle);
+	VertexArray.EnableBufferAttribArray(Handle);
+}
+
+void ORenderer::EnableBufferAttribArray(const SBufferAttribVertexHandle& Handle)
+{
+	VertexArray.EnableBufferAttribArray(Handle);
+}
+
+SBufferAttribVertexHandle ORenderer::AddAttribBuffer(const OVertexAttribBuffer& Buffer)
+{
+	return VertexArray.AddAttribBuffer(Buffer);
+}
+
+SBufferAttribVertexHandle ORenderer::AddAttribBuffer(OVertexAttribBuffer&& Buffer)
+{
+	return VertexArray.AddAttribBuffer(Move(Buffer));
+}
+SBufferHandle ORenderer::AddBuffer(const void* Data, size_t Size)
+{
+	return VertexArray.AddBuffer(Data, Size);
+}
+void ORenderer::BindBuffer(const SBufferHandle& Handle)
+{
+	VertexArray.BindBuffer(Handle);
+}
+SBufferHandle ORenderer::AddBuffer(SBufferContext&& Context)
+{
+	return VertexArray.AddBuffer(Move(Context));
 }
 
 } // namespace RenderAPI

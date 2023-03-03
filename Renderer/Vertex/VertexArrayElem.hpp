@@ -11,7 +11,7 @@ namespace RenderAPI
 {
 class OVertexArrayElem
 {
-	using OBufferHandle = OBufferAttribVertexHandle;
+	using OBufferHandle = SBufferAttribVertexHandle;
 
 public:
 	OVertexArrayElem(const OBufferHandle& Handle, const SDrawContext& Draw) noexcept
@@ -36,15 +36,15 @@ public:
 		return *this;
 	}
 
-	void DrawArrays() const;
+	void Draw() const;
 
-	OBufferAttribVertexHandle GetBoundBufferHandle() const
+	SBufferAttribVertexHandle GetBoundBufferHandle() const
 	{
 		return BoundBufferHandle;
 	}
 
 private:
-	OBufferAttribVertexHandle BoundBufferHandle;
+	SBufferAttribVertexHandle BoundBufferHandle;
 	SDrawContext DrawContext;
 };
 } // namespace RenderAPI

@@ -99,8 +99,8 @@ void OInputHandler::MouseCursorMoveCallback(GLFWwindow* /*Window*/, double XPos,
 		auto pos = OVec2(XPos, YPos);
 		auto delta = (ORenderer::PressedMousePos - pos);
 
-		ORenderer::CameraPos = glm::rotate(
-		    ORenderer::CameraPos, glm::length(delta) / ORenderer::MRSDivideFactor, OVec3(delta.y, delta.x, 0)); // inverted
+		ORenderer::VMat = glm::rotate(
+		    ORenderer::VMat, glm::length(delta) / ORenderer::MRSDivideFactor, OVec3(delta.y, delta.x, 0)); // inverted
 
 		ORenderer::PressedMousePos = pos;
 		if (DEBUG_MOUSE_POS)

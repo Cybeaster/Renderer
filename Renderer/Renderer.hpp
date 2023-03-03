@@ -51,36 +51,42 @@ public:
 		return Tests;
 	}
 
-	TDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext)
+	SDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext)
 	{
 		return VertexArray.CreateVertexElement(VContext, RContext);
 	}
 
-	void DrawArrays(const TDrawVertexHandle& Handle)
+	void Draw(const SDrawVertexHandle& Handle)
 	{
-		VertexArray.DrawArrays(Handle);
+		VertexArray.Draw(Handle);
 	}
 
-	void EnableBuffer(const TDrawVertexHandle& Handle);
+	void EnableBufferAttribArray(const SDrawVertexHandle& Handle);
 
-	void EnableBuffer(const OBufferAttribVertexHandle& Handle)
-	{
-		VertexArray.EnableBuffer(Handle);
-	}
+	void EnableBufferAttribArray(const SBufferAttribVertexHandle& Handle);
 
-	// TODO Create move adding
-	OBufferAttribVertexHandle AddAttribBuffer(const OVertexAttribBuffer& Buffer)
-	{
-		return VertexArray.AddAttribBuffer(Buffer);
-	}
+	SBufferAttribVertexHandle AddAttribBuffer(const OVertexAttribBuffer& Buffer);
+	SBufferAttribVertexHandle AddAttribBuffer(OVertexAttribBuffer&& Buffer);
+	SBufferAttribVertexHandle AddAttributeBuffer(const SVertexContext& Context);
 
-	OBufferAttribVertexHandle AddAttributeBuffer(const SVertexContext& Context);
+	SBufferHandle AddBuffer(const void* Data, size_t Size);
+	SBufferHandle AddBuffer(SBufferContext&& Context);
 
+	void BindBuffer(const SBufferHandle& Handle);
 	void TranslateCameraLocation(const glm::mat4& Transform);
+
 	void LookAtCamera(const OVec3& Position);
 
 	void Init();
 	void PostInit();
+
+	void MoveCamera(const OVec3& Delta);
+	void MoveCameraByInput(const OVec3& Dir) const;
+
+	FORCEINLINE GLFWwindow* GetWindowContext() const
+	{
+		return Window;
+	}
 
 	static int ScreenWidth;
 	static int ScreenHeight;
@@ -100,14 +106,6 @@ public:
 
 	static OMat4 MouseCameraRotation;
 	static float MRSDivideFactor;
-
-	void MoveCamera(const OVec3& Delta);
-	void MoveCameraByInput(const OVec3& Dir) const;
-
-	FORCEINLINE GLFWwindow* GetWindowContext() const
-	{
-		return Window;
-	}
 
 private:
 	ORenderer() = default;

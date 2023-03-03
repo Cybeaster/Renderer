@@ -1,6 +1,7 @@
 #pragma once
 #include "../Renderer/Vertex/SimpleVertexHandle.hpp"
 #include "Models/Sphere.hpp"
+#include "Models/Torus.hpp"
 
 #include <Test.hpp>
 #include <Texture.hpp>
@@ -11,7 +12,7 @@ namespace Test
 class OTestTexture : public OTest
 {
 public:
-	OTestTexture(const OPath& filePath, const OPath& ShaderPath, OTSharedPtr<RenderAPI::ORenderer> Renderer);
+	OTestTexture(const OPath& filePath, const OPath& SecondTexturePath, const OPath& ShaderPath, OTSharedPtr<RenderAPI::ORenderer> Renderer);
 	~OTestTexture() override = default;
 
 	void OnUpdate(
@@ -75,15 +76,20 @@ private:
 		0, 0, 1, 0, .5, 1, 0, 0, 1, 0, .5, 0, 0, 0, 1, 0, 0.5, 1
 	};
 
+	RenderAPI::OTorus Torus{ 48 };
+	SBufferAttribVertexHandle VerticesTorusHandle;
+	SDrawVertexHandle TexturesTorusHandle;
+	SBufferHandle IndicesTorusHandle;
+
 	RenderAPI::OSphere Sphere{ 48 };
+	SBufferAttribVertexHandle VerticesSphereHandle;
+	SDrawVertexHandle TexturesSphereHandle;
+	SBufferHandle NormalsSphereHandle;
 
-	OBufferAttribVertexHandle VerticesSphereHandle;
-	OBufferAttribVertexHandle NormalsSphereHandle;
-	OBufferAttribVertexHandle TexturesSphereHandle;
-
-	OBufferAttribVertexHandle pyramidHandle;
-	TDrawVertexHandle textureHandle;
+	SBufferAttribVertexHandle pyramidHandle;
+	SDrawVertexHandle textureHandle;
 	OTexture Texture;
+	OTexture EarthTexture;
 };
 
 } // namespace Test

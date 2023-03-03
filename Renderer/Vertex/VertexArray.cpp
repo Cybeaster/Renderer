@@ -6,9 +6,6 @@
 
 namespace RenderAPI
 {
-OVertexArray::OVertexArray(/* args */)
-{
-}
 
 void OVertexArray::AddVertexArray()
 {
@@ -19,56 +16,88 @@ void OVertexArray::AddVertexArray()
 	VertexIndicesArray.push_back(id);
 }
 
-TDrawVertexHandle OVertexArray::CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext)
+SDrawVertexHandle OVertexArray::CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext)
 {
 	++ElementsCounter;
 
-	auto elementsHandle = TDrawVertexHandle(ElementsCounter);
-	auto bufferAttribHandle = AddAttribBufferImpl(VContext);
+	auto elementsHandle = SDrawVertexHandle(ElementsCounter);
+	auto bufferAttribHandle = AddAttribBufferImpl(OVertexAttribBuffer(VContext));
 
 	VertexElements[elementsHandle] = OVertexArrayElem(bufferAttribHandle, RContext);
 
 	return elementsHandle;
 }
 
-OBufferAttribVertexHandle OVertexArray::AddAttribBufferImpl(const OVertexAttribBuffer& Buffer)
+SBufferAttribVertexHandle OVertexArray::AddAttribBufferImpl(const OVertexAttribBuffer& Buffer)
 {
-	++AttribBuffersCounter;
-	auto bufferAttribHandle = OBufferAttribVertexHandle(AttribBuffersCounter);
+	auto bufferAttribHandle = CreateNewVertexHandle();
 	VertexAttribBuffers[bufferAttribHandle] = Buffer;
-
 	return bufferAttribHandle;
 }
 
-OBufferAttribVertexHandle OVertexArray::AddAttribBuffer(const SVertexContext& VContext)
+SBufferAttribVertexHandle OVertexArray::AddAttribBufferImpl(OVertexAttribBuffer&& Buffer)
+{
+	auto bufferAttribHandle = CreateNewVertexHandle();
+	VertexAttribBuffers[bufferAttribHandle] = Move(Buffer);
+	return bufferAttribHandle;
+}
+
+SBufferAttribVertexHandle OVertexArray::AddAttribBuffer(const SVertexContext& VContext)
 {
 	return AddAttribBufferImpl(OVertexAttribBuffer(VContext));
 }
 
-OBufferAttribVertexHandle OVertexArray::AddAttribBuffer(const OVertexAttribBuffer& Buffer)
+SBufferAttribVertexHandle OVertexArray::AddAttribBuffer(const OVertexAttribBuffer& Buffer)
 {
 	return AddAttribBufferImpl(Buffer);
 }
 
-void OVertexArray::DrawArrays(const TDrawVertexHandle& Handle) const
+SBufferAttribVertexHandle OVertexArray::AddAttribBuffer(OVertexAttribBuffer&& Buffer)
 {
-	auto elem = VertexElements.find(Handle);
-	elem->second.DrawArrays();
+	AddAttribBufferImpl(Move(Buffer));
 }
 
-void OVertexArray::EnableBuffer(const TDrawVertexHandle& Handle)
+SBufferAttribVertexHandle OVertexArray::AddAttribBuffer(SVertexContext&& VContext)
 {
-	auto elem = VertexElements.find(Handle);
-	EnableBuffer(elem->second.GetBoundBufferHandle());
+	return AddAttribBufferImpl(OVertexAttribBuffer(Move(VContext)));
 }
 
-void OVertexArray::EnableBuffer(const OBufferAttribVertexHandle& Handle)
+void OVertexArray::Draw(const SDrawVertexHandle& Handle) const
+{
+	auto elem = VertexElements.find(Handle);
+	elem->second.Draw();
+}
+
+void OVertexArray::EnableBufferAttribArray(const SDrawVertexHandle& Handle)
+{
+	auto elem = VertexElements.find(Handle);
+	EnableBufferAttribArray(elem->second.GetBoundBufferHandle());
+}
+
+void OVertexArray::EnableBufferAttribArray(const SBufferAttribVertexHandle& Handle)
 {
 	auto elem = VertexAttribBuffers[Handle];
 	elem.EnableVertexAttribPointer();
 }
 
-OVertexArray::~OVertexArray()
+void OVertexArray::BindBuffer(const SBufferHandle& Handle)
 {
+	const auto& elem = BufferStorage[Handle];
+	elem->Bind();
 }
+
+SBufferHandle OVertexArray::AddBuffer(const void* Data, size_t Size)
+{
+	auto bufferHandle = CreateNewBufferHandle();
+	BufferStorage.insert({ bufferHandle, MakeShared<OBuffer>(Data, Size) });
+	return bufferHandle;
+}
+
+SBufferHandle OVertexArray::AddBuffer(SBufferContext&& Context)
+{
+	auto bufferHandle = CreateNewBufferHandle();
+	BufferStorage.insert({ bufferHandle, MakeShared<OBuffer>(Move(Context)) });
+	return bufferHandle;
+}
+
 } // namespace RenderAPI

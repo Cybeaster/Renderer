@@ -60,7 +60,7 @@ add_executable(exec
         Utils/Types/Vector.hpp
         Utils/Threads/ThreadPool/ThreadPool.cpp
         Utils/Threads/HierarchicalMutex/HierarchicalMutex.cpp
-        Utils/Checks/Exception.hpp Utils/Logging/Log.hpp Models/Sphere.cpp Models/Sphere.hpp Models/Sphere.hpp Utils/Logging/Printer.hpp)
+        Utils/Checks/Exception.hpp Utils/Logging/Log.hpp Models/Sphere.cpp Models/Sphere.hpp Models/Sphere.hpp Utils/Logging/Printer.hpp Models/Torus.cpp Models/Torus.hpp Models/Model.hpp Models/Model.cpp)
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
 set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)
 set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)

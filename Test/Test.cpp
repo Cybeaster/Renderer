@@ -16,24 +16,29 @@ void OTest::InitShader(const OString& ShaderPath)
 	Shader.Init(ShaderPath);
 }
 
-void OTest::DrawArrays(const TDrawVertexHandle& Handle)
+void OTest::Draw(const SDrawVertexHandle& Handle)
 {
-	Renderer->DrawArrays(Handle);
+	Renderer->Draw(Handle);
 }
 
-void OTest::EnableBuffer(const OBufferAttribVertexHandle& Handle)
+void OTest::EnableAttribArrayBuffer(const SBufferAttribVertexHandle& Handle)
 {
-	Renderer->EnableBuffer(Handle);
+	Renderer->EnableBufferAttribArray(Handle);
 }
 
-void OTest::EnableBuffer(const TDrawVertexHandle& Handle)
+void OTest::EnableAttribArrayBuffer(const SDrawVertexHandle& Handle)
 {
-	Renderer->EnableBuffer(Handle);
+	Renderer->EnableBufferAttribArray(Handle);
 }
 
-TDrawVertexHandle OTest::CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext)
+SDrawVertexHandle OTest::CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext)
 {
 	return Renderer->CreateVertexElement(VContext, RContext);
+}
+
+SBufferAttribVertexHandle OTest::AddAttribBuffer(const RenderAPI::OVertexAttribBuffer& AttribBuffer)
+{
+	return Renderer->AddAttribBuffer(AttribBuffer);
 }
 
 void OTest::OnUpdate(
@@ -45,6 +50,21 @@ void OTest::OnUpdate(
 {
 	Shader.Bind();
 	Shader.SetUnformMat4f("proj_matrix", Move(PMat));
+}
+
+SBufferHandle OTest::AddBuffer(const void* Data, size_t Size)
+{
+	return Renderer->AddBuffer(Data, Size);
+}
+
+SBufferHandle OTest::AddBuffer(SBufferContext&& Context)
+{
+	return Renderer->AddBuffer(Move(Context));
+}
+
+void OTest::BindBuffer(const SBufferHandle& Handle)
+{
+	Renderer->BindBuffer(Handle);
 }
 
 } // namespace Test

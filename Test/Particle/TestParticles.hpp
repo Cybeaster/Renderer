@@ -25,7 +25,7 @@ public:
 	    OMat4& VMat) override;
 
 private:
-	TDrawVertexHandle DefaultParticleHandle;
+	SDrawVertexHandle DefaultParticleHandle;
 	void ChangeVelocity(Particle& particle);
 	void AddField(const OVec3& pos, const float& strenght, const OVec3& chargeVec, const float& charge);
 	void AddParticle(const OVec3& startPos, const float& radius, const float& charge, const OVec3& startVelocity);

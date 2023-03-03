@@ -6,15 +6,27 @@
 namespace RenderAPI
 {
 
-TVertexAttribBuffer::OVertexAttribBuffer(const SVertexContext& Context)
+OVertexAttribBuffer::OVertexAttribBuffer(const SVertexContext& Context)
     : VertexContext(Context)
+{
+	RegisterBuffer();
+}
+
+OVertexAttribBuffer::OVertexAttribBuffer(SVertexContext&& Context) noexcept
+    : // NOLINT
+    VertexContext(Move(Context))
+{
+	RegisterBuffer();
+}
+
+void OVertexAttribBuffer::RegisterBuffer()
 {
 	RenderAPI::ORenderer::GetRenderer()->AddAttribBuffer(*this);
 }
 
-void TVertexAttribBuffer::EnableVertexAttribPointer()
+void OVertexAttribBuffer::EnableVertexAttribPointer()
 {
-	VertexContext.BoundBuffer->Bind();
+	BindBuffer();
 	glVertexAttribPointer(VertexContext.VertexIndex,
 	                      VertexContext.VertexSize,
 	                      VertexContext.VertexType,
@@ -24,4 +36,9 @@ void TVertexAttribBuffer::EnableVertexAttribPointer()
 
 	glEnableVertexAttribArray(VertexContext.VertexAttribArrayIndex);
 }
+void OVertexAttribBuffer::BindBuffer()
+{
+	RenderAPI::ORenderer::GetRenderer()->BindBuffer(VertexContext.BoundBuffer);
+}
+
 } // namespace RenderAPI

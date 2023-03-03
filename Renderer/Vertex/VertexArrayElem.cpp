@@ -5,11 +5,15 @@
 namespace RenderAPI
 {
 
-void OVertexArrayElem::DrawArrays() const
+void OVertexArrayElem::Draw() const
 {
 	// ORenderer::GetRenderer()->EnableBuffer(BoundBufferHandle);
 
-	// GLCall(glEnable(DrawContext.Flag.Flag));
+	if (DrawContext.Flag != UINT32_MAX)
+	{
+		GLCall(glEnable(DrawContext.Flag));
+	}
+
 	GLCall(glFrontFace(DrawContext.FrontFace));
 
 	GLCall(glDepthFunc(DrawContext.DepthFunction));

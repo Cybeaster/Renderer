@@ -1,5 +1,6 @@
 #pragma once
 #include "../Buffer.hpp"
+#include "../SimpleVertexHandle.hpp"
 #include "SmartPtr.hpp"
 #include "Types.hpp"
 
@@ -8,15 +9,10 @@ namespace RenderAPI
 
 struct SVertexContext
 {
-	inline void Bind() const
-	{
-		BoundBuffer->Bind();
-	}
-
 	SVertexContext(const SVertexContext& Context) = default;
 	SVertexContext() = default;
 
-	SVertexContext(OBuffer* Buffer,
+	SVertexContext(SBufferHandle Handle,
 	               const uint32 Index,
 	               const uint32 Size,
 	               const uint32 Type,
@@ -24,14 +20,15 @@ struct SVertexContext
 	               const uint32 Stride,
 	               const uint32 AttribArrayIndex,
 	               void* Pointer)
-	    : BoundBuffer(Buffer), VertexIndex(Index), VertexSize(Size), VertexType(Type), IsNormalized(Normalized), VertexStride(Stride), VertexPointer(Pointer), VertexAttribArrayIndex(AttribArrayIndex)
+	    : BoundBuffer(Move(Handle)), VertexIndex(Index), VertexSize(Size), VertexType(Type), IsNormalized(Normalized), VertexStride(Stride), VertexPointer(Pointer), VertexAttribArrayIndex(AttribArrayIndex)
 	{
 	}
 
 	SVertexContext& operator=(const SVertexContext& Elem) = default;
 
 	// vertex options
-	OTSharedPtr<OBuffer> BoundBuffer;
+	SBufferHandle BoundBuffer;
+
 	uint32 VertexIndex;
 	uint32 VertexSize;
 	uint32 VertexType;

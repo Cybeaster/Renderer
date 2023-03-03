@@ -3,11 +3,10 @@
 
 #include "Renderer.hpp"
 #include "TestTexture.hpp"
+
 #include <TestSimpleSolarSystem.hpp>
 #include <iostream>
 #include <string>
-
-
 
 void OApplication::Start(int /*argc*/, char** /*argv*/)
 {
@@ -19,16 +18,15 @@ void OApplication::Start(int /*argc*/, char** /*argv*/)
 	renderer->GLFWInit();
 	const auto textureShaderPath = GetShaderLocalPathWith(SimpleTextureShader);
 	const auto simpleCubeShader = GetShaderLocalPathWith(SimpleCubeShader);
-	auto brickTexture = GetResourceDirectoryWith("BrickWall.jpg");
+	auto brickTexture = GetResourceDirectoryWith(TEXT("BrickWall.jpg"));
+	auto earthTexture = GetResourceDirectoryWith(TEXT("TopographicalEarth.jpg"));
 #ifndef NDEBUG
 
 	std::cout << textureShaderPath << std::endl;
 
 #endif
 
-	// Add different tests or write your own.
-	Test::OTestSimpleSolarSystem test(simpleCubeShader, renderer);
-	Test::OTestTexture textureTest(brickTexture, textureShaderPath, renderer);
+	Test::OTestTexture textureTest(brickTexture, earthTexture, textureShaderPath, renderer);
 
 	// renderer->AddTest(&test);
 	renderer->AddTest(&textureTest);

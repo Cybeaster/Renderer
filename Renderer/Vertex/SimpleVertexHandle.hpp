@@ -1,67 +1,33 @@
 #pragma once
 #include <Types.hpp>
 
-struct TVertexHandle
+struct SVertexHandle
 {
-	TVertexHandle(uint64 ID)
+	SVertexHandle(uint64 ID)
 	    : Handle(ID)
 	{
 	}
 
-	TVertexHandle(const TVertexHandle& ID)
+	SVertexHandle(const SVertexHandle& ID)
 	    : Handle(ID.Handle)
 	{
 	}
 
-	TVertexHandle() = default;
+	SVertexHandle() = default;
 
-	uint64 GetHandle() const
+	NODISCARD uint64 GetHandle() const
 	{
 		return Handle;
 	}
 
-	operator int64()
+	explicit operator int64() const
 	{
 		return Handle;
 	}
 
-	bool operator==(const TVertexHandle& ArrayHandle)
-	{
-		return Handle == ArrayHandle.Handle;
-	}
+	SVertexHandle& operator=(const SVertexHandle& OtherHandle) = default;
 
-	bool operator!=(const TVertexHandle& ArrayHandle)
-	{
-		return Handle != ArrayHandle.Handle;
-	}
-
-	bool operator>(const TVertexHandle& ArrayHandle)
-	{
-		return Handle > ArrayHandle.Handle;
-	}
-
-	bool operator>=(const TVertexHandle& ArrayHandle)
-	{
-		return Handle >= ArrayHandle.Handle;
-	}
-
-	bool operator<(const TVertexHandle& ArrayHandle)
-	{
-		return Handle < ArrayHandle.Handle;
-	}
-
-	bool operator<=(const TVertexHandle& ArrayHandle)
-	{
-		return Handle <= ArrayHandle.Handle;
-	}
-
-	TVertexHandle& operator=(const TVertexHandle& OtherHandle)
-	{
-		Handle = OtherHandle.Handle;
-		return *this;
-	}
-
-	friend bool operator==(const TVertexHandle& FirstHandle, const TVertexHandle& SecondHandle)
+	friend bool operator==(const SVertexHandle& FirstHandle, const SVertexHandle& SecondHandle)
 	{
 		return FirstHandle.Handle == SecondHandle.Handle;
 	}
@@ -70,16 +36,23 @@ private:
 	uint64 Handle = UINT64_MAX;
 };
 
-struct TDrawVertexHandle : TVertexHandle
+struct SDrawVertexHandle : SVertexHandle
 {
-	explicit TDrawVertexHandle(uint64 Handle)
-	    : TVertexHandle(Handle) {}
-	TDrawVertexHandle() = default;
+	explicit SDrawVertexHandle(uint64 Handle)
+	    : SVertexHandle(Handle) {}
+	SDrawVertexHandle() = default;
 };
 
-struct OBufferAttribVertexHandle : TVertexHandle
+struct SBufferAttribVertexHandle : SVertexHandle
 {
-	explicit OBufferAttribVertexHandle(uint64 Handle)
-	    : TVertexHandle(Handle) {}
-	OBufferAttribVertexHandle() = default;
+	explicit SBufferAttribVertexHandle(uint64 Handle)
+	    : SVertexHandle(Handle) {}
+	SBufferAttribVertexHandle() = default;
+};
+
+struct SBufferHandle : SVertexHandle
+{
+	explicit SBufferHandle(uint64 Handle)
+	    : SVertexHandle(Handle) {}
+	SBufferHandle() = default;
 };
