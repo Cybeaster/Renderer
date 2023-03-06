@@ -29,6 +29,59 @@
 
 #endif
 
+#define MIN_FLOAT (1.175494351e-38F) /* min positive value */
+#define MAX_FLOAT (3.402823466e+38F)
+
+#define MIN_DOUBLE (2.2250738585072014e-308) /* min positive value */
+#define MAX_DOUBLE (1.7976931348623158e+308)
+
+template<typename T>
+struct STypeLimits;
+
+template<>
+struct STypeLimits<uint32>
+{
+	static uint32 Min()
+	{
+		return 0;
+	}
+
+	static uint32 MAX()
+	{
+		return UINT32_MAX;
+	}
+};
+
+template<>
+struct STypeLimits<float>
+{
+	static float Min()
+	{
+		return MIN_FLOAT;
+	}
+
+	static float MAX()
+	{
+		return MAX_FLOAT;
+	}
+};
+
+template<>
+struct STypeLimits<double>
+{
+	static double Min()
+	{
+		return MIN_DOUBLE;
+	}
+
+	static double MAX()
+	{
+		return MAX_DOUBLE;
+	}
+};
+
+#define UINT32_INVALID_VALUE STypeLimits<uint32>::MAX()
+
 template<typename T>
 NODISCARD constexpr TRemoveRef<T>&& Move(T&& Arg) noexcept
 {

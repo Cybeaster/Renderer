@@ -1,11 +1,10 @@
 #pragma once
-#include "Buffer.hpp"
-#include "SimpleVertexHandle.hpp"
-#include "VertexData/DrawContext.hpp"
-
-#include <Hash.hpp>
-#include <SmartPtr.hpp>
-#include <Types/Types.hpp>
+#include "Renderer/Vertex/Buffer.hpp"
+#include "Renderer/Vertex/SimpleVertexHandle.hpp"
+#include "Renderer/Vertex/VertexData/DrawContext.hpp"
+#include "Utils/Types/Hash.hpp"
+#include "Utils/Types/SmartPtr.hpp"
+#include "Utils/Types/Types.hpp"
 
 namespace RenderAPI
 {

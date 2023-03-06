@@ -4,6 +4,14 @@
 namespace RenderAPI
 {
 
+enum EDrawType
+{
+	// Draws vertices
+	DrawArrays,
+	// Draws indices
+	DrawElements
+};
+
 struct SDrawFlag
 {
 	SDrawFlag() = default;
@@ -35,7 +43,7 @@ struct SDrawContext
 	             const uint32 FlagArg)
 	    :
 
-	    DrawType(Type)
+	    DrawFlagType(Type)
 	    , FirstDrawIndex(Index)
 	    , DrawSize(Size)
 	    , DepthFunction(Function)
@@ -44,11 +52,11 @@ struct SDrawContext
 	{
 	}
 
-	uint32 DrawType = UINT32_MAX;
-	uint32 FirstDrawIndex = UINT32_MAX;
-	uint32 DrawSize = UINT32_MAX;
-	uint32 DepthFunction = UINT32_MAX;
-	uint32 FrontFace = UINT32_MAX;
-	uint32 Flag = UINT32_MAX;
+	uint32 DrawFlagType = UINT32_INVALID_VALUE;
+	uint32 FirstDrawIndex = UINT32_INVALID_VALUE;
+	uint32 DrawSize = UINT32_INVALID_VALUE;
+	uint32 DepthFunction = UINT32_INVALID_VALUE;
+	uint32 FrontFace = UINT32_INVALID_VALUE;
+	uint32 Flag = UINT32_INVALID_VALUE;
 };
 } // namespace RenderAPI

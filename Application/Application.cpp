@@ -10,7 +10,7 @@
 
 void OApplication::Start(int /*argc*/, char** /*argv*/)
 {
-	auto renderer = RenderAPI::ORenderer::GetRenderer();
+	auto renderer = RenderAPI::ORenderer::Get();
 
 	if (!renderer)
 		return;

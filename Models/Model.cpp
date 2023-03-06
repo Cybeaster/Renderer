@@ -7,22 +7,15 @@
 namespace RenderAPI
 {
 
-void OModel::GetVertexTextureNormalPositions(SModelContext& OutContext)
+void OModel::PreInit(int32 Precision) noexcept
 {
-	const auto indices = GetNumIndices();
+	SqredPrecision = Precision * Precision;
+	NumVertices = SqredPrecision + 2 * Precision + 1;
+	NumIndices = SqredPrecision * 6;
 
-	for (int idx = 0; idx < indices; ++idx)
-	{
-		OutContext.VertexCoords.push_back(Vertices[Indices[idx]].x);
-		OutContext.VertexCoords.push_back(Vertices[Indices[idx]].y);
-		OutContext.VertexCoords.push_back(Vertices[Indices[idx]].z);
-
-		OutContext.TextureCoords.push_back(TexCoords[Indices[idx]].s);
-		OutContext.TextureCoords.push_back(TexCoords[Indices[idx]].t);
-
-		OutContext.NormalsCoords.push_back(Normals[Indices[idx]].x);
-		OutContext.NormalsCoords.push_back(Normals[Indices[idx]].y);
-		OutContext.NormalsCoords.push_back(Normals[Indices[idx]].z);
-	}
+	Vertices.resize(NumVertices);
+	TexCoords.resize(NumVertices);
+	Normals.resize(NumVertices);
+	Indices.resize(NumIndices);
 }
 } // namespace RenderAPI

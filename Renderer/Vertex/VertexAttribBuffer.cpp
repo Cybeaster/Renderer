@@ -21,7 +21,7 @@ OVertexAttribBuffer::OVertexAttribBuffer(SVertexContext&& Context) noexcept
 
 void OVertexAttribBuffer::RegisterBuffer()
 {
-	RenderAPI::ORenderer::GetRenderer()->AddAttribBuffer(*this);
+	RenderAPI::ORenderer::Get()->AddAttribBuffer(*this);
 }
 
 void OVertexAttribBuffer::EnableVertexAttribPointer()
@@ -38,7 +38,7 @@ void OVertexAttribBuffer::EnableVertexAttribPointer()
 }
 void OVertexAttribBuffer::BindBuffer()
 {
-	RenderAPI::ORenderer::GetRenderer()->BindBuffer(VertexContext.BoundBuffer);
+	RenderAPI::ORenderer::Get()->BindBuffer(VertexContext.BoundBuffer);
 }
 
 } // namespace RenderAPI

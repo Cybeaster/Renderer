@@ -23,12 +23,10 @@ class OModel
 public:
 	OModel()
 	{
-		Init(DefaultPrecision);
 	}
 
-	explicit OModel(const uint32 Precision)
+	explicit OModel(const uint32 /*Precision*/)
 	{
-		Init(Precision);
 	}
 
 	NODISCARD FORCEINLINE uint32 GetNumVertices() const
@@ -46,12 +44,15 @@ public:
 		return Indices;
 	}
 
-	void GetVertexTextureNormalPositions(SModelContext& OutContext);
+	virtual void GetVertexTextureNormalPositions(SModelContext& OutContext) = 0;
 
 protected:
 	virtual void Init(int32) noexcept = 0;
+	virtual void PreInit(int32 Precision) noexcept;
 
 	const uint32 DefaultPrecision = 48;
+
+	mutable uint32 SqredPrecision;
 
 	uint32 NumVertices;
 	uint32 NumIndices;

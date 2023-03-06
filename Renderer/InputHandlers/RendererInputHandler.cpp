@@ -8,7 +8,7 @@ namespace RenderAPI
 
 void ORendererInputHandler::OnWKeyToggled(bool Pressed)
 {
-	RAPI_LOG(Log, "On W KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetRenderer()->CameraPos));
+	RAPI_LOG(Log, "On W KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetRenderer()->GetCameraPosition()));
 
 	if (Pressed)
 	{
@@ -18,7 +18,7 @@ void ORendererInputHandler::OnWKeyToggled(bool Pressed)
 
 void ORendererInputHandler::OnSKeyToggled(bool Pressed)
 {
-	RAPI_LOG(Log, "On S KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetRenderer()->CameraPos));
+	RAPI_LOG(Log, "On S KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetRenderer()->GetCameraPosition()));
 	if (Pressed)
 	{
 		Owner->MoveCamera(OVec3(0, 0, 1));
@@ -27,37 +27,37 @@ void ORendererInputHandler::OnSKeyToggled(bool Pressed)
 
 void ORendererInputHandler::OnDKeyToggled(bool Pressed)
 {
-	RAPI_LOG(Log, "On D KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetRenderer()->CameraPos));
-	if (Pressed)
-	{
-		Owner->MoveCamera(OVec3(0, 1, 0));
-	}
-}
-
-void ORendererInputHandler::OnAKeyToggled(bool Pressed)
-{
-	RAPI_LOG(Log, "On A KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetRenderer()->CameraPos));
-	if (Pressed)
-	{
-		Owner->MoveCamera(OVec3(0, -1, 0));
-	}
-}
-
-void ORendererInputHandler::OnEKeyToggled(bool Pressed)
-{
-	RAPI_LOG(Log, "On E KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetRenderer()->CameraPos));
+	RAPI_LOG(Log, "On D KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetRenderer()->GetCameraPosition()));
 	if (Pressed)
 	{
 		Owner->MoveCamera(OVec3(1, 0, 0));
 	}
 }
 
-void ORendererInputHandler::OnQKeyToggled(bool Pressed)
+void ORendererInputHandler::OnAKeyToggled(bool Pressed)
 {
-	RAPI_LOG(Log, "On Q KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetRenderer()->CameraPos));
+	RAPI_LOG(Log, "On A KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetRenderer()->GetCameraPosition()));
 	if (Pressed)
 	{
 		Owner->MoveCamera(OVec3(-1, 0, 0));
+	}
+}
+
+void ORendererInputHandler::OnEKeyToggled(bool Pressed)
+{
+	RAPI_LOG(Log, "On E KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetRenderer()->GetCameraPosition()));
+	if (Pressed)
+	{
+		Owner->MoveCamera(OVec3(0, 1, 0));
+	}
+}
+
+void ORendererInputHandler::OnQKeyToggled(bool Pressed)
+{
+	RAPI_LOG(Log, "On Q KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetRenderer()->GetCameraPosition()));
+	if (Pressed)
+	{
+		Owner->MoveCamera(OVec3(0, -1, 0));
 	}
 }
 

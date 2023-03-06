@@ -53,14 +53,14 @@ add_executable(exec
         Test/Particle/Particle.cpp
         Test/Particle/TestParticles.cpp
         Test/TestSimpleSolarSystem.cpp
-        Renderer/Vertex/VertexArrayElem.cpp
+        Renderer/Vertex/VertexArrayElements/VertexArrayElem.cpp
         Renderer/Vertex/VertexArray.cpp
 
         Utils/Delegate/MulticastDelegate.hpp
         Utils/Types/Vector.hpp
         Utils/Threads/ThreadPool/ThreadPool.cpp
         Utils/Threads/HierarchicalMutex/HierarchicalMutex.cpp
-        Utils/Checks/Exception.hpp Utils/Logging/Log.hpp Models/Sphere.cpp Models/Sphere.hpp Models/Sphere.hpp Utils/Logging/Printer.hpp Models/Torus.cpp Models/Torus.hpp Models/Model.hpp Models/Model.cpp)
+        Utils/Checks/Exception.hpp Utils/Logging/Log.hpp Models/Sphere.cpp Models/Sphere.hpp Models/Sphere.hpp Utils/Logging/Printer.hpp Models/Torus.cpp Models/Torus.hpp Models/Model.hpp Models/Model.cpp Renderer/Camera/Camera.cpp Renderer/Camera/Camera.hpp)
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
 set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)
 set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)

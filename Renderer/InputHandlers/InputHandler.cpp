@@ -52,9 +52,14 @@ void OInputHandler::WindowReshapeCallback(GLFWwindow* window,
 {
 	if (!window)
 		return;
+
 	glViewport(0, 0, newWidth, newHeight);
 
-	ORenderer::Aspect = static_cast<float>(newWidth / newHeight);
+	if (newHeight != 0)
+	{
+		ORenderer::Aspect = static_cast<float>(newWidth / newHeight);
+	}
+
 	ORenderer::ScreenWidth = newWidth;
 	ORenderer::ScreenHeight = newHeight;
 	ORenderer::PMat = glm::perspective(ORenderer::Fovy, ORenderer::Aspect, 0.1F, 1000.F);
@@ -63,10 +68,10 @@ void OInputHandler::WindowReshapeCallback(GLFWwindow* window,
 void OInputHandler::CursorWheelInputCallback(GLFWwindow* /*window*/, double /*XOffset*/,
                                              double YOffset)
 {
-	ORenderer::CameraPos.z -= YOffset;
+	ORenderer::Get()->MoveCamera({ 0, 0, YOffset });
 	if (DEBUG_MOUSE_WHEEL)
 	{
-		std::cout << glm::to_string(ORenderer::CameraPos) << std::endl;
+		std::cout << glm::to_string(ORenderer::Get()->GetCameraPosition()) << std::endl;
 	}
 }
 
@@ -99,9 +104,9 @@ void OInputHandler::MouseCursorMoveCallback(GLFWwindow* /*Window*/, double XPos,
 		auto pos = OVec2(XPos, YPos);
 		auto delta = (ORenderer::PressedMousePos - pos);
 
-		ORenderer::VMat = glm::rotate(
-		    ORenderer::VMat, glm::length(delta) / ORenderer::MRSDivideFactor, OVec3(delta.y, delta.x, 0)); // inverted
-
+		// TODO Rot camera appropriately
+		// ORenderer::CameraPos = glm::rotate(
+		//    ORenderer::CameraPos, glm::length(delta) / ORenderer::MRSDivideFactor, OVec3(delta.y, delta.x, 0)); // inverted
 		ORenderer::PressedMousePos = pos;
 		if (DEBUG_MOUSE_POS)
 		{
@@ -147,7 +152,7 @@ void OInputHandler::KeyboardInputReleased(GLFWwindow* /*window*/, EKeys key,
 }
 void OInputHandler::MoveCamera(const OVec3& Dir)
 {
-	Renderer->MoveCameraByInput(Dir);
+	Renderer->MoveCamera(Dir);
 }
 
 } // namespace RenderAPI

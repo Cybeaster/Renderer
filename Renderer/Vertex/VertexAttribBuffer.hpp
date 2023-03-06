@@ -25,8 +25,8 @@ public:
 		return *this;
 	}
 
-	explicit OVertexAttribBuffer(const SVertexContext& Context);
-	explicit OVertexAttribBuffer(SVertexContext&& Context) noexcept;
+	OVertexAttribBuffer(const SVertexContext& Context);
+	OVertexAttribBuffer(SVertexContext&& Context) noexcept;
 
 	void EnableVertexAttribPointer();
 	void BindBuffer();

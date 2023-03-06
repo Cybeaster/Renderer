@@ -1,4 +1,5 @@
 #pragma once
+#include "Camera/Camera.hpp"
 #include "Checks/Assert.hpp"
 #include "InputHandlers/InputHandler.hpp"
 #include "Math.hpp"
@@ -25,7 +26,7 @@ class ORenderer
 public:
 	~ORenderer();
 
-	static auto GetRenderer()
+	static auto Get()
 	{
 		if (!SingletonRenderer)
 		{
@@ -73,15 +74,19 @@ public:
 	SBufferHandle AddBuffer(SBufferContext&& Context);
 
 	void BindBuffer(const SBufferHandle& Handle);
-	void TranslateCameraLocation(const glm::mat4& Transform);
 
+	void TranslateCameraLocation(const glm::mat4& Transform);
 	void LookAtCamera(const OVec3& Position);
 
 	void Init();
 	void PostInit();
 
 	void MoveCamera(const OVec3& Delta);
-	void MoveCameraByInput(const OVec3& Dir) const;
+
+	const OVec3& GetCameraPosition() const
+	{
+		return Camera.GetPosition();
+	}
 
 	FORCEINLINE GLFWwindow* GetWindowContext() const
 	{
@@ -96,7 +101,6 @@ public:
 	static float LastFrame;
 	static float CurrentFrame;
 	static float Fovy;
-	static OVec3 CameraPos;
 
 	static OMat4 VMat;
 	static OMat4 PMat;
@@ -119,15 +123,17 @@ private:
 	void CalcScene();
 	void SetInput();
 
-	Thread::OThreadPool RendererThreadPool;
-
 	float InputStepOffset = 0.1F;
+
+	OCamera Camera;
+
+	Thread::OThreadPool RendererThreadPool;
 
 	OVertexArray VertexArray;
 	OInputHandler InputHandler{ this };
-
 	GLFWwindow* Window;
 	OTVector<Test::OTest*> Tests;
+
 	static inline OTSharedPtr<ORenderer> SingletonRenderer = nullptr;
 };
 

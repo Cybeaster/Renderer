@@ -77,9 +77,13 @@ private:
 	};
 
 	RenderAPI::OTorus Torus{ 48 };
+
 	SBufferAttribVertexHandle VerticesTorusHandle;
-	SDrawVertexHandle TexturesTorusHandle;
+	SBufferAttribVertexHandle TexturesTorusHandle;
+
 	SBufferHandle IndicesTorusHandle;
+	SBufferHandle NormalsTorusHandle;
+
 
 	RenderAPI::OSphere Sphere{ 48 };
 	SBufferAttribVertexHandle VerticesSphereHandle;
@@ -88,7 +92,7 @@ private:
 
 	SBufferAttribVertexHandle pyramidHandle;
 	SDrawVertexHandle textureHandle;
-	OTexture Texture;
+	OTexture WallTexture;
 	OTexture EarthTexture;
 };
 

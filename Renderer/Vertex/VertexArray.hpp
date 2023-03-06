@@ -1,8 +1,8 @@
 #pragma once
 #include "Hash.hpp"
+#include "Renderer/Vertex/VertexArrayElements/VertexArrayElem.hpp"
 #include "SimpleVertexHandle.hpp"
 #include "Vector.hpp"
-#include "VertexArrayElem.hpp"
 #include "VertexAttribBuffer.hpp"
 #include "VertexData/DrawContext.hpp"
 #include "VertexData/VertexContext.hpp"

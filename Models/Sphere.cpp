@@ -9,15 +9,6 @@ void OSphere::Init(int32 Precision) noexcept
 	// Because the whole sphere has to be "closed";
 	const auto incPrecision = Precision + 1;
 
-	auto squaredPrecision = Precision * Precision;
-	NumVertices = squaredPrecision + 2 * Precision + 1;
-	NumIndices = squaredPrecision * 6;
-
-	Vertices.resize(NumVertices);
-	TexCoords.resize(NumVertices);
-	Normals.resize(NumVertices);
-	Indices.resize(NumIndices);
-
 	for (size_t sliceIndex = 0; sliceIndex <= Precision; ++sliceIndex)
 	{
 		for (int vertexIndex = 0; vertexIndex < Precision; ++vertexIndex)
@@ -49,6 +40,24 @@ void OSphere::Init(int32 Precision) noexcept
 			Indices[6 * (sliceIdx * Precision + vertexIdx) + 4] = (sliceIdx + 1) * incPrecision + vertexIdx + 1; // 5th index is the up right corner
 			Indices[6 * (sliceIdx * Precision + vertexIdx) + 5] = (sliceIdx + 1) * incPrecision + vertexIdx; // 3rd and 6th are the same
 		}
+	}
+}
+void OSphere::GetVertexTextureNormalPositions(SModelContext& OutContext)
+{
+	const auto indices = GetNumIndices();
+
+	for (int idx = 0; idx < indices; ++idx)
+	{
+		OutContext.VertexCoords.push_back(Vertices[Indices[idx]].x);
+		OutContext.VertexCoords.push_back(Vertices[Indices[idx]].y);
+		OutContext.VertexCoords.push_back(Vertices[Indices[idx]].z);
+
+		OutContext.TextureCoords.push_back(TexCoords[Indices[idx]].s);
+		OutContext.TextureCoords.push_back(TexCoords[Indices[idx]].t);
+
+		OutContext.NormalsCoords.push_back(Normals[Indices[idx]].x);
+		OutContext.NormalsCoords.push_back(Normals[Indices[idx]].y);
+		OutContext.NormalsCoords.push_back(Normals[Indices[idx]].z);
 	}
 }
 

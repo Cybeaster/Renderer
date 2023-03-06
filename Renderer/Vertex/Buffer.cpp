@@ -29,9 +29,9 @@ OBuffer::~OBuffer()
 
 void OBuffer::Bind() const
 {
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, BufferID));
+	GLCall(glBindBuffer(BufferType, BufferID));
 }
 void OBuffer::Unbind() const
 {
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	GLCall(glBindBuffer(BufferType, 0));
 }

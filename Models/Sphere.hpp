@@ -13,12 +13,25 @@ namespace RenderAPI
 
 class OSphere final : public OModel
 {
+	using Super = OModel;
+
 public:
+	OSphere()
+	{
+		PreInit(DefaultPrecision);
+		Init(DefaultPrecision);
+	}
+
 	explicit OSphere(uint32 Precision)
-	    : OModel(Precision) {}
+	    : OModel(Precision)
+	{
+		PreInit(Precision);
+		Init(Precision);
+	}
 
 	void Init(int32) noexcept override;
-	
+	void GetVertexTextureNormalPositions(SModelContext& OutContext) override;
+
 private:
 };
 

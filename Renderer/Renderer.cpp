@@ -18,7 +18,6 @@ float ORenderer::DeltaTime{ 0 };
 float ORenderer::LastFrame{ 0 };
 float ORenderer::CurrentFrame{ 0 };
 float ORenderer::Fovy{ 1.0472F };
-OVec3 ORenderer::CameraPos{ 0.F, 0.F, 3.F };
 
 OMat4 ORenderer::VMat{};
 OMat4 ORenderer::PMat{};
@@ -87,12 +86,7 @@ ORenderer::GLFWInit()
 
 void ORenderer::MoveCamera(const OVec3& Delta)
 {
-	CameraPos += Delta;
-}
-
-void ORenderer::MoveCameraByInput(const OVec3& Dir) const
-{
-	CameraPos += glm::normalize(Dir) * InputStepOffset;
+	Camera.Translate(Delta);
 }
 
 void ORenderer::GLFWRendererStart(const float currentTime)
@@ -107,7 +101,7 @@ void ORenderer::GLFWRendererStart(const float currentTime)
 void ORenderer::CalcScene()
 {
 	PMat = glm::perspective(1.0472f, Aspect, 0.01f, 1000.F);
-	VMat = MouseCameraRotation * glm::translate(OMat4(1.0f), CameraPos * -1.F);
+	VMat = MouseCameraRotation * glm::translate(OMat4(1.0f), GetCameraPosition() * -1.F);
 }
 
 void ORenderer::GLFWRendererEnd()
@@ -124,7 +118,7 @@ void ORenderer::GLFWRenderTickStart()
 		GLFWRendererStart(glfwGetTime());
 		for (auto* const test : Tests)
 			if (test)
-				test->OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
+				test->OnUpdate(DeltaTime, Aspect, GetCameraPosition(), PMat, VMat);
 		GLFWRendererEnd();
 	}
 }
@@ -141,7 +135,8 @@ void ORenderer::GLFWCalcPerspective(GLFWwindow* window)
 	glfwGetFramebufferSize(window, &ScreenWidth, &ScreenHeight);
 	Aspect = static_cast<float>(ScreenWidth / ScreenHeight);
 	PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.F);
-	VMat = glm::translate(OMat4(1.0f), CameraPos * -1.F);
+
+	VMat = glm::lookAt(GetCameraPosition() * -1.F, GetCameraPosition(), { 0, 1, 0 });
 }
 
 void ORenderer::TranslateCameraLocation(const glm::mat4& Transform)
@@ -151,7 +146,7 @@ void ORenderer::TranslateCameraLocation(const glm::mat4& Transform)
 
 void ORenderer::LookAtCamera(const OVec3& Position)
 {
-	// CameraPos *= glm::lookAt(CameraPos,Position,OVec3(0,0,1));
+	glm::lookAt(GetCameraPosition(), Position, OVec3(0, 0, 1));
 }
 
 #pragma endregion GLFW
