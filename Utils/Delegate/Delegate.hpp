@@ -56,7 +56,7 @@ public:
 #pragma region SP
 
 	template<typename ObjectType, typename... PayloadTypes>
-	DELEGATE_NODISCARD static ODelegate CreateSP(OTSharedPtr<ObjectType> ObjectArg, TNonConstMemberFunc<ObjectType, PayloadTypes...> Function, PayloadTypes&&... Args2)
+	DELEGATE_NODISCARD static ODelegate CreateSP(OSharedPtr<ObjectType> ObjectArg, TNonConstMemberFunc<ObjectType, PayloadTypes...> Function, PayloadTypes&&... Args2)
 	{
 		ODelegate delegate;
 		delegate.Bind<OTSPDelegate<false, ObjectType, RetValueType(ArgTypes...), PayloadTypes...>>(ObjectArg, Function, Forward<PayloadTypes>(Args2)...);
@@ -64,7 +64,7 @@ public:
 	}
 
 	template<typename ObjectType, typename... PayloadTypes>
-	DELEGATE_NODISCARD static ODelegate CreateSP(OTSharedPtr<ObjectType> ObjectArg, TConstMemberFunc<ObjectType, PayloadTypes...> Function, PayloadTypes&&... Args2)
+	DELEGATE_NODISCARD static ODelegate CreateSP(OSharedPtr<ObjectType> ObjectArg, TConstMemberFunc<ObjectType, PayloadTypes...> Function, PayloadTypes&&... Args2)
 	{
 		ODelegate delegate;
 		delegate.Bind<OTSPDelegate<true, ObjectType, RetValueType(ArgTypes...), PayloadTypes...>>(ObjectArg, Function, Forward<PayloadTypes>(Args2)...);
@@ -106,13 +106,13 @@ public:
 	}
 
 	template<class ObjectType, typename... Payload>
-	void BindSP(OTSharedPtr<ObjectType> Object, TConstMemberFunc<ObjectType, Payload...> Function, Payload&&... Args2)
+	void BindSP(OSharedPtr<ObjectType> Object, TConstMemberFunc<ObjectType, Payload...> Function, Payload&&... Args2)
 	{
 		*this = CreateSP(Object, Function, Forward<Payload>(Args2)...);
 	}
 
 	template<class ObjectType, typename... Payload>
-	void BindSP(OTSharedPtr<ObjectType> Object, TNonConstMemberFunc<ObjectType, Payload...> Function, Payload&&... Args2)
+	void BindSP(OSharedPtr<ObjectType> Object, TNonConstMemberFunc<ObjectType, Payload...> Function, Payload&&... Args2)
 	{
 		*this = CreateSP(Object, Function, Forward<Payload>(Args2)...);
 	}

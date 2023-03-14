@@ -57,7 +57,7 @@ public:
 	}
 
 	template<typename ObjectType, typename FunctionType, typename... ArgTypes>
-	void AddSharedListener(OTSharedPtr<ObjectType> Object, FunctionType Function, EKeys Key)
+	void AddSharedListener(OSharedPtr<ObjectType> Object, FunctionType Function, EKeys Key)
 	{
 		if (Object != nullptr)
 		{

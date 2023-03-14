@@ -25,12 +25,12 @@ FORCEINLINE auto MakeShared(Type* Arg)
 }
 
 template<typename T>
-using OTWeakPtr = std::weak_ptr<T>;
+using OWeakPtr = std::weak_ptr<T>;
 
 template<typename T>
-using OTSharedPtr = std::shared_ptr<T>;
+using OSharedPtr = std::shared_ptr<T>;
 
 template<typename T>
-using OTUniquePtr = std::unique_ptr<T>;
+using OUniquePtr = std::unique_ptr<T>;
 
 } // namespace RenderAPI

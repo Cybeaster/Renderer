@@ -8,12 +8,16 @@ namespace RenderAPI
 {
 void OCamera::SetPosition(const OVec3& Arg)
 {
+	OMutexGuard guard(TargetMutex);
+
 	CameraPosition = Arg;
 	UpdateCameraDirection();
 }
 
 void OCamera::SetTarget(const OVec3& Arg)
 {
+	OMutexGuard guard(TargetMutex);
+
 	CameraTarget = Arg;
 	UpdateCameraDirection();
 }
@@ -26,6 +30,8 @@ void OCamera::UpdateCameraDirection()
 }
 void OCamera::Rotate(float XOffset, float YOffset)
 {
+	OMutexGuard guard(RotateMutex);
+
 	XOffset *= Sensitivity;
 	YOffset *= Sensitivity;
 
@@ -51,7 +57,10 @@ void OCamera::Rotate(float XOffset, float YOffset)
 
 void OCamera::Translate(const OVec3& Delta)
 {
+	OMutexGuard guard(TargetMutex);
+
 	CameraPosition += FrontVector * Delta;
+	UpdateCameraDirection();
 }
 
 } // namespace RenderAPI

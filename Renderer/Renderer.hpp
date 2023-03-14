@@ -30,7 +30,7 @@ public:
 	{
 		if (!SingletonRenderer)
 		{
-			SingletonRenderer = OTSharedPtr<ORenderer>(new ORenderer());
+			SingletonRenderer = OSharedPtr<ORenderer>(new ORenderer());
 			return SingletonRenderer;
 		}
 
@@ -127,14 +127,14 @@ private:
 
 	OCamera Camera;
 
-	Thread::OThreadPool RendererThreadPool;
+	Async::OThreadPool RendererThreadPool;
 
 	OVertexArray VertexArray;
 	OInputHandler InputHandler{ this };
 	GLFWwindow* Window;
 	OTVector<Test::OTest*> Tests;
 
-	static inline OTSharedPtr<ORenderer> SingletonRenderer = nullptr;
+	static inline OSharedPtr<ORenderer> SingletonRenderer = nullptr;
 };
 
 } // namespace RenderAPI

@@ -56,11 +56,32 @@ add_executable(exec
         Renderer/Vertex/VertexArrayElements/VertexArrayElem.cpp
         Renderer/Vertex/VertexArray.cpp
 
+
         Utils/Delegate/MulticastDelegate.hpp
         Utils/Types/Vector.hpp
+        Utils/Types/Queue.hpp
         Utils/Threads/ThreadPool/ThreadPool.cpp
         Utils/Threads/HierarchicalMutex/HierarchicalMutex.cpp
-        Utils/Checks/Exception.hpp Utils/Logging/Log.hpp Models/Sphere.cpp Models/Sphere.hpp Models/Sphere.hpp Utils/Logging/Printer.hpp Models/Torus.cpp Models/Torus.hpp Models/Model.hpp Models/Model.cpp Renderer/Camera/Camera.cpp Renderer/Camera/Camera.hpp)
+        Utils/Checks/Exception.hpp
+        Utils/Logging/Log.hpp
+        Models/Sphere.cpp
+        Models/Sphere.hpp
+        Models/Sphere.hpp
+        Utils/Logging/Printer.hpp
+        Models/Torus.cpp
+        Models/Torus.hpp
+        Models/Model.hpp
+        Models/Model.cpp
+        Renderer/Camera/Camera.cpp Renderer/Camera/Camera.hpp
+        Utils/Threads/Tests/ThreadTests.cpp
+        Utils/Threads/Tests/ThreadTests.hpp
+        Utils/Threads/Tests/Clocks.hpp
+        Utils/Alogs/QuickSort.hpp
+        Utils/Types/List.hpp
+        Utils/Threads/Async.hpp
+        Utils/UnitTests/TestGroup.cpp
+        Utils/UnitTests/TestGroup.hpp
+        Utils/Types/Stack.hpp)
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
 set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)
 set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
@@ -68,7 +89,6 @@ set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
 set(GLFW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glfw3.dll)
 set(GLEW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew64.dll)
 set(GLEW32_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew32.dll)
-
 target_link_libraries(
         exec
         PRIVATE
@@ -76,4 +96,6 @@ target_link_libraries(
         ${OPENGL_LIBRARY}
         ${GLEW_LIB}
         ${SOIL_LIB}
+
+
 )

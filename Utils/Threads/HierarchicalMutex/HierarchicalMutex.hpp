@@ -4,7 +4,7 @@
 
 namespace RenderAPI
 {
-namespace Thread
+namespace Async
 {
 class HierarchicalMutex
 {
@@ -28,6 +28,6 @@ private:
 	static thread_local uint64 ThreadHierarchyValue;
 	OMutex InternalMutex;
 };
-} // namespace Thread
+} // namespace Async
 
 } // namespace RenderAPI

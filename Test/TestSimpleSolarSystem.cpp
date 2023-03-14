@@ -59,7 +59,7 @@ void OTestSimpleSolarSystem::OnUpdate(
 	// GetMVStack().pop();
 }
 
-OTestSimpleSolarSystem::OTestSimpleSolarSystem(OPath shaderPath, OTSharedPtr<RenderAPI::ORenderer> Renderer)
+OTestSimpleSolarSystem::OTestSimpleSolarSystem(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
     : OTest(shaderPath, Renderer)
 {
 	// auto size = sizeof(cubePositions);

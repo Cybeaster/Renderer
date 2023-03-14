@@ -175,13 +175,13 @@ public:
 	}
 
 	template<typename ObjectType, typename... Args2>
-	SDelegateHandle AddSP(OTSharedPtr<ObjectType> Object, TNonConstMemberFunc<ObjectType, Args2...> Function, Args2&&... Args)
+	SDelegateHandle AddSP(OSharedPtr<ObjectType> Object, TNonConstMemberFunc<ObjectType, Args2...> Function, Args2&&... Args)
 	{
 		return Add(DelegateType::CreateSP(Object, Function, Forward<Args2>(Args)...));
 	}
 
 	template<typename ObjectType, typename... Args2>
-	SDelegateHandle AddRaw(OTSharedPtr<ObjectType> Object, TConstMemberFunc<ObjectType, Args2...> Function, Args2&&... Args)
+	SDelegateHandle AddRaw(OSharedPtr<ObjectType> Object, TConstMemberFunc<ObjectType, Args2...> Function, Args2&&... Args)
 	{
 		return Add(DelegateType::CreateSP(Object, Function, Forward<Args2>(Args)...));
 	}

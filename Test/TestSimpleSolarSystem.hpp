@@ -15,7 +15,7 @@ class OTestSimpleSolarSystem : public OTest
 public:
 	~OTestSimpleSolarSystem() override = default;
 	OTestSimpleSolarSystem() = default;
-	OTestSimpleSolarSystem(OPath shaderPath, OTSharedPtr<RenderAPI::ORenderer> Renderer);
+	OTestSimpleSolarSystem(OPath shaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
 
 	void OnUpdate(
 	    const float& DeltaTime,

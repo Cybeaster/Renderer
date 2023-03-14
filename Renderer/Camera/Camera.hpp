@@ -5,6 +5,7 @@
 #ifndef RENDERAPI_CAMERA_HPP
 #define RENDERAPI_CAMERA_HPP
 #include "Math.hpp"
+#include "Thread.hpp"
 #include "Types.hpp"
 namespace RenderAPI
 {
@@ -28,6 +29,9 @@ public:
 private:
 	void UpdateCameraDirection();
 
+	OMutex TargetMutex;
+	OMutex RotateMutex;
+
 	float Sensitivity = 1.F;
 
 	OVec3 CameraPosition;
@@ -42,6 +46,8 @@ private:
 
 	float Yaw{ 0 };
 	float Pitch{ 0 };
+
+
 };
 
 } // namespace RenderAPI

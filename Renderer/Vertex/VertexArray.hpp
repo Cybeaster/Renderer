@@ -80,7 +80,7 @@ private:
 
 	OTHashMap<SDrawVertexHandle, OVertexArrayElem, STSimpleHandleHash<SDrawVertexHandle>> VertexElements;
 	OTHashMap<SBufferAttribVertexHandle, OVertexAttribBuffer, STSimpleHandleHash<SBufferAttribVertexHandle>> VertexAttribBuffers;
-	OTHashMap<SBufferHandle, OTSharedPtr<OBuffer>, STSimpleHandleHash<SBufferHandle>> BufferStorage;
+	OTHashMap<SBufferHandle, OSharedPtr<OBuffer>, STSimpleHandleHash<SBufferHandle>> BufferStorage;
 
 	OTVector<STSimpleVertexIndex> VertexIndicesArray;
 };

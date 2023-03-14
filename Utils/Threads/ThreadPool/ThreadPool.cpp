@@ -1,6 +1,6 @@
 #include "ThreadPool.hpp"
 
-namespace RenderAPI::Thread
+namespace RenderAPI::Async
 {
 OThreadPool::OThreadPool(uint32 NumOfThreads)
 {
@@ -79,4 +79,4 @@ void OThreadPool::CreateThread(JoiningThread&& Thread)
 {
 	Threads.push_back(std::move(Thread));
 }
-} // namespace RenderAPI::Thread
+} // namespace RenderAPI::Async

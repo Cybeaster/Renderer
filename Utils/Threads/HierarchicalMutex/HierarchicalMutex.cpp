@@ -4,7 +4,7 @@
 
 namespace RenderAPI
 {
-namespace Thread
+namespace Async
 {
 thread_local uint64 HierarchicalMutex::ThreadHierarchyValue(ULONG_MAX);
 
@@ -57,6 +57,6 @@ bool HierarchicalMutex::TryLock()
 	return false;
 }
 
-} // namespace Thread
+} // namespace Async
 
 } // namespace RenderAPI

@@ -7,8 +7,6 @@
 
 namespace RenderAPI
 {
-class ORenderer;
-}
 
 struct SShaderName
 {
@@ -60,7 +58,7 @@ public:
 	{
 		if (!Application)
 		{
-			Application = RenderAPI::OTSharedPtr<OApplication>(new OApplication());
+			Application = RenderAPI::OSharedPtr<OApplication>(new OApplication());
 			return Application;
 		}
 
@@ -86,8 +84,10 @@ public:
 
 private:
 	OApplication() = default;
+	void ParseInput(int argc, char** argv);
+	void StartProgram();
 
-	static inline RenderAPI::OTSharedPtr<OApplication> Application = nullptr;
+	static inline RenderAPI::OSharedPtr<OApplication> Application = nullptr;
 
 	static inline OPath DebugPath = current_path();
 	static inline OPath RootDirPath = current_path();
@@ -98,3 +98,4 @@ private:
 	static inline SShaderName SimpleCubeShader = "\\SimpleCube.shader";
 	static inline SShaderName SimpleTextureShader = "\\SimpleTexture.shader";
 };
+} // namespace RenderAPI

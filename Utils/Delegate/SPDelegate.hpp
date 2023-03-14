@@ -18,12 +18,12 @@ class OTSPDelegate<IsConst, ObjectType, RetType(Args...), Args2...> : public OID
 public:
 	using TSPDelegateFunction = typename STMemberFunctionType<IsConst, ObjectType, RetType, Args..., Args2...>::Type;
 
-	OTSPDelegate(OTWeakPtr<ObjectType> ObjectArg, TSPDelegateFunction FunctionArg, Args2&&... Arguments)
+	OTSPDelegate(OWeakPtr<ObjectType> ObjectArg, TSPDelegateFunction FunctionArg, Args2&&... Arguments)
 	    : Object(ObjectArg), Function(FunctionArg), Payload(Arguments...)
 	{
 	}
 
-	OTSPDelegate(OTSharedPtr<ObjectType> ObjectArg, TSPDelegateFunction FunctionArg, OTuple<Args2...> Arguments)
+	OTSPDelegate(OSharedPtr<ObjectType> ObjectArg, TSPDelegateFunction FunctionArg, OTuple<Args2...> Arguments)
 	    : Object(ObjectArg), Function(FunctionArg), Payload(Arguments)
 	{
 	}
@@ -42,16 +42,15 @@ private:
 	template<size_t... Indices>
 	RetType ExecuteImpl(Args&&... Arguments, TIndexSequenceWrapper<Indices...>)
 	{
-		if(Object.expired())
+		if (Object.expired())
 		{
 			return RetType();
 		}
-		
+
 		auto lockedObject = Object.lock();
 		return (lockedObject.get()->*Function)(Forward(Arguments)..., (Payload.template Get<Indices>())...);
-		
 	}
-	OTWeakPtr<ObjectType> Object;
+	OWeakPtr<ObjectType> Object;
 	TSPDelegateFunction Function;
 	OTuple<Args2...> Payload;
 };

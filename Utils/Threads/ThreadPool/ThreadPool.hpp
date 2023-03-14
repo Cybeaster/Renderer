@@ -12,7 +12,7 @@
 #include <ThreadSafeQueue.hpp>
 #include <functional>
 
-namespace RenderAPI::Thread
+namespace RenderAPI::Async
 {
 struct STaskID
 {
@@ -68,4 +68,4 @@ private:
 	OAtomic<bool> Quite = false;
 	OAtomic<int64> LastID{ 0 };
 };
-} // namespace RenderAPI::Thread
+} // namespace RenderAPI::Async
