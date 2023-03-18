@@ -1,7 +1,7 @@
 #pragma once
-#include "Hash.hpp"
 #include "Renderer/Vertex/VertexArrayElements/VertexArrayElem.hpp"
 #include "SimpleVertexHandle.hpp"
+#include "Utils/Types/HashMap/Hash.hpp"
 #include "Vector.hpp"
 #include "VertexAttribBuffer.hpp"
 #include "VertexData/DrawContext.hpp"
@@ -78,11 +78,11 @@ private:
 	static inline uint64 AttribBuffersCounter = 0;
 	static inline uint64 BufferCounter = 0;
 
-	OTHashMap<SDrawVertexHandle, OVertexArrayElem, STSimpleHandleHash<SDrawVertexHandle>> VertexElements;
-	OTHashMap<SBufferAttribVertexHandle, OVertexAttribBuffer, STSimpleHandleHash<SBufferAttribVertexHandle>> VertexAttribBuffers;
-	OTHashMap<SBufferHandle, OSharedPtr<OBuffer>, STSimpleHandleHash<SBufferHandle>> BufferStorage;
+	OHashMap<SDrawVertexHandle, OVertexArrayElem, STSimpleHandleHash<SDrawVertexHandle>> VertexElements;
+	OHashMap<SBufferAttribVertexHandle, OVertexAttribBuffer, STSimpleHandleHash<SBufferAttribVertexHandle>> VertexAttribBuffers;
+	OHashMap<SBufferHandle, OSharedPtr<OBuffer>, STSimpleHandleHash<SBufferHandle>> BufferStorage;
 
-	OTVector<STSimpleVertexIndex> VertexIndicesArray;
+	OVector<STSimpleVertexIndex> VertexIndicesArray;
 };
 
 }; // namespace RenderAPI

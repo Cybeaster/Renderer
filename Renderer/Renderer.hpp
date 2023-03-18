@@ -47,7 +47,7 @@ public:
 
 	void AddTest(Test::OTest* testPtr);
 
-	inline OTVector<Test::OTest*>& GetTests()
+	inline OVector<Test::OTest*>& GetTests()
 	{
 		return Tests;
 	}
@@ -132,7 +132,7 @@ private:
 	OVertexArray VertexArray;
 	OInputHandler InputHandler{ this };
 	GLFWwindow* Window;
-	OTVector<Test::OTest*> Tests;
+	OVector<Test::OTest*> Tests;
 
 	static inline OSharedPtr<ORenderer> SingletonRenderer = nullptr;
 };

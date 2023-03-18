@@ -1,70 +1,171 @@
-#include "../Queue.hpp"
-#include "../SmartPtr.hpp"
-#include "../Thread.hpp"
-
 #pragma once
+#include "SmartPtr.hpp"
+#include "Thread.hpp"
 
 namespace RenderAPI
 {
+
+/**
+ * @brief Well grained queue allowing thread-safe operations*/
 template<typename T>
 class OThreadSafeQueue
 {
-public:
-	OThreadSafeQueue(const OThreadSafeQueue& Queue)
+	struct SNode
 	{
-		OMutexGuard guard(Mutex);
-		InternalQueue = Queue.InternalQueue;
-	}
-	~OThreadSafeQueue();
+		OSharedPtr<T> Data;
+		OUniquePtr<T> Next;
+	};
 
-	void Push(T Value);
+public:
+	OThreadSafeQueue()
+	    : Head(new SNode), Tail(Head.get()) {}
 
-	void Pop(T& Value);
-	OSharedPtr<T> Pop();
+	OThreadSafeQueue(const OThreadSafeQueue& Other) = delete;
+	OThreadSafeQueue& operator=(const OThreadSafeQueue& Other) = delete;
 
-	bool Empty();
+	OSharedPtr<T> TryPop();
+
+	bool TryPop(T& Value);
+
+	template<typename Arg>
+	void Push(Arg&& Value);
+
+	void WaitAndPop(T& Argument);
+	OSharedPtr<T> WaitAndPop();
+
+	bool IsEmpty();
 
 private:
-	mutable OMutex Mutex;
-	OQueue<T> InternalQueue;
-	OConditionVariable PushCondition;
+	SNode* GetTail();
+	OUniquePtr<SNode> PopHead();
+
+	/**@note Returns the same lock to ensure that the same one is held. */
+	OUniqueMutexLock WaitForData();
+
+	OUniquePtr<SNode> WaitPopHead();
+	OUniquePtr<SNode> WaitPopHead(T& Value);
+
+	OUniquePtr<SNode> TryPopHead();
+	OUniquePtr<SNode> TryPopHead(T& Value);
+
+	OUniquePtr<SNode> Head;
+	SNode* Tail;
+	OMutex HeadMutex;
+	OMutex TailMutex;
+	OConditionVariable DataCondition;
 };
 
 template<typename T>
-void OThreadSafeQueue<T>::Push(T Value)
+bool OThreadSafeQueue<T>::IsEmpty()
 {
-	OMutexGuard guard(Mutex);
-	InternalQueue.push(Value);
-	PushCondition.notify_one();
+	OMutexGuard lock(HeadMutex);
+	return Head.get() == Tail;
 }
 
 template<typename T>
-void OThreadSafeQueue<T>::Pop(T& Value)
+OUniquePtr<typename OThreadSafeQueue<T>::SNode> OThreadSafeQueue<T>::WaitPopHead()
 {
-	OUniqueLock lock(Mutex);
-	PushCondition.wait(lock, [this]()
-	                   { return !InternalQueue.empty(); });
-
-	Value = InternalQueue.front();
-	InternalQueue.pop();
+	OUniqueMutexLock lock(WaitForData());
+	return PopHead();
 }
 
 template<typename T>
-OSharedPtr<T> OThreadSafeQueue<T>::Pop()
+OUniquePtr<typename OThreadSafeQueue<T>::SNode> OThreadSafeQueue<T>::WaitPopHead(T& Value)
 {
-	OUniqueLock lock(Mutex);
-	PushCondition.wait(lock, [this]()
-	                   { return !InternalQueue.empty(); });
-	OSharedPtr<T> result(MakeShared(InternalQueue.front()));
-	InternalQueue.pop();
-	return result;
+	OUniqueMutexLock(WaitForData());
+	Value = Move(*Head->Data);
+	return PopHead();
 }
 
 template<typename T>
-bool OThreadSafeQueue<T>::Empty()
+OUniqueMutexLock OThreadSafeQueue<T>::WaitForData()
 {
-	OMutexGuard guard(Mutex);
-	return InternalQueue.empty();
+	OUniqueMutexLock headLock(HeadMutex);
+	DataCondition.wait(headLock, [&]
+	                   { Head.get() != GetTail(); });
+	return Move(headLock);
+}
+
+template<typename T>
+OSharedPtr<T> OThreadSafeQueue<T>::TryPop()
+{
+	OUniquePtr<SNode> oldHead = PopHead();
+	return oldHead ? oldHead->Data : nullptr;
+}
+
+template<typename T>
+typename OThreadSafeQueue<T>::SNode* OThreadSafeQueue<T>::GetTail()
+{
+	OMutexGuard lock(TailMutex);
+	return Tail;
+}
+
+template<typename T>
+OUniquePtr<typename OThreadSafeQueue<T>::SNode> OThreadSafeQueue<T>::PopHead()
+{
+	OUniquePtr<SNode> oldHead = Move(Head);
+	Head = Move(oldHead->Next);
+	return oldHead;
+}
+
+template<typename T>
+template<typename Arg>
+void OThreadSafeQueue<T>::Push(Arg&& Value)
+{
+	OSharedPtr<Arg> value = MakeShared(Move(Value));
+
+	OUniquePtr<SNode> newValue(new SNode);
+	SNode* const newNode = newValue.get();
+	{
+		OMutexGuard lock(TailMutex);
+		Tail->Data = value;
+		Tail->Next = Move(newValue);
+		Tail = newNode;
+	}
+	DataCondition.notify_one();
+}
+
+template<typename T>
+OSharedPtr<T> OThreadSafeQueue<T>::WaitAndPop()
+{
+	OUniquePtr<SNode> oldHead = WaitPopHead();
+	return oldHead->Data;
+}
+
+template<typename T>
+void OThreadSafeQueue<T>::WaitAndPop(T& OutValue)
+{
+	OUniquePtr<SNode> const oldHead = WaitPopHead(OutValue);
+}
+
+template<typename T>
+OUniquePtr<typename OThreadSafeQueue<T>::SNode> OThreadSafeQueue<T>::TryPopHead()
+{
+	OMutexGuard lock(HeadMutex);
+	if (Head.get() == GetTail())
+	{
+		return {};
+	}
+	return PopHead();
+}
+
+template<typename T>
+OUniquePtr<typename OThreadSafeQueue<T>::SNode> OThreadSafeQueue<T>::TryPopHead(T& Value)
+{
+	OMutexGuard lock(HeadMutex);
+	if (Head.get() == GetTail())
+	{
+		return {};
+	}
+	Value = Move(*Head->Data);
+	return PopHead();
+}
+
+template<typename T>
+bool OThreadSafeQueue<T>::TryPop(T& Value)
+{
+	OUniquePtr<SNode> oldHead = TryPopHead(Value);
+	return oldHead;
 }
 
 } // namespace RenderAPI

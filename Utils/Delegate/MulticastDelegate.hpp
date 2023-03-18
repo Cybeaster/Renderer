@@ -210,7 +210,7 @@ private:
 
 	bool IsLocked() { return Locks > 0; }
 
-	OTVector<SDelegateHandlerPair> Events;
+	OVector<SDelegateHandlerPair> Events;
 	uint32 Locks{};
 };
 

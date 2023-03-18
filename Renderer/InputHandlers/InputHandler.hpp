@@ -1,13 +1,13 @@
 #pragma once
 #include "../Test/Test.hpp"
 #include "Delegate.hpp"
-#include "Hash.hpp"
 #include "KeyboardKeys.hpp"
 #include "RendererInputHandler.hpp"
 #include "SmartPtr.hpp"
 #include "TypeTraits.hpp"
 #include "Types.hpp"
 #include "Utils/Delegate/MulticastDelegate.hpp"
+#include "Utils/Types/HashMap/Hash.hpp"
 #include "glfw3.h"
 
 #include <Set.hpp>
@@ -81,7 +81,7 @@ private:
 	ORenderer* Renderer;
 	ORendererInputHandler RenderInputHandler{ this };
 
-	static OTHashMap<EKeys, SKeyState> KeyMap;
+	static OHashMap<EKeys, SKeyState> KeyMap;
 };
 
 } // namespace RenderAPI

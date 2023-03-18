@@ -59,7 +59,7 @@ add_executable(exec
 
         Utils/Delegate/MulticastDelegate.hpp
         Utils/Types/Vector.hpp
-        Utils/Types/Queue.hpp
+        Utils/Types/Queue/ThreadSafeQueue.hpp
         Utils/Threads/ThreadPool/ThreadPool.cpp
         Utils/Threads/HierarchicalMutex/HierarchicalMutex.cpp
         Utils/Checks/Exception.hpp
@@ -81,7 +81,7 @@ add_executable(exec
         Utils/Threads/Async.hpp
         Utils/UnitTests/TestGroup.cpp
         Utils/UnitTests/TestGroup.hpp
-        Utils/Types/Stack.hpp)
+        Utils/Types/Stack.hpp Utils/Types/Queue/Queue.hpp Utils/Types/Queue.hpp Utils/Types/HashMap/ThreadSafeHashMap.hpp Utils/Types/List/ThreadSafeList.hpp)
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
 set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)
 set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)

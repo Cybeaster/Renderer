@@ -26,7 +26,7 @@ void OThreadPool::Run()
 {
 	while (!Quite)
 	{
-		OUniqueLock uniqueLock(QueueMutex);
+		OUniqueMutexLock uniqueLock(QueueMutex);
 		QueueCV.wait(uniqueLock, [this]() -> bool
 		             { return !TaskQueue.empty() || Quite; });
 
@@ -45,14 +45,14 @@ void OThreadPool::Run()
 }
 void OThreadPool::Wait(const STaskID& ID)
 {
-	OUniqueLock lock(CompletedTaskMutex);
+	OUniqueMutexLock lock(CompletedTaskMutex);
 	// wait for notify in function run
 	CompletedTaskIdsCV.wait(lock, [this, ID]() -> bool
 	                        { return CompletedTasksIDs.find(ID) != CompletedTasksIDs.end(); });
 }
 void OThreadPool::WaitAll()
 {
-	OUniqueLock lock(QueueMutex);
+	OUniqueMutexLock lock(QueueMutex);
 	CompletedTaskIdsCV.wait(lock, [this]() -> bool
 	                        {
                                         OMutexGuard taskLock(CompletedTaskMutex);

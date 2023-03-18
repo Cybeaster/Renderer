@@ -2,4 +2,4 @@
 #include <list>
 
 template<typename T>
-using OTList = std::list<T>;
+using OList = std::list<T>;

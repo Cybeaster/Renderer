@@ -1,15 +1,15 @@
 #pragma once
 #include "../JoiningThread.hpp"
 #include "Functor/Functor.hpp"
-#include "Hash.hpp"
 #include "Pair.hpp"
 #include "Queue.hpp"
 #include "Set.hpp"
 #include "Thread.hpp"
+#include "ThreadSafeQueue.hpp"
 #include "Types.hpp"
+#include "Utils/Types/HashMap/Hash.hpp"
 #include "Vector.hpp"
 
-#include <ThreadSafeQueue.hpp>
 #include <functional>
 
 namespace RenderAPI::Async
@@ -63,7 +63,7 @@ private:
 	OMutex QueueMutex;
 	OMutex CompletedTaskMutex;
 
-	OTVector<JoiningThread> Threads;
+	OVector<JoiningThread> Threads;
 
 	OAtomic<bool> Quite = false;
 	OAtomic<int64> LastID{ 0 };

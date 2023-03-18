@@ -66,7 +66,7 @@ private:
 	OTestGroup() = default;
 
 	static inline OSharedPtr<OTestGroup> Group{ nullptr };
-	OTVector<OSharedPtr<OTestBase>> Tests{};
+	OVector<OSharedPtr<OTestBase>> Tests{};
 };
 
 } // namespace RenderAPI

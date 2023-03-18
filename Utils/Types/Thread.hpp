@@ -4,11 +4,20 @@
 #include <atomic>
 #include <future>
 #include <mutex>
+#include <shared_mutex>
 
 using OMutex = std::mutex;
-
+using OSharedMutex = std::shared_mutex;
 using OMutexGuard = std::lock_guard<OMutex>;
-using OUniqueLock = std::unique_lock<OMutex>;
+
+using OSharedMutexLock = std::shared_lock<OSharedMutex>;
+using OUniqueMutexLock = std::unique_lock<OMutex>;
+
+template<typename T>
+using OUniqueLock = std::unique_lock<T>;
+
+template<typename T>
+using OSharedLock = std::shared_lock<T>;
 
 template<typename T>
 using OFuture = std::future<T>;

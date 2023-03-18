@@ -16,7 +16,7 @@
 namespace RenderAPI
 {
 
-OTHashMap<EKeys, SKeyState> OInputHandler::KeyMap{};
+OHashMap<EKeys, SKeyState> OInputHandler::KeyMap{};
 
 OInputHandler::OInputHandler(ORenderer* OwningRender, bool Enable)
     : Renderer(OwningRender)

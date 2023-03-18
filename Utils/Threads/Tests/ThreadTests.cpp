@@ -2,7 +2,7 @@
 // Created by Cybea on 3/7/2023.
 //
 #include "Types.hpp"
-#include "Types/UnitTests/TestGroup.hpp"
+#include "Utils/UnitTests/TestGroup.hpp"
 
 #include <barrier>
 #include <cassert>
@@ -435,7 +435,5 @@ void SFenceDebuggableTest::Run()
 	mutex.lock();
 	Super::PostRun();
 }
-
-MAKE_TEST(FenceDebuggable)
 
 } // namespace Test

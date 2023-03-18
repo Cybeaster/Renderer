@@ -43,8 +43,8 @@ private:
 	float InnerRadius{ 0.5F };
 	float OuterRadius{ 0.2F };
 
-	OTVector<OVec3> STangents;
-	OTVector<OVec3> TTangents;
+	OVector<OVec3> STangents;
+	OVector<OVec3> TTangents;
 };
 
 } // namespace RenderAPI

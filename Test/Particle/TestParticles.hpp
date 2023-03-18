@@ -71,12 +71,12 @@ private:
 	 * @brief Already spawned particles.
 	 *
 	 */
-	OTVector<Particle> Particles;
+	OVector<Particle> Particles;
 	/**
 	 * @brief Already spawned fields.
 	 *
 	 */
-	OTVector<SGravityField> Fields;
+	OVector<SGravityField> Fields;
 
 	/**
 	 * @brief Timer for particles.

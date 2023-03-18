@@ -10,9 +10,9 @@
 
 struct SModelContext
 {
-	OTVector<float> VertexCoords;
-	OTVector<float> TextureCoords;
-	OTVector<float> NormalsCoords;
+	OVector<float> VertexCoords;
+	OVector<float> TextureCoords;
+	OVector<float> NormalsCoords;
 };
 
 namespace RenderAPI
@@ -39,7 +39,7 @@ public:
 		return NumIndices;
 	}
 
-	NODISCARD FORCEINLINE const OTVector<int32>& GetIndices() const
+	NODISCARD FORCEINLINE const OVector<int32>& GetIndices() const
 	{
 		return Indices;
 	}
@@ -57,10 +57,10 @@ protected:
 	uint32 NumVertices;
 	uint32 NumIndices;
 
-	OTVector<int32> Indices;
-	OTVector<OVec3> Vertices;
-	OTVector<OVec2> TexCoords;
-	OTVector<OVec3> Normals;
+	OVector<int32> Indices;
+	OVector<OVec3> Vertices;
+	OVector<OVec2> TexCoords;
+	OVector<OVec3> Normals;
 };
 } // namespace RenderAPI
 
