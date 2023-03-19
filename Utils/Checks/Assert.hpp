@@ -6,6 +6,10 @@
 
 #include <cassert>
 
+#define ASSERT_MSG(x, ...)        \
+	RAPI_LOG(Error, __VA_ARGS__); \
+	assert(x);
+
 #define ASSERT(x) \
 	assert(x);
 

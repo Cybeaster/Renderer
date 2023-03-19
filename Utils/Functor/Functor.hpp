@@ -92,15 +92,17 @@ public:
 		return *this;
 	}
 
-	ReturnType Call()
+	template<typename... Args>
+	ReturnType Call(Args... Arguments)
 	{
 		CheckCallable();
-		return Arguments.template Call<FuncType>(std::forward<FuncType>(*Function));
+		return Arguments.template Call<FuncType>(std::forward<FuncType>(*Function), Forward(Arguments)...);
 	}
 
-	ReturnType operator()()
+	template<typename... Args>
+	ReturnType operator()(Args... Arguments)
 	{
-		return Call();
+		return Call(Forward(Arguments)...);
 	}
 
 	~OFunctor() = default;

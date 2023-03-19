@@ -29,6 +29,10 @@
 
 #endif
 
+#define REMOVE_COPY_FOR(ClassName)        \
+	ClassName(const ClassName&) = delete; \
+	ClassName& operator=(const ClassName&) = delete;
+
 #define MIN_FLOAT (1.175494351e-38F) /* min positive value */
 #define MAX_FLOAT (3.402823466e+38F)
 

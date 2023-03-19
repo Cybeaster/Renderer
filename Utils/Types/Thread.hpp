@@ -30,6 +30,13 @@ using OConditionVariable = std::condition_variable;
 template<typename T>
 using OAtomic = std::atomic<T>;
 
+using ThreadID = std::thread::id;
+
+inline decltype(auto) GetThisThreadID() noexcept
+{
+	return std::this_thread::get_id();
+}
+
 using OAtomicFlag = std::atomic_flag;
 
 class OSpinlockMutex

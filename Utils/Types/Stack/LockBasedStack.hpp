@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef RENDERAPI_STACK_HPP
-#define RENDERAPI_STACK_HPP
+#ifndef RENDERAPI_LOCKBASEDSTACK_HPP
+#define RENDERAPI_LOCKBASEDSTACK_HPP
 #include "SmartPtr.hpp"
 #include "Thread.hpp"
 
@@ -11,13 +11,13 @@ namespace RenderAPI
 {
 
 template<typename T>
-class OThreadSafeStack
+class OLockBasedStack
 {
 public:
-	OThreadSafeStack() = default;
-	OThreadSafeStack& operator=(const OThreadSafeStack& Other) = delete;
+	OLockBasedStack() = default;
+	OLockBasedStack& operator=(const OLockBasedStack& Other) = delete;
 
-	OThreadSafeStack(const OThreadSafeStack& Other)
+	OLockBasedStack(const OLockBasedStack& Other)
 	{
 		OMutexGuard lock(Other.Mutex);
 		Data = Other.Data;
@@ -33,19 +33,19 @@ public:
 	OSharedPtr<T> Pop()
 	{
 		OMutexGuard lock(Mutex);
-		if (Data.empty())
+		if (ENSURE(!Data.empty()))
 		{
+			OSharedPtr<T> result(MakeShared<T>(Move(Data.top())));
+			Data.pop();
+			return result;
 		}
-
-		OSharedPtr<T> result(MakeShared<T>(Move(Data.top())));
-		Data.pop();
-		return result;
+		return {};
 	}
 
 	void Pop(T& OutResult)
 	{
 		OMutexGuard lock(Mutex);
-		if (ENSURE(Data.empty()))
+		if (ENSURE(!Data.empty()))
 		{
 			OutResult = Move(Data.top());
 			Data.pop();
@@ -63,4 +63,4 @@ private:
 	OMutex Mutex;
 };
 } // namespace RenderAPI
-#endif // RENDERAPI_STACK_HPP
+#endif // RENDERAPI_LOCKBASEDSTACK_HPP
