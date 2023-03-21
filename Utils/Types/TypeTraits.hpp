@@ -27,6 +27,9 @@ using wchar = wchar_t;
 using CWCharPTR = const wchar*;
 using CCharPTR = const char*;
 
+#define INFINITE_LOOP_SCOPE() \
+	while (true)
+
 template<bool Flag, typename Arg = void>
 struct STEnableIf
 {

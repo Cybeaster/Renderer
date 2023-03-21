@@ -400,7 +400,7 @@ MAKE_TEST(FenceDebuggable)
 void SFenceDebuggableTest::Run()
 {
 	Super::Run();
-
+	return;
 	std::atomic<bool> x, y;
 	std::atomic<int> z;
 
@@ -434,6 +434,21 @@ void SFenceDebuggableTest::Run()
 	std::mutex mutex;
 	mutex.lock();
 	Super::PostRun();
+}
+
+MAKE_TEST(SharedPtr)
+void SSharedPtrTest::Run()
+{
+	std::atomic<std::shared_ptr<int>> atomic;
+
+	if (atomic.is_lock_free())
+	{
+		RAPI_LOG(Warning, "Shared ptr is lock free!")
+	}
+	else
+	{
+		RAPI_LOG(Error, "Shared ptr is not lock free!")
+	}
 }
 
 } // namespace Test

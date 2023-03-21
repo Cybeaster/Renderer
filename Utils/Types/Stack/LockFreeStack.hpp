@@ -34,7 +34,7 @@ struct SDataToReclaim
 };
 
 template<typename T>
-class OLockFreeStack
+class OLockFreeStackImpl
 {
 	struct SNode
 	{
@@ -43,7 +43,11 @@ class OLockFreeStack
 		explicit SNode(const T& NewData)
 		    : Data(MakeShared(NewData)) {}
 	};
+};
 
+template<typename T>
+class OLockFreeStack : public OLockFreeStackImpl<T>
+{
 	// better to use hazard pointers
 
 public:
