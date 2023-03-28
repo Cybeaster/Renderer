@@ -4,10 +4,10 @@
 #include "Pair.hpp"
 #include "Queue.hpp"
 #include "Set.hpp"
-#include "Thread.hpp"
 #include "ThreadSafeQueue.hpp"
 #include "Types.hpp"
 #include "Utils/Types/HashMap/Hash.hpp"
+#include "Utils/Types/Threads/Thread.hpp"
 #include "Vector.hpp"
 
 #include <functional>

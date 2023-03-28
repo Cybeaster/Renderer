@@ -1,5 +1,6 @@
 #pragma once
-#include <Thread.hpp>
+#include "Utils/Types/Threads/Thread.hpp"
+
 #include <Types.hpp>
 
 namespace RenderAPI

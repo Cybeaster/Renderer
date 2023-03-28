@@ -1,8 +1,8 @@
 #pragma once
 #include "Functor/Functor.hpp"
 #include "SmartPtr.hpp"
-#include "Thread.hpp"
 #include "Threads/HazardPointer.hpp"
+#include "Utils/Types/Threads/Thread.hpp"
 namespace RenderAPI
 {
 

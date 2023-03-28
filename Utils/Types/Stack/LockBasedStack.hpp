@@ -3,13 +3,16 @@
 #ifndef RENDERAPI_LOCKBASEDSTACK_HPP
 #define RENDERAPI_LOCKBASEDSTACK_HPP
 #include "SmartPtr.hpp"
-#include "Thread.hpp"
+#include "Utils/Types/Threads/Thread.hpp"
 
 #include <stack>
 
 namespace RenderAPI
 {
 
+/**
+ * @brief Very slow implementation. Doesn't use whole concurrency features.
+ */
 template<typename T>
 class OLockBasedStack
 {

@@ -1,8 +1,8 @@
 
 
 #include "SmartPtr.hpp"
-#include "Thread.hpp"
 #include "TypeTraits.hpp"
+#include "Utils/Types/Threads/Thread.hpp"
 namespace RenderAPI
 {
 

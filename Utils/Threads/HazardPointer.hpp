@@ -4,9 +4,9 @@
 #define RENDERAPI_HAZARDPOINTER_HPP
 
 #include "Assert.hpp"
-#include "Thread.hpp"
 #include "TypeTraits.hpp"
 #include "Types.hpp"
+#include "Utils/Types/Threads/Thread.hpp"
 namespace RenderAPI
 {
 

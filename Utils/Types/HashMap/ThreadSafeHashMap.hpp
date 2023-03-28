@@ -4,7 +4,7 @@
 #include "List.hpp"
 #include "Pair.hpp"
 #include "SmartPtr.hpp"
-#include "Thread.hpp"
+#include "Utils/Types/Threads/Thread.hpp"
 #include "Vector.hpp"
 
 #include <functional>

@@ -3,8 +3,8 @@
 #ifndef RENDERAPI_ASYNC_HPP
 #define RENDERAPI_ASYNC_HPP
 
-#include "Thread.hpp"
 #include "TypeTraits.hpp"
+#include "Utils/Types/Threads/Thread.hpp"
 
 namespace Async
 {

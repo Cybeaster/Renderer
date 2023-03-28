@@ -1,6 +1,6 @@
 #pragma once
 #include "SmartPtr.hpp"
-#include "Thread.hpp"
+#include "Utils/Types/Threads/Thread.hpp"
 
 namespace RenderAPI
 {

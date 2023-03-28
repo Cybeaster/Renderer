@@ -6,7 +6,7 @@
 #define RENDERAPI_THREADSAFELIST_HPP
 
 #include "SmartPtr.hpp"
-#include "Thread.hpp"
+#include "Utils/Types/Threads/Thread.hpp"
 namespace RenderAPI
 {
 

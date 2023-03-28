@@ -4,8 +4,7 @@ project(RenderAPI LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED)
-
-find_package(OpenGL REQUIRED)
+set(Boost_DEBUG 1)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}
@@ -35,8 +34,12 @@ include_directories(
         ${PROJECT_SOURCE_DIR}/Utils/Types/Queue
         ${PROJECT_BINARY_DIR}/Utils/Allocators
         ${PROJECT_BINARY_DIR}/Utils/Delegate
+        ${Boost_INCLUDE_DIR}
+        }
 )
 
+find_package(OpenGL REQUIRED)
+find_package(Boost REQUIRED)
 add_executable(exec
         main.cpp
         Renderer/Renderer.cpp
@@ -81,7 +84,9 @@ add_executable(exec
         Utils/Threads/Async.hpp
         Utils/UnitTests/TestGroup.cpp
         Utils/UnitTests/TestGroup.hpp
-        Utils/Types/Stack/LockBasedStack.hpp Utils/Types/Queue/Queue.hpp Utils/Types/Queue.hpp Utils/Types/HashMap/ThreadSafeHashMap.hpp Utils/Types/List/ThreadSafeList.hpp Utils/Types/Stack/LockFreeStack.hpp Utils/Types/Stack/Stack.hpp Utils/Threads/HazardPointer.hpp Utils/Types/Stack/SharedPtrLockFreeStack.hpp Utils/Types/Stack/ReferenceBasedLockFreeStack.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Types/Queue/LockFreeQueue.hpp)
+        Utils/Types/Stack/LockBasedStack.hpp Utils/Types/Queue/Queue.hpp Utils/Types/Queue.hpp Utils/Types/HashMap/ThreadSafeHashMap.hpp Utils/Types/List/ThreadSafeList.hpp Utils/Types/Stack/LockFreeStack.hpp Utils/Types/Stack/Stack.hpp Utils/Threads/HazardPointer.hpp Utils/Types/Stack/SharedPtrLockFreeStack.hpp Utils/Types/Stack/ReferenceBasedLockFreeStack.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Alogs/Sorter.hpp Utils/Types/Time.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/Accumulate.hpp)
+
+
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)
 set(GLEW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glew32.lib)
 set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
@@ -89,6 +94,8 @@ set(SOIL_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/soil2-debug.lib)
 set(GLFW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glfw3.dll)
 set(GLEW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew64.dll)
 set(GLEW32_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew32.dll)
+
+
 target_link_libraries(
         exec
         PRIVATE
@@ -96,6 +103,6 @@ target_link_libraries(
         ${OPENGL_LIBRARY}
         ${GLEW_LIB}
         ${SOIL_LIB}
-
+        ${Boost_LIBRARIES}
 
 )

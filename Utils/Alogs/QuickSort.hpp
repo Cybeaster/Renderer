@@ -6,7 +6,7 @@
 #define RENDERAPI_QUICKSORT_HPP
 
 #include "List.hpp"
-#include "Thread.hpp"
+#include "Utils/Types/Threads/Thread.hpp"
 
 #include <algorithm>
 namespace Algo
@@ -23,28 +23,28 @@ OTList<T> SequentialQuickSort(OTList<T> Input)
 	}
 	OTList<T> output;
 
-	output.splice(output.begin(),Input,Input.end());
+	output.splice(output.begin(), Input, Input.end());
 
 	T const& pivot = *output.begin();
 
-	auto dividePoint = std::partition(Input.begin(),Input.end(),[&](T const& Value){
-		                                  return Value < pivot;
-	});
+	auto dividePoint = std::partition(Input.begin(), Input.end(), [&](T const& Value)
+	                                  { return Value < pivot; });
 
 	OTList<T> lowerPart;
-	lowerPart.splice(lowerPart.end(),Input,Input.begin(),dividePoint);
+	lowerPart.splice(lowerPart.end(), Input, Input.begin(), dividePoint);
 
 	auto newLower(SequentialQuickSort(Move(lowerPart)));
 	auto newHigher(SequentialQuickSort(Move(Input)));
 
-	output.splice(output.end(),newHigher);
-	output.splice(output.begin(),newLower);
+	output.splice(output.end(), newHigher);
+	output.splice(output.begin(), newLower);
 
 	return output;
 }
 
-template <typename T>
+template<typename T>
 
+// very bad implementation
 OTList<T> AsyncQuickSort(OTList<T> Input)
 {
 	if (Input.empty())
@@ -53,23 +53,22 @@ OTList<T> AsyncQuickSort(OTList<T> Input)
 	}
 	OTList<T> output;
 
-	output.splice(output.begin(),Input,Input.end());
+	output.splice(output.begin(), Input, Input.end());
 
 	T const& pivot = *output.begin();
 
-	auto dividePoint = std::partition(Input.begin(),Input.end(),[&](T const& Value){
-		                                  return Value < pivot;
-	                                  });
+	auto dividePoint = std::partition(Input.begin(), Input.end(), [&](T const& Value)
+	                                  { return Value < pivot; });
 
 	OTList<T> lowerPart;
-	lowerPart.splice(lowerPart.end(),Input,Input.begin(),dividePoint);
+	lowerPart.splice(lowerPart.end(), Input, Input.begin(), dividePoint);
 
 	OFuture<OTList<T>> newLower(std::async(AsyncQuickSort(Move(lowerPart))));
 
 	auto newHigher(AsyncQuickSort(Move(Input)));
 
-	output.splice(output.end(),newHigher);
-	output.splice(output.begin(),newLower.get());
+	output.splice(output.end(), newHigher);
+	output.splice(output.begin(), newLower.get());
 
 	return output;
 }

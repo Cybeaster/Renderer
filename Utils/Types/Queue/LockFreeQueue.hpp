@@ -6,7 +6,7 @@
 #define RENDERAPI_LOCKFREEQUEUE_HPP
 
 #include "SmartPtr.hpp"
-#include "Thread.hpp"
+#include "Utils/Types/Threads/Thread.hpp"
 namespace RenderAPI
 {
 
@@ -77,7 +77,7 @@ void OLockFreeQueue<T>::SetNewTail(OLockFreeQueue::SCountedNode& OldTail, const 
 	const SNode* currentTailPtr = OldTail.Pointer;
 	while (!Tail.compare_exchange_weak(OldTail, NewTail) && OldTail.Pointer == currentTailPtr)
 		;
-	if(OldTail.Pointer == currentTailPtr)
+	if (OldTail.Pointer == currentTailPtr)
 	{
 		FreeExternalCounter(OldTail);
 	}
@@ -85,7 +85,6 @@ void OLockFreeQueue<T>::SetNewTail(OLockFreeQueue::SCountedNode& OldTail, const 
 	{
 		currentTailPtr->ReleaseReference();
 	}
-
 }
 
 template<typename T>
@@ -152,24 +151,28 @@ void OLockFreeQueue<T>::Push(const T& Value)
 		IncreaseExternalCount(Tail, oldTail);
 		T* oldData = nullptr;
 
-		if(oldTail.Pointer->Data.compare_exchange_strong(oldData,newData.get()))
+		if (oldTail.Pointer->Data.compare_exchange_strong(oldData, newData.get())) // If set, need to handle where other thread has helped this one
 		{
-			SCountedNode oldNext = {0};
-			if(oldTail.Pointer)
+			SCountedNode oldNext = { 0 };
+			if (!oldTail.Pointer->Next.compare_exchange_strong(oldNext, newNext)) // if fails, then another thread has already set the next pointer.
 			{
-				//Todo complete hepling
+				delete newNext.Pointer;
+				newNext = oldNext; // Use the value that is set by other thread.
 			}
-		}
-
-		if (oldTail.Pointer->Data.compare_exchange_strong(oldData, newData.get()))
-		{
-			oldTail.Pointer->Next = newNext;
-			oldTail = Tail.exchange(newNext);
-			FreeExternalCounter(oldTail);
+			SetNewTail(oldTail, newNext);
 			newData.release();
 			break;
 		}
-		oldTail.Pointer->ReleaseRef();
+		else // If couldn't, we need help //NOLINT
+		{
+			SCountedNode oldNext = { 0 };
+			if (oldTail.Pointer->Next.compare_exchange_strong(oldNext, newNext))
+			{
+				oldNext = newNext;
+				newNext.Pointer = new SNode();
+			}
+			SetNewTail(oldTail, oldNext);
+		}
 	}
 }
 

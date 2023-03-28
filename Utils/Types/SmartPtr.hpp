@@ -1,5 +1,7 @@
 #pragma once
 #include "Types.hpp"
+#include "boost/make_shared.hpp"
+#include "boost/shared_ptr.hpp"
 
 #include <memory>
 
@@ -15,7 +17,7 @@ FORCEINLINE auto MakeUnique(T* Arg)
 template<class Type, typename... Payload>
 FORCEINLINE auto MakeShared(Payload&&... Args)
 {
-	return std::make_shared<Type>(Args...);
+	return boost::make_shared<Type>(Args...);
 }
 
 template<class Type>
@@ -28,7 +30,7 @@ template<typename T>
 using OWeakPtr = std::weak_ptr<T>;
 
 template<typename T>
-using OSharedPtr = std::shared_ptr<T>;
+using OSharedPtr = boost::shared_ptr<T>;
 
 template<typename T>
 using OUniquePtr = std::unique_ptr<T>;

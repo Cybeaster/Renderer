@@ -5,8 +5,8 @@
 #ifndef RENDERAPI_CAMERA_HPP
 #define RENDERAPI_CAMERA_HPP
 #include "Math.hpp"
-#include "Thread.hpp"
 #include "Types.hpp"
+#include "Utils/Types/Threads/Thread.hpp"
 namespace RenderAPI
 {
 
@@ -46,8 +46,6 @@ private:
 
 	float Yaw{ 0 };
 	float Pitch{ 0 };
-
-
 };
 
 } // namespace RenderAPI
