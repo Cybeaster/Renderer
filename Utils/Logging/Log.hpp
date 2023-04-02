@@ -8,6 +8,7 @@
 #include <gtx/string_cast.hpp>
 #include <iostream>
 #include <ostream>
+#include <sstream>
 
 #define RAPI_LOG(LogType, String, ...) \
 	SLogUtils::Log(SLogUtils::Format(String, __VA_ARGS__), ELogType::LogType);
@@ -112,11 +113,19 @@ public:
 		return OString(Str);
 	}
 
+	template<typename T>
+	static OString ToString(T Value) noexcept
+	{
+		return std::to_string(Value);
+	}
+
+	template<>
 	static OString ToString(bool Value) noexcept
 	{
 		return Value ? "True" : "False";
 	}
 
+	template<>
 	static OString ToString(const OVec3& Vector) noexcept
 	{
 		return glm::to_string(Vector);

@@ -11,12 +11,23 @@ using OVec2 = glm::vec2;
 using OVec3 = glm::vec3;
 using OVec4 = glm::vec4;
 
+
+namespace RenderAPI
+{
 struct SMath
 {
 	static inline constexpr float Pi = 3.14159F;
 
-	NODISCARD static auto ToRadians(float Degree) noexcept
+	NODISCARD FORCEINLINE static auto ToRadians(float Degree) noexcept
 	{
 		return (Degree * 2.F * Pi) / 360.F;
 	}
+
+
+	NODISCARD FORCEINLINE static decltype(auto) Min(auto First, auto Second)
+	{
+		return First > Second ? Second : First;
+	}
 };
+
+}

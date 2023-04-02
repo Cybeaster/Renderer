@@ -23,6 +23,9 @@ using OSharedLock = std::shared_lock<T>;
 template<typename T>
 using OFuture = std::future<T>;
 
+template<typename... Args>
+using OPackagedTask = std::packaged_task<Args...>;
+
 template<typename T>
 using OSharedFuture = std::shared_future<T>;
 
