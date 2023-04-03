@@ -13,7 +13,7 @@ class OThreadSafeQueue
 	struct SNode
 	{
 		OSharedPtr<T> Data;
-		OUniquePtr<T> Next;
+		OUniquePtr<SNode> Next;
 	};
 
 public:
@@ -24,7 +24,6 @@ public:
 	OThreadSafeQueue& operator=(const OThreadSafeQueue& Other) = delete;
 
 	OSharedPtr<T> TryPop();
-
 	bool TryPop(T& Value);
 
 	template<typename Arg>
@@ -165,7 +164,7 @@ template<typename T>
 bool OThreadSafeQueue<T>::TryPop(T& Value)
 {
 	OUniquePtr<SNode> oldHead = TryPopHead(Value);
-	return oldHead;
+	return !!oldHead;
 }
 
 } // namespace RenderAPI

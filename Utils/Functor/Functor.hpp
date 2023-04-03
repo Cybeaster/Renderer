@@ -49,9 +49,16 @@ class OFunctor<ReturnType(ArgTypes...)> : public SFunctorBase
 	using FuncType = ReturnType(ArgTypes...);
 
 public:
+	OFunctor() = default;
+	~OFunctor() = default;
+
+	OFunctor& operator=(const OFunctor& Functor) = default;
+	OFunctor(const OFunctor<RetType(ArgTypes...)> Functor) = default;
+
 	template<typename FuncConstrType, typename... ArgsConstrTypes>
 	explicit OFunctor(FuncConstrType FunctionType, ArgsConstrTypes... FuncArgs)
-	    : Function(FunctionType), Arguments(FuncArgs...)
+	    : Function(FunctionType)
+	    , Payload(FuncArgs...)
 	{
 	}
 
@@ -59,60 +66,42 @@ public:
 	explicit OFunctor(OFunctor<RetType(LocalArgTypes...)>&& Functor)
 	{
 		Function = Functor.Function;
-		Arguments = Move(Functor.Arguments);
+		Payload = Move(Functor.Payload);
 
-		Functor.Arguments.Empty();
+		Functor.Payload.Empty();
 		Functor.Function = nullptr;
-	}
-
-	template<typename RetType, typename... Args>
-	explicit OFunctor(const OFunctor<RetType(Args...)>& Functor)
-	{
-		Function = Functor.Function;
-		Arguments = Functor.Arguments;
-	}
-
-	template<typename RetType, typename... Args>
-	OFunctor& operator=(const OFunctor<RetType(Args...)>& Functor)
-	{
-		Function = Functor.Function;
-		Arguments = Functor.Arguments;
-
-		return *this;
 	}
 
 	template<typename RetType, typename... Args>
 	OFunctor& operator=(OFunctor<RetType(Args...)>&& MovableFunctor)
 	{
 		Function = MovableFunctor.Function;
-		Arguments = MovableFunctor.Arguments;
+		Payload = MovableFunctor.Payload;
 
 		MovableFunctor.Function = nullptr;
-		MovableFunctor.Arguments.Empty();
+		MovableFunctor.Payload.Empty();
 		return *this;
 	}
 
 	template<typename... Args>
-	ReturnType Call(Args... Arguments)
+	ReturnType Call(Args&&... Arguments)
 	{
 		CheckCallable();
-		return Arguments.template Call<FuncType>(std::forward<FuncType>(*Function), Forward(Arguments)...);
+		return Payload.template Call<FuncType>(std::forward<FuncType>(*Function), Forward(Arguments)...);
 	}
 
 	template<typename... Args>
-	ReturnType operator()(Args... Arguments)
+	ReturnType operator()(Args&&... Arguments)
 	{
 		return Call(Forward(Arguments)...);
 	}
-
-	~OFunctor() = default;
 
 protected:
 	void CheckCallable()
 	{
 	}
 
-	OTuple<ArgTypes...> Arguments;
+	OTuple<ArgTypes...> Payload;
 	FuncType* Function;
 };
 

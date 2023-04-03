@@ -1,11 +1,15 @@
 #pragma once
 
+#include "SimpleThreadPool/ThreadPool.hpp"
 #include "Threads/Thread.hpp"
 #include "Threads/Utils.hpp"
 #include "TypeTraits.hpp"
 #include "Vector.hpp"
 
 #include <numeric>
+
+namespace RenderAPI
+{
 template<typename Iterator, typename T>
 struct SAccumulateBlock
 {
@@ -14,9 +18,6 @@ struct SAccumulateBlock
 		return std::accumulate(First, Last, T());
 	}
 };
-
-namespace
-{
 
 template<typename Iterator, typename T>
 T CstmAsyncAccumulate(Iterator First, Iterator Last, T Init)
@@ -28,29 +29,22 @@ T CstmAsyncAccumulate(Iterator First, Iterator Last, T Init)
 		return Init;
 	}
 
-	uint32 minPerThread = 25;
-	uint32 maxThreads = (lenght + minPerThread - 1) / minPerThread;
-	uint32 hardwareThreads = OThread::hardware_concurrency();
-	uint32 numThreads = std::min(hardwareThreads != 0 ? hardwareThreads : 2, maxThreads);
-	uint32 blockSize = lenght / numThreads;
-
-	OVector<OFuture<T>> futures(numThreads - 1);
-	OVector<OThread> threads(numThreads - 1);
-
-	OJoinThreads joinThreads(threads);
+	uint32 blockSize = 25;
+	uint32 numBlocks = (lenght + blockSize - 1) / blockSize;
+	OVector<OFuture<T>> futures(numBlocks - 1);
+	OSimpleThreadPool pool;
 
 	Iterator blockStart = First;
-	for (uint32 i = 0; i < (numThreads - 1); ++i)
+	for (uint32 i = 0; i < (numBlocks - 1); ++i)
 	{
 		Iterator blockEnd = blockStart;
 
 		std::advance(blockEnd, blockSize);
 
-		OPackagedTask<T(Iterator, Iterator)> task{ SAccumulateBlock<Iterator, T>() };
+		futures[i] = pool.Submit([=]{
+			                       SAccumulateBlock<Iterator,T>(blockStart,blockEnd);
+		});
 
-		futures[i] = task.get_future();
-
-		threads[i] = OThread(Move(task), blockStart, blockEnd);
 		blockStart = blockEnd;
 	}
 
@@ -62,10 +56,10 @@ T CstmAsyncAccumulate(Iterator First, Iterator Last, T Init)
 	{
 		result += future.get();
 	}
+
 	result += lastResult;
 	return result;
 }
-} // namespace
 
 template<typename Iterator, typename T>
 T AsyncAccumulate(Iterator First, Iterator Last, T Init)
@@ -87,3 +81,5 @@ T AsyncAccumulate(Iterator First, Iterator Last, T Init)
 
 	return firstHalfRes.get() + secondHalfRes;
 }
+
+} // namespace RenderAPI

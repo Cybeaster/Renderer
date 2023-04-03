@@ -3,7 +3,6 @@
 #include "Assert.hpp"
 #include "Types.hpp"
 
-#pragma optimize("", off)
 namespace RenderAPI
 {
 
@@ -144,5 +143,3 @@ protected:
 	OInlineAllocator<SInlineAllocatable::StackSize::_32> Allocator;
 };
 } // namespace RenderAPI
-
-#pragma optimize("", on)
