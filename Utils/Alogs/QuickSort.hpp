@@ -6,22 +6,29 @@
 #define RENDERAPI_QUICKSORT_HPP
 
 #include "List.hpp"
+#include "ThreadPool.hpp"
+#include "Time.hpp"
 #include "Utils/Types/Threads/Thread.hpp"
 
 #include <algorithm>
+
+namespace RenderAPI
+{
+
 namespace Algo
 {
+
 template<typename Container>
 Container SequentialQuickSort(Container Input);
 
 template<typename T>
-OTList<T> SequentialQuickSort(OTList<T> Input)
+OList<T> SequentialQuickSort(OList<T> Input)
 {
 	if (Input.empty())
 	{
 		return Input;
 	}
-	OTList<T> output;
+	OList<T> output;
 
 	output.splice(output.begin(), Input, Input.end());
 
@@ -30,7 +37,7 @@ OTList<T> SequentialQuickSort(OTList<T> Input)
 	auto dividePoint = std::partition(Input.begin(), Input.end(), [&](T const& Value)
 	                                  { return Value < pivot; });
 
-	OTList<T> lowerPart;
+	OList<T> lowerPart;
 	lowerPart.splice(lowerPart.end(), Input, Input.begin(), dividePoint);
 
 	auto newLower(SequentialQuickSort(Move(lowerPart)));
@@ -43,36 +50,56 @@ OTList<T> SequentialQuickSort(OTList<T> Input)
 }
 
 template<typename T>
-
-// very bad implementation
-OTList<T> AsyncQuickSort(OTList<T> Input)
+struct SQuickSorter
 {
-	if (Input.empty())
+	OThreadPool ThreadPool;
+
+	OList<T> DoSort(OList<T>& Chunk)
+	{
+		if (Chunk.empty())
+		{
+			return Chunk;
+		}
+
+		OList<T> result;
+
+		result.splice(result.begin(), Chunk, Chunk.begin());
+
+		const T& partitionVal = *result.begin();
+
+		typename OList<T>::iterator dividePoint = std::partition(Chunk.begin(), Chunk.end(), [&](const T& Val)
+		                                                         { Val < partitionVal; });
+		OList<T> newLowerChunk;
+
+		newLowerChunk.splice(newLowerChunk.end(), Chunk, Chunk.begin(), dividePoint);
+
+		OFuture<OList<T>> newLower = ThreadPool.Submit(std::bind(&SQuickSorter::DoSort, this, Move(newLowerChunk)));
+
+		OList<T> newHigher(DoSort(Chunk));
+		result.splice(result.end(), newHigher);
+
+		while (newLower.wait_for(SSeconds(0)) == EFutureStatus::TimeOut)
+		{
+			ThreadPool.RunPendingTask();
+		}
+		result.splice(result.begin(), newLower.get());
+		return result;
+	}
+};
+
+template<typename T>
+OList<T> AsyncQuickSort(OList<T> Input)
+{
+	if(Input.empty())
 	{
 		return Input;
 	}
-	OTList<T> output;
 
-	output.splice(output.begin(), Input, Input.end());
-
-	T const& pivot = *output.begin();
-
-	auto dividePoint = std::partition(Input.begin(), Input.end(), [&](T const& Value)
-	                                  { return Value < pivot; });
-
-	OTList<T> lowerPart;
-	lowerPart.splice(lowerPart.end(), Input, Input.begin(), dividePoint);
-
-	OFuture<OTList<T>> newLower(std::async(AsyncQuickSort(Move(lowerPart))));
-
-	auto newHigher(AsyncQuickSort(Move(Input)));
-
-	output.splice(output.end(), newHigher);
-	output.splice(output.begin(), newLower.get());
-
-	return output;
+	SQuickSorter<T> sorter;
+	sorter.DoSort(Input);
 }
 
-} // namespace Algo
 
+} // namespace Algo
+} // namespace RenderAPI
 #endif // RENDERAPI_QUICKSORT_HPP

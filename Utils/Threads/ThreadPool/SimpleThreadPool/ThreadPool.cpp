@@ -4,23 +4,18 @@
 
 #include "ThreadPool.hpp"
 
+#include <memory>
+
 namespace RenderAPI
 {
 
 void OSimpleThreadPool::WorkerThread()
 {
+	LocalWorkQueue = std::make_unique<TLocalQueue>();
+
 	while (!IsDone)
 	{
-		TFunctor task;
-
-		if (WorkQueue.TryPop(task))
-		{
-			task();
-		}
-		else
-		{
-			NThisThread::Yield();
-		}
+		RunPendingTask();
 	}
 }
 OSimpleThreadPool::OSimpleThreadPool()
@@ -40,6 +35,26 @@ OSimpleThreadPool::OSimpleThreadPool()
 		throw;
 	}
 }
+
+void OSimpleThreadPool::RunPendingTask()
+{
+	TFunctor task;
+	if (LocalWorkQueue && !LocalWorkQueue->empty())
+	{
+		task = Move(LocalWorkQueue->front());
+		LocalWorkQueue->pop();
+		task();
+	}
+	else if (WorkQueue.TryPop(task))
+	{
+		task();
+	}
+	else
+	{
+		NThisThread::Yield();
+	}
+}
+
 template<typename FuncType>
 OFuture<std::invoke_result<FuncType()>::type> OSimpleThreadPool::Submit(FuncType Function)
 {
@@ -47,8 +62,15 @@ OFuture<std::invoke_result<FuncType()>::type> OSimpleThreadPool::Submit(FuncType
 	OPackagedTask<TResult()> newTask(Move(Function));
 
 	OFuture<TResult> result(newTask.get_future());
-	WorkQueue.Push(Move(newTask));
 
+	if (LocalWorkQueue)
+	{
+		LocalWorkQueue->push(Move(newTask));
+	}
+	else
+	{
+		WorkQueue.Push(Move(newTask));
+	}
 	return result;
 }
 
