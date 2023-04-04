@@ -9,9 +9,10 @@
 namespace RenderAPI
 {
 
-void OSimpleThreadPool::WorkerThread()
+void OSimpleThreadPool::WorkerThread(uint32 Index)
 {
-	LocalWorkQueue = std::make_unique<TLocalQueue>();
+	LocalIndex = Index;
+	LocalWorkQueue = Queues[LocalIndex].get();
 
 	while (!IsDone)
 	{
@@ -26,7 +27,12 @@ OSimpleThreadPool::OSimpleThreadPool()
 	{
 		for (uint32 it = 0; it < threadCount; it++)
 		{
-			WorkerThreads.emplace_back(&OSimpleThreadPool::WorkerThread, this);
+			Queues.emplace_back(new TWorkStealingQueue);
+		}
+
+		for (uint32 it = 0; it < threadCount; it++)
+		{
+			WorkerThreads.emplace_back(&OSimpleThreadPool::WorkerThread, this, it);
 		}
 	}
 	catch (...)
@@ -39,13 +45,9 @@ OSimpleThreadPool::OSimpleThreadPool()
 void OSimpleThreadPool::RunPendingTask()
 {
 	TFunctor task;
-	if (LocalWorkQueue && !LocalWorkQueue->empty())
-	{
-		task = Move(LocalWorkQueue->front());
-		LocalWorkQueue->pop();
-		task();
-	}
-	else if (WorkQueue.TryPop(task))
+	if (PopTaskFromLocalQueue(task)
+	    || PopTaskFromPoolQueue(task)
+	    || PopTaskFromOtherThreadQueue(task))
 	{
 		task();
 	}
@@ -53,6 +55,27 @@ void OSimpleThreadPool::RunPendingTask()
 	{
 		NThisThread::Yield();
 	}
+}
+bool OSimpleThreadPool::PopTaskFromLocalQueue(OSimpleThreadPool::TFunctor& Task)
+{
+	return (LocalWorkQueue != nullptr) && LocalWorkQueue->TryPop(Task);
+}
+
+bool OSimpleThreadPool::PopTaskFromPoolQueue(OSimpleThreadPool::TFunctor& Task)
+{
+	return PoolWorkQueue.TryPop(Task);
+}
+bool OSimpleThreadPool::PopTaskFromOtherThreadQueue(OSimpleThreadPool::TFunctor& Task)
+{
+	for (uint32 it = 0; it < Queues.size(); it++)
+	{
+		uint32 index = (LocalIndex + it + 1) % Queues.size();
+		if (Queues[index]->TrySteal(Task))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 template<typename FuncType>
@@ -65,11 +88,11 @@ OFuture<std::invoke_result<FuncType()>::type> OSimpleThreadPool::Submit(FuncType
 
 	if (LocalWorkQueue)
 	{
-		LocalWorkQueue->push(Move(newTask));
+		LocalWorkQueue->Push(Move(newTask));
 	}
 	else
 	{
-		WorkQueue.Push(Move(newTask));
+		PoolWorkQueue.Push(Move(newTask));
 	}
 	return result;
 }

@@ -6,6 +6,7 @@
 #include "Threads/Thread.hpp"
 #include "Threads/Utils.hpp"
 #include "Vector.hpp"
+#include "WorkStealingQueue.hpp"
 namespace RenderAPI
 {
 
@@ -16,6 +17,8 @@ public:
 	OFuture<std::invoke_result<FuncType()>::type> Submit(FuncType Function);
 
 	using TFunctor = OFunctor<void()>;
+	using TWorkStealingQueue = OWorkStealingQueue<TFunctor>;
+
 	OSimpleThreadPool();
 
 	~OSimpleThreadPool()
@@ -26,12 +29,19 @@ public:
 	void RunPendingTask();
 
 private:
-	void WorkerThread();
+	void WorkerThread(uint32 Index);
+	bool PopTaskFromLocalQueue(TFunctor& Task);
+	bool PopTaskFromPoolQueue(TFunctor& Task);
+	bool PopTaskFromOtherThreadQueue(TFunctor& Task);
 
 	using TLocalQueue = OQueue<TFunctor>;
-	static thread_local OUniquePtr<TLocalQueue> LocalWorkQueue;
 
-	OThreadSafeQueue<TFunctor> WorkQueue;
+	OVector<OUniquePtr<TWorkStealingQueue>> Queues;
+	OThreadSafeQueue<TFunctor> PoolWorkQueue;
+
+	thread_local TWorkStealingQueue* LocalWorkQueue;
+	thread_local uint32 LocalIndex;
+
 	OVector<OThread> WorkerThreads;
 	OAtomic<bool> IsDone;
 	OJoinThreads Joiner{ WorkerThreads };
