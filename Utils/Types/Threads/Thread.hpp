@@ -57,27 +57,17 @@ using OAtomicFlag = std::atomic_flag;
 
 namespace EFutureStatus
 {
-inline auto Ready = std::future_status::ready;
-inline auto TimeOut = std::future_status::timeout;
-inline auto Deffered = std::future_status::deferred;
-} // namespace EFutureStatus
+constexpr auto Ready = std::future_status::ready;
+constexpr auto TimeOut = std::future_status::timeout;
+constexpr auto Deffered = std::future_status::deferred;
+}; // namespace EFutureStatus
 
-class OSpinlockMutex
+namespace EMemoryOrder
 {
-public:
-	OSpinlockMutex() = default;
-
-	void Lock()
-	{
-		while (Flag.test_and_set(std::memory_order_acquire))
-			;
-	}
-
-	void Unlock()
-	{
-		Flag.clear(std::memory_order_release);
-	}
-
-private:
-	OAtomicFlag Flag;
-};
+constexpr auto Relaxed = std::memory_order::relaxed;
+constexpr auto Consume = std::memory_order::consume;
+constexpr auto Acquire = std::memory_order::acquire;
+constexpr auto Release = std::memory_order::release;
+constexpr auto AcqRel = std::memory_order::acq_rel;
+constexpr auto SeqCst = std::memory_order::seq_cst;
+} // namespace EMemoryOrder

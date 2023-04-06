@@ -1,9 +1,8 @@
 #pragma once
+#include <chrono>
 
-#include <boost/chrono.hpp>
-
-using SMicSeconds = boost::chrono::microseconds;
-using SMillSeconds = boost::chrono::milliseconds;
-using SSeconds = boost::chrono::seconds;
-using SMinutes = boost::chrono::minutes;
-using SHours = boost::chrono::hours;
+using SMicSeconds = std::chrono::microseconds;
+using SMillSeconds = std::chrono::milliseconds;
+using SSeconds = std::chrono::seconds;
+using SMinutes = std::chrono::minutes;
+using SHours = std::chrono::hours;

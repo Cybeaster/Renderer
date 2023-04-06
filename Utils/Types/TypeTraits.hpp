@@ -6,6 +6,8 @@
 #include <type_traits>
 
 #define NODISCARD [[nodiscard]]
+
+#define NODISC_FORCEINL NODISCARD FORCEINLINE
 #define DELEGATE_NODISCARD [[nodiscard("Delegate's function result has to be stored in value!")]]
 
 using int32 = int32_t;
