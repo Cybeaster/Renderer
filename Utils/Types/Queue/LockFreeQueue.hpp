@@ -7,7 +7,7 @@
 
 #include "SmartPtr.hpp"
 #include "Utils/Types/Threads/Thread.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 
 template<typename T>
@@ -200,6 +200,6 @@ OSharedPtr<T> OLockFreeQueue<T>::Pop()
 	}
 }
 
-} // namespace RenderAPI
+} // namespace RAPI
 
 #endif // RENDERAPI_LOCKFREEQUEUE_HPP

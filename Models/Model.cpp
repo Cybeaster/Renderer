@@ -4,7 +4,7 @@
 
 #include "Model.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 void OModel::PreInit(int32 Precision) noexcept
@@ -18,4 +18,4 @@ void OModel::PreInit(int32 Precision) noexcept
 	Normals.resize(NumVertices);
 	Indices.resize(NumIndices);
 }
-} // namespace RenderAPI
+} // namespace RAPI

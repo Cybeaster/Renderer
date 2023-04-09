@@ -12,7 +12,7 @@ namespace Test
 class OTestTexture : public OTest
 {
 public:
-	OTestTexture(const OPath& filePath, const OPath& SecondTexturePath, const OPath& ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer);
+	OTestTexture(const OPath& filePath, const OPath& SecondTexturePath, const OPath& ShaderPath, OSharedPtr<RAPI::ORenderer> Renderer);
 	~OTestTexture() override = default;
 
 	void OnUpdate(
@@ -76,7 +76,7 @@ private:
 		0, 0, 1, 0, .5, 1, 0, 0, 1, 0, .5, 0, 0, 0, 1, 0, 0.5, 1
 	};
 
-	RenderAPI::OTorus Torus{ 48 };
+	RAPI::OTorus Torus{ 48 };
 
 	SBufferAttribVertexHandle VerticesTorusHandle;
 	SBufferAttribVertexHandle TexturesTorusHandle;
@@ -84,7 +84,7 @@ private:
 	SBufferHandle IndicesTorusHandle;
 	SBufferHandle NormalsTorusHandle;
 
-	RenderAPI::OSphere Sphere{ 48 };
+	RAPI::OSphere Sphere{ 48 };
 	SBufferAttribVertexHandle VerticesSphereHandle;
 	SDrawVertexHandle TexturesSphereHandle;
 	SBufferHandle NormalsSphereHandle;

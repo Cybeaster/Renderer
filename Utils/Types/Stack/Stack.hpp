@@ -8,4 +8,4 @@ template<typename T>
 using OStack = std::stack<T>;
 
 template<typename T>
-using OThreadSafeStack = RenderAPI::OLockBasedStack<T>;
+using OThreadSafeStack = RAPI::OLockBasedStack<T>;

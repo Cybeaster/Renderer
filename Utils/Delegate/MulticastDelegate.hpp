@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace RenderAPI
+namespace RAPI
 {
 #define INVALID_ID UINT32_MAX
 struct SDelegateHandle
@@ -336,4 +336,4 @@ bool OTMulticastDelegate<ArgTypes...>::RemoveFrom(ObjectType* Object)
 	}
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

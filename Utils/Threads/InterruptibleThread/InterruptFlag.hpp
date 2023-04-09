@@ -2,8 +2,11 @@
 
 #include "Threads/Thread.hpp"
 #include "TypeTraits.hpp"
+#include "Types.hpp"
 
-namespace RenderAPI
+#include <boost/thread/exceptions.hpp>
+
+namespace RAPI
 {
 
 class OInterruptFlag
@@ -21,6 +24,10 @@ public:
 		if (ThreadCondition)
 		{
 			ThreadCondition->notify_all();
+		}
+		else if (ThreadConditionAny)
+		{
+			ThreadConditionAny->notify_all();
 		}
 	}
 	NODISCARD bool IsSet() const
@@ -40,12 +47,63 @@ public:
 		ThreadCondition = nullptr;
 	}
 
+	template<typename TLockable>
+	void Wait(OConditionVariableAny& CV, TLockable& Lock);
+
 	OInterruptFlag() = default;
 
 private:
 	OAtomic<bool> Flag;
 	OConditionVariable* ThreadCondition{ nullptr };
+	OConditionVariableAny* ThreadConditionAny{ nullptr };
 	OMutex SetClearMutex;
 };
 
-} // namespace RenderAPI
+static thread_local OInterruptFlag LocalThreadInterruptFlag; // NOLINT
+FORCEINLINE void InterruptionPoint()
+{
+	if (LocalThreadInterruptFlag.IsSet())
+	{
+		throw boost::thread_interrupted();
+	}
+}
+
+template<typename TLockable>
+void OInterruptFlag::Wait(OConditionVariableAny& CV, TLockable& Lock)
+{
+	{
+		struct SCustomLock
+		{
+			OInterruptFlag* Self;
+			TLockable& LK;
+			SCustomLock(OInterruptFlag* SelfFlag, OConditionVariableAny& Condition, TLockable& Lock)
+			    : Self(SelfFlag), LK(Lock)
+			{
+				Self->SetClearMutex.lock();
+				Self->ThreadConditionAny = &Condition;
+			}
+			void Unlock()
+			{
+				LK.unlock();
+				Self->SetClearMutex.unlock();
+			}
+
+			void Lock()
+			{
+				std::lock(Self->SetClearMutex, LK);
+			}
+
+			~SCustomLock()
+			{
+				Self->ThreadConditionAny = nullptr;
+				Self->SetClearMutex.unlock();
+			}
+		};
+
+		SCustomLock cL(this, CV, Lock);
+		InterruptionPoint();
+		CV.wait(cL);
+		InterruptionPoint();
+	}
+}
+} // namespace RAPI

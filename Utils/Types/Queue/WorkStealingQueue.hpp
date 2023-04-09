@@ -4,7 +4,7 @@
 #include "Types.hpp"
 
 #include <deque>
-namespace RenderAPI
+namespace RAPI
 {
 
 template<typename DataType>
@@ -56,4 +56,4 @@ private:
 	std::deque<DataType> Queue;
 	mutable OMutex Mutex;
 };
-} // namespace RenderAPI
+} // namespace RAPI

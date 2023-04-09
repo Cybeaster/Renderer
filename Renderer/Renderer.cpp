@@ -7,7 +7,7 @@
 
 #define DEBUG_FPS false
 
-namespace RenderAPI
+namespace RAPI
 {
 
 int ORenderer::ScreenWidth = 900;
@@ -210,4 +210,4 @@ SBufferHandle ORenderer::AddBuffer(SBufferContext&& Context)
 	return VertexArray.AddBuffer(Move(Context));
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

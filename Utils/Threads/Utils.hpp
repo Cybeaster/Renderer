@@ -1,5 +1,7 @@
 #pragma once
 
+#include "JoinThreads.hpp"
+#include "SpinlockMutex.hpp"
 #include "Threads/InterruptibleThread/InterruptFlag.hpp"
 #include "Time.hpp"
 #include "TypeTraits.hpp"
@@ -9,64 +11,13 @@
 
 #include <boost/thread/exceptions.hpp>
 
-namespace RenderAPI
+namespace RAPI
 {
-
-class OJoinThreads
-{
-public:
-	explicit OJoinThreads(OVector<OThread>& Other)
-	    : Threads(Other) {}
-
-	~OJoinThreads()
-	{
-		for (auto& thread : Threads)
-		{
-			if (thread.joinable())
-			{
-				thread.join();
-			}
-		}
-	}
-
-private:
-	OVector<OThread>& Threads;
-};
-
-class OSpinlockMutex
-{
-public:
-	OSpinlockMutex() = default;
-
-	void Lock()
-	{
-		while (Flag.test_and_set(std::memory_order_acquire))
-			;
-	}
-
-	void Unlock()
-	{
-		Flag.clear(std::memory_order_release);
-	}
-
-private:
-	OAtomicFlag Flag;
-};
 
 class OThreadUtils
 {
 public:
-	static thread_local OInterruptFlag LocalThreadInterruptFlag; // NOLINT
-
 	NODISCARD static OString GetFormattedThreadID();
-
-	FORCEINLINE static void InterruptionPoint()
-	{
-		if (LocalThreadInterruptFlag.IsSet())
-		{
-			throw boost::thread_interrupted();
-		}
-	}
 
 	FORCEINLINE static void InterruptibleWait(OConditionVariable& CV, OUniqueLock<OMutex>& Lock)
 	{
@@ -93,6 +44,26 @@ public:
 		}
 		InterruptionPoint();
 	}
+
+	template<typename T>
+	void InterruptibleWait(OFuture<T>& Future)
+	{
+		OMutex lk;
+		while (!LocalThreadInterruptFlag.IsSet())
+		{
+			if (Future.wait_for(lk, SMillSeconds(1)) == EFutureStatus::Ready)
+			{
+				break;
+			}
+		}
+		InterruptionPoint();
+	}
+
+	template<typename Lockable>
+	void InterruptibleWait(OConditionVariableAny& CV, Lockable& LK)
+	{
+		LocalThreadInterruptFlag.Wait(CV, LK);
+	}
 };
 
-} // namespace RenderAPI
+} // namespace RAPI

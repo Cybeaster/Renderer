@@ -7,7 +7,7 @@
 #include "VertexData/DrawContext.hpp"
 #include "VertexData/VertexContext.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 struct STSimpleVertexIndex
 {
@@ -85,4 +85,4 @@ private:
 	OVector<STSimpleVertexIndex> VertexIndicesArray;
 };
 
-}; // namespace RenderAPI
+}; // namespace RAPI

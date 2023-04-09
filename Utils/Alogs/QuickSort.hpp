@@ -12,7 +12,7 @@
 
 #include <algorithm>
 
-namespace RenderAPI
+namespace RAPI
 {
 
 namespace Algo
@@ -90,7 +90,7 @@ struct SQuickSorter
 template<typename T>
 OList<T> AsyncQuickSort(OList<T> Input)
 {
-	if(Input.empty())
+	if (Input.empty())
 	{
 		return Input;
 	}
@@ -99,7 +99,6 @@ OList<T> AsyncQuickSort(OList<T> Input)
 	sorter.DoSort(Input);
 }
 
-
 } // namespace Algo
-} // namespace RenderAPI
+} // namespace RAPI
 #endif // RENDERAPI_QUICKSORT_HPP

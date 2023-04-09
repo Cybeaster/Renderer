@@ -10,7 +10,7 @@
 
 #include <numeric>
 
-namespace RenderAPI
+namespace RAPI
 {
 
 template<typename Iterator>
@@ -178,4 +178,4 @@ void SPartialSumTest::Run()
 	fillVec(testVec);
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

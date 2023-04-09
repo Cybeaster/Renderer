@@ -1,7 +1,7 @@
 #pragma once
 #include "SimpleThreadPool/ThreadPool.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 using OThreadPool = OSimpleThreadPool;

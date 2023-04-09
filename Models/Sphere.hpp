@@ -8,7 +8,7 @@
 #include "TypeTraits.hpp"
 #include "Types.hpp"
 #include "Vector.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 
 class OSphere final : public OModel
@@ -35,6 +35,6 @@ public:
 private:
 };
 
-} // namespace RenderAPI
+} // namespace RAPI
 
 #endif // RENDERAPI_SPHERE_HPP

@@ -2,7 +2,7 @@
 
 #include "Threads/Thread.hpp"
 #include "TypeTraits.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 class OBarrier
 {
@@ -43,4 +43,4 @@ private:
 	OAtomic<uint32> Generation{ 0 };
 	OAtomic<uint32> Count{ 0 };
 };
-} // namespace RenderAPI
+} // namespace RAPI

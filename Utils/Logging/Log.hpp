@@ -110,7 +110,7 @@ public:
 
 	static OString Format(CCharPTR Str) noexcept
 	{
-		return OString(Str);
+		return { Str };
 	}
 
 	template<typename T>
@@ -126,8 +126,21 @@ public:
 	}
 
 	template<>
-	static OString ToString(const OVec3& Vector) noexcept
+	static OString ToString(OVec3 Vector) noexcept
 	{
 		return glm::to_string(Vector);
+	}
+
+	template<template<typename Contained, typename Alloc = std::allocator<Contained>>
+	         typename Container,
+	         typename Type>
+	static OString ToString(const Container<Type>& Array) noexcept
+	{
+		std::stringstream ss;
+		for (const auto& elem : Array)
+		{
+			ss << elem;
+		}
+		return ss.str();
 	}
 };

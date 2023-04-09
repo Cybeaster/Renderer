@@ -3,7 +3,7 @@
 #include "Logging/Log.hpp"
 #include "Renderer.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 void ORendererInputHandler::OnWKeyToggled(bool Pressed)
@@ -72,4 +72,4 @@ void ORendererInputHandler::BindKeys()
 	Owner->AddRawListener(this, &ORendererInputHandler::OnQKeyToggled, EKeys::KEY_Q);
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

@@ -7,7 +7,7 @@
 
 #include <stack>
 
-namespace RenderAPI
+namespace RAPI
 {
 
 /**
@@ -65,5 +65,5 @@ private:
 	std::stack<T> Data;
 	OMutex Mutex;
 };
-} // namespace RenderAPI
+} // namespace RAPI
 #endif // RENDERAPI_LOCKBASEDSTACK_HPP

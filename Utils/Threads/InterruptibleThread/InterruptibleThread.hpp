@@ -4,7 +4,7 @@
 #include "Threads/Utils.hpp"
 #include "TypeTraits.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 class OInterruptibleThread
@@ -30,10 +30,18 @@ OInterruptibleThread::OInterruptibleThread(FuncType Function)
 	OPromise<OInterruptFlag*> pFlag;
 	InternalThread = OThread([Function, &pFlag]
 	                         {
-		pFlag.set_value(&OThreadUtils::LocalThreadInterruptFlag)     ;
-		Function(); });
+		                         pFlag.set_value(&LocalThreadInterruptFlag);
+
+		                         try
+		                         {
+			                         Function();
+		                         }
+		                         catch (const boost::thread_interrupted&)
+		                         {
+		                         }
+	                         });
 
 	Flag = pFlag.get_future().get();
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

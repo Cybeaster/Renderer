@@ -15,7 +15,7 @@ struct SModelContext
 	OVector<float> NormalsCoords;
 };
 
-namespace RenderAPI
+namespace RAPI
 {
 
 class OModel
@@ -62,6 +62,6 @@ protected:
 	OVector<OVec2> TexCoords;
 	OVector<OVec3> Normals;
 };
-} // namespace RenderAPI
+} // namespace RAPI
 
 #endif // RENDERAPI_MODEL_HPP

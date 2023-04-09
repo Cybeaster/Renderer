@@ -6,7 +6,7 @@
 
 #include <type_traits>
 
-namespace RenderAPI
+namespace RAPI
 {
 #define SMALL_INLINE_ALLOC_STACK_SIZE_MSG                             \
 	"MaxStackSize is smaller or equal to the size of a pointer. '\n'" \
@@ -133,4 +133,4 @@ private:
 	uint32 AllocSize{};
 };
 
-} // namespace RenderAPI
+} // namespace RAPI

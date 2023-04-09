@@ -19,7 +19,7 @@ enum class ShaderType
 	FRAGMENT = 1
 };
 
-namespace RenderAPI
+namespace RAPI
 {
 class OShader
 {
@@ -50,4 +50,4 @@ private:
 	uint32 RendererID = 277;
 	std::unordered_map<OString, int32_t> LocationCache;
 };
-} // namespace RenderAPI
+} // namespace RAPI

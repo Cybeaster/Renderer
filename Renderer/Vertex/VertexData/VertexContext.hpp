@@ -2,9 +2,10 @@
 #include "../Buffer.hpp"
 #include "../SimpleVertexHandle.hpp"
 #include "SmartPtr.hpp"
+#include "TypeTraits.hpp"
 #include "Types.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 struct SVertexContext
@@ -37,4 +38,4 @@ struct SVertexContext
 	void* VertexPointer;
 	bool IsNormalized;
 };
-} // namespace RenderAPI
+} // namespace RAPI

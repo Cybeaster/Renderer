@@ -1,43 +1,34 @@
 #pragma once
 
 #include "HashMap/Hash.hpp"
+#include "HashMap/ThreadSafeHashMap.hpp"
+#include "StatGroup.hpp"
 #include "TypeTraits.hpp"
-namespace RenderAPI
+
+namespace RAPI
 {
 
-// I need to have some stat group.
-//  Stat-Group is a string-ID for this group
-//  Group itself is an array of subgroups (possibly stat counters, or others)
-
-
-struct SProfilerGroup
-{
-	uint32 ID;
-};
-
-class OCycleStatGroup
-{
-
-};
-
-// Singleton profiler
 class OProfiler
 {
-
-	OProfiler* Get()
+public:
+	static OProfiler* Get()
 	{
-		if(Profiler == nullptr)
+		if (Profiler == nullptr)
 		{
-			Profiler = new OProfiler;
+			Profiler = new OProfiler();
 		}
+
 		return Profiler;
 	}
 
+	void AddStatGroup(const OString& Name, OStatGroup* Group);
+
 private:
-
-	OHashMap<SProfilerGroup, > ;
-
-	OProfiler* Profiler= nullptr;
+	OProfiler() = default;
+	OThreadSafeHashMap<SStatGroupID<OString>, OStatGroup*, STStatGroupHash<OString>> StatGroups;
+	static inline OProfiler* Profiler{ nullptr };
 };
 
-} // namespace RenderAPI
+#define MAKE_STAT_GROUP(Name)
+
+} // namespace RAPI

@@ -2,7 +2,7 @@
 #include "../Functions.hpp"
 #include "TupleElem.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 template<typename FunctionType, typename... ArgTypes>
 auto CallFunction(FunctionType&& FuncType, ArgTypes&&... Args) -> decltype(std::forward<FunctionType>(FuncType)(std::forward<ArgTypes>(Args)...))
@@ -155,4 +155,4 @@ public:
 
 #pragma endregion Tuple
 
-} // namespace RenderAPI
+} // namespace RAPI

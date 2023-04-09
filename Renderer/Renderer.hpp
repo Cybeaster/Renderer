@@ -14,7 +14,7 @@
 
 struct GLFWwindow;
 class Application;
-namespace RenderAPI
+namespace RAPI
 {
 /**
  * @brief Singleton class that creates the context, calculates perspective, frames etc.
@@ -137,4 +137,4 @@ private:
 	static inline OSharedPtr<ORenderer> SingletonRenderer = nullptr;
 };
 
-} // namespace RenderAPI
+} // namespace RAPI

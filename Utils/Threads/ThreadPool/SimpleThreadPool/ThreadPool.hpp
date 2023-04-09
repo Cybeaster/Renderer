@@ -7,7 +7,7 @@
 #include "Threads/Utils.hpp"
 #include "Vector.hpp"
 #include "WorkStealingQueue.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 
 class OSimpleThreadPool
@@ -39,12 +39,12 @@ private:
 	OVector<OUniquePtr<TWorkStealingQueue>> Queues;
 	OThreadSafeQueue<TFunctor> PoolWorkQueue;
 
-	thread_local TWorkStealingQueue* LocalWorkQueue;
-	thread_local uint32 LocalIndex;
+	static thread_local TWorkStealingQueue* LocalWorkQueue;
+	static thread_local uint32 LocalIndex;
 
 	OVector<OThread> WorkerThreads;
 	OAtomic<bool> IsDone;
 	OJoinThreads Joiner{ WorkerThreads };
 };
 
-} // namespace RenderAPI
+} // namespace RAPI

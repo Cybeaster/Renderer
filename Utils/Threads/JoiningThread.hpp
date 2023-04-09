@@ -1,7 +1,7 @@
 #pragma once
 #include <thread>
 
-namespace RenderAPI
+namespace RAPI
 {
 namespace Async
 {
@@ -102,4 +102,4 @@ private:
 	std::thread Thread;
 };
 } // namespace Async
-} // namespace RenderAPI
+} // namespace RAPI

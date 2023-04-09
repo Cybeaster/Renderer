@@ -2,7 +2,7 @@
 
 namespace Test
 {
-OTestTexture::OTestTexture(const OPath& TexturePath, const OPath& SecondTexturePath, const OPath& ShaderPath, OSharedPtr<RenderAPI::ORenderer> Renderer)
+OTestTexture::OTestTexture(const OPath& TexturePath, const OPath& SecondTexturePath, const OPath& ShaderPath, OSharedPtr<RAPI::ORenderer> Renderer)
     : WallTexture(TexturePath), EarthTexture(SecondTexturePath), OTest(ShaderPath, Renderer)
 {
 	SModelContext sphereContext;

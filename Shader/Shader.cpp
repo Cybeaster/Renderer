@@ -6,7 +6,7 @@
 #include <iostream>
 #include <sstream>
 
-namespace RenderAPI
+namespace RAPI
 {
 OShader::OShader(const OPath& Source)
 {
@@ -145,4 +145,4 @@ int OShader::CreateShader(const OString& vertexShader, const OString& fragmentSh
 	return program;
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

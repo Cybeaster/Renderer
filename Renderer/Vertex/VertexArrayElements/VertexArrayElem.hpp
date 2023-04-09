@@ -6,7 +6,7 @@
 #include "Utils/Types/SmartPtr.hpp"
 #include "Utils/Types/Types.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 class OVertexArrayElem
 {
@@ -46,4 +46,4 @@ private:
 	SBufferAttribVertexHandle BoundBufferHandle;
 	SDrawContext DrawContext;
 };
-} // namespace RenderAPI
+} // namespace RAPI

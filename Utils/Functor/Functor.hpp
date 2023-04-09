@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <typeinfo>
 
-namespace RenderAPI
+namespace RAPI
 {
 
 template<typename Func>
@@ -53,7 +53,7 @@ public:
 	~OFunctor() = default;
 
 	OFunctor& operator=(const OFunctor& Functor) = default;
-	OFunctor(const OFunctor<RetType(ArgTypes...)> Functor) = default;
+	OFunctor(const OFunctor& Functor) = default;
 
 	template<typename FuncConstrType, typename... ArgsConstrTypes>
 	explicit OFunctor(FuncConstrType FunctionType, ArgsConstrTypes... FuncArgs)
@@ -131,7 +131,7 @@ protected:
 //     };
 // #pragma endregion FuncWithOwner
 
-} // namespace RenderAPI
+} // namespace RAPI
 
 #define DECLARE_FUNCTOR(FunctorTypeName, RetValue) \
 	using(FunctorTypeName) = RenderAPI::TTFunctor<RetValue(void)>;

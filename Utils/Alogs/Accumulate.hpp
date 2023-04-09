@@ -8,7 +8,7 @@
 
 #include <numeric>
 
-namespace RenderAPI
+namespace RAPI
 {
 template<typename Iterator, typename T>
 struct SAccumulateBlock
@@ -41,9 +41,8 @@ T CstmAsyncAccumulate(Iterator First, Iterator Last, T Init)
 
 		std::advance(blockEnd, blockSize);
 
-		futures[i] = pool.Submit([=]{
-			                       SAccumulateBlock<Iterator,T>(blockStart,blockEnd);
-		});
+		futures[i] = pool.Submit([=]
+		                         { SAccumulateBlock<Iterator, T>(blockStart, blockEnd); });
 
 		blockStart = blockEnd;
 	}
@@ -82,4 +81,4 @@ T AsyncAccumulate(Iterator First, Iterator Last, T Init)
 	return firstHalfRes.get() + secondHalfRes;
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

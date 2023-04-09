@@ -4,7 +4,7 @@
 #include <cstring>
 #include <utility>
 
-namespace RenderAPI
+namespace RAPI
 {
 struct SAllocatorUtils
 {
@@ -39,4 +39,4 @@ struct SInlineAllocatable
 	};
 };
 
-} // namespace RenderAPI
+} // namespace RAPI

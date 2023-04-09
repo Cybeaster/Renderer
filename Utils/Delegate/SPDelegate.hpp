@@ -5,7 +5,7 @@
 #include "SmartPtr.hpp"
 #include "Tuple.hpp"
 #include "TypeTraits.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 template<bool IsConst, typename ObjectType, typename RetType, typename... Args>
 class OTSPDelegate
@@ -55,4 +55,4 @@ private:
 	OTuple<Args2...> Payload;
 };
 
-} // namespace RenderAPI
+} // namespace RAPI

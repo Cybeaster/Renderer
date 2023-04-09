@@ -3,7 +3,7 @@
 #include "Math.hpp"
 #include "Threads/Thread.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 uint32 OAsyncUtils::GetDesirableNumOfThreads(uint32 MinPerThread, uint32 Len)
 {
@@ -14,4 +14,4 @@ uint32 OAsyncUtils::GetDesirableNumOfThreads(uint32 MinPerThread, uint32 Len)
 	SMath::Min((hardwareThreads != 0 ? hardwareThreads : 2), maxThreads);
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

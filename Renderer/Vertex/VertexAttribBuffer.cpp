@@ -3,7 +3,7 @@
 
 #include "../Renderer.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 OVertexAttribBuffer::OVertexAttribBuffer(const SVertexContext& Context)
@@ -21,7 +21,7 @@ OVertexAttribBuffer::OVertexAttribBuffer(SVertexContext&& Context) noexcept
 
 void OVertexAttribBuffer::RegisterBuffer()
 {
-	RenderAPI::ORenderer::Get()->AddAttribBuffer(*this);
+	RAPI::ORenderer::Get()->AddAttribBuffer(*this);
 }
 
 void OVertexAttribBuffer::EnableVertexAttribPointer()
@@ -38,7 +38,7 @@ void OVertexAttribBuffer::EnableVertexAttribPointer()
 }
 void OVertexAttribBuffer::BindBuffer()
 {
-	RenderAPI::ORenderer::Get()->BindBuffer(VertexContext.BoundBuffer);
+	RAPI::ORenderer::Get()->BindBuffer(VertexContext.BoundBuffer);
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

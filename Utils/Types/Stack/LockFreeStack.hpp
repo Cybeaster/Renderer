@@ -3,7 +3,7 @@
 #include "SmartPtr.hpp"
 #include "Threads/HazardPointer.hpp"
 #include "Utils/Types/Threads/Thread.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 
 struct SDataToReclaim
@@ -236,4 +236,4 @@ void OLockFreeStack<T>::ReclaimLater(DataType* Data)
 	AddToReclaimList(new SDataToReclaim(Data));
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

@@ -5,7 +5,7 @@
 
 #include <memory>
 
-namespace RenderAPI
+namespace RAPI
 {
 
 template<typename T>
@@ -35,4 +35,4 @@ using OSharedPtr = boost::shared_ptr<T>;
 template<typename T>
 using OUniquePtr = std::unique_ptr<T>;
 
-} // namespace RenderAPI
+} // namespace RAPI

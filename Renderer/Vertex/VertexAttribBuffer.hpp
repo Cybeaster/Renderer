@@ -5,7 +5,7 @@
 #include <SmartPtr.hpp>
 #include <Types.hpp>
 
-namespace RenderAPI
+namespace RAPI
 {
 class OVertexAttribBuffer
 {
@@ -36,4 +36,4 @@ private:
 
 	SVertexContext VertexContext;
 };
-} // namespace RenderAPI
+} // namespace RAPI

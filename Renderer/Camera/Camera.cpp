@@ -4,7 +4,7 @@
 
 #include "Camera.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 void OCamera::SetPosition(const OVec3& Arg)
 {
@@ -63,4 +63,4 @@ void OCamera::Translate(const OVec3& Delta)
 	UpdateCameraDirection();
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

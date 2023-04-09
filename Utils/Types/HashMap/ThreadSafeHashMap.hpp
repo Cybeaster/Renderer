@@ -8,7 +8,7 @@
 #include "Vector.hpp"
 
 #include <functional>
-namespace RenderAPI
+namespace RAPI
 {
 
 template<typename TKey, typename TValue, typename Hash = std::hash<TKey>>
@@ -31,10 +31,10 @@ class OThreadSafeHashMap
 		}
 
 		// Unique lock for modifying
-		void AddOrUpdate(const TKey& Key, const TValue& Value)
+		void AddOrUpdate(const TKey& Key, TValue Value)
 		{
 			OUniqueLock<OSharedMutex> lock(Mutex);
-			BucketIterator entry = FindEntryFor(Key);
+			const BucketIterator entry = FindEntryFor(Key);
 			if (entry == Data.end())
 			{
 				Data.push_back(BucketEntityType(Key, Value));
@@ -73,9 +73,9 @@ public:
 	explicit OThreadSafeHashMap(uint8 BucketsNum = 13, const Hash& Hasher = Hash())
 	    : BucketArray(BucketsNum), MainHasher(Hasher)
 	{
-		for (auto elem : BucketArray)
+		for (auto& elem : BucketArray)
 		{
-			elem = new OBucket;
+			elem.reset(new OBucket);
 		}
 	}
 
@@ -89,7 +89,12 @@ public:
 
 	void AddOrUpdateMapping(const TKey& Key, const TValue& Value)
 	{
-		GetBucket(Key).AddOrUpdate(Value);
+		GetBucket(Key).AddOrUpdate(Key, Value);
+	}
+
+	void AddOrUpdateMapping(const TKey& Key, TValue&& Value)
+	{
+		GetBucket(Key).AddOrUpdate(Key, Move(Value));
 	}
 
 	bool Remove(const TKey& Key)
@@ -127,4 +132,4 @@ private:
 	Hash MainHasher;
 };
 
-} // namespace RenderAPI
+} // namespace RAPI

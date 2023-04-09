@@ -1,7 +1,7 @@
 #pragma once
 #include <exception>
 
-namespace RenderAPI
+namespace RAPI
 {
 namespace Exceptions
 {
@@ -26,4 +26,4 @@ private:
 
 } // namespace Exceptions
 
-} // namespace RenderAPI
+} // namespace RAPI

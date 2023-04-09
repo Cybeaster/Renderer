@@ -1,7 +1,7 @@
 
 #include "Sphere.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 void OSphere::Init(int32 Precision) noexcept
@@ -61,4 +61,4 @@ void OSphere::GetVertexTextureNormalPositions(SModelContext& OutContext)
 	}
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

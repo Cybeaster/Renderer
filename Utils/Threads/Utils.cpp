@@ -4,7 +4,7 @@
 #include "Logging/Log.hpp"
 #include "boost/thread.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 OString OThreadUtils::GetFormattedThreadID()
@@ -15,4 +15,4 @@ OString OThreadUtils::GetFormattedThreadID()
 	return SLogUtils::Format("Current Thread ID is {} \n ", ss.str());
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

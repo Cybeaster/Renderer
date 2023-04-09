@@ -6,7 +6,7 @@
 
 #include <memory>
 
-namespace RenderAPI
+namespace RAPI
 {
 
 void OSimpleThreadPool::WorkerThread(uint32 Index)
@@ -97,4 +97,4 @@ OFuture<std::invoke_result<FuncType()>::type> OSimpleThreadPool::Submit(FuncType
 	return result;
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

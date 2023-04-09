@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv)
 {
-	auto app = RenderAPI::OApplication::GetApplication();
+	auto app = RAPI::OApplication::GetApplication();
 	app->Start(argc, argv);
 	return 0;
 }

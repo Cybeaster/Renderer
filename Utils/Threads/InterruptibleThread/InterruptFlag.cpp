@@ -1,11 +1,12 @@
 #include "InterruptFlag.hpp"
 
 #include "../Utils.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 
 OInterruptFlag::SClearCondVariableOnDestruct::~SClearCondVariableOnDestruct()
 {
-	OThreadUtils::LocalThreadInterruptFlag.ClearConditionVariable();
+	LocalThreadInterruptFlag.ClearConditionVariable();
 }
-} // namespace RenderAPI
+
+} // namespace RAPI

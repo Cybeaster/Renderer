@@ -12,7 +12,7 @@
 
 #include <functional>
 
-namespace RenderAPI::Async
+namespace RAPI::Async
 {
 struct STaskID
 {
@@ -68,4 +68,4 @@ private:
 	OAtomic<bool> Quite = false;
 	OAtomic<int64> LastID{ 0 };
 };
-} // namespace RenderAPI::Async
+} // namespace RAPI::Async

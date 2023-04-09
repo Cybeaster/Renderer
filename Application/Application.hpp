@@ -1,3 +1,5 @@
+#include "Profiler/Profiler.hpp"
+#include "ShaderName.hpp"
 #include "SmartPtr.hpp"
 
 #include <Path.hpp>
@@ -5,51 +7,8 @@
 #include <cstdint>
 #include <string>
 
-namespace RenderAPI
+namespace RAPI
 {
-
-struct SShaderName
-{
-	SShaderName() = default;
-	SShaderName(const SShaderName& Str) = default;
-
-	explicit SShaderName(const OString& Str) // NOLINT
-	    : Name(Str)
-	{
-	}
-
-	SShaderName(OString&& Str) noexcept // NOLINT
-	    : Name(Move(Str))
-	{
-	}
-
-	SShaderName(const char* Str) // NOLINT
-	    : Name(Str)
-	{
-	}
-
-	SShaderName(SShaderName&& Str) noexcept
-	    : Name(Move(Str)) {}
-
-	SShaderName& operator=(const OString& Str)
-	{
-		Name = Str;
-		return *this;
-	}
-
-	SShaderName& operator=(const char* const Str)
-	{
-		Name = Str;
-		return *this;
-	}
-
-	explicit operator OString() const
-	{
-		return Name;
-	}
-
-	OString Name;
-};
 
 class OApplication
 {
@@ -58,7 +17,7 @@ public:
 	{
 		if (!Application)
 		{
-			Application = RenderAPI::OSharedPtr<OApplication>(new OApplication());
+			Application = RAPI::OSharedPtr<OApplication>(new OApplication());
 			return Application;
 		}
 
@@ -84,10 +43,11 @@ public:
 
 private:
 	OApplication() = default;
+
 	void ParseInput(int argc, char** argv);
 	void StartProgram();
 
-	static inline RenderAPI::OSharedPtr<OApplication> Application = nullptr;
+	static inline RAPI::OSharedPtr<OApplication> Application = nullptr;
 
 	static inline OPath DebugPath = current_path();
 	static inline OPath RootDirPath = current_path();
@@ -98,4 +58,4 @@ private:
 	static inline SShaderName SimpleCubeShader = "\\SimpleCube.shader";
 	static inline SShaderName SimpleTextureShader = "\\SimpleTexture.shader";
 };
-} // namespace RenderAPI
+} // namespace RAPI

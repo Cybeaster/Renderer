@@ -13,7 +13,7 @@
 #define DEBUG_MOUSE_WHEEL false
 #define DEBUG_MOUSE_POS true
 
-namespace RenderAPI
+namespace RAPI
 {
 
 OHashMap<EKeys, SKeyState> OInputHandler::KeyMap{};
@@ -155,4 +155,4 @@ void OInputHandler::MoveCamera(const OVec3& Dir)
 	Renderer->MoveCamera(Dir);
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

@@ -2,10 +2,12 @@
 // Created by Cybea on 3/7/2023.
 //
 #include "Types.hpp"
+#include "Utils/Threads/InterruptibleThread/InterruptibleThread.hpp"
 #include "Utils/UnitTests/TestGroup.hpp"
 
 #include <barrier>
 #include <cassert>
+#include <execution>
 #include <future>
 
 namespace Test
@@ -448,6 +450,80 @@ void SSharedPtrTest::Run()
 	else
 	{
 		RAPI_LOG(Error, "Shared ptr is not lock free!")
+	}
+}
+
+MAKE_TEST(ParallelAlgos)
+
+class Y
+{
+public:
+	int data;
+	Y(int other)
+	    : data(other) {}
+
+	Y()
+	    : data(0) {}
+	int get_value() const
+	{
+		return data;
+	}
+	void increment()
+	{
+		++data;
+	}
+
+	friend std::stringstream& operator<<(std::stringstream& stream, const Y& Other)
+	{
+		stream << Other.data;
+		return stream;
+	}
+};
+class ProtectedY
+{
+	std::mutex m;
+	std::vector<Y> v;
+
+public:
+	void lock()
+	{
+		m.lock();
+	}
+	void unlock()
+	{
+		m.unlock();
+	}
+	std::vector<Y>& get_vec()
+	{
+		return v;
+	}
+};
+
+void increment_all(ProtectedY& data)
+{
+	std::lock_guard guard(data);
+	auto& v = data.get_vec();
+
+	std::for_each(std::execution::par_unseq, v.begin(), v.end(), [](Y& y)
+	              { y.increment(); });
+}
+
+void SParallelAlgosTest::Run()
+{
+	ProtectedY y;
+	for (int i = 0; i < 100; ++i)
+	{
+		y.get_vec().emplace_back(i);
+	}
+	ProtectedY y_2;
+	y_2.get_vec() = y.get_vec();
+
+	increment_all(y);
+
+	RAPI_LOG(Log, SLogUtils::ToString(y.get_vec()));
+	for (int i = 0; i < 100; ++i)
+	{
+		assert(y_2.get_vec()[i].data == (y.get_vec()[i].data - 1));
 	}
 }
 

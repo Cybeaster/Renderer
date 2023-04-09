@@ -1,7 +1,7 @@
 #pragma once
 #include "Types.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 enum EDrawType
@@ -59,4 +59,4 @@ struct SDrawContext
 	uint32 FrontFace = UINT32_INVALID_VALUE;
 	uint32 Flag = UINT32_INVALID_VALUE;
 };
-} // namespace RenderAPI
+} // namespace RAPI

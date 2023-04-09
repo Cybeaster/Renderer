@@ -2,7 +2,7 @@
 #include "SmartPtr.hpp"
 #include "Utils/Types/Threads/Thread.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 /**
@@ -167,4 +167,4 @@ bool OThreadSafeQueue<T>::TryPop(T& Value)
 	return !!oldHead;
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

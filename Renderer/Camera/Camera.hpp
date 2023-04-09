@@ -7,7 +7,7 @@
 #include "Math.hpp"
 #include "Types.hpp"
 #include "Utils/Types/Threads/Thread.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 
 class OCamera
@@ -48,6 +48,6 @@ private:
 	float Pitch{ 0 };
 };
 
-} // namespace RenderAPI
+} // namespace RAPI
 
 #endif // RENDERAPI_CAMERA_HPP

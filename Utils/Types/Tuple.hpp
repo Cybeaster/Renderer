@@ -3,7 +3,7 @@
 
 #include <tuple>
 
-namespace RenderAPI
+namespace RAPI
 {
 template<typename... Types>
 using OTuple = OTElemSequenceTuple<Types...>;

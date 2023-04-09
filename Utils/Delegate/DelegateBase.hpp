@@ -3,7 +3,7 @@
 #include "Assert.hpp"
 #include "Types.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 class OIDelegateBase
@@ -142,4 +142,4 @@ protected:
 
 	OInlineAllocator<SInlineAllocatable::StackSize::_32> Allocator;
 };
-} // namespace RenderAPI
+} // namespace RAPI

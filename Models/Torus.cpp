@@ -1,11 +1,11 @@
 #include "Torus.hpp"
 
-void RenderAPI::OTorus::Init(int32 Precision) noexcept
+void RAPI::OTorus::Init(int32 Precision) noexcept
 {
 	const auto sqrtPrecision = Precision * Precision;
 	NumVertices = sqrtPrecision + 2 * Precision + 1;
 }
-void RenderAPI::OTorus::PreInit(int32 Precision) noexcept
+void RAPI::OTorus::PreInit(int32 Precision) noexcept
 {
 	OModel::PreInit(Precision);
 	STangents.resize(NumVertices);
@@ -15,7 +15,7 @@ void RenderAPI::OTorus::PreInit(int32 Precision) noexcept
 	MultiplyRings(Precision);
 	CalcIndices(Precision);
 }
-void RenderAPI::OTorus::CalcFirstRing(uint32 Precision)
+void RAPI::OTorus::CalcFirstRing(uint32 Precision)
 {
 	for (size_t it = 0; it < Precision + 1; ++it)
 	{
@@ -37,7 +37,7 @@ void RenderAPI::OTorus::CalcFirstRing(uint32 Precision)
 	}
 }
 
-void RenderAPI::OTorus::MultiplyRings(uint32 Precision)
+void RAPI::OTorus::MultiplyRings(uint32 Precision)
 {
 	auto incPrecision = Precision + 1;
 	for (size_t ringIdx = 1; ringIdx < Precision; ++ringIdx)
@@ -66,7 +66,7 @@ void RenderAPI::OTorus::MultiplyRings(uint32 Precision)
 		}
 	}
 }
-void RenderAPI::OTorus::CalcIndices(uint32 Precision)
+void RAPI::OTorus::CalcIndices(uint32 Precision)
 {
 	const auto incPrecision = Precision + 1;
 	for (uint32 ringIdx = 0; ringIdx < Precision; ++ringIdx)
@@ -85,7 +85,7 @@ void RenderAPI::OTorus::CalcIndices(uint32 Precision)
 		}
 	}
 }
-void RenderAPI::OTorus::GetVertexTextureNormalPositions(SModelContext& OutContext)
+void RAPI::OTorus::GetVertexTextureNormalPositions(SModelContext& OutContext)
 {
 	const auto numVertices = GetNumVertices();
 	for (uint32 idx = 0; idx < numVertices; ++idx)
@@ -100,7 +100,5 @@ void RenderAPI::OTorus::GetVertexTextureNormalPositions(SModelContext& OutContex
 		OutContext.NormalsCoords.push_back(Normals[idx].x);
 		OutContext.NormalsCoords.push_back(Normals[idx].y);
 		OutContext.NormalsCoords.push_back(Normals[idx].z);
-
-
 	}
 }

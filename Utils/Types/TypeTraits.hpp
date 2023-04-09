@@ -1,36 +1,8 @@
 #pragma once
-
-#include "TypeTraits.hpp"
+#include "Types.hpp"
 
 #include <cstdint>
 #include <type_traits>
-
-#define NODISCARD [[nodiscard]]
-
-#define NODISC_FORCEINL NODISCARD FORCEINLINE
-#define DELEGATE_NODISCARD [[nodiscard("Delegate's function result has to be stored in value!")]]
-
-using int32 = int32_t;
-using int64 = int64_t;
-
-using uint32 = uint32_t;
-using uint64 = uint64_t;
-using uint16 = uint16_t;
-using int16 = int16_t;
-
-using uint8 = uint8_t;
-using int8 = int8_t;
-
-using char8 = char8_t;
-using char16 = char16_t;
-using char32 = char32_t;
-using wchar = wchar_t;
-
-using CWCharPTR = const wchar*;
-using CCharPTR = const char*;
-
-#define INFINITE_LOOP_SCOPE() \
-	while (true)
 
 template<bool Flag, typename Arg = void>
 struct STEnableIf
@@ -175,3 +147,28 @@ using TMakeIndexSequence = TMakeIntegerSequence<size_t, Size>;
 
 template<typename... Types>
 using TMakeIndexSequenceFor = TMakeIndexSequence<sizeof...(Types)>;
+
+template<typename T>
+NODISCARD constexpr TRemoveRef<T>&& Move(T&& Arg) noexcept
+{
+	return static_cast<TRemoveRef<T>&&>(Arg);
+}
+
+template<typename>
+constexpr bool TIsLValueRef = false;
+
+template<typename T>
+constexpr bool TIsLValueRef<T&> = true;
+
+template<typename T>
+NODISCARD constexpr T&& Forward(TRemoveRef<T>& Arg) noexcept
+{
+	return static_cast<T&&>(Arg);
+}
+
+template<typename T>
+NODISCARD constexpr T&& Forward(TRemoveRef<T>&& Arg) noexcept
+{
+	static_assert(TIsLValueRef<T>, "Bad forward call");
+	return static_cast<T&&>(Arg);
+}

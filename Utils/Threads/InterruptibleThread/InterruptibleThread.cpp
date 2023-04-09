@@ -6,11 +6,11 @@
 
 #include "InterruptFlag.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 NODISCARD bool OInterruptibleThread::IsJoinable() const
 {
-	InternalThread.joinable();
+	return InternalThread.joinable();
 }
 void OInterruptibleThread::Interrupt()
 {
@@ -28,4 +28,4 @@ void OInterruptibleThread::Join()
 	InternalThread.join();
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 
 #ifndef RENDERAPI_TESTGROUP_HPP
 #define RENDERAPI_TESTGROUP_HPP
@@ -7,7 +7,7 @@
 #include "Logging/Log.hpp"
 #include "Vector.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 class OTestBase
@@ -30,16 +30,16 @@ class OTestGroup
 public:
 	static auto Get()
 	{
-		if (Group.get() == nullptr)
+		if (Group == nullptr)
 		{
-			Group = OSharedPtr<OTestGroup>(new OTestGroup());
+			Group = new OTestGroup();
 		}
 		return Group;
 	}
 
 	void AddTest(OTestBase* Test)
 	{
-		Tests.push_back(OSharedPtr<OTestBase>(Test));
+		Tests.push_back(Test);
 	}
 
 	void Run()
@@ -65,35 +65,35 @@ public:
 private:
 	OTestGroup() = default;
 
-	static inline OSharedPtr<OTestGroup> Group{ nullptr };
-	OVector<OSharedPtr<OTestBase>> Tests{};
+	static inline OTestGroup* Group{ nullptr };
+	OVector<OTestBase*> Tests{};
 };
 
-} // namespace RenderAPI
+} // namespace RAPI
 
-#define MAKE_TEST(Name)                                  \
-	struct S##Name##Test : public RenderAPI::OTestBase   \
-	{                                                    \
-		using ThisTestType = S##Name##Test;              \
-		using Super = RenderAPI::OTestBase;              \
-                                                         \
-		S##Name##Test()                                  \
-		{                                                \
-			RenderAPI::OTestGroup::Get()->AddTest(this); \
-		}                                                \
-                                                         \
-		NODISCARD OString GetName() const override       \
-		{                                                \
-			return #Name;                                \
-		}                                                \
-                                                         \
-		void Run() override;                             \
+#define MAKE_TEST(Name)                             \
+	struct S##Name##Test : public RAPI::OTestBase   \
+	{                                               \
+		using ThisTestType = S##Name##Test;         \
+		using Super = RAPI::OTestBase;              \
+                                                    \
+		S##Name##Test()                             \
+		{                                           \
+			RAPI::OTestGroup::Get()->AddTest(this); \
+		}                                           \
+                                                    \
+		NODISCARD OString GetName() const override  \
+		{                                           \
+			return #Name;                           \
+		}                                           \
+                                                    \
+		void Run() override;                        \
 	} Name##Test;
 
 #define RUN_ALL_TESTS() \
-	RenderAPI::OTestGroup::Get()->Run();
+	RAPI::OTestGroup::Get()->Run();
 
 #define RUN_TEST(TestName) \
-	RenderAPI::OTestGroup::Get()->Run(Move(TestName));
+	RAPI::OTestGroup::Get()->Run(Move(#TestName));
 
 #endif // RENDERAPI_TESTGROUP_HPP

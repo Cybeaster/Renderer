@@ -4,7 +4,7 @@
 #include "Renderer.hpp"
 #include "glfw3.h"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 void OVertexArray::AddVertexArray()
@@ -100,4 +100,4 @@ SBufferHandle OVertexArray::AddBuffer(SBufferContext&& Context)
 	return bufferHandle;
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

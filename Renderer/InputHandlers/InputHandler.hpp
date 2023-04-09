@@ -1,5 +1,4 @@
 #pragma once
-#include "../Test/Test.hpp"
 #include "Delegate.hpp"
 #include "KeyboardKeys.hpp"
 #include "RendererInputHandler.hpp"
@@ -12,7 +11,7 @@
 
 #include <Set.hpp>
 
-namespace RenderAPI
+namespace RAPI
 {
 
 struct SKeyState
@@ -78,10 +77,10 @@ protected:
 private:
 	void SetInput(GLFWwindow* Window);
 
-	ORenderer* Renderer;
+	ORenderer* Renderer{ nullptr };
 	ORendererInputHandler RenderInputHandler{ this };
 
 	static OHashMap<EKeys, SKeyState> KeyMap;
 };
 
-} // namespace RenderAPI
+} // namespace RAPI

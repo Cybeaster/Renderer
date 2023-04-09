@@ -2,7 +2,7 @@
 
 #include "Renderer/Renderer.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 
 void OVertexArrayElem::Draw() const
@@ -22,4 +22,4 @@ void OVertexArrayElem::Draw() const
 	                    DrawContext.DrawSize));
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

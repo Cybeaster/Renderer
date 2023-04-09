@@ -33,6 +33,7 @@ template<typename T>
 using OPromise = std::promise<T>;
 
 using OConditionVariable = std::condition_variable;
+using OConditionVariableAny = std::condition_variable_any;
 
 template<typename T>
 using OAtomic = std::atomic<T>;

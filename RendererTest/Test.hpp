@@ -16,17 +16,17 @@
 
 // clang-format on
 
-namespace RenderAPI
+namespace RAPI
 {
 class ORenderer;
 }
 namespace Test
 {
-using RenderAPI::ORenderer;
-using RenderAPI::OShader;
-using RenderAPI::OSharedPtr;
-using RenderAPI::SDrawContext;
-using RenderAPI::SVertexContext;
+using RAPI::ORenderer;
+using RAPI::OShader;
+using RAPI::OSharedPtr;
+using RAPI::SDrawContext;
+using RAPI::SVertexContext;
 /**
  * @brief Base class for all tests.
  * @details Each test is an abstract modul, receiving as input base parameters(camera location, frame rate, aspect ration, perspective matrix)
@@ -35,7 +35,7 @@ using RenderAPI::SVertexContext;
 class OTest
 {
 public:
-	OTest(const OPath& shaderPath, const OSharedPtr<RenderAPI::ORenderer>& RendererArg);
+	OTest(const OPath& shaderPath, const OSharedPtr<RAPI::ORenderer>& RendererArg);
 	OTest() = default;
 	virtual ~OTest() = default;
 
@@ -55,12 +55,12 @@ public:
 
 	virtual void InitShader(const OString& shaderPath);
 
-	void EnableVertexArray(const RenderAPI::OVertexAttribBuffer& VContext);
+	void EnableVertexArray(const RAPI::OVertexAttribBuffer& VContext);
 	void Draw(const SDrawVertexHandle& Handle);
 	void BindBuffer(const SBufferHandle& Handle);
 
 	SDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext);
-	SBufferAttribVertexHandle AddAttribBuffer(const RenderAPI::OVertexAttribBuffer& AttribBuffer);
+	SBufferAttribVertexHandle AddAttribBuffer(const RAPI::OVertexAttribBuffer& AttribBuffer);
 
 	SBufferHandle AddBuffer(const void* Data, size_t Size);
 	SBufferHandle AddBuffer(SBufferContext&& Context);

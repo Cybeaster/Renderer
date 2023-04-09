@@ -4,7 +4,7 @@
 #include "KeyboardKeys.hpp"
 #include "SmartPtr.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 class OInputHandler;
 class ORenderer;
@@ -35,4 +35,4 @@ private:
 	OInputHandler* Owner; // should be shared ref
 };
 
-} // namespace RenderAPI
+} // namespace RAPI

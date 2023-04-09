@@ -9,7 +9,7 @@
 #include <iterator>
 #include <utility>
 
-namespace RenderAPI
+namespace RAPI
 {
 namespace
 {
@@ -23,7 +23,6 @@ void CustAsyncForEach(Iterator First, Iterator Last, Func Function)
 	{
 		return;
 	}
-
 
 	auto numThreads = OAsyncUtils::GetDesirableNumOfThreads(25, len);
 
@@ -83,4 +82,4 @@ void AsyncForEach(Iterator First, Iterator Last, Func&& Function)
 		firstHalf.get();
 	}
 }
-}
+} // namespace RAPI

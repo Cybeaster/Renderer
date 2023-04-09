@@ -3,7 +3,7 @@
 #ifndef RENDERAPI_TORUS_HPP
 #define RENDERAPI_TORUS_HPP
 
-namespace RenderAPI
+namespace RAPI
 {
 
 class OTorus final : public OModel
@@ -47,6 +47,6 @@ private:
 	OVector<OVec3> TTangents;
 };
 
-} // namespace RenderAPI
+} // namespace RAPI
 
 #endif // RENDERAPI_TORUS_HPP

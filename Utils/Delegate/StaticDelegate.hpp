@@ -3,7 +3,7 @@
 #include "DelegateBase.hpp"
 #include "Tuple.hpp"
 #include "TypeTraits.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 
 template<typename RetType, typename... Args2>
@@ -48,4 +48,4 @@ private:
 	TDelegateFunction Function;
 	OTuple<Args2...> Payload;
 };
-} // namespace RenderAPI
+} // namespace RAPI

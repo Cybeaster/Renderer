@@ -7,7 +7,7 @@
 #include <type_traits>
 #include <vcruntime.h>
 
-namespace RenderAPI
+namespace RAPI
 {
 
 template<typename LamdaType, typename RetType, typename... Args>
@@ -50,4 +50,4 @@ private:
 	LamdaType Lamda;
 };
 
-} // namespace RenderAPI
+} // namespace RAPI

@@ -6,7 +6,7 @@
 
 namespace Test
 {
-OTest::OTest(const OPath& ShaderPath, const OSharedPtr<RenderAPI::ORenderer>& RendererArg)
+OTest::OTest(const OPath& ShaderPath, const OSharedPtr<RAPI::ORenderer>& RendererArg)
     : Shader(ShaderPath), Renderer(RendererArg)
 {
 }
@@ -36,7 +36,7 @@ SDrawVertexHandle OTest::CreateVertexElement(const SVertexContext& VContext, con
 	return Renderer->CreateVertexElement(VContext, RContext);
 }
 
-SBufferAttribVertexHandle OTest::AddAttribBuffer(const RenderAPI::OVertexAttribBuffer& AttribBuffer)
+SBufferAttribVertexHandle OTest::AddAttribBuffer(const RAPI::OVertexAttribBuffer& AttribBuffer)
 {
 	return Renderer->AddAttribBuffer(AttribBuffer);
 }

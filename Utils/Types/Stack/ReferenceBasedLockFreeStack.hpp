@@ -3,7 +3,7 @@
 #include "SmartPtr.hpp"
 #include "TypeTraits.hpp"
 #include "Utils/Types/Threads/Thread.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 
 template<typename T>
@@ -106,4 +106,4 @@ void OReferenceBasedLockFreeStack<T>::Push(const T& Data)
 		;
 }
 
-} // namespace RenderAPI
+} // namespace RAPI

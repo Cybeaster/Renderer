@@ -18,10 +18,10 @@ include_directories(
         ${PROJECT_SOURCE_DIR}/Shader
         ${PROJECT_SOURCE_DIR}/Texture
         ${PROJECT_SOURCE_DIR}/Externals/Vendor
-        ${PROJECT_SOURCE_DIR}/Test/Particle
-        ${PROJECT_SOURCE_DIR}/Test
-        ${PROJECT_SOURCE_DIR}/Test/Tube
-        ${PROJECT_SOURCE_DIR}/Test/Tube/Plane
+        ${PROJECT_SOURCE_DIR}/RendererTest/Particle
+        ${PROJECT_SOURCE_DIR}/RendererTest
+        ${PROJECT_SOURCE_DIR}/RendererTest/Tube
+        ${PROJECT_SOURCE_DIR}/RendererTest/Tube/Plane
         ${PROJECT_SOURCE_DIR}/Utils
         ${PROJECT_SOURCE_DIR}/Externals/freeglut/include
         ${PROJECT_SOURCE_DIR}/Utils/Threads/ThreadPool
@@ -50,12 +50,12 @@ add_executable(exec
         Application/Application.cpp
         Shader/Shader.cpp
         Texture/Texture.cpp
-        Test/Test.cpp
-        Test/TestTexture.cpp
-        Test/TestSimpleCube.cpp
-        Test/Particle/Particle.cpp
-        Test/Particle/TestParticles.cpp
-        Test/TestSimpleSolarSystem.cpp
+        RendererTest/Test.cpp
+        RendererTest/TestTexture.cpp
+        RendererTest/TestSimpleCube.cpp
+        RendererTest/Particle/Particle.cpp
+        RendererTest/Particle/TestParticles.cpp
+        RendererTest/TestSimpleSolarSystem.cpp
         Renderer/Vertex/VertexArrayElements/VertexArrayElem.cpp
         Renderer/Vertex/VertexArray.cpp
 
@@ -76,15 +76,15 @@ add_executable(exec
         Models/Model.hpp
         Models/Model.cpp
         Renderer/Camera/Camera.cpp Renderer/Camera/Camera.hpp
-        Utils/Threads/Tests/ThreadTests.cpp
-        Utils/Threads/Tests/ThreadTests.hpp
-        Utils/Threads/Tests/Clocks.hpp
+        Tests/ThreadTests.cpp
+        Tests/ThreadTests.hpp
+        Tests/Clocks.hpp
         Utils/Alogs/QuickSort.hpp
         Utils/Types/List.hpp
         Utils/Threads/Async.hpp
         Utils/UnitTests/TestGroup.cpp
         Utils/UnitTests/TestGroup.hpp
-        Utils/Types/Stack/LockBasedStack.hpp Utils/Types/Queue/Queue.hpp Utils/Types/Queue.hpp Utils/Types/HashMap/ThreadSafeHashMap.hpp Utils/Types/List/ThreadSafeList.hpp Utils/Types/Stack/LockFreeStack.hpp Utils/Types/Stack/Stack.hpp Utils/Threads/HazardPointer.hpp Utils/Types/Stack/SharedPtrLockFreeStack.hpp Utils/Types/Stack/ReferenceBasedLockFreeStack.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Alogs/Sorter.hpp Utils/Types/Time.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/ForEach.hpp Utils/Threads/Utils.hpp Utils/Alogs/Find.hpp Utils/Alogs/PartialSum.hpp Utils/Alogs/Utils.hpp Utils/Alogs/Utils.cpp Utils/Threads/Utils.cpp Utils/Profiler/Profiler.hpp Utils/Profiler/StatGroup.hpp Utils/Threads/Barrier.hpp Utils/Threads/ThreadPool/SimpleThreadPool/ThreadPool.cpp Utils/Threads/ThreadPool/SimpleThreadPool/ThreadPool.hpp Utils/Threads/ThreadPool/ThreadPool.hpp Utils/Types/Queue/WorkStealingQueue.hpp Utils/Threads/InterruptibleThread/InterruptibleThread.cpp Utils/Threads/InterruptibleThread/InterruptibleThread.hpp Utils/Threads/InterruptibleThread/InterruptFlag.hpp Utils/Threads/InterruptibleThread/InterruptFlag.cpp)
+        Utils/Types/Stack/LockBasedStack.hpp Utils/Types/Queue/Queue.hpp Utils/Types/Queue.hpp Utils/Types/HashMap/ThreadSafeHashMap.hpp Utils/Types/List/ThreadSafeList.hpp Utils/Types/Stack/LockFreeStack.hpp Utils/Types/Stack/Stack.hpp Utils/Threads/HazardPointer.hpp Utils/Types/Stack/SharedPtrLockFreeStack.hpp Utils/Types/Stack/ReferenceBasedLockFreeStack.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Alogs/Sorter.hpp Utils/Types/Time.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/ForEach.hpp Utils/Threads/Utils.hpp Utils/Alogs/Find.hpp Utils/Alogs/PartialSum.hpp Utils/Alogs/Utils.hpp Utils/Alogs/Utils.cpp Utils/Threads/Utils.cpp Utils/Profiler/Profiler.hpp Utils/Profiler/StatGroup.hpp Utils/Threads/Barrier.hpp Utils/Threads/ThreadPool/SimpleThreadPool/ThreadPool.cpp Utils/Threads/ThreadPool/SimpleThreadPool/ThreadPool.hpp Utils/Threads/ThreadPool/ThreadPool.hpp Utils/Types/Queue/WorkStealingQueue.hpp Utils/Threads/InterruptibleThread/InterruptibleThread.cpp Utils/Threads/InterruptibleThread/InterruptibleThread.hpp Utils/Threads/InterruptibleThread/InterruptFlag.hpp Utils/Threads/InterruptibleThread/InterruptFlag.cpp Utils/Threads/JoinThreads.hpp Utils/Threads/SpinlockMutex.hpp Utils/Profiler/StatObject.hpp Utils/Types/ShaderName.hpp Utils/Profiler/Profiler.cpp Utils/Profiler/StatGroup.cpp)
 
 
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)

@@ -1,10 +1,8 @@
 #pragma once
-#include "TypeTraits.hpp"
 #include "cstdint"
 
 #include <iostream>
 #include <string>
-#include <type_traits>
 #include <utility>
 
 #ifdef NDEBUG
@@ -29,6 +27,33 @@
 
 #endif
 
+#define NODISCARD [[nodiscard]]
+
+#define NODISC_FORCEINL NODISCARD FORCEINLINE
+#define DELEGATE_NODISCARD [[nodiscard("Delegate's function result has to be stored in value!")]]
+
+using int32 = int32_t;
+using int64 = int64_t;
+
+using uint32 = uint32_t;
+using uint64 = uint64_t;
+using uint16 = uint16_t;
+using int16 = int16_t;
+
+using uint8 = uint8_t;
+using int8 = int8_t;
+
+using char8 = char8_t;
+using char16 = char16_t;
+using char32 = char32_t;
+using wchar = wchar_t;
+
+using CWCharPTR = const wchar*;
+using CCharPTR = const char*;
+using OString = std::string;
+#define INFINITE_LOOP_SCOPE() \
+	while (true)
+
 #define REMOVE_COPY_FOR(ClassName)        \
 	ClassName(const ClassName&) = delete; \
 	ClassName& operator=(const ClassName&) = delete;
@@ -45,12 +70,12 @@ struct STypeLimits;
 template<>
 struct STypeLimits<uint32>
 {
-	static uint32 Min()
+	constexpr static uint32 Min()
 	{
 		return 0;
 	}
 
-	static uint32 MAX()
+	constexpr static uint32 MAX()
 	{
 		return UINT32_MAX;
 	}
@@ -59,12 +84,12 @@ struct STypeLimits<uint32>
 template<>
 struct STypeLimits<float>
 {
-	static float Min()
+	constexpr static float Min()
 	{
 		return MIN_FLOAT;
 	}
 
-	static float MAX()
+	constexpr static float MAX()
 	{
 		return MAX_FLOAT;
 	}
@@ -73,42 +98,43 @@ struct STypeLimits<float>
 template<>
 struct STypeLimits<double>
 {
-	static double Min()
+	constexpr static double Min()
 	{
 		return MIN_DOUBLE;
 	}
 
-	static double MAX()
+	constexpr static double MAX()
 	{
 		return MAX_DOUBLE;
 	}
 };
 
+template<typename Type>
+struct SInvalidValue
+{
+	static Type Get()
+	{
+		static_assert(false, "SInvalidValue is specialized for this type!");
+	}
+};
+
+template<>
+struct SInvalidValue<uint32>
+{
+	constexpr static uint32 Get()
+	{
+		return STypeLimits<uint32>::MAX();
+	}
+};
+
+template<>
+struct SInvalidValue<OString>
+{
+	constexpr static OString Get()
+	{
+		return "NONE";
+	}
+};
+
 #define UINT32_INVALID_VALUE STypeLimits<uint32>::MAX()
-
-template<typename T>
-NODISCARD constexpr TRemoveRef<T>&& Move(T&& Arg) noexcept
-{
-	return static_cast<TRemoveRef<T>&&>(Arg);
-}
-
-template<typename>
-constexpr bool TIsLValueRef = false;
-
-template<typename T>
-constexpr bool TIsLValueRef<T&> = true;
-
-template<typename T>
-NODISCARD constexpr T&& Forward(TRemoveRef<T>& Arg) noexcept
-{
-	return static_cast<T&&>(Arg);
-}
-
-template<typename T>
-NODISCARD constexpr T&& Forward(TRemoveRef<T>&& Arg) noexcept
-{
-	static_assert(TIsLValueRef<T>, "Bad forward call");
-	return static_cast<T&&>(Arg);
-}
-
-using OString = std::string;
+#define STRING_INVALID_VALUE SInvalidValue<OString>::Get();

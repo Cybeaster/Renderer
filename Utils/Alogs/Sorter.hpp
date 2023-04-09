@@ -10,7 +10,7 @@
 #include "Threads/Thread.hpp"
 #include "Time.hpp"
 #include "Vector.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 
 template<typename T>
@@ -121,6 +121,6 @@ OList<T> ParallelQuickSort(const OList<T>& Input)
 	return sorter.Sort(Input);
 }
 
-} // namespace RenderAPI
+} // namespace RAPI
 
 #endif // RENDERAPI_SORTER_HPP

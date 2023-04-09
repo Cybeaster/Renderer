@@ -7,7 +7,7 @@
 
 #include "SmartPtr.hpp"
 #include "Utils/Types/Threads/Thread.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 
 template<typename T>
@@ -106,6 +106,6 @@ private:
 	SNode Head;
 };
 
-} // namespace RenderAPI
+} // namespace RAPI
 
 #endif // RENDERAPI_THREADSAFELIST_HPP

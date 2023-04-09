@@ -3,7 +3,7 @@
 
 #include <Types.hpp>
 
-namespace RenderAPI
+namespace RAPI
 {
 namespace Async
 {
@@ -31,4 +31,4 @@ private:
 };
 } // namespace Async
 
-} // namespace RenderAPI
+} // namespace RAPI

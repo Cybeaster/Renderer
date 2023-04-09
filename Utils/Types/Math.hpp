@@ -11,8 +11,7 @@ using OVec2 = glm::vec2;
 using OVec3 = glm::vec3;
 using OVec4 = glm::vec4;
 
-
-namespace RenderAPI
+namespace RAPI
 {
 struct SMath
 {
@@ -23,11 +22,10 @@ struct SMath
 		return (Degree * 2.F * Pi) / 360.F;
 	}
 
-
 	NODISCARD FORCEINLINE static decltype(auto) Min(auto First, auto Second)
 	{
 		return First > Second ? Second : First;
 	}
 };
 
-}
+} // namespace RAPI

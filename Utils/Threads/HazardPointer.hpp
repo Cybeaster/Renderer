@@ -7,7 +7,7 @@
 #include "TypeTraits.hpp"
 #include "Types.hpp"
 #include "Utils/Types/Threads/Thread.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 
 struct SHazardPointer
@@ -84,6 +84,6 @@ bool OHazardPointerManagerImpl<Size>::IsOutstandingHazardPointerFor(void* Pointe
 	return false;
 }
 
-} // namespace RenderAPI
+} // namespace RAPI
 
 #endif // RENDERAPI_HAZARDPOINTER_HPP

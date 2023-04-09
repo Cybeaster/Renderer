@@ -7,7 +7,7 @@
 #include "SmartPtr.hpp"
 #include "StaticDelegate.hpp"
 #include "Types.hpp"
-namespace RenderAPI
+namespace RAPI
 {
 
 template<typename RetValueType, typename... ArgTypes>
@@ -133,4 +133,4 @@ private:
 	}
 };
 
-} // namespace RenderAPI
+} // namespace RAPI

@@ -2,7 +2,7 @@
 
 #include "Assert.hpp"
 
-namespace RenderAPI
+namespace RAPI
 {
 namespace Async
 {
@@ -59,4 +59,4 @@ bool HierarchicalMutex::TryLock()
 
 } // namespace Async
 
-} // namespace RenderAPI
+} // namespace RAPI

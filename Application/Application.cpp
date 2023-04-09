@@ -9,20 +9,22 @@
 #include <iostream>
 #include <string>
 
-namespace RenderAPI
+
+
+namespace RAPI
 {
 
 void OApplication::Start(int argc, char** argv)
 {
-	RUN_ALL_TESTS()
+	RUN_TEST(ParallelAlgos);
 
-	ParseInput(argc, argv);
-	StartProgram();
+	//ParseInput(argc, argv);
+	//StartProgram();
 }
 
 void OApplication::StartProgram()
 {
-	auto renderer = RenderAPI::ORenderer::Get();
+	auto renderer = RAPI::ORenderer::Get();
 	if (!renderer)
 		return;
 
@@ -45,7 +47,6 @@ void OApplication::ParseInput(int argc, char** argv)
 	OString arguments[argc];
 	for (int it = 0; it < argc; it++)
 	{
-
 	}
 
 	for (auto str : arguments)
@@ -53,8 +54,7 @@ void OApplication::ParseInput(int argc, char** argv)
 		RAPI_LOG(Log, "Command: {} is parsed", str);
 		if (str == "StartTests")
 		{
-
 		}
 	}
 }
-} // namespace RenderAPI
+} // namespace RAPI
