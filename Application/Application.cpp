@@ -37,7 +37,7 @@ void OApplication::StartProgram()
 	Test::OTestTexture textureTest(brickTexture, earthTexture, textureShaderPath, renderer);
 	// renderer->AddTest(&test);
 	renderer->AddTest(&textureTest);
-	renderer->GLFWRenderTickStart();
+	renderer->Tick();
 }
 
 void OApplication::ParseInput(int argc, char** argv)
@@ -54,5 +54,10 @@ void OApplication::ParseInput(int argc, char** argv)
 		{
 		}
 	}
+}
+void OApplication::SetupInput()
+{
+	auto renderer = RAPI::ORenderer::Get();
+	InputHandler.InitHandlerWith(renderer->GetWindowContext());
 }
 } // namespace RAPI

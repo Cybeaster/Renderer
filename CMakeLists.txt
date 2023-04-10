@@ -45,8 +45,8 @@ add_executable(exec
         Renderer/Renderer.cpp
         Renderer/Vertex/Buffer.cpp
         Renderer/Vertex/VertexAttribBuffer.cpp
-        Renderer/InputHandlers/InputHandler.cpp
-        Renderer/InputHandlers/RendererInputHandler.cpp
+        InputHandlers/InputHandler.cpp
+        InputHandlers/RendererInputHandler.cpp
         Application/Application.cpp
         Shader/Shader.cpp
         Texture/Texture.cpp
@@ -84,7 +84,7 @@ add_executable(exec
         Utils/Threads/Async.hpp
         Utils/UnitTests/TestGroup.cpp
         Utils/UnitTests/TestGroup.hpp
-        Utils/Types/Stack/LockBasedStack.hpp Utils/Types/Queue/Queue.hpp Utils/Types/Queue.hpp Utils/Types/HashMap/ThreadSafeHashMap.hpp Utils/Types/List/ThreadSafeList.hpp Utils/Types/Stack/LockFreeStack.hpp Utils/Types/Stack/Stack.hpp Utils/Threads/HazardPointer.hpp Utils/Types/Stack/SharedPtrLockFreeStack.hpp Utils/Types/Stack/ReferenceBasedLockFreeStack.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Alogs/Sorter.hpp Utils/Types/Time.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/ForEach.hpp Utils/Threads/Utils.hpp Utils/Alogs/Find.hpp Utils/Alogs/PartialSum.hpp Utils/Alogs/Utils.hpp Utils/Alogs/Utils.cpp Utils/Threads/Utils.cpp Utils/Profiler/Profiler.hpp Utils/Profiler/StatGroup.hpp Utils/Threads/Barrier.hpp Utils/Threads/ThreadPool/SimpleThreadPool/ThreadPool.cpp Utils/Threads/ThreadPool/SimpleThreadPool/ThreadPool.hpp Utils/Threads/ThreadPool/ThreadPool.hpp Utils/Types/Queue/WorkStealingQueue.hpp Utils/Threads/InterruptibleThread/InterruptibleThread.cpp Utils/Threads/InterruptibleThread/InterruptibleThread.hpp Utils/Threads/InterruptibleThread/InterruptFlag.hpp Utils/Threads/InterruptibleThread/InterruptFlag.cpp Utils/Threads/JoinThreads.hpp Utils/Threads/SpinlockMutex.hpp Utils/Profiler/StatObject.hpp Utils/Types/ShaderName.hpp Utils/Profiler/Profiler.cpp Utils/Profiler/StatGroup.cpp)
+        Utils/Types/Stack/LockBasedStack.hpp Utils/Types/Queue/Queue.hpp Utils/Types/Queue.hpp Utils/Types/HashMap/ThreadSafeHashMap.hpp Utils/Types/List/ThreadSafeList.hpp Utils/Types/Stack/LockFreeStack.hpp Utils/Types/Stack/Stack.hpp Utils/Threads/HazardPointer.hpp Utils/Types/Stack/SharedPtrLockFreeStack.hpp Utils/Types/Stack/ReferenceBasedLockFreeStack.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Alogs/Sorter.hpp Utils/Types/Time.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/ForEach.hpp Utils/Threads/Utils.hpp Utils/Alogs/Find.hpp Utils/Alogs/PartialSum.hpp Utils/Alogs/Utils.hpp Utils/Alogs/Utils.cpp Utils/Threads/Utils.cpp Utils/Profiler/Profiler.hpp Utils/Profiler/StatGroup.hpp Utils/Threads/Barrier.hpp Utils/Threads/ThreadPool/SimpleThreadPool/ThreadPool.cpp Utils/Threads/ThreadPool/SimpleThreadPool/ThreadPool.hpp Utils/Threads/ThreadPool/ThreadPool.hpp Utils/Types/Queue/WorkStealingQueue.hpp Utils/Threads/InterruptibleThread/InterruptibleThread.cpp Utils/Threads/InterruptibleThread/InterruptibleThread.hpp Utils/Threads/InterruptibleThread/InterruptFlag.hpp Utils/Threads/InterruptibleThread/InterruptFlag.cpp Utils/Threads/JoinThreads.hpp Utils/Threads/SpinlockMutex.hpp Utils/Profiler/StatObject.hpp Utils/Types/ShaderName.hpp Utils/Profiler/Profiler.cpp Utils/Profiler/StatGroup.cpp InputHandlers/ConsoleInputHandler.cpp InputHandlers/ConsoleInputHandler.hpp Window/GlfwWindow.cpp Window/GlfwWindow.hpp Window/Window.hpp)
 
 
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)

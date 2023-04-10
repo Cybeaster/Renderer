@@ -1,13 +1,13 @@
 #include "InputHandler.hpp"
 
+#include "Externals/Include/glm/gtc/matrix_transform.hpp"
+#include "Externals/Include/glm/gtx/rotate_vector.hpp"
+#include "Externals/Include/glm/gtx/string_cast.hpp"
 #include "InputHandlers/InputHandler.hpp"
 #include "Renderer.hpp"
+#include "Utils/Delegate/Delegate.hpp"
 #include "glfw3.h"
 
-#include <Delegate.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtx/rotate_vector.hpp>
-#include <gtx/string_cast.hpp>
 #include <iostream>
 
 #define DEBUG_MOUSE_WHEEL false
@@ -18,19 +18,17 @@ namespace RAPI
 
 OHashMap<EKeys, SKeyState> OInputHandler::KeyMap{};
 
-OInputHandler::OInputHandler(ORenderer* OwningRender, bool Enable)
-    : Renderer(OwningRender)
+OInputHandler::OInputHandler(GLFWwindow* Window, bool Enable)
 {
 	if (Enable)
 	{
-		InitHandlerWith(OwningRender);
+		InitHandlerWith(Window);
 	}
 }
 
-void OInputHandler::InitHandlerWith(ORenderer* Owner)
+void OInputHandler::InitHandlerWith(GLFWwindow* Window)
 {
-	SetInput(Owner->GetWindowContext());
-	RenderInputHandler.BindKeys();
+	SetInput(Window);
 }
 
 void OInputHandler::Tick(float DeltaTime)
@@ -150,9 +148,4 @@ void OInputHandler::KeyboardInputReleased(GLFWwindow* /*window*/, EKeys key,
 		state.Callback.Broadcast(state.IsPressed);
 	}
 }
-void OInputHandler::MoveCamera(const OVec3& Dir)
-{
-	Renderer->MoveCamera(Dir);
-}
-
 } // namespace RAPI

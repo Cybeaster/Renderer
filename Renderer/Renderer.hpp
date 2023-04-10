@@ -12,62 +12,40 @@
 
 #include <Test.hpp>
 
-struct GLFWwindow;
 class Application;
 namespace RAPI
 {
 /**
- * @brief Singleton class that creates the context, calculates perspective, frames etc.
+ * @brief Singleton class that creates the context, calculates perspective etc.
  *
  */
+struct SRenderContext
+{
+	float DeltaTime{ 0 };
+	float AspectRatio{ 0 };
+};
 
 class ORenderer
 {
 public:
 	~ORenderer();
 
-	static auto Get()
-	{
-		if (!SingletonRenderer)
-		{
-			SingletonRenderer = OSharedPtr<ORenderer>(new ORenderer());
-			return SingletonRenderer;
-		}
+	static ORenderer* Get();
 
-		return SingletonRenderer;
-	}
-
-	/**
-	 * @brief Initalizes glfw Opengl context and creates a window.
-	 *
-	 * @return GLFWwindow*
-	 */
-	GLFWwindow* GLFWInit();
-	void GLFWRenderTickStart();
+	void Tick(const SRenderContext& Context);
 
 	void AddTest(Test::OTest* testPtr);
 
-	inline OVector<Test::OTest*>& GetTests()
-	{
-		return Tests;
-	}
+	SDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext);
 
-	SDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext)
-	{
-		return VertexArray.CreateVertexElement(VContext, RContext);
-	}
-
-	void Draw(const SDrawVertexHandle& Handle)
-	{
-		VertexArray.Draw(Handle);
-	}
+	void Draw(const SDrawVertexHandle& Handle);
 
 	void EnableBufferAttribArray(const SDrawVertexHandle& Handle);
-
 	void EnableBufferAttribArray(const SBufferAttribVertexHandle& Handle);
 
 	SBufferAttribVertexHandle AddAttribBuffer(const OVertexAttribBuffer& Buffer);
 	SBufferAttribVertexHandle AddAttribBuffer(OVertexAttribBuffer&& Buffer);
+
 	SBufferAttribVertexHandle AddAttributeBuffer(const SVertexContext& Context);
 
 	SBufferHandle AddBuffer(const void* Data, size_t Size);
@@ -75,31 +53,13 @@ public:
 
 	void BindBuffer(const SBufferHandle& Handle);
 
-	void TranslateCameraLocation(const glm::mat4& Transform);
-	void LookAtCamera(const OVec3& Position);
-
 	void Init();
 	void PostInit();
 
 	void MoveCamera(const OVec3& Delta);
 
-	const OVec3& GetCameraPosition() const
-	{
-		return Camera.GetPosition();
-	}
+	NODISCARD const OVec3& GetCameraPosition() const;
 
-	FORCEINLINE GLFWwindow* GetWindowContext() const
-	{
-		return Window;
-	}
-
-	static int ScreenWidth;
-	static int ScreenHeight;
-
-	static float Aspect;
-	static float DeltaTime;
-	static float LastFrame;
-	static float CurrentFrame;
 	static float Fovy;
 
 	static OMat4 VMat;
@@ -114,24 +74,15 @@ public:
 private:
 	ORenderer() = default;
 
-	void GLFWRendererStart(float currentTime);
-	void GLFWRendererEnd();
-	void CalcDeltaTime(float currentTime);
+	void RendererStart(float Aspect);
+	void RendererEnd();
 	void CleanScene();
-	void GLFWCalcPerspective(GLFWwindow* window);
-	void PrintDebugInfo();
-	void CalcScene();
-	void SetInput();
-
-	float InputStepOffset = 0.1F;
+	void CalcPerspective(float Aspect) const;
+	void SetInput(OInputHandler* InputHandler);
 
 	OCamera Camera;
-
-	Async::OThreadPool RendererThreadPool;
-
+	ORendererInputHandler RenderInputHandler;
 	OVertexArray VertexArray;
-	OInputHandler InputHandler{ this };
-	GLFWwindow* Window;
 	OVector<Test::OTest*> Tests;
 
 	static inline OSharedPtr<ORenderer> SingletonRenderer = nullptr;

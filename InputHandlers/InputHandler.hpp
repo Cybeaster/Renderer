@@ -7,9 +7,8 @@
 #include "Types.hpp"
 #include "Utils/Delegate/MulticastDelegate.hpp"
 #include "Utils/Types/HashMap/Hash.hpp"
+#include "Utils/Types/Set.hpp"
 #include "glfw3.h"
-
-#include <Set.hpp>
 
 namespace RAPI
 {
@@ -20,13 +19,7 @@ struct SKeyState
 	bool IsPressed = false;
 };
 
-class OIInputHandler
-{
-	NODISCARD virtual ORenderer* GetRenderer() const = 0;
-};
-
-class ORenderer;
-class OInputHandler : public OIInputHandler
+class OInputHandler
 {
 	friend ORendererInputHandler;
 
@@ -34,7 +27,7 @@ public:
 	OInputHandler() = default;
 	~OInputHandler() = default;
 
-	explicit OInputHandler(ORenderer* OwningRender, bool Enable = true);
+	explicit OInputHandler(GLFWwindow* Window, bool Enable = true);
 
 	void Tick(float DeltaTime);
 
@@ -64,21 +57,10 @@ public:
 		}
 	}
 
-	NODISCARD ORenderer* GetRenderer() const override
-	{
-		return Renderer;
-	}
-
-	void InitHandlerWith(ORenderer* Owner);
-
-protected:
-	void MoveCamera(const OVec3& Offset);
+	void InitHandlerWith(GLFWwindow* Window);
 
 private:
 	void SetInput(GLFWwindow* Window);
-
-	ORenderer* Renderer{ nullptr };
-	ORendererInputHandler RenderInputHandler{ this };
 
 	static OHashMap<EKeys, SKeyState> KeyMap;
 };

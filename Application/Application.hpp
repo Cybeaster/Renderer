@@ -1,3 +1,4 @@
+#include "InputHandlers/InputHandler.hpp"
 #include "Profiler/Profiler.hpp"
 #include "ShaderName.hpp"
 #include "SmartPtr.hpp"
@@ -45,7 +46,10 @@ private:
 	OApplication() = default;
 
 	void ParseInput(int argc, char** argv);
+	void SetupInput();
 	void StartProgram();
+
+	OInputHandler InputHandler;
 
 	static inline RAPI::OSharedPtr<OApplication> Application = nullptr;
 

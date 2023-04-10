@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../Utils/Types/Math.hpp"
 #include "KeyboardKeys.hpp"
 #include "SmartPtr.hpp"
+#include "Utils/Types/Math.hpp"
 
 namespace RAPI
 {
@@ -12,18 +12,10 @@ class ORendererInputHandler
 {
 public:
 	ORendererInputHandler() = default;
-	explicit ORendererInputHandler(OInputHandler* OwningHandler)
-	    : Owner(OwningHandler)
-	{
-	}
 
-	void BindKeys();
+	void BindKeys(OInputHandler* InputHandler);
 
-	OInputHandler* GetHandlingOwner()
-	{
-		return Owner;
-	}
-
+private:
 	void OnWKeyToggled(bool Pressed);
 	void OnSKeyToggled(bool Pressed);
 	void OnDKeyToggled(bool Pressed);
@@ -31,8 +23,7 @@ public:
 	void OnEKeyToggled(bool Pressed);
 	void OnQKeyToggled(bool Pressed);
 
-private:
-	OInputHandler* Owner; // should be shared ref
+	ORenderer* Owner;
 };
 
 } // namespace RAPI
