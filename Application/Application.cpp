@@ -9,8 +9,6 @@
 #include <iostream>
 #include <string>
 
-
-
 namespace RAPI
 {
 
@@ -18,8 +16,8 @@ void OApplication::Start(int argc, char** argv)
 {
 	RUN_TEST(ParallelAlgos);
 
-	//ParseInput(argc, argv);
-	//StartProgram();
+	ParseInput(argc, argv);
+	StartProgram();
 }
 
 void OApplication::StartProgram()
