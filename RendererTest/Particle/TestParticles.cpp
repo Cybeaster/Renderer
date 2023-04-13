@@ -328,7 +328,7 @@ void OTestParticles::ParticleSpawnTick(float DeltaTime)
 		const OVec3 velocity = rand() % 100 > 50 ? Particles45StartVel : ParticlesNegative45StartVel;
 		AddParticle({ -80, 20, 0 }, rand() % 3, charge, velocity);
 
-		Renderer->LookAtCamera((Particles.end() - 1)->getPosition());
+		// Renderer->LookAtCamera((Particles.end() - 1)->getPosition());
 	}
 	else
 		ParticleSpawnTimer -= DeltaTime;

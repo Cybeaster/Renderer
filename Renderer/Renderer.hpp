@@ -71,6 +71,8 @@ public:
 	static OMat4 MouseCameraRotation;
 	static float MRSDivideFactor;
 
+	void SetInput(OInputHandler* InputHandler);
+
 private:
 	ORenderer() = default;
 
@@ -78,14 +80,13 @@ private:
 	void RendererEnd();
 	void CleanScene();
 	void CalcPerspective(float Aspect) const;
-	void SetInput(OInputHandler* InputHandler);
 
 	OCamera Camera;
 	ORendererInputHandler RenderInputHandler;
 	OVertexArray VertexArray;
 	OVector<Test::OTest*> Tests;
 
-	static inline OSharedPtr<ORenderer> SingletonRenderer = nullptr;
+	static inline ORenderer* Renderer = nullptr;
 };
 
 } // namespace RAPI

@@ -37,7 +37,6 @@ void OInputHandler::Tick(float DeltaTime)
 
 void OInputHandler::SetInput(GLFWwindow* Window)
 {
-	glfwSetWindowSizeCallback(Window, OInputHandler::WindowReshapeCallback);
 	glfwSetScrollCallback(Window, OInputHandler::CursorWheelInputCallback);
 	glfwSetMouseButtonCallback(Window, OInputHandler::MouseInputCallback);
 	glfwSetCursorPosCallback(Window, OInputHandler::MouseCursorMoveCallback);
@@ -48,19 +47,7 @@ void OInputHandler::WindowReshapeCallback(GLFWwindow* window,
                                           int newHeight,
                                           int newWidth)
 {
-	if (!window)
-		return;
-
-	glViewport(0, 0, newWidth, newHeight);
-
-	if (newHeight != 0)
-	{
-		ORenderer::Aspect = static_cast<float>(newWidth / newHeight);
-	}
-
-	ORenderer::ScreenWidth = newWidth;
-	ORenderer::ScreenHeight = newHeight;
-	ORenderer::PMat = glm::perspective(ORenderer::Fovy, ORenderer::Aspect, 0.1F, 1000.F);
+	// ORenderer::PMat = glm::perspective(ORenderer::Fovy, ORenderer::Aspect, 0.1F, 1000.F);
 }
 
 void OInputHandler::CursorWheelInputCallback(GLFWwindow* /*window*/, double /*XOffset*/,

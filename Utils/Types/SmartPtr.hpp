@@ -8,10 +8,10 @@
 namespace RAPI
 {
 
-template<typename T>
-FORCEINLINE auto MakeUnique(T* Arg)
+template<typename T, typename... Payload>
+FORCEINLINE auto MakeUnique(Payload&&... Args)
 {
-	return std::make_unique<T>(Arg);
+	return std::make_unique<T>(Args...);
 }
 
 template<class Type, typename... Payload>
@@ -23,7 +23,7 @@ FORCEINLINE auto MakeShared(Payload&&... Args)
 template<class Type>
 FORCEINLINE auto MakeShared(Type* Arg)
 {
-	return std::make_shared<Type>(Arg);
+	return boost::make_shared<Type>(Arg);
 }
 
 template<typename T>

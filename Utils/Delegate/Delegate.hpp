@@ -102,7 +102,7 @@ public:
 	template<typename LambdaType, typename... Payload>
 	void BindLambda(LambdaType&& Lambda, Payload&&... Args2)
 	{
-		*this = CreateLambda(Forward<LambdaType>(Lambda), Forward<Payload>(Args2)...);
+		*this = CreateLambda<LambdaType, Args2...>(Forward<LambdaType>(Lambda), Forward<Payload>(Args2)...);
 	}
 
 	template<class ObjectType, typename... Payload>
@@ -117,7 +117,8 @@ public:
 		*this = CreateSP(Object, Function, Forward<Payload>(Args2)...);
 	}
 
-	void Execute(ArgTypes&&... Args)
+	template<typename... ArgsTypes2>
+	void Execute(ArgsTypes2&&... Args)
 	{
 		ASSERT(Allocator.IsAllocated());
 		(static_cast<TDelegateType*>(GetDelegate()))->Execute(Forward<ArgTypes>(Args)...);

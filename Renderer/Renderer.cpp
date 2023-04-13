@@ -130,13 +130,13 @@ void ORenderer::Draw(const SDrawVertexHandle& Handle)
 }
 ORenderer* ORenderer::Get()
 {
-	if (!SingletonRenderer)
+	if (!Renderer)
 	{
-		SingletonRenderer = OSharedPtr<ORenderer>(new ORenderer());
-		return SingletonRenderer;
+		Renderer = new ORenderer();
+		return Renderer;
 	}
 
-	return SingletonRenderer;
+	return Renderer;
 }
 const OVec3& ORenderer::GetCameraPosition() const
 {

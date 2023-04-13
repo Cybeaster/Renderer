@@ -5,6 +5,10 @@ project(RenderAPI LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED)
 set(Boost_DEBUG 1)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+
+    add_compile_options(/EHsc)
+endif ()
 
 include_directories(
         ${PROJECT_SOURCE_DIR}
@@ -84,7 +88,7 @@ add_executable(exec
         Utils/Threads/Async.hpp
         Utils/UnitTests/TestGroup.cpp
         Utils/UnitTests/TestGroup.hpp
-        Utils/Types/Stack/LockBasedStack.hpp Utils/Types/Queue/Queue.hpp Utils/Types/Queue.hpp Utils/Types/HashMap/ThreadSafeHashMap.hpp Utils/Types/List/ThreadSafeList.hpp Utils/Types/Stack/LockFreeStack.hpp Utils/Types/Stack/Stack.hpp Utils/Threads/HazardPointer.hpp Utils/Types/Stack/SharedPtrLockFreeStack.hpp Utils/Types/Stack/ReferenceBasedLockFreeStack.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Alogs/Sorter.hpp Utils/Types/Time.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/ForEach.hpp Utils/Threads/Utils.hpp Utils/Alogs/Find.hpp Utils/Alogs/PartialSum.hpp Utils/Alogs/Utils.hpp Utils/Alogs/Utils.cpp Utils/Threads/Utils.cpp Utils/Profiler/Profiler.hpp Utils/Profiler/StatGroup.hpp Utils/Threads/Barrier.hpp Utils/Threads/ThreadPool/SimpleThreadPool/ThreadPool.cpp Utils/Threads/ThreadPool/SimpleThreadPool/ThreadPool.hpp Utils/Threads/ThreadPool/ThreadPool.hpp Utils/Types/Queue/WorkStealingQueue.hpp Utils/Threads/InterruptibleThread/InterruptibleThread.cpp Utils/Threads/InterruptibleThread/InterruptibleThread.hpp Utils/Threads/InterruptibleThread/InterruptFlag.hpp Utils/Threads/InterruptibleThread/InterruptFlag.cpp Utils/Threads/JoinThreads.hpp Utils/Threads/SpinlockMutex.hpp Utils/Profiler/StatObject.hpp Utils/Types/ShaderName.hpp Utils/Profiler/Profiler.cpp Utils/Profiler/StatGroup.cpp InputHandlers/ConsoleInputHandler.cpp InputHandlers/ConsoleInputHandler.hpp Window/GlfwWindow.cpp Window/GlfwWindow.hpp Window/Window.hpp)
+        Utils/Types/Stack/LockBasedStack.hpp Utils/Types/Queue/Queue.hpp Utils/Types/Queue.hpp Utils/Types/HashMap/ThreadSafeHashMap.hpp Utils/Types/List/ThreadSafeList.hpp Utils/Types/Stack/LockFreeStack.hpp Utils/Types/Stack/Stack.hpp Utils/Threads/HazardPointer.hpp Utils/Types/Stack/SharedPtrLockFreeStack.hpp Utils/Types/Stack/ReferenceBasedLockFreeStack.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Types/Queue/LockFreeQueue.hpp Utils/Alogs/Sorter.hpp Utils/Types/Time.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/Accumulate.hpp Utils/Alogs/ForEach.hpp Utils/Threads/Utils.hpp Utils/Alogs/Find.hpp Utils/Alogs/PartialSum.hpp Utils/Alogs/Utils.hpp Utils/Alogs/Utils.cpp Utils/Threads/Utils.cpp Utils/Profiler/Profiler.hpp Utils/Profiler/StatGroup.hpp Utils/Threads/Barrier.hpp Utils/Threads/ThreadPool/SimpleThreadPool/ThreadPool.cpp Utils/Threads/ThreadPool/SimpleThreadPool/ThreadPool.hpp Utils/Threads/ThreadPool/ThreadPool.hpp Utils/Types/Queue/WorkStealingQueue.hpp Utils/Threads/InterruptibleThread/InterruptibleThread.cpp Utils/Threads/InterruptibleThread/InterruptibleThread.hpp Utils/Threads/InterruptibleThread/InterruptFlag.hpp Utils/Threads/InterruptibleThread/InterruptFlag.cpp Utils/Threads/JoinThreads.hpp Utils/Threads/SpinlockMutex.hpp Utils/Profiler/StatObject.hpp Utils/Types/ShaderName.hpp Utils/Profiler/Profiler.cpp Utils/Profiler/StatGroup.cpp InputHandlers/ConsoleInputHandler.cpp InputHandlers/ConsoleInputHandler.hpp Window/GlfwWindow.cpp Window/GlfwWindow.hpp Window/Window.hpp Utils/Threads/ThreadPool/NamedThreadPool/NamedThreadPool.cpp Utils/Threads/ThreadPool/NamedThreadPool/NamedThreadPool.hpp)
 
 
 set(GLFW_LIB ${PROJECT_SOURCE_DIR}/Externals/Lib/glfw3.lib)

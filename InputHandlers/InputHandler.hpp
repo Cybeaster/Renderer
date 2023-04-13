@@ -15,7 +15,7 @@ namespace RAPI
 
 struct SKeyState
 {
-	OTMulticastDelegate<bool> Callback;
+	OMulticastDelegate<bool> Callback;
 	bool IsPressed = false;
 };
 

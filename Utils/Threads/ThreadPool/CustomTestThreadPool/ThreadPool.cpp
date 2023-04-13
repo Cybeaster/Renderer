@@ -35,6 +35,7 @@ void OThreadPool::Run()
 			auto& elem = TaskQueue.front();
 			TaskQueue.pop();
 			uniqueLock.unlock();
+
 			elem.first->Call();
 
 			OMutexGuard guardlock(CompletedTaskMutex);

@@ -13,7 +13,6 @@
 #include <filesystem>
 #include <memory>
 #include <stack>
-
 // clang-format on
 
 namespace RAPI

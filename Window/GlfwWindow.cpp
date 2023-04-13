@@ -26,6 +26,9 @@ void OGLFWWindow::InitWindow()
 
 	GLCall(glEnable(GL_BLEND));
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+	OnReshapedDelegate.BindRaw(this, &OGLFWWindow::OnReshaped);
+	glfwSetWindowSizeCallback(Window, OGLFWWindow::WindowReshapeCallback);
 }
 
 bool OGLFWWindow::NeedClose()
@@ -53,11 +56,6 @@ void OGLFWWindow::DrawEnd()
 	glfwPollEvents();
 }
 
-double OGLFWWindow::GetDeltaTime() const
-{
-	return DeltaTime;
-}
-
 void OGLFWWindow::CalcAspect()
 {
 	glfwGetFramebufferSize(Window, &Width, &Height);
@@ -68,6 +66,28 @@ OGLFWWindow::~OGLFWWindow()
 {
 	glfwDestroyWindow(Window);
 	glfwTerminate();
+}
+
+GLFWwindow* OGLFWWindow::GetWindow()
+{
+	return Window;
+}
+
+void OGLFWWindow::OnReshaped(int32 NewWidth, int32 NewHeight)
+{
+	Width = NewWidth;
+	Height = NewHeight;
+	AspectRatio = static_cast<float>(static_cast<float>(Width) / static_cast<float>(Height));
+}
+
+void OGLFWWindow::WindowReshapeCallback(GLFWwindow* Window, int NewHeight, int NewWidth)
+{
+	if (!Window)
+	{
+		return;
+	}
+
+	OGLFWWindow::OnReshapedDelegate.Execute(NewWidth, NewHeight);
 }
 
 } // namespace RAPI

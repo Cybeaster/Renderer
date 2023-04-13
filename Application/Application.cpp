@@ -4,9 +4,11 @@
 #include "Renderer.hpp"
 #include "TestTexture.hpp"
 #include "UnitTests/TestGroup.hpp"
+#include "Window/GlfwWindow.hpp"
 
 #include <TestSimpleSolarSystem.hpp>
 #include <iostream>
+#include <memory>
 #include <string>
 
 namespace RAPI
@@ -17,27 +19,41 @@ void OApplication::Start(int argc, char** argv)
 	RUN_TEST(ParallelAlgos);
 
 	ParseInput(argc, argv);
-	StartProgram();
+	InitRenderer();
+	NamedThreadPool.AddTaskToThread(EThreadID::RenderThread, [this]() {});
+
+	NamedThreadPool.AddTaskToThread(EThreadID::InputThread, [this]()
+	                                { InitConsoleInput(); });
 }
 
-void OApplication::StartProgram()
+void OApplication::InitConsoleInput()
 {
-	auto renderer = RAPI::ORenderer::Get();
-	if (!renderer)
-		return;
+}
 
-	renderer->GLFWInit();
+void OApplication::InitRenderer()
+{
+	CreateWindow();
+	SetupInput();
+
 	const auto textureShaderPath = GetShaderLocalPathWith(SimpleTextureShader);
 	const auto simpleCubeShader = GetShaderLocalPathWith(SimpleCubeShader);
+
 	auto brickTexture = GetResourceDirectoryWith(TEXT("BrickWall.jpg"));
 	auto earthTexture = GetResourceDirectoryWith(TEXT("TopographicalEarth.jpg"));
-#ifndef NDEBUG
-	std::cout << textureShaderPath << std::endl;
-#endif
-	Test::OTestTexture textureTest(brickTexture, earthTexture, textureShaderPath, renderer);
-	// renderer->AddTest(&test);
-	renderer->AddTest(&textureTest);
-	renderer->Tick();
+
+	auto renderer = ORenderer::Get();
+
+	renderer->Init();
+	renderer->SetInput(&InputHandler);
+
+	while (!Window.get()->NeedClose())
+	{
+		Window->DrawStart();
+
+		renderer->Tick(MakeRendererContext());
+
+		Window->DrawEnd();
+	}
 }
 
 void OApplication::ParseInput(int argc, char** argv)
@@ -57,7 +73,44 @@ void OApplication::ParseInput(int argc, char** argv)
 }
 void OApplication::SetupInput()
 {
-	auto renderer = RAPI::ORenderer::Get();
-	InputHandler.InitHandlerWith(renderer->GetWindowContext());
+	InputHandler.InitHandlerWith(dynamic_cast<OGLFWWindow*>(Window.get())->GetWindow());
 }
+void OApplication::CreateWindow()
+{
+	Window = OUniquePtr<OGLFWWindow>(new OGLFWWindow());
+	Window.get()->InitWindow();
+}
+
+SRenderContext OApplication::MakeRendererContext() const
+{
+	auto* window = Window.get();
+
+	SRenderContext context;
+	context.AspectRatio = static_cast<float>(window->GetAspectRation());
+	context.DeltaTime = static_cast<float>(window->GetDeltaTime());
+
+	return context;
+}
+
+OApplication* OApplication::GetApplication()
+{
+	if (!Application)
+	{
+		Application = (new OApplication());
+		return Application;
+	}
+
+	return Application;
+}
+
+OString OApplication::GetShaderLocalPathWith(const SShaderName& Name)
+{
+	return RootDirPath.string() + ShadersDir.string() + Name.Name;
+}
+
+OString OApplication::GetResourceDirectoryWith(const OPath& Path)
+{
+	return RootDirPath.string() + ResourceDirectory.string() + Path.string();
+}
+
 } // namespace RAPI

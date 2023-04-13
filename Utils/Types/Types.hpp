@@ -114,7 +114,7 @@ struct SInvalidValue
 {
 	static Type Get()
 	{
-		static_assert(false, "SInvalidValue is specialized for this type!");
+		// static_assert(false, "SInvalidValue is specialized for this type!");
 	}
 };
 

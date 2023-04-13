@@ -78,7 +78,7 @@ public:
 	}
 
 	template<typename... ArgTypes>
-	static OString Format(std::wstring_view Str, ArgTypes&&... Args) noexcept
+	static OString Format(std::wstring_view Str, ArgTypes&&... Args)
 	{
 		try
 		{
@@ -91,7 +91,7 @@ public:
 	}
 
 	template<typename... ArgTypes>
-	static OString Format(std::string_view Str, ArgTypes&&... Args) noexcept
+	static OString Format(std::string_view Str, ArgTypes&&... Args)
 	{
 		try
 		{
@@ -103,30 +103,30 @@ public:
 		}
 	}
 
-	static OString Format(OString Str) noexcept
+	static OString Format(OString Str)
 	{
 		return Str;
 	}
 
-	static OString Format(CCharPTR Str) noexcept
+	static OString Format(CCharPTR Str)
 	{
 		return { Str };
 	}
 
 	template<typename T>
-	static OString ToString(T Value) noexcept
+	static OString ToString(T Value)
 	{
 		return std::to_string(Value);
 	}
 
 	template<>
-	static OString ToString(bool Value) noexcept
+	static OString ToString(bool Value)
 	{
 		return Value ? "True" : "False";
 	}
 
 	template<>
-	static OString ToString(OVec3 Vector) noexcept
+	static OString ToString(OVec3 Vector)
 	{
 		return glm::to_string(Vector);
 	}

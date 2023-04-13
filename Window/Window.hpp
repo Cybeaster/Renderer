@@ -6,14 +6,24 @@ namespace RAPI
 
 class OWindow
 {
-	virtual double GetDeltaTime() const = 0;
-
+public:
 	virtual ~OWindow() = default;
-protected:
-	virtual bool NeedClose() = 0;
 	virtual void InitWindow() = 0;
+	virtual bool NeedClose() = 0;
 	virtual void DrawStart() = 0;
 	virtual void DrawEnd() = 0;
+
+	FORCEINLINE auto GetDeltaTime() const
+	{
+		return DeltaTime;
+	}
+
+	FORCEINLINE auto GetAspectRation() const
+	{
+		return AspectRatio;
+	}
+
+protected:
 	virtual void CalcDeltaTime() = 0;
 	virtual void CalcAspect() = 0;
 

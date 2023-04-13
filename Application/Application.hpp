@@ -1,7 +1,10 @@
 #include "InputHandlers/InputHandler.hpp"
+#include "NamedThreadPool/NamedThreadPool.hpp"
 #include "Profiler/Profiler.hpp"
+#include "Renderer.hpp"
 #include "ShaderName.hpp"
 #include "SmartPtr.hpp"
+#include "Window/Window.hpp"
 
 #include <Path.hpp>
 #include <Types.hpp>
@@ -14,30 +17,12 @@ namespace RAPI
 class OApplication
 {
 public:
-	static auto GetApplication()
-	{
-		if (!Application)
-		{
-			Application = RAPI::OSharedPtr<OApplication>(new OApplication());
-			return Application;
-		}
-
-		return Application;
-	}
-
-	static auto GetShaderLocalPathWith(const SShaderName& Name)
-	{
-		return RootDirPath.string() + ShadersDir.string() + Name.Name;
-	}
-
-	static auto GetResourceDirectoryWith(const OPath& Path)
-	{
-		return RootDirPath.string() + ResourceDirectory.string() + Path.string();
-	}
+	static OApplication* GetApplication();
+	static OString GetShaderLocalPathWith(const SShaderName& Name);
+	static OString GetResourceDirectoryWith(const OPath& Path);
 
 	/**
 	 * @brief Programm start.
-	 * @details Initializes Renderer class.
 	 *
 	 */
 	void Start(int argc, char** argv);
@@ -45,13 +30,17 @@ public:
 private:
 	OApplication() = default;
 
+	void CreateWindow();
 	void ParseInput(int argc, char** argv);
 	void SetupInput();
-	void StartProgram();
+	void InitRenderer();
+	void InitConsoleInput();
+
+	NODISCARD SRenderContext MakeRendererContext() const;
 
 	OInputHandler InputHandler;
-
-	static inline RAPI::OSharedPtr<OApplication> Application = nullptr;
+	OUniquePtr<OWindow> Window;
+	ONamedThreadPool NamedThreadPool;
 
 	static inline OPath DebugPath = current_path();
 	static inline OPath RootDirPath = current_path();
@@ -61,5 +50,7 @@ private:
 
 	static inline SShaderName SimpleCubeShader = "\\SimpleCube.shader";
 	static inline SShaderName SimpleTextureShader = "\\SimpleTexture.shader";
+
+	static inline OApplication* Application = nullptr;
 };
 } // namespace RAPI
