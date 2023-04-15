@@ -14,6 +14,7 @@ public:
 	ORendererInputHandler() = default;
 
 	void BindKeys(OInputHandler* InputHandler);
+	void SetRenderer(ORenderer* Renderer);
 
 private:
 	void OnWKeyToggled(bool Pressed);

@@ -6,9 +6,6 @@
 #include "UnitTests/TestGroup.hpp"
 #include "Window/GlfwWindow.hpp"
 
-#include <TestSimpleSolarSystem.hpp>
-#include <iostream>
-#include <memory>
 #include <string>
 
 namespace RAPI
@@ -38,9 +35,11 @@ void OApplication::InitRenderer()
 	auto earthTexture = GetResourceDirectoryWith(TEXT("TopographicalEarth.jpg"));
 
 	auto renderer = ORenderer::Get();
-
 	renderer->Init();
 	renderer->SetInput(&InputHandler);
+
+	Test::OTestTexture textureTest(brickTexture, earthTexture, textureShaderPath, renderer);
+	renderer->AddTest(&textureTest);
 
 	while (!Window.get()->NeedClose())
 	{

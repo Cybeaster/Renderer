@@ -43,13 +43,6 @@ void OInputHandler::SetInput(GLFWwindow* Window)
 	glfwSetKeyCallback(Window, OInputHandler::KeyboardInputCallback);
 }
 
-void OInputHandler::WindowReshapeCallback(GLFWwindow* window,
-                                          int newHeight,
-                                          int newWidth)
-{
-	// ORenderer::PMat = glm::perspective(ORenderer::Fovy, ORenderer::Aspect, 0.1F, 1000.F);
-}
-
 void OInputHandler::CursorWheelInputCallback(GLFWwindow* /*window*/, double /*XOffset*/,
                                              double YOffset)
 {

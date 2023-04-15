@@ -12,7 +12,7 @@ namespace Test
 class OTestTexture : public OTest
 {
 public:
-	OTestTexture(const OPath& filePath, const OPath& SecondTexturePath, const OPath& ShaderPath, OSharedPtr<RAPI::ORenderer> Renderer);
+	OTestTexture(const OPath& filePath, const OPath& SecondTexturePath, const OPath& ShaderPath, RAPI::ORenderer* Renderer);
 	~OTestTexture() override = default;
 
 	void OnUpdate(

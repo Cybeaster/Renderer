@@ -66,13 +66,16 @@ void ORendererInputHandler::BindKeys(OInputHandler* InputHandler)
 	if (ENSURE(InputHandler))
 	{
 		InputHandler->AddRawListener(this, &ORendererInputHandler::OnWKeyToggled, EKeys::KEY_W);
-		InputHandler->AddRawListener(this, &ORendererInputHandler::OnWKeyToggled, EKeys::KEY_W);
 		InputHandler->AddRawListener(this, &ORendererInputHandler::OnAKeyToggled, EKeys::KEY_A);
 		InputHandler->AddRawListener(this, &ORendererInputHandler::OnDKeyToggled, EKeys::KEY_D);
 		InputHandler->AddRawListener(this, &ORendererInputHandler::OnSKeyToggled, EKeys::KEY_S);
 		InputHandler->AddRawListener(this, &ORendererInputHandler::OnEKeyToggled, EKeys::KEY_E);
 		InputHandler->AddRawListener(this, &ORendererInputHandler::OnQKeyToggled, EKeys::KEY_Q);
 	}
+}
+void ORendererInputHandler::SetRenderer(ORenderer* Renderer)
+{
+	Owner = Renderer;
 }
 
 } // namespace RAPI

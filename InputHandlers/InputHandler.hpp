@@ -37,7 +37,6 @@ public:
 	static void MouseCursorMoveCallback(GLFWwindow* Window, double XPos, double YPos);
 	static void MouseInputCallback(GLFWwindow* window, int Button, int Action, int Mods);
 	static void CursorWheelInputCallback(GLFWwindow* window, double XOffset, double YOffset);
-	static void WindowReshapeCallback(GLFWwindow* window, int newHeight, int newWidth);
 
 	template<typename ObjectType, typename FunctionType, typename... ArgTypes>
 	void AddRawListener(ObjectType* Object, FunctionType Function, EKeys Key)

@@ -7,15 +7,23 @@ namespace RAPI
 
 void OGLFWWindow::InitWindow()
 {
-	/* Initialize the library */
-	ASSERT(glfwInit());
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
+	/* Initialize the library */
+	if (!ENSURE(glfwInit()))
+	{
+		return;
+	}
+	Height = 720;
+	Width = 720;
 	/* Create a windowed mode window and its OpenGL context */
 	Window = glfwCreateWindow(Width, Height, WindowName.c_str(), nullptr, nullptr);
 
-	if (ENSURE(!Window == false, "Window is not created in glfw!"))
+	if (!ENSURE(Window != nullptr, "Window is not created in glfw!"))
 	{
 		glfwTerminate();
+		return;
 	}
 
 	/* Make the window's context current */

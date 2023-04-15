@@ -24,7 +24,7 @@ float ORenderer::MRSDivideFactor{ 100.F };
 
 void ORenderer::Init()
 {
-	// Post Init has to be called after everything
+
 	PostInit();
 }
 
@@ -35,6 +35,7 @@ void ORenderer::PostInit()
 
 void ORenderer::SetInput(OInputHandler* InputHandler)
 {
+	RenderInputHandler.SetRenderer(this);
 	RenderInputHandler.BindKeys(InputHandler);
 }
 

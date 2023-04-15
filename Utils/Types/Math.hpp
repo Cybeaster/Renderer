@@ -22,7 +22,7 @@ struct SMath
 		return (Degree * 2.F * Pi) / 360.F;
 	}
 
-	NODISCARD FORCEINLINE static decltype(auto) Min(auto First, auto Second)
+	NODISCARD FORCEINLINE static auto Min(auto First, auto Second)
 	{
 		return First > Second ? Second : First;
 	}

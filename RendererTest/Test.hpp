@@ -34,7 +34,7 @@ using RAPI::SVertexContext;
 class OTest
 {
 public:
-	OTest(const OPath& shaderPath, const OSharedPtr<RAPI::ORenderer>& RendererArg);
+	OTest(const OPath& shaderPath, RAPI::ORenderer* RendererArg);
 	OTest() = default;
 	virtual ~OTest() = default;
 
@@ -81,7 +81,7 @@ protected:
 	std::stack<OMat4> mvStack;
 	OVector<GLuint> vertexArray;
 
-	OSharedPtr<class ORenderer> Renderer;
+	class ORenderer* Renderer;
 
 private:
 	OMat4
