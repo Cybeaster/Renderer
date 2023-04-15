@@ -84,8 +84,13 @@ using TBoolConstant = STIntegralConstant<bool, Value>;
 
 using TFalse = TBoolConstant<false>;
 
-template<typename First, typename Second>
-struct STIsSame : TBoolConstant<__is_same(First, Second)>
+template<typename T, typename U>
+struct SIsSame : TBoolConstant<false>
+{
+};
+
+template<typename T>
+struct SIsSame<T, T> : TBoolConstant<true>
 {
 };
 
@@ -115,7 +120,7 @@ template<typename... Traits>
 constexpr bool TDisjunction = STDisjunctionValue<Traits...>::Value;
 
 template<typename SearchedType, typename... Types>
-constexpr bool TIsAnyOf = TDisjunction<STIsSame<SearchedType, Types>...>;
+constexpr bool TIsAnyOf = TDisjunction<SIsSame<SearchedType, Types>...>;
 
 template<typename Type>
 constexpr bool TIsIntegral = TIsAnyOf<TRemoveCV<Type>,

@@ -20,10 +20,6 @@ void OApplication::Start(int argc, char** argv)
 
 	ParseInput(argc, argv);
 	InitRenderer();
-	NamedThreadPool.AddTaskToThread(EThreadID::RenderThread, [this]() {});
-
-	NamedThreadPool.AddTaskToThread(EThreadID::InputThread, [this]()
-	                                { InitConsoleInput(); });
 }
 
 void OApplication::InitConsoleInput()
@@ -58,17 +54,9 @@ void OApplication::InitRenderer()
 
 void OApplication::ParseInput(int argc, char** argv)
 {
-	OString arguments[argc];
+	auto* arguments = new OString[argc];
 	for (int it = 0; it < argc; it++)
 	{
-	}
-
-	for (auto str : arguments)
-	{
-		RAPI_LOG(Log, "Command: {} is parsed", str);
-		if (str == "StartTests")
-		{
-		}
 	}
 }
 void OApplication::SetupInput()

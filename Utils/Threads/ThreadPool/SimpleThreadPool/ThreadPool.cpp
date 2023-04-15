@@ -79,7 +79,7 @@ bool OSimpleThreadPool::PopTaskFromOtherThreadQueue(OSimpleThreadPool::TFunctor&
 }
 
 template<typename FuncType>
-OFuture<std::invoke_result<FuncType()>::type> OSimpleThreadPool::Submit(FuncType Function)
+OFuture<typename std::invoke_result<FuncType()>::type> OSimpleThreadPool::Submit(FuncType Function)
 {
 	using TResult = typename std::invoke_result<FuncType()>::type;
 	OPackagedTask<TResult()> newTask(Move(Function));

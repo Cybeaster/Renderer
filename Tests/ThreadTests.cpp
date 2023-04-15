@@ -122,7 +122,7 @@ void read_y_then_x()
 		++z;
 	}
 }
-int Testmain()
+void Testmain()
 {
 	x = false;
 	y = false;
@@ -165,7 +165,7 @@ void read_y_then_x()
 	}
 }
 
-int Testmain()
+void Testmain()
 {
 	x = false;
 	y = false;

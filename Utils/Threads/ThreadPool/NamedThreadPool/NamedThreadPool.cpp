@@ -20,4 +20,9 @@ void ONamedThreadPool::InitThreads()
 	}
 }
 
+void ONamedThreadPool::Run()
+{
+
+}
+
 } // namespace RAPI

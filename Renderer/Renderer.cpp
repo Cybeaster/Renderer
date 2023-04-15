@@ -138,9 +138,14 @@ ORenderer* ORenderer::Get()
 
 	return Renderer;
 }
+
 const OVec3& ORenderer::GetCameraPosition() const
 {
 	return Camera.GetPosition();
+}
+
+void ORenderer::RendererEnd()
+{
 }
 
 } // namespace RAPI

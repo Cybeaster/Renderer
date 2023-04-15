@@ -5,10 +5,11 @@ project(RenderAPI LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED)
 set(Boost_DEBUG 1)
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     add_compile_options(/EHsc)
 endif ()
+set(Boost_USE_STATIC_LIBS ON)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}
@@ -43,7 +44,7 @@ include_directories(
 )
 
 find_package(OpenGL REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost COMPONENTS thread REQUIRED)
 add_executable(exec
         main.cpp
         Renderer/Renderer.cpp
@@ -100,6 +101,7 @@ set(GLEW_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew64.dll)
 set(GLEW32_DLL ${PROJECT_SOURCE_DIR}/Externals/dll/glew32.dll)
 
 
+link_directories(${Boost_LIBRARY_DIR})
 target_link_libraries(
         exec
         PRIVATE
@@ -108,5 +110,4 @@ target_link_libraries(
         ${GLEW_LIB}
         ${SOIL_LIB}
         ${Boost_LIBRARIES}
-
 )

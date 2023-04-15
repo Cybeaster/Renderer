@@ -54,7 +54,7 @@ SBufferAttribVertexHandle OVertexArray::AddAttribBuffer(const OVertexAttribBuffe
 
 SBufferAttribVertexHandle OVertexArray::AddAttribBuffer(OVertexAttribBuffer&& Buffer)
 {
-	AddAttribBufferImpl(Move(Buffer));
+	return AddAttribBufferImpl(Move(Buffer));
 }
 
 SBufferAttribVertexHandle OVertexArray::AddAttribBuffer(SVertexContext&& VContext)

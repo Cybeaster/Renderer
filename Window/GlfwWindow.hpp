@@ -16,17 +16,17 @@ public:
 	static void WindowReshapeCallback(GLFWwindow* Window, int NewHeight, int NewWidth);
 
 	void OnReshaped(int32 NewWidth, int32 NewHeight);
-	//OMulticastDelegate<void, > ;
-private :
+	void InitWindow() override;
+
+private:
 	void CalcDeltaTime() override;
 	void CalcAspect() override;
 	bool NeedClose() override;
-	void InitWindow() override;
 	void DrawStart() override;
 	void DrawEnd() override;
 
 private:
-	static ODelegate<void, int32, int32> OnReshapedDelegate;
+	static inline ODelegate<void, int32, int32> OnReshapedDelegate{};
 	GLFWwindow* Window;
 };
 

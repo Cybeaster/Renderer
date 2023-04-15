@@ -14,7 +14,7 @@ class OSimpleThreadPool
 {
 public:
 	template<typename FuncType>
-	OFuture<std::invoke_result<FuncType()>::type> Submit(FuncType Function);
+	OFuture<typename std::invoke_result<FuncType()>::type> Submit(FuncType Function);
 
 	using TFunctor = OFunctor<void()>;
 	using TWorkStealingQueue = OWorkStealingQueue<TFunctor>;
@@ -39,8 +39,8 @@ private:
 	OVector<OUniquePtr<TWorkStealingQueue>> Queues;
 	OThreadSafeQueue<TFunctor> PoolWorkQueue;
 
-	static thread_local TWorkStealingQueue* LocalWorkQueue;
-	static thread_local uint32 LocalIndex;
+	static inline thread_local TWorkStealingQueue* LocalWorkQueue{ nullptr };
+	static inline thread_local uint32 LocalIndex{ UINT32_INVALID_VALUE };
 
 	OVector<OThread> WorkerThreads;
 	OAtomic<bool> IsDone;
