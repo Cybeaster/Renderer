@@ -24,7 +24,6 @@ float ORenderer::MRSDivideFactor{ 100.F };
 
 void ORenderer::Init()
 {
-
 	PostInit();
 }
 
@@ -39,20 +38,20 @@ void ORenderer::SetInput(OInputHandler* InputHandler)
 	RenderInputHandler.BindKeys(InputHandler);
 }
 
-void ORenderer::MoveCamera(const OVec3& Delta)
+void ORenderer::MoveCamera(ETranslateDirection Dir)
 {
-	Camera.Translate(Delta);
+	Camera.Translate(Dir);
 }
 
-void ORenderer::RendererStart(float Aspect)
+void ORenderer::RendererStart(const SRenderContext& Context)
 {
 	CleanScene();
-	CalcPerspective(Aspect);
+	CalcPerspective(Context.AspectRatio);
 }
 
 void ORenderer::Tick(const SRenderContext& Context)
 {
-	RendererStart(Context.DeltaTime);
+	RendererStart(Context);
 	for (auto* const test : Tests)
 	{
 		if (test)
@@ -64,10 +63,10 @@ void ORenderer::Tick(const SRenderContext& Context)
 	RendererEnd();
 }
 
-void ORenderer::CalcPerspective(float Aspect) const
+void ORenderer::CalcPerspective(float Aspect)
 {
 	PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.F); // it needs aspect
-	VMat = glm::lookAt(GetCameraPosition() * -1.F, GetCameraPosition(), { 0, 1, 0 });
+	VMat = glm::lookAt(GetCameraPosition() * -1.F, GetCameraPosition(), { 0, 1, 0 }); // TODO fix look at
 }
 
 void ORenderer::CleanScene()

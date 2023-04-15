@@ -9,6 +9,15 @@
 #include "Utils/Types/Threads/Thread.hpp"
 namespace RAPI
 {
+enum ETranslateDirection
+{
+	Forward,
+	Backward,
+	Left,
+	Right,
+	Up,
+	Down
+};
 
 class OCamera
 {
@@ -23,8 +32,10 @@ public:
 
 	void SetTarget(const OVec3& Arg);
 
-	void Translate(const OVec3& Delta);
+	void Translate(ETranslateDirection Dir);
 	void Rotate(float XOffset, float YOffset);
+
+	void Tick(float DeltaTime);
 
 private:
 	void UpdateCameraDirection();
@@ -33,6 +44,8 @@ private:
 	OMutex RotateMutex;
 
 	float Sensitivity = 1.F;
+	float CameraSpeed = 1.F;
+	float CameraSpeedMultiplier = 1.F;
 
 	OVec3 CameraPosition;
 	OVec3 CameraTarget;

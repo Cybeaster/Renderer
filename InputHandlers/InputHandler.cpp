@@ -46,7 +46,16 @@ void OInputHandler::SetInput(GLFWwindow* Window)
 void OInputHandler::CursorWheelInputCallback(GLFWwindow* /*window*/, double /*XOffset*/,
                                              double YOffset)
 {
-	ORenderer::Get()->MoveCamera({ 0, 0, YOffset });
+	//Remove this from here
+	if(YOffset > 0)
+	{
+		ORenderer::Get()->MoveCamera(ETranslateDirection::Forward);
+	}
+	else
+	{
+		ORenderer::Get()->MoveCamera(ETranslateDirection::Backward);
+
+	}
 	if (DEBUG_MOUSE_WHEEL)
 	{
 		std::cout << glm::to_string(ORenderer::Get()->GetCameraPosition()) << std::endl;

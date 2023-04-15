@@ -12,7 +12,7 @@ void ORendererInputHandler::OnWKeyToggled(bool Pressed)
 
 	if (Pressed)
 	{
-		Owner->MoveCamera(OVec3(0, 0, -1));
+		Owner->MoveCamera(ETranslateDirection::Forward);
 	}
 }
 
@@ -21,7 +21,7 @@ void ORendererInputHandler::OnSKeyToggled(bool Pressed)
 	RAPI_LOG(Log, "On S KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetCameraPosition()));
 	if (Pressed)
 	{
-		Owner->MoveCamera(OVec3(0, 0, 1));
+		Owner->MoveCamera(ETranslateDirection::Backward);
 	}
 }
 
@@ -30,7 +30,7 @@ void ORendererInputHandler::OnDKeyToggled(bool Pressed)
 	RAPI_LOG(Log, "On D KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetCameraPosition()));
 	if (Pressed)
 	{
-		Owner->MoveCamera(OVec3(1, 0, 0));
+		Owner->MoveCamera(ETranslateDirection::Right);
 	}
 }
 
@@ -39,7 +39,7 @@ void ORendererInputHandler::OnAKeyToggled(bool Pressed)
 	RAPI_LOG(Log, "On A KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetCameraPosition()));
 	if (Pressed)
 	{
-		Owner->MoveCamera(OVec3(-1, 0, 0));
+		Owner->MoveCamera(ETranslateDirection::Left);
 	}
 }
 
@@ -48,7 +48,7 @@ void ORendererInputHandler::OnEKeyToggled(bool Pressed)
 	RAPI_LOG(Log, "On E KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetCameraPosition()));
 	if (Pressed)
 	{
-		Owner->MoveCamera(OVec3(0, 1, 0));
+		Owner->MoveCamera(ETranslateDirection::Up);
 	}
 }
 
@@ -57,7 +57,7 @@ void ORendererInputHandler::OnQKeyToggled(bool Pressed)
 	RAPI_LOG(Log, "On Q KeyToggled called (Is pressed: {}), (Camera position is: {})", TO_STRING(Pressed), TO_STRING(Owner->GetCameraPosition()));
 	if (Pressed)
 	{
-		Owner->MoveCamera(OVec3(0, -1, 0));
+		Owner->MoveCamera(ETranslateDirection::Down);
 	}
 }
 

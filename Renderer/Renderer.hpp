@@ -56,7 +56,7 @@ public:
 	void Init();
 	void PostInit();
 
-	void MoveCamera(const OVec3& Delta);
+	void MoveCamera(ETranslateDirection Dir);
 
 	NODISCARD const OVec3& GetCameraPosition() const;
 
@@ -76,10 +76,10 @@ public:
 private:
 	ORenderer() = default;
 
-	void RendererStart(float Aspect);
+	void RendererStart(const SRenderContext& Context);
 	void RendererEnd();
 	void CleanScene();
-	void CalcPerspective(float Aspect) const;
+	void CalcPerspective(float Aspect);
 
 	OCamera Camera;
 	ORendererInputHandler RenderInputHandler;
