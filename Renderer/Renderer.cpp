@@ -65,8 +65,8 @@ void ORenderer::Tick(const SRenderContext& Context)
 
 void ORenderer::CalcPerspective(float Aspect)
 {
-	PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.F); // it needs aspect
-	VMat = glm::lookAt(GetCameraPosition() * -1.F, GetCameraPosition(), { 0, 1, 0 }); // TODO fix look at
+	PMat = glm::perspective(1.0472f, Aspect, 0.1f, 1000.F);
+	VMat = Camera.GetCameraView();
 }
 
 void ORenderer::CleanScene()

@@ -165,15 +165,15 @@ constexpr bool TIsLValueRef = false;
 template<typename T>
 constexpr bool TIsLValueRef<T&> = true;
 
-template<class Type>
-NODISCARD constexpr Type&& Forward(STRemoveRef<Type>& Arg) noexcept
+template<typename T>
+NODISCARD constexpr T&& Forward(TRemoveRef<T>& Arg) noexcept
 {
-	return static_cast<Type&&>(Arg);
+	return static_cast<T&&>(Arg);
 }
 
-template<class Type>
-NODISCARD constexpr Type&& Forward(STRemoveRef<Type>&& Arg) noexcept
+template<typename T>
+NODISCARD constexpr T&& Forward(TRemoveRef<T>&& Arg) noexcept
 {
-	static_assert(!TIsLValueRef<Type>, "bad forward call");
-	return static_cast<Type&&>(Arg);
+	static_assert(TIsLValueRef<T>, "Bad forward call");
+	return static_cast<T&&>(Arg);
 }

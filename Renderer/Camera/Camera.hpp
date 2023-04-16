@@ -9,7 +9,7 @@
 #include "Utils/Types/Threads/Thread.hpp"
 namespace RAPI
 {
-enum ETranslateDirection
+enum class ETranslateDirection
 {
 	Forward,
 	Backward,
@@ -34,9 +34,9 @@ public:
 
 	void Translate(ETranslateDirection Dir);
 	void Rotate(float XOffset, float YOffset);
-
 	void Tick(float DeltaTime);
 
+	OMat4 GetCameraView()const;
 private:
 	void UpdateCameraDirection();
 

@@ -59,32 +59,37 @@ void OCamera::Translate(ETranslateDirection Dir)
 	OVec3 delta;
 	switch (Dir)
 	{
-	case Forward:
+	case ETranslateDirection::Forward:
 		delta = FrontVector * CameraSpeed;
 		break;
-	case Backward:
+	case ETranslateDirection::Backward:
 		delta = -FrontVector * CameraSpeed;
 		break;
-	case Left:
+	case ETranslateDirection::Left:
 		delta = -glm::normalize(glm::cross(FrontVector, UpVector)) * CameraSpeed;
 		break;
-	case Right:
+	case ETranslateDirection::Right:
 		delta = glm::normalize(glm::cross(FrontVector, UpVector)) * CameraSpeed;
 		break;
-	case Up:
+	case ETranslateDirection::Up:
 		delta = UpVector * CameraSpeed;
 		break;
-	case Down:
+	case ETranslateDirection::Down:
 		delta = -UpVector * CameraSpeed;
 		break;
 	}
 	OMutexGuard guard(TargetMutex);
 	CameraPosition += delta;
+	UpdateCameraDirection();
 }
 
 void OCamera::Tick(float DeltaTime)
 {
 	CameraSpeed = CameraSpeedMultiplier * DeltaTime;
+}
+OMat4 OCamera::GetCameraView() const
+{
+	return glm::lookAt(CameraPosition, CameraPosition + FrontVector, CameraUp);
 }
 
 } // namespace RAPI
