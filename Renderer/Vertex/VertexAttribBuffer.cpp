@@ -34,7 +34,7 @@ void OVertexAttribBuffer::EnableVertexAttribPointer()
 	                      VertexContext.VertexStride,
 	                      VertexContext.VertexPointer);
 
-	glEnableVertexAttribArray(VertexContext.VertexAttribArrayIndex);
+	glEnableVertexAttribArray(VertexContext.VertexIndex);
 }
 void OVertexAttribBuffer::BindBuffer()
 {

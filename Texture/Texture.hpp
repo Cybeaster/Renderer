@@ -1,6 +1,12 @@
 #pragma once
-#include <Renderer.hpp>
+
+#include "Path.hpp"
+#include "Types.hpp"
+
 #include <string>
+
+namespace RAPI
+{
 class OTexture
 {
 public:
@@ -14,3 +20,5 @@ private:
 	bool EnableAF = false;
 	uint32 textureID;
 };
+
+} // namespace RAPI

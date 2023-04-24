@@ -5,7 +5,7 @@
 #ifndef RENDERAPI_THREADTESTS_HPP
 #define RENDERAPI_THREADTESTS_HPP
 
-namespace Test
+namespace RAPI
 {
 
 class OThreadTests
@@ -22,6 +22,6 @@ namespace Five
 {
 void Test();
 }
-} // namespace Test
+} // namespace RAPI
 
 #endif // RENDERAPI_THREADTESTS_HPP

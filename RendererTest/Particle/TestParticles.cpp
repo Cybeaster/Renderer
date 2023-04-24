@@ -229,7 +229,7 @@ Mat4 calcTranslation(const Mat4& vMat, const Vec3 position)
 #pragma endregion CUDA
 #endif
 
-namespace Test
+namespace RAPI
 {
 
 OTestParticles::OTestParticles(OPath shaderPath, ORenderer* Renderer)
@@ -374,4 +374,4 @@ void OTestParticles::DrawFields(float deltaTime, OMat4 vMat)
 	}
 }
 
-} // namespace Test
+} // namespace RAPI

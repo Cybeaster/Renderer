@@ -10,11 +10,9 @@
 #include "Vertex/VertexArray.hpp"
 #include "glfw3.h"
 
-#include <Test.hpp>
-
-class Application;
 namespace RAPI
 {
+class OTest;
 /**
  * @brief Singleton class that creates the context, calculates perspective etc.
  *
@@ -34,7 +32,7 @@ public:
 
 	void Tick(const SRenderContext& Context);
 
-	void AddTest(Test::OTest* testPtr);
+	void AddTest(OTest* testPtr);
 
 	SDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext);
 
@@ -84,7 +82,7 @@ private:
 	OCamera Camera;
 	ORendererInputHandler RenderInputHandler;
 	OVertexArray VertexArray;
-	OVector<Test::OTest*> Tests;
+	OVector<OTest*> Tests;
 
 	static inline ORenderer* Renderer = nullptr;
 };

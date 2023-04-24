@@ -1,4 +1,5 @@
 #include "InputHandlers/InputHandler.hpp"
+#include "ModelsImporter/ImportManager.hpp"
 #include "NamedThreadPool/NamedThreadPool.hpp"
 #include "Profiler/Profiler.hpp"
 #include "Renderer.hpp"
@@ -41,7 +42,7 @@ private:
 	OInputHandler InputHandler;
 	OUniquePtr<OWindow> Window;
 	ONamedThreadPool NamedThreadPool;
-
+	OImportManager Importer;
 	static inline OPath DebugPath = current_path();
 	static inline OPath RootDirPath = current_path();
 
@@ -50,7 +51,7 @@ private:
 
 	static inline SShaderName SimpleCubeShader = "\\SimpleCube.shader";
 	static inline SShaderName SimpleTextureShader = "\\SimpleTexture.shader";
-
+	static inline SShaderName BasicShader = "\\Basic.shader";
 	static inline OApplication* Application = nullptr;
 };
 } // namespace RAPI

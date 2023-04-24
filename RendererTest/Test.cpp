@@ -4,7 +4,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-namespace Test
+namespace RAPI
 {
 OTest::OTest(const OPath& ShaderPath, RAPI::ORenderer* RendererArg)
     : Shader(ShaderPath), Renderer(RendererArg)
@@ -49,7 +49,7 @@ void OTest::OnUpdate(
     OMat4& /*VMat*/)
 {
 	Shader.Bind();
-	Shader.SetUnformMat4f("proj_matrix", Move(PMat));
+	Shader.SetUnformMat4f("proj_matrix", PMat);
 }
 
 SBufferHandle OTest::AddBuffer(const void* Data, size_t Size)
@@ -67,4 +67,4 @@ void OTest::BindBuffer(const SBufferHandle& Handle)
 	Renderer->BindBuffer(Handle);
 }
 
-} // namespace Test
+} // namespace RAPI

@@ -1,5 +1,7 @@
 #include "Renderer.hpp"
 
+#include "Test.hpp"
+
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 #include <gtx/rotate_vector.hpp>
@@ -52,7 +54,7 @@ void ORenderer::RendererStart(const SRenderContext& Context)
 void ORenderer::Tick(const SRenderContext& Context)
 {
 	RendererStart(Context);
-	for (auto* const test : Tests)
+	for (auto* test : Tests)
 	{
 		if (test)
 		{
@@ -76,7 +78,7 @@ void ORenderer::CleanScene()
 	GLCall(glEnable(GL_CULL_FACE));
 }
 
-void ORenderer::AddTest(Test::OTest* testPtr)
+void ORenderer::AddTest(OTest* testPtr)
 {
 	if (testPtr)
 	{

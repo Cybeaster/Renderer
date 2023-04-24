@@ -5,7 +5,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-namespace Test
+namespace RAPI
 {
 
 void OTestSimpleSolarSystem::OnUpdate(
@@ -89,4 +89,4 @@ OTestSimpleSolarSystem::OTestSimpleSolarSystem(OPath shaderPath, ORenderer* Rend
 	pyramidHandle = CreateVertexElement(pyramidVertex, pyramidDrawContext);
 }
 
-} // namespace Test
+} // namespace RAPI

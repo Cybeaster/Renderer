@@ -1,9 +1,12 @@
 #include "Texture.hpp"
 
+#include "Assert.hpp"
+#include "GL.hpp"
 #include "SOIL2.h"
 
 #include <iostream>
-
+namespace RAPI
+{
 OTexture::OTexture(const OPath& path, bool IsAF_Enabled)
 {
 	EnableAF = IsAF_Enabled && glewIsSupported("GL_EXT_texture_filter_anisotropic");
@@ -40,3 +43,4 @@ void OTexture::Unbind()
 {
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
+} // namespace RAPI

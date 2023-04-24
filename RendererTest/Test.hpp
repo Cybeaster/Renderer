@@ -7,6 +7,7 @@
 #include "SmartPtr.hpp"
 #include "Types.hpp"
 #include "Vector.hpp"
+#include "Texture/Texture.hpp"
 #include "Vertex/VertexArray.hpp"
 #include "Vertex/VertexData/DrawContext.hpp"
 #include <Path.hpp>
@@ -19,13 +20,9 @@ namespace RAPI
 {
 class ORenderer;
 }
-namespace Test
+namespace RAPI
 {
-using RAPI::ORenderer;
-using RAPI::OShader;
-using RAPI::OSharedPtr;
-using RAPI::SDrawContext;
-using RAPI::SVertexContext;
+
 /**
  * @brief Base class for all tests.
  * @details Each test is an abstract modul, receiving as input base parameters(camera location, frame rate, aspect ration, perspective matrix)
@@ -99,4 +96,4 @@ private:
 	OVector<SVertexHandle> Handles;
 };
 
-} // namespace Test
+} // namespace RAPI

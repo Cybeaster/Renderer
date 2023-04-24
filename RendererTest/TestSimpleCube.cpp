@@ -2,7 +2,7 @@
 
 #include <Renderer.hpp>
 
-namespace Test
+namespace RAPI
 {
 OTestSimpleCube::OTestSimpleCube(OPath ShaderPath, ORenderer* Renderer)
     : OTest(ShaderPath, Renderer)
@@ -47,4 +47,4 @@ void OTestSimpleCube::OnUpdate(
 
 	// GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
 }
-} // namespace Test
+} // namespace RAPI

@@ -5,7 +5,7 @@
 
 #include <vector>
 
-namespace Test
+namespace RAPI
 {
 /**
  * @brief Spawns particles in a specific area, with start velocity, <<field>> and additional parameters like force of gravity.
@@ -110,4 +110,4 @@ private:
 	const float DefaultFieldStrenght = 1.1F;
 };
 
-} // namespace Test
+} // namespace RAPI

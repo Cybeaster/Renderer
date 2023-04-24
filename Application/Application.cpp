@@ -2,6 +2,7 @@
 #include "Application.hpp"
 
 #include "Renderer.hpp"
+#include "TestModelling.hpp"
 #include "TestTexture.hpp"
 #include "UnitTests/TestGroup.hpp"
 #include "Window/GlfwWindow.hpp"
@@ -13,8 +14,6 @@ namespace RAPI
 
 void OApplication::Start(int argc, char** argv)
 {
-	RUN_TEST(ParallelAlgos);
-
 	ParseInput(argc, argv);
 	InitRenderer();
 }
@@ -28,17 +27,17 @@ void OApplication::InitRenderer()
 	CreateWindow();
 	SetupInput();
 
-	const auto textureShaderPath = GetShaderLocalPathWith(SimpleTextureShader);
-	const auto simpleCubeShader = GetShaderLocalPathWith(SimpleCubeShader);
-
 	auto brickTexture = GetResourceDirectoryWith(TEXT("BrickWall.jpg"));
 	auto earthTexture = GetResourceDirectoryWith(TEXT("TopographicalEarth.jpg"));
+	auto shuttleModel = GetResourceDirectoryWith(TEXT("crawler.obj"));
+	auto simpleCubeModel = GetResourceDirectoryWith(TEXT("Cube.obj"));
 
 	auto renderer = ORenderer::Get();
 	renderer->Init();
 	renderer->SetInput(&InputHandler);
 
-	Test::OTestTexture textureTest(brickTexture, earthTexture, textureShaderPath, renderer);
+	auto simpleCube = Importer.BuildModelFromPath(simpleCubeModel, EModelType::OBJ);
+	OTestTexture textureTest(brickTexture, earthTexture, GetShaderLocalPathWith(BasicShader), renderer, simpleCube.get());
 	renderer->AddTest(&textureTest);
 
 	while (!Window.get()->NeedClose())

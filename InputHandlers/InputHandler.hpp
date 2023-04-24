@@ -62,6 +62,7 @@ private:
 	void SetInput(GLFWwindow* Window);
 
 	static OHashMap<EKeys, SKeyState> KeyMap;
+
 };
 
 } // namespace RAPI

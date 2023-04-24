@@ -1,3 +1,4 @@
+#include "GeneratedModel.hpp"
 #include "Model.hpp"
 
 #ifndef RENDERAPI_TORUS_HPP
@@ -6,9 +7,9 @@
 namespace RAPI
 {
 
-class OTorus final : public OModel
+class OTorus final : public OGeneratedModel
 {
-	using Super = OModel;
+	using Super = OGeneratedModel;
 
 public:
 	OTorus()
@@ -18,22 +19,23 @@ public:
 	}
 
 	explicit OTorus(uint32 Precision, float Inner, float Outer)
-	    : OModel(Precision), InnerRadius(Inner), OuterRadius(Outer)
+	    : OGeneratedModel(Precision), InnerRadius(Inner), OuterRadius(Outer)
 	{
 		PreInit(Precision);
 		Init(Precision);
 	}
 
 	explicit OTorus(uint32 Precision)
-	    : OModel(Precision)
+	    : OGeneratedModel(Precision)
 	{
 		PreInit(Precision);
 		Init(Precision);
 	}
 
-	void Init(int32) noexcept override;
-	void PreInit(int32) noexcept override;
+	void Init(uint32) noexcept override;
+	void PreInit(uint32) noexcept override;
 	void GetVertexTextureNormalPositions(SModelContext& OutContext) override;
+	SModelContext GetModelContext();
 
 private:
 	void CalcFirstRing(uint32 Precision);

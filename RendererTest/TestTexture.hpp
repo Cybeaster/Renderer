@@ -7,12 +7,12 @@
 #include <Texture.hpp>
 
 class GLFWwindow;
-namespace Test
+namespace RAPI
 {
 class OTestTexture : public OTest
 {
 public:
-	OTestTexture(const OPath& filePath, const OPath& SecondTexturePath, const OPath& ShaderPath, RAPI::ORenderer* Renderer);
+	OTestTexture(const OPath& filePath, const OPath& SecondTexturePath, const OPath& ShaderPath, RAPI::ORenderer* Renderer, OModel* Model);
 	~OTestTexture() override = default;
 
 	void OnUpdate(
@@ -93,6 +93,11 @@ private:
 	SDrawVertexHandle textureHandle;
 	OTexture WallTexture;
 	OTexture EarthTexture;
+
+	SDrawVertexHandle VerticesImportedHandle;
+	SBufferAttribVertexHandle TexturesImportedHandle;
+
+	SModelContext ImportedModelContext;
 };
 
-} // namespace Test
+} // namespace RAPI

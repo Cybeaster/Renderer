@@ -1,6 +1,6 @@
 #include "Particle.hpp"
 
-namespace Test
+namespace RAPI
 {
 
 Particle::Particle(
@@ -283,4 +283,4 @@ void Particle::updateColor()
 	color = { red, blue, green };
 }
 
-} // namespace Test
+} // namespace RAPI

@@ -8,7 +8,6 @@
 #include "Utils/Delegate/Delegate.hpp"
 #include "glfw3.h"
 
-#include <iostream>
 
 #define DEBUG_MOUSE_WHEEL false
 #define DEBUG_MOUSE_POS true
@@ -54,8 +53,8 @@ void OInputHandler::CursorWheelInputCallback(GLFWwindow* /*window*/, double /*XO
 	else
 	{
 		ORenderer::Get()->MoveCamera(ETranslateDirection::Backward);
-
 	}
+
 	if (DEBUG_MOUSE_WHEEL)
 	{
 		std::cout << glm::to_string(ORenderer::Get()->GetCameraPosition()) << std::endl;

@@ -1,34 +1,43 @@
 #shader vertex
-#version 330 core 
 
-layout(location = 0) in vec4 position;
+#version 430
+layout(location=0) in vec3 position;
+layout(location=1) in vec2 texels;
+layout(location = 2) in vec3 normals;
 
-mat4 buildRotate(float rad)
+out vec2 tc;
+
+uniform mat4 proj_matrix;
+uniform mat4 mv_matrix;
+uniform int use_texture = 1;
+
+layout (binding = 0) uniform sampler2D sampler;
+
+void main(void)
 {
-    mat4 xrot = mat4(1.0,0.0,0.0,0.0,
-                    0.0,cos(rad),-sin(rad),0.0,
-                    0.0,sin(rad),cos(rad),0.0,
-                    0.0,0.0,0.0,1.0);
-    return xrot;
+    gl_Position = proj_matrix * mv_matrix * vec4(position,1.0);
+    tc = texels;
 }
 
-void main()
-{
-    gl_Position = buildRotate(50) * position; 
 
-};
 
 
 #shader fragment
-#version 330 core  
+#version 430
 
-layout(location = 0) out vec4 color;
+in vec2 tc;
+out vec4 color;
 
-in vec2 v_TexCoord;
+layout (binding=0) uniform sampler2D sampler;
+uniform mat4 proj_matrix;
+uniform mat4 mv_matrix;
+uniform int use_texture = 1;
 
-uniform vec4 u_Color;
-
-void main()
+void main(void)
 {
-   color = u_Color; 
+    color = vec4(1,1,1,1);
+   if(use_texture == 1)
+   {
+        color = texture(sampler,tc);
+    }
 };

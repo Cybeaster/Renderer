@@ -4,7 +4,7 @@
 namespace RAPI
 {
 
-void OSphere::Init(int32 Precision) noexcept
+void OSphere::Init(uint32 Precision) noexcept
 {
 	// Because the whole sphere has to be "closed";
 	const auto incPrecision = Precision + 1;
@@ -48,16 +48,16 @@ void OSphere::GetVertexTextureNormalPositions(SModelContext& OutContext)
 
 	for (int idx = 0; idx < indices; ++idx)
 	{
-		OutContext.VertexCoords.push_back(Vertices[Indices[idx]].x);
-		OutContext.VertexCoords.push_back(Vertices[Indices[idx]].y);
-		OutContext.VertexCoords.push_back(Vertices[Indices[idx]].z);
+		OutContext.Vertices.push_back(Vertices[Indices[idx]].x);
+		OutContext.Vertices.push_back(Vertices[Indices[idx]].y);
+		OutContext.Vertices.push_back(Vertices[Indices[idx]].z);
 
-		OutContext.TextureCoords.push_back(TexCoords[Indices[idx]].s);
-		OutContext.TextureCoords.push_back(TexCoords[Indices[idx]].t);
+		OutContext.TexCoords.push_back(TexCoords[Indices[idx]].s);
+		OutContext.TexCoords.push_back(TexCoords[Indices[idx]].t);
 
-		OutContext.NormalsCoords.push_back(Normals[Indices[idx]].x);
-		OutContext.NormalsCoords.push_back(Normals[Indices[idx]].y);
-		OutContext.NormalsCoords.push_back(Normals[Indices[idx]].z);
+		OutContext.Normals.push_back(Normals[Indices[idx]].x);
+		OutContext.Normals.push_back(Normals[Indices[idx]].y);
+		OutContext.Normals.push_back(Normals[Indices[idx]].z);
 	}
 }
 

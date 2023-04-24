@@ -1,11 +1,13 @@
 #pragma once
-#include <Renderer.hpp>
+#include "Path.hpp"
+#include "Test.hpp"
+
 #include <cstdint>
 #include <glm.hpp>
 #include <vector>
-namespace Test
+namespace RAPI
 {
-
+class ORenderer;
 /**
  * @brief Spawns 2 figures with specific offset.
  *
@@ -81,4 +83,4 @@ private:
 	};
 };
 
-} // namespace Test
+} // namespace RAPI

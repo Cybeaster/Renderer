@@ -2,8 +2,8 @@
 #ifndef RENDERAPI_SPHERE_HPP
 #define RENDERAPI_SPHERE_HPP
 
+#include "GeneratedModel.hpp"
 #include "Math.hpp"
-#include "Model.hpp"
 #include "Tuple.hpp"
 #include "TypeTraits.hpp"
 #include "Types.hpp"
@@ -11,9 +11,9 @@
 namespace RAPI
 {
 
-class OSphere final : public OModel
+class OSphere final : public OGeneratedModel
 {
-	using Super = OModel;
+	using Super = OGeneratedModel;
 
 public:
 	OSphere()
@@ -23,13 +23,13 @@ public:
 	}
 
 	explicit OSphere(uint32 Precision)
-	    : OModel(Precision)
+	    : OGeneratedModel(Precision)
 	{
 		PreInit(Precision);
 		Init(Precision);
 	}
 
-	void Init(int32) noexcept override;
+	void Init(uint32) noexcept override;
 	void GetVertexTextureNormalPositions(SModelContext& OutContext) override;
 
 private:

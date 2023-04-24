@@ -1,13 +1,13 @@
 #include "Torus.hpp"
 
-void RAPI::OTorus::Init(int32 Precision) noexcept
+void RAPI::OTorus::Init(uint32 Precision) noexcept
 {
 	const auto sqrtPrecision = Precision * Precision;
 	NumVertices = sqrtPrecision + 2 * Precision + 1;
 }
-void RAPI::OTorus::PreInit(int32 Precision) noexcept
+void RAPI::OTorus::PreInit(uint32 Precision) noexcept
 {
-	OModel::PreInit(Precision);
+	Super::PreInit(Precision);
 	STangents.resize(NumVertices);
 	TTangents.resize(NumVertices);
 
@@ -90,15 +90,15 @@ void RAPI::OTorus::GetVertexTextureNormalPositions(SModelContext& OutContext)
 	const auto numVertices = GetNumVertices();
 	for (uint32 idx = 0; idx < numVertices; ++idx)
 	{
-		OutContext.VertexCoords.push_back(Vertices[idx].x);
-		OutContext.VertexCoords.push_back(Vertices[idx].y);
-		OutContext.VertexCoords.push_back(Vertices[idx].z);
+		OutContext.Vertices.push_back(Vertices[idx].x);
+		OutContext.Vertices.push_back(Vertices[idx].y);
+		OutContext.Vertices.push_back(Vertices[idx].z);
 
-		OutContext.TextureCoords.push_back(TexCoords[idx].s);
-		OutContext.TextureCoords.push_back(TexCoords[idx].t);
+		OutContext.TexCoords.push_back(TexCoords[idx].s);
+		OutContext.TexCoords.push_back(TexCoords[idx].t);
 
-		OutContext.NormalsCoords.push_back(Normals[idx].x);
-		OutContext.NormalsCoords.push_back(Normals[idx].y);
-		OutContext.NormalsCoords.push_back(Normals[idx].z);
+		OutContext.Normals.push_back(Normals[idx].x);
+		OutContext.Normals.push_back(Normals[idx].y);
+		OutContext.Normals.push_back(Normals[idx].z);
 	}
 }

@@ -30,6 +30,7 @@ public:
 	void Unbind() const;
 	void SetUniform4f(const OString& name, float v0, float v1, float v2, float v3);
 
+
 	void SetUniform1f(const OString& name, float v0);
 	void SetUniform1i(const OString& name, int32_t v0);
 	void SetUnformMat4f(const OString& name, OMat4&& matrix);

@@ -3,7 +3,7 @@
 #include "Types.hpp"
 #include "Vector.hpp"
 
-namespace Test
+namespace RAPI
 {
 class Particle
 {
@@ -163,4 +163,4 @@ private:
 	int interleavedStride;
 };
 
-} // namespace Test
+} // namespace RAPI

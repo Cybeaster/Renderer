@@ -10,7 +10,7 @@
 #include <execution>
 #include <future>
 
-namespace Test
+namespace RAPI
 {
 
 namespace Zero
@@ -527,4 +527,4 @@ void SParallelAlgosTest::Run()
 	}
 }
 
-} // namespace Test
+} // namespace RAPI
