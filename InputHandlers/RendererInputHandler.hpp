@@ -1,13 +1,15 @@
 #pragma once
 
-#include "KeyboardKeys.hpp"
+#include "InputHandler.hpp"
 #include "SmartPtr.hpp"
+#include "Utils/Types/Keys/KeyboardKeys.hpp"
 #include "Utils/Types/Math.hpp"
 
 namespace RAPI
 {
 class OInputHandler;
 class ORenderer;
+
 class ORendererInputHandler
 {
 public:
@@ -17,14 +19,28 @@ public:
 	void SetRenderer(ORenderer* Renderer);
 
 private:
-	void OnWKeyToggled(bool Pressed);
-	void OnSKeyToggled(bool Pressed);
-	void OnDKeyToggled(bool Pressed);
-	void OnAKeyToggled(bool Pressed);
-	void OnEKeyToggled(bool Pressed);
-	void OnQKeyToggled(bool Pressed);
+	void OnWKeyToggled(EKeyState State);
+	void OnSKeyToggled(EKeyState State);
+	void OnDKeyToggled(EKeyState State);
+	void OnAKeyToggled(EKeyState State);
+	void OnEKeyToggled(EKeyState State);
+	void OnQKeyToggled(EKeyState State);
 
-	ORenderer* Owner;
+	void OnMouseLeftToggled(EKeyState State);
+	void OnMouseRightToggled(EKeyState State);
+	void OnMouseWheelToggled(EKeyState State);
+
+	void OnMouseMoved(double XCoord, double YCoord);
+
+	ORenderer* Owner{ nullptr };
+	OVec2 MousePosition{ 0.0, 0.0 };
+
+	bool IsRightMousePressed = false;
+
+	bool XRotNegative = true;
+	bool YRotNegative = false;
+
+
 };
 
 } // namespace RAPI

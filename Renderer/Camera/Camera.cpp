@@ -4,6 +4,8 @@
 
 #include "Camera.hpp"
 
+#include "Logging/Log.hpp"
+
 namespace RAPI
 {
 void OCamera::SetPosition(const OVec3& Arg)
@@ -53,6 +55,8 @@ void OCamera::Rotate(float XOffset, float YOffset)
 	direction.z = sin(yawRadians) * cos(pitchRadians);
 
 	FrontVector = glm::normalize(direction);
+
+	RAPI_LOG(Log, "Camera is rotated! Current Pitch:{} Yaw:{}", TO_STRING(Pitch), TO_STRING(Yaw));
 }
 void OCamera::Translate(ETranslateDirection Dir)
 {

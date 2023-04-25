@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Keys/KeyState.hpp"
 #include "Math.hpp"
 #include "Printer.hpp"
 #include "Types.hpp"
@@ -125,10 +126,31 @@ public:
 		return Value ? "True" : "False";
 	}
 
+
+
+	template<>
+	static OString ToString(EKeyState Value)
+	{
+		switch (Value)
+		{
+		case EKeyState::Pressed:
+			return "Pressed";
+		case EKeyState::Released:
+			return "Released";
+		}
+		return STRING_INVALID_VALUE;
+	}
+
 	template<>
 	static OString ToString(OVec3 Vector)
 	{
 		return glm::to_string(Vector);
+	}
+
+	template<>
+	static OString ToString(OVec2 Value)
+	{
+		return glm::to_string(Value);
 	}
 
 	template<template<typename Contained, typename Alloc = std::allocator<Contained>>

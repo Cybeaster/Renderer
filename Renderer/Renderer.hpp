@@ -2,6 +2,7 @@
 #include "Camera/Camera.hpp"
 #include "Checks/Assert.hpp"
 #include "InputHandlers/InputHandler.hpp"
+#include "InputHandlers/RendererInputHandler.hpp"
 #include "Math.hpp"
 #include "SmartPtr.hpp"
 #include "Types.hpp"
@@ -55,19 +56,12 @@ public:
 	void PostInit();
 
 	void MoveCamera(ETranslateDirection Dir);
+	void RotateCamera(const OVec2& Delta);
 
 	NODISCARD const OVec3& GetCameraPosition() const;
 
-	static float Fovy;
-
 	static OMat4 VMat;
 	static OMat4 PMat;
-
-	static bool RightMousePressed;
-	static OVec2 PressedMousePos;
-
-	static OMat4 MouseCameraRotation;
-	static float MRSDivideFactor;
 
 	void SetInput(OInputHandler* InputHandler);
 

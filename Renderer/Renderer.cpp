@@ -11,18 +11,9 @@
 
 namespace RAPI
 {
-float ORenderer::Fovy{ 1.0472F };
 
 OMat4 ORenderer::VMat{};
 OMat4 ORenderer::PMat{};
-
-OVec2 ORenderer::PressedMousePos{ 0, 0 };
-OMat4 ORenderer::MouseCameraRotation{ OMat4(1.F) };
-
-bool ORenderer::RightMousePressed{ false };
-
-/// @brief Mouse Rotation Speed Divide Factor
-float ORenderer::MRSDivideFactor{ 100.F };
 
 void ORenderer::Init()
 {
@@ -148,6 +139,10 @@ const OVec3& ORenderer::GetCameraPosition() const
 
 void ORenderer::RendererEnd()
 {
+}
+void ORenderer::RotateCamera(const OVec2& Delta)
+{
+	Camera.Rotate(Delta.x, Delta.y);
 }
 
 } // namespace RAPI

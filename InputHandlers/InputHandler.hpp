@@ -1,12 +1,12 @@
 #pragma once
 #include "Delegate.hpp"
-#include "KeyboardKeys.hpp"
-#include "RendererInputHandler.hpp"
+#include "Keys/KeyState.hpp"
 #include "SmartPtr.hpp"
 #include "TypeTraits.hpp"
 #include "Types.hpp"
 #include "Utils/Delegate/MulticastDelegate.hpp"
 #include "Utils/Types/HashMap/Hash.hpp"
+#include "Utils/Types/Keys/KeyboardKeys.hpp"
 #include "Utils/Types/Set.hpp"
 #include "glfw3.h"
 
@@ -15,14 +15,11 @@ namespace RAPI
 
 struct SKeyState
 {
-	OMulticastDelegate<bool> Callback;
-	bool IsPressed = false;
+	OMulticastDelegate<EKeyState> Callback;
 };
 
 class OInputHandler
 {
-	friend ORendererInputHandler;
-
 public:
 	OInputHandler() = default;
 	~OInputHandler() = default;
@@ -38,8 +35,8 @@ public:
 	static void MouseInputCallback(GLFWwindow* window, int Button, int Action, int Mods);
 	static void CursorWheelInputCallback(GLFWwindow* window, double XOffset, double YOffset);
 
-	template<typename ObjectType, typename FunctionType, typename... ArgTypes>
-	void AddRawListener(ObjectType* Object, FunctionType Function, EKeys Key)
+	template<typename ObjectType, typename FunctionType>
+	void AddRawKeyListener(ObjectType* Object, FunctionType Function, EKeys Key)
 	{
 		if (Object != nullptr)
 		{
@@ -47,12 +44,21 @@ public:
 		}
 	}
 
-	template<typename ObjectType, typename FunctionType, typename... ArgTypes>
-	void AddSharedListener(OSharedPtr<ObjectType> Object, FunctionType Function, EKeys Key)
+	template<typename ObjectType, typename FunctionType>
+	void AddSharedKeyListener(OSharedPtr<ObjectType> Object, FunctionType Function, EKeys Key)
 	{
 		if (Object != nullptr)
 		{
 			KeyMap[Key].Callback.AddSP(Object, Function);
+		}
+	}
+
+	template<typename ObjectType, typename FunctionType>
+	void AddRawMouseListener(ObjectType* Object, FunctionType Function)
+	{
+		if (Object != nullptr)
+		{
+			OnMouseMoved.AddRaw(Object, Function);
 		}
 	}
 
@@ -62,7 +68,8 @@ private:
 	void SetInput(GLFWwindow* Window);
 
 	static OHashMap<EKeys, SKeyState> KeyMap;
-
+	static OMulticastDelegate<EKeys, EKeyState> OnKey;
+	static OMulticastDelegate<double, double> OnMouseMoved;
 };
 
 } // namespace RAPI
