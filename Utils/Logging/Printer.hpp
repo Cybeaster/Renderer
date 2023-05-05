@@ -8,7 +8,9 @@
 #include <iostream>
 class OPrinter
 {
+
 public:
+
 	template<class Printable>
 	FORCEINLINE OPrinter& operator<<(Printable Object)
 	{

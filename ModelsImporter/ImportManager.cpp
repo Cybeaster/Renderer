@@ -19,7 +19,7 @@ OUniquePtr<OModel> OImportManager::BuildModelFromPath(const OPath& PathToModel, 
 	}
 
 	auto model = MakeUnique<OModel>();
-	model->SetupModelFromModelContext(usedImporter->GetParsedModel(PathToModel));
+	// model->SetupModelFromModelContext(usedImporter->GetParsedModel(PathToModel)); //modify models
 	return Move(model);
 }
 } // namespace RAPI

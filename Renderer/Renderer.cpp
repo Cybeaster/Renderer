@@ -145,4 +145,8 @@ void ORenderer::RotateCamera(const OVec2& Delta)
 	Camera.Rotate(Delta.x, Delta.y);
 }
 
+void ORenderer::AddModel(const SModelContext& Context)
+{
+}
+
 } // namespace RAPI

@@ -17,14 +17,19 @@ struct SMath
 {
 	static inline constexpr float Pi = 3.14159F;
 
-	NODISCARD FORCEINLINE static auto ToRadians(float Degree) noexcept
+	NODISC_FORCEINL static auto ToRadians(float Degree) noexcept
 	{
 		return (Degree * 2.F * Pi) / 360.F;
 	}
 
-	NODISCARD FORCEINLINE static auto Min(auto First, auto Second)
+	NODISC_FORCEINL static auto Min(auto First, auto Second)
 	{
 		return First > Second ? Second : First;
+	}
+
+	NODISC_FORCEINL static auto Max(auto First, auto Second)
+	{
+		return First > Second ? First : Second;
 	}
 };
 

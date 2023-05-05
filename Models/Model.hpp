@@ -4,17 +4,10 @@
 #define RENDERAPI_MODEL_HPP
 
 #include "Math.hpp"
+#include "Texture.hpp"
 #include "TypeTraits.hpp"
 #include "Types.hpp"
 #include "Vector.hpp"
-
-/**@brief Model for storing */
-struct SParsedModelContext
-{
-	OVector<OVec3> Vertices;
-	OVector<OVec2> TexCoords;
-	OVector<OVec3> Normals;
-};
 
 /**@brief Ready to use in graphics API*/
 struct SModelContext
@@ -43,22 +36,16 @@ public:
 		return Indices;
 	}
 
-
-
 	virtual void GetVertexTextureNormalPositions(SModelContext& OutContext);
-
-	void SetupModelFromModelContext(SParsedModelContext&& Context);
-	void SetupModelFromModelContext(const SParsedModelContext& Context);
 
 protected:
 	OVector<int32> Indices;
-
 	OVector<OVec3> Vertices;
 	OVector<OVec2> TexCoords;
 	OVector<OVec3> Normals;
 
-
-
+	OTexture* ModelTexture;
+	OVec3 ModelPosition;
 };
 
 } // namespace RAPI

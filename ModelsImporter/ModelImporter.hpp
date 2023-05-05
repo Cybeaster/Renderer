@@ -10,7 +10,7 @@ namespace RAPI
 class IModelImporter
 {
 public:
-	NODISCARD virtual SParsedModelContext GetParsedModel(const OPath& PathToModel) const = 0;
+	NODISCARD virtual SModelContext GetParsedModel(const OPath& PathToModel) const = 0;
 };
 
 } // namespace RAPI

@@ -4,19 +4,7 @@
 #include "Logging/Log.hpp"
 namespace RAPI
 {
-void OModel::SetupModelFromModelContext(SParsedModelContext&& Context)
-{
-	Vertices = Move(Context.Vertices);
-	TexCoords = Move(Context.TexCoords);
-	Normals = Move(Context.Normals);
-}
 
-void OModel::SetupModelFromModelContext(const SParsedModelContext& Context)
-{
-	Vertices = Context.Vertices;
-	TexCoords = Context.TexCoords;
-	Normals = Context.Normals;
-}
 void OModel::GetVertexTextureNormalPositions(SModelContext& OutContext)
 {
 	auto triangleVert = Vertices.size();

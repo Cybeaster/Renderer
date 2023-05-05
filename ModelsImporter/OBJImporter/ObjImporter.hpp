@@ -7,7 +7,7 @@ class OOBJImporter : public IModelImporter
 {
 public:
 private:
-	NODISCARD SParsedModelContext GetParsedModel(const OPath& PathToModel) const override;
+	NODISCARD SModelContext GetParsedModel(const OPath& PathToModel) const override;
 };
 
 } // namespace RAPI

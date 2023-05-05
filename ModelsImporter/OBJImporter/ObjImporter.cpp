@@ -10,13 +10,13 @@
 
 namespace RAPI
 {
-SParsedModelContext OOBJImporter::GetParsedModel(const OPath& PathToModel) const
+SModelContext OOBJImporter::GetParsedModel(const OPath& PathToModel) const
 {
-	SParsedModelContext result;
+	SModelContext result;
 
-	OVector<OVec3> vertices;
-	OVector<OVec2> texels;
-	OVector<OVec3> normals;
+	OVector<float> vertices;
+	OVector<float> texels;
+	OVector<float> normals;
 
 	float x, y, z;
 
@@ -36,7 +36,9 @@ SParsedModelContext OOBJImporter::GetParsedModel(const OPath& PathToModel) const
 			ss >> x;
 			ss >> y;
 			ss >> z;
-			vertices.emplace_back(x, y, z);
+			vertices.push_back(x);
+			vertices.push_back(y);
+			vertices.push_back(z);
 		}
 
 		// texture coord
@@ -47,7 +49,8 @@ SParsedModelContext OOBJImporter::GetParsedModel(const OPath& PathToModel) const
 			ss >> x;
 			ss >> y;
 
-			texels.emplace_back(x, y);
+			texels.push_back(x);
+			texels.push_back(y);
 		}
 
 		// Check normals
@@ -58,7 +61,9 @@ SParsedModelContext OOBJImporter::GetParsedModel(const OPath& PathToModel) const
 			ss >> y;
 			ss >> z;
 
-			normals.emplace_back(x, y, z);
+			normals.push_back(x);
+			normals.push_back(y);
+			normals.push_back(z);
 		}
 
 		// Check faces
@@ -78,13 +83,20 @@ SParsedModelContext OOBJImporter::GetParsedModel(const OPath& PathToModel) const
 				std::getline(oneCornerSS, normal, '/');
 
 				// subtract to make it 0 based
-				auto vertRef = (std::stoi(vertex) - 1);
-				auto texelRef = ((std::stoi(texel)) - 1);
-				auto normRef = ((std::stoi(normal)) - 1);
+				auto vertRef = (std::stoi(vertex) - 1) * 3;
+				auto texelRef = ((std::stoi(texel)) - 1) * 2;
+				auto normRef = ((std::stoi(normal)) - 1) * 3;
 
 				result.Vertices.push_back(vertices[vertRef]);
+				result.Vertices.push_back(vertices[vertRef + 1]);
+				result.Vertices.push_back(vertices[vertRef + 2]);
+
 				result.TexCoords.push_back(texels[texelRef]);
+				result.TexCoords.push_back(texels[texelRef + 1]);
+
 				result.Normals.push_back(normals[normRef]);
+				result.Normals.push_back(normals[normRef + 1]);
+				result.Normals.push_back(normals[normRef + 2]);
 			}
 		}
 		RAPI_LOG(Log, "Loading model {} ...", PathToModel.string());

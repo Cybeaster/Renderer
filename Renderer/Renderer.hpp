@@ -4,6 +4,7 @@
 #include "InputHandlers/InputHandler.hpp"
 #include "InputHandlers/RendererInputHandler.hpp"
 #include "Math.hpp"
+#include "Models/Model.hpp"
 #include "SmartPtr.hpp"
 #include "Types.hpp"
 #include "Utils/Threads/ThreadPool/CustomTestThreadPool/ThreadPool.hpp"
@@ -24,6 +25,7 @@ struct SRenderContext
 	float AspectRatio{ 0 };
 };
 
+class OModel;
 class ORenderer
 {
 public:
@@ -51,6 +53,8 @@ public:
 	SBufferHandle AddBuffer(SBufferContext&& Context);
 
 	void BindBuffer(const SBufferHandle& Handle);
+
+	void AddModel(const SModelContext& Context);
 
 	void Init();
 	void PostInit();
