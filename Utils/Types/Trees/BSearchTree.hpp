@@ -1,130 +1,60 @@
 #pragma once
 
 #include "Assert.hpp"
+#include "BSearchTreeBase.hpp"
 #include "SmartPtr.hpp"
+
 namespace RAPI
 {
 
-template<typename TKeyType, typename TValueType>
+template<typename KeyType, typename ValueType>
 struct SBSearchTreeNode
 {
-	TKeyType Key;
-	OSharedPtr<TValueType> Value;
+	KeyType Key;
+	OSharedPtr<ValueType> Value;
 	SBSearchTreeNode* Right = nullptr;
 	SBSearchTreeNode* Left = nullptr;
-	SBSearchTreeNode(TKeyType NewKey, TValueType NewValue)
+	SBSearchTreeNode(KeyType NewKey, ValueType NewValue)
 	    : Key(NewKey), Value(MakeShared(NewValue))
 	{
 	}
 };
 
-template<typename TKeyType, typename TValueType, typename TNode = SBSearchTreeNode<TKeyType, TValueType>>
-class OBSearchTree
+template<typename KeyType, typename ValueType>
+class OBSearchTree : OBSearchTreeBase<KeyType, ValueType, SBSearchTreeNode<KeyType, ValueType>>
 {
-public:
-	enum ETraverseType
-	{
-		Symmetric, // left child -> parent -> right child
-		Reverse,
-		Direct
-	};
+	using TNode = SBSearchTreeNode<KeyType, ValueType>;
 
-	virtual void Insert(TKeyType Key, TValueType Value);
-	TValueType Find(TKeyType Key);
-	TValueType GetMax();
-	TValueType GetMin();
-	bool Remove(TKeyType Key);
-	void Print(OPrinter* Printer);
+public:
+
+	void Insert(KeyType Key, ValueType Value) override;
+	bool Remove(KeyType Key) override;
 
 private:
-	void Print(TNode* Where, OBSearchTree::ETraverseType Type, OPrinter* Printer);
-
-	template<typename Operation>
-	void TraverseTreeWith(TNode* Where, ETraverseType Type, Operation Op);
-
-	TNode* GetMax(TNode* Where);
-	TNode* Remove(TNode* Where, TKeyType What);
-	TNode* GetMin(TNode* Where);
-	TValueType Find(TNode* Where, TKeyType What);
-	void Insert(TNode* Where, TNode* What);
-
-	OSharedPtr<TNode> Head = nullptr;
+	TNode* Remove(TNode* Where, KeyType Key);
 };
 
-template<typename TKeyType, typename TValueType, typename TNode>
-template<typename Operation>
-void OBSearchTree<TKeyType, TValueType, TNode>::TraverseTreeWith(TNode* Where, OBSearchTree::ETraverseType Type, Operation Op)
+template<typename KeyType, typename ValueType>
+void OBSearchTree<KeyType, ValueType>::Insert(KeyType Key, ValueType Value)
 {
-	if (Where == nullptr)
-	{
-		return;
-	}
-
-	switch (Type)
-	{
-	case ETraverseType::Symmetric:
-	{
-		TraverseTreeWith(Where->Left, Type, Op);
-		Op(Where);
-		TraverseTreeWith(Where->Right, Type, Op);
-		break;
-	}
-	case ETraverseType::Reverse:
-	{
-		TraverseTreeWith(Where->Left, Type, Op);
-		TraverseTreeWith(Where->Right, Type, Op);
-		Op(Where);
-	}
-	case ETraverseType::Direct:
-	{
-		Op(Where);
-		TraverseTreeWith(Where->Left, Type, Op);
-		TraverseTreeWith(Where->Right, Type, Op);
-	}
-	}
+	OBTreeUtils::Insert(Root, Key, Value);
 }
 
-template<typename TKeyType, typename TValueType, typename TNode>
-void OBSearchTree<TKeyType, TValueType, TNode>::Print(TNode* Where, OBSearchTree::ETraverseType Type, OPrinter* Printer)
-{
-	TraverseTreeWith(Where, Type, [Printer](TNode* Node)
-	                 { *Printer << "Key: " << Node->Key << "Value: " << Node->Value << "\n"; });
-}
-
-template<typename TKeyType, typename TValueType, typename TNode>
-void OBSearchTree<TKeyType, TValueType, TNode>::Print(OBSearchTree::ETraverseType Type, OPrinter* Printer)
-{
-	Print(Head, Type, Printer);
-}
-
-template<typename TKeyType, typename TValueType, typename TNode>
-TNode* OBSearchTree<TKeyType, TValueType, TNode>::GetMax(TNode* Where)
-{
-	if (Where->Right != nullptr)
-	{
-		return Where->Right;
-	}
-	else
-	{
-		return Where;
-	}
-}
-
-template<typename TKeyType, typename TValueType, typename TNode>
-TNode* OBSearchTree<TKeyType, TValueType, TNode>::Remove(TNode* Where, TKeyType What)
+template<typename KeyType, typename ValueType>
+OBSearchTree<KeyType, ValueType>::TNode* OBSearchTree<KeyType, ValueType>::Remove(OBSearchTree::TNode* Where, KeyType Key)
 {
 	if (Where == nullptr)
 	{
 		return nullptr;
 	}
 
-	if (Where->Key > What)
+	if (Where->Key > Key)
 	{
-		return Where->Right = Remove(Where->Right, What);
+		return Where->Right = Remove(Where->Right, Key);
 	}
-	else if (Where->Key < What)
+	else if (Where->Key < Key)
 	{
-		return Where->Left = Remove(Where->Left, What);
+		return Where->Left = Remove(Where->Left, Key);
 	}
 	else
 	{
@@ -143,114 +73,18 @@ TNode* OBSearchTree<TKeyType, TValueType, TNode>::Remove(TNode* Where, TKeyType 
 	}
 
 	return Remove(Where, What);
-} // namespace RAPI
+}
 
-template<typename TKeyType, typename TValueType, typename TNode>
-bool OBSearchTree<TKeyType, TValueType, TNode>::Remove(TKeyType Key)
+template<typename KeyType, typename ValueType>
+bool OBSearchTree<KeyType, ValueType>::Remove(KeyType Key)
 {
-	auto node = Remove(Head, Key);
+	auto node = Remove(Root, Key);
 	if (node)
 	{
 		delete node;
 		return true;
 	}
 	return false;
-}
-
-template<typename TKeyType, typename TValueType, typename TNode>
-TNode* OBSearchTree<TKeyType, TValueType, TNode>::GetMin(TNode* Where)
-{
-	if (Where->Left == nullptr)
-	{
-		return Where->Left;
-	}
-
-	return GetMin(Where->Left);
-}
-
-template<typename TKeyType, typename TValueType, typename TNode>
-TValueType OBSearchTree<TKeyType, TValueType, TNode>::GetMin()
-{
-	if (ENSURE(Head != nullptr))
-	{
-		return GetMin(Head)->Value;
-	}
-	return TValueType();
-}
-
-template<typename TKeyType, typename TValueType, typename TNode>
-TValueType OBSearchTree<TKeyType, TValueType, TNode>::GetMax()
-{
-	if (ENSURE(Head != nullptr))
-	{
-		return GetMax(Head).Value;
-	}
-	return TValueType();
-}
-
-template<typename TKeyType, typename TValueType, typename TNode>
-TValueType OBSearchTree<TKeyType, TValueType, TNode>::Find(TNode* Where, TKeyType What)
-{
-	if (ENSURE(Where != nullptr))
-	{
-		if (Where->Key == What)
-		{
-			return Where->Value;
-		}
-
-		return Where->Key > What ? Find(Where->Left, What) : Find(Where->Right, What);
-	}
-	return TValueType();
-}
-
-template<typename TKeyType, typename TValueType, typename TNode>
-TValueType OBSearchTree<TKeyType, TValueType, TNode>::Find(TKeyType Key)
-{
-	if (ENSURE(Head != nullptr))
-	{
-		if (Head->Key == Key)
-		{
-			return Head->Value;
-		}
-
-		return Find(Head, Key);
-	}
-}
-
-template<typename TKeyType, typename TValueType, typename TNode>
-void OBSearchTree<TKeyType, TValueType, TNode>::Insert(TNode* Where, TNode* What)
-{
-	if (What->Key > Where->Key)
-	{
-		if (Where->Right == nullptr)
-		{
-			Where->Right = Where;
-			return;
-		}
-	}
-	else
-	{
-		if (Where->Left == nullptr)
-		{
-			Where->Left = Where;
-			return;
-		}
-	}
-	Insert(Where, What);
-}
-
-template<typename TKeyType, typename TValueType, typename TNode>
-void OBSearchTree<TKeyType, TValueType, TNode>::Insert(TKeyType Key, TValueType Value)
-{
-	auto newNode = new TNode(Key, Value);
-	if (Head == nullptr)
-	{
-		Head = new TNode(Key, Value);
-	}
-	else
-	{
-		Insert(Head, newNode);
-	}
 }
 
 } // namespace RAPI
