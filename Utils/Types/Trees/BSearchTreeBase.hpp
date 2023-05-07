@@ -22,7 +22,10 @@ public:
 	static void Print(NodeType* Where, ETraverseType Type, OPrinter* Printer);
 
 	template<typename NodeType, typename KeyType, typename ValueType>
-	static ValueType Find(NodeType* Node, KeyType Key);
+	static ValueType FindValue(NodeType* Node, KeyType Key);
+
+	template<typename NodeType, typename KeyType>
+	static NodeType* FindNode(NodeType* Node, KeyType);
 
 	template<typename NodeType, typename KeyType, typename ValueType>
 	static void Insert(NodeType* Where, KeyType Key, ValueType Value);
@@ -61,6 +64,24 @@ void OBTreeUtils::Print(NodeType* Where, ETraverseType Type, OPrinter* Printer)
 {
 	TraverseTreeWith(Where, Type, [Printer](NodeType* Node)
 	                 { *Printer << "Key: " << Node->Key << "Value: " << Node->Value << "\n"; });
+}
+
+
+template<typename NodeType, typename KeyType>
+NodeType* OBTreeUtils::FindNode(NodeType* Node, KeyType Key)
+{
+	if(Node != nullptr)
+	{
+		if(Node->Key == Key)
+		{
+			return Node;
+		}
+		else
+		{
+			return Node->Key > Key ? FindNode(Node->Left,Key) : FindNode(Node->Right, Key);
+		}
+	}
+	return nullptr;
 }
 
 template<typename NodeType, typename Operation>
@@ -222,7 +243,7 @@ void OBTreeUtils::Insert(NodeType* Where, KeyType Key, ValueType Value)
 }
 
 template<typename NodeType, typename KeyType, typename ValueType>
-ValueType OBTreeUtils::Find(NodeType* Node, KeyType Key)
+ValueType OBTreeUtils::FindValue(NodeType* Node, KeyType Key)
 {
 	if (ENSURE(Node != nullptr))
 	{
@@ -231,7 +252,7 @@ ValueType OBTreeUtils::Find(NodeType* Node, KeyType Key)
 			return Node->Value;
 		}
 
-		return Node->Key > Key ? Find(Node->Left, Key) : Find(Node->Right, Key);
+		return Node->Key > Key ? FindValue(Node->Left, Key) : FindValue(Node->Right, Key);
 	}
 	return ValueType();
 }
@@ -242,7 +263,7 @@ class OBSearchTreeBase
 public:
 	ValueType Find(KeyType Key)
 	{
-		OBTreeUtils::Find(Root, Key);
+		OBTreeUtils::FindValue(Root, Key);
 	}
 
 	ValueType GetMax()

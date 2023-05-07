@@ -4,69 +4,224 @@
 namespace RAPI
 {
 
-template<typename KeyType, typename ValueType>
-class ORedBlackTree
+enum class ERedBlackTreeColor
 {
-	enum class EColor
+	Black,
+	Red
+};
+
+template<typename KeyType, typename ValueType>
+struct SRedBlackTreeNode
+{
+	using TColor = ERedBlackTreeColor;
+
+	KeyType Key;
+	ValueType Value;
+	SRedBlackTreeNode* Left;
+	SRedBlackTreeNode* Right;
+	SRedBlackTreeNode* Parent;
+	TColor Color : 2;
+
+	SRedBlackTreeNode(KeyType KeyParam, ValueType ValueParam, SRedBlackTreeNode* NullNode = nullptr)
 	{
-		Black,
-		Red
-	};
+		Key = KeyParam;
+		Value = ValueParam;
+		Color = TColor::Red;
 
-	struct SNode
-	{
-		KeyType Key;
-		ValueType Value;
-		SNode* Left;
-		SNode* Right;
-		SNode* Parent;
-		EColor Color;
+		Left = NullNode;
+		Right = NullNode;
+		Parent = NullNode;
+	}
+};
 
-		SNode(KeyType KeyParam, ValueType ValueParam, SNode* NullNode = nullptr)
-		{
-			Key = KeyParam;
-			Value = ValueParam;
-			Color = EColor::Red;
+template<typename KeyType, typename ValueType>
+class ORedBlackTree : OBSearchTreeBase<KeyType, ValueType, SRedBlackTreeNode<KeyType, ValueType>>
+{
+	using TColor = ERedBlackTreeColor;
+	using NodeType = SRedBlackTreeNode<KeyType, ValueType>;
 
-			Left = NullNode;
-			Right = NullNode;
-			Parent = NullNode;
-		}
-	};
-
-	void Insert(KeyType Key, ValueType Value);
+	void Insert(KeyType Key, ValueType Value) override;
+	void Remove(KeyType Key) override;
 
 private:
-	SNode* NullNode = new SNode();
-	SNode* Head = nullptr;
+	NodeType* NullNode = new NodeType();
 
-	void Balance(SNode* Node);
-	void Remove(KeyType Key);
-	bool DoesNodeExist(SNode* Node);
+	void Balance(NodeType* Node);
+	bool DoesNodeExist(NodeType* Node);
+	NodeType* GetChildOrMock(NodeType* Node);
+	uint8 GetChildrenCount(NodeType* Node);
+	void TransplantNode(NodeType* FromNode, NodeType* ToNode);
+	void FixRulesAfterRemoval(NodeType* Node);
 };
+
+template<typename KeyType, typename ValueType>
+void ORedBlackTree<KeyType, ValueType>::FixRulesAfterRemoval(ORedBlackTree::NodeType* Node)
+{
+	using TColor::Black;
+	using TColor::Red;
+
+	while (Node != Root && Node->Color == Black)
+	{
+		NodeType* brother = nullptr;
+
+		if (Node == Node->Parent->Left)
+		{
+			brother = Node->Parent->Right;
+			if (brother->Color == Red)
+			{
+				brother->Color = Black;
+				Node->Parent->Color = Black;
+
+				Node->Parent->Color = Red;
+				OBTreeUtils::RotateLeft(Node->Parent);
+			}
+
+			if (brother->Left->Color == TColor::Black && brother->Right->Color == Black)
+			{
+				brother->Color = Red;
+				Node = Node->Parent;
+			}
+			else
+			{
+				if (brother->Right->Color == Black)
+				{
+					brother->Left->Color = TColor::Black;
+					brother->Color = Red;
+					OBTreeUtils::RotateRight(brother);
+					brother = Node->Parent->Right;
+				}
+
+				brother->Color = Node->Parent->Color;
+				Node->Parent->Color = Black;
+				brother->Right->Color = Black;
+
+				OBTreeUtils::RotateLeft(Node->Parent);
+
+				Node = Root;
+			}
+		}
+		else
+		{
+			brother = Node->Parent->Left;
+
+			if (brother->Color == Red)
+			{
+				brother->Color = Black;
+				Node->Parent->Color = Red;
+				OBTreeUtils::RotateRight(Node);
+				brother = Node->Parent->Left;
+			}
+			if (brother->Left->Color == Black && brother->Right->Color == Black)
+			{
+				OBTreeUtils::RotateRight(Node->Parent);
+				brother = Node->Parent->Left;
+			}
+			else
+			{
+				if (brother->Left->Color == Black)
+				{
+					brother->Right->Color == Black;
+					brother->Color = Red;
+
+					OBTreeUtils::RotateLeft(brother);
+					brother = Node->Parent->Left;
+				}
+
+				brother->Color = Node->Parent->Color;
+				brother->Parent->Color = Black;
+				brother->Left->Color = Black;
+				OBTreeUtils::RotateRight(Node->Parent);
+
+				Node = Root;
+			}
+		}
+	}
+	Node->Color = Black;
+}
+
+template<typename KeyType, typename ValueType>
+void ORedBlackTree<KeyType, ValueType>::TransplantNode(ORedBlackTree::NodeType* FromNode, ORedBlackTree::NodeType* ToNode)
+{
+	if (ToNode == Root)
+	{
+		Root = FromNode;
+	}
+	else if (ToNode == ToNode->Parent->Left)
+	{
+		ToNode->Parent->Left = FromNode;
+	}
+	else
+	{
+		ToNode->Parent->Right = FromNode;
+	}
+	FromNode->Parent = ToNode->Parent;
+}
+
+template<typename KeyType, typename ValueType>
+uint8 ORedBlackTree<KeyType, ValueType>::GetChildrenCount(ORedBlackTree::NodeType* Node)
+{
+	uint8 count = 0;
+	if (DoesNodeExist(Node->Left))
+	{
+		count++;
+	}
+	if (DoesNodeExist(Node->Right))
+	{
+		count++;
+	}
+	return count;
+}
+
+template<typename KeyType, typename ValueType>
+ORedBlackTree<KeyType, ValueType>::NodeType* ORedBlackTree<KeyType, ValueType>::GetChildOrMock(ORedBlackTree::NodeType* Node)
+{
+	return DoesNodeExist(Node->Left) ? Node->Left : Node->Right;
+}
 
 template<typename KeyType, typename ValueType>
 void ORedBlackTree<KeyType, ValueType>::Remove(KeyType Key)
 {
+	auto nodeToDelete = OBTreeUtils::FindNode(Root, Key);
+	auto removedNodeColor = nodeToDelete->Color;
 
+	NodeType* child = nullptr;
+
+	if (GetChildrenCount(nodeToDelete) < 2)
+	{
+		child = GetChildOrMock(nodeToDelete);
+		TransplantNode(nodeToDelete, child);
+	}
+	else
+	{
+		NodeType* minNode = OBTreeUtils::GetMin(nodeToDelete);
+		nodeToDelete->Key = Move(minNode->Key);
+		nodeToDelete->Value = Move(minNode->Value);
+		removedNodeColor = minNode->Color;
+		child = GetChildOrMock(minNode);
+		TransplantNode(minNode, child);
+	}
+	if (removedNodeColor == TColor::Black)
+	{
+		FixRulesAfterRemoval(child);
+	}
 }
 
 template<typename KeyType, typename ValueType>
-void ORedBlackTree<KeyType, ValueType>::Balance(SNode* Node)
+void ORedBlackTree<KeyType, ValueType>::Balance(NodeType* Node)
 {
-	SNode* uncle = nullptr;
+	NodeType* uncle = nullptr;
 
-	while (Node->Parent->Color == EColor::Red)
+	while (Node->Parent->Color == TColor::Red)
 	{
 		if (Node->Parent == Node->Parent->Parent->Left) // Check which side we are working with
 		{
 			uncle = Node->Parent->Parent->Right;
-			if (uncle->Color == EColor::Red)
+			if (uncle->Color == TColor::Red)
 			{
-				Node->Parent->Color = EColor::Black;
-				uncle->Color = EColor::Black;
+				Node->Parent->Color = TColor::Black;
+				uncle->Color = TColor::Black;
 
-				Node->Parent->Parent->Color = EColor::Red;
+				Node->Parent->Parent->Color = TColor::Red;
 				Node = Node->Parent->Parent;
 			}
 			else
@@ -76,9 +231,8 @@ void ORedBlackTree<KeyType, ValueType>::Balance(SNode* Node)
 					Node = Node->Parent;
 					OBTreeUtils::RotateLeft(Node);
 				}
-				Node->Parent->Color = EColor::Black;
-				Node->Parent->Parent->Color = EColor::Red;
-
+				Node->Parent->Color = TColor::Black;
+				Node->Parent->Parent->Color = TColor::Red;
 
 				OBTreeUtils::RotateRight(Node->Parent->Parent);
 			}
@@ -87,12 +241,12 @@ void ORedBlackTree<KeyType, ValueType>::Balance(SNode* Node)
 		{
 			uncle = Node->Parent->Parent->Left;
 
-			if (uncle->Color == EColor::Red)
+			if (uncle->Color == TColor::Red)
 			{
-				Node->Parent->Color = EColor::Black;
-				uncle->Color = EColor::Black;
+				Node->Parent->Color = TColor::Black;
+				uncle->Color = TColor::Black;
 
-				Node->Parent->Parent->Color = EColor::Red;
+				Node->Parent->Parent->Color = TColor::Red;
 				Node = Node->Parent->Parent;
 			}
 			else
@@ -102,19 +256,19 @@ void ORedBlackTree<KeyType, ValueType>::Balance(SNode* Node)
 					Node = Node->Parent;
 					OBTreeUtils::RotateRight(Node);
 				}
-				Node->Parent->Color = EColor::Black;
-				Node->Parent->Parent->Color = EColor::Red;
+				Node->Parent->Color = TColor::Black;
+				Node->Parent->Parent->Color = TColor::Red;
 				OBTreeUtils::RotateLeft(Node->Parent->Parent);
 			}
 		}
 	}
-	Head->Color = EColor::Black;
+	Root->Color = TColor::Black;
 }
 
 template<typename KeyType, typename ValueType>
 void ORedBlackTree<KeyType, ValueType>::Insert(KeyType Key, ValueType Value)
 {
-	auto currentNode = Head;
+	auto currentNode = Root;
 	auto parent = NullNode;
 
 	while (DoesNodeExist(currentNode))
@@ -129,12 +283,12 @@ void ORedBlackTree<KeyType, ValueType>::Insert(KeyType Key, ValueType Value)
 			currentNode = currentNode->Right;
 		}
 	}
-	auto newNode = SNode(Key, Value, NullNode);
+	auto newNode = NodeType(Key, Value, NullNode);
 	newNode.Parent = parent;
 
 	if (parent == NullNode)
 	{
-		Head = newNode;
+		Root = newNode;
 	}
 	else if (Value < parent->Value)
 	{
@@ -149,7 +303,7 @@ void ORedBlackTree<KeyType, ValueType>::Insert(KeyType Key, ValueType Value)
 }
 
 template<typename KeyType, typename ValueType>
-bool ORedBlackTree<KeyType, ValueType>::DoesNodeExist(ORedBlackTree::SNode* Node)
+bool ORedBlackTree<KeyType, ValueType>::DoesNodeExist(ORedBlackTree::NodeType* Node)
 {
 	Node != NullNode;
 }
