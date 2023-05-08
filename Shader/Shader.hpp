@@ -30,19 +30,18 @@ public:
 	void Unbind() const;
 	void SetUniform4f(const OString& name, float v0, float v1, float v2, float v3);
 
-
 	void SetUniform1f(const OString& name, float v0);
 	void SetUniform1i(const OString& name, int32_t v0);
-	void SetUnformMat4f(const OString& name, OMat4&& matrix);
-	void SetUnformMat4f(const OString& name, const OMat4& matrix);
-
+	void SetUniformMat4f(const OString& name, const OMat4& matrix);
+	void SetUniformVec3f(const OString& name, const OVec3& Vector);
+	void SetUniformVec4f(const OString& name, const OVec4& Vector);
 	OShader() = default;
 	explicit OShader(const OPath& source);
 	~OShader();
 
 private:
 	uint32 CompileShader(uint32 type, const OString& source);
-	uint32 GetUnformLocation(const OString& name);
+	uint32 GetUniformLocation(const OString& name);
 	int CreateShader(const OString& vertexShader, const OString& fragmentShader);
 	SHaderSource ParseShader(const OPath& filePath);
 	bool CompileShader();

@@ -25,36 +25,42 @@ void OShader::Init(const OPath& Source)
 	RendererID = CreateShader(shaderSource.vertexShader, shaderSource.fragmentShader);
 }
 
-void OShader::SetUniform1i(const OString& name, int32_t v0)
+void OShader::SetUniform1i(const OString& name, int32 v0)
 {
-	GLCall(glUniform1i(GetUnformLocation(name), v0));
+	GLCall(glUniform1i(GetUniformLocation(name), v0));
 }
 
 void OShader::SetUniform1f(const OString& name, float v0)
 {
-	GLCall(glUniform1f(GetUnformLocation(name), v0));
+	GLCall(glUniform1f(GetUniformLocation(name), v0));
 }
 
-uint32 OShader::GetUnformLocation(const OString& name)
+uint32 OShader::GetUniformLocation(const OString& name)
 {
 	if (LocationCache.find(name) != LocationCache.end())
 		return LocationCache[name];
 
-	GLCall(int32_t location = glGetUniformLocation(RendererID, name.c_str()));
+	GLCall(int32 location = glGetUniformLocation(RendererID, name.c_str()));
 	if (location == -1)
-		std::cout << "Warning unform " << name << "  doesnt exist." << std::endl;
+		std::cout << "Warning unform " << name << "  doesn't exist." << std::endl;
 
 	LocationCache[name] = location;
 	return location;
 }
-void OShader::SetUnformMat4f(const OString& name, OMat4&& matrix)
+
+void OShader::SetUniformVec3f(const OString& name, const OVec3& Vector)
 {
-	GLCall(glUniformMatrix4fv(GetUnformLocation(name), 1, GL_FALSE, &matrix[0][0]));
+	GLCall(glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(Vector)));
 }
 
-void OShader::SetUnformMat4f(const OString& name, const OMat4& matrix)
+void OShader::SetUniformVec4f(const OString& name, const OVec4& Vector)
 {
-	GLCall(glUniformMatrix4fv(GetUnformLocation(name), 1, GL_FALSE, &matrix[0][0]));
+	GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(Vector)));
+}
+
+void OShader::SetUniformMat4f(const OString& name, const OMat4& matrix)
+{
+	GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix)));
 }
 
 void OShader::Bind() const
@@ -69,7 +75,7 @@ void OShader::Unbind() const
 
 void OShader::SetUniform4f(const OString& name, float v0, float v1, float v2, float v3)
 {
-	GLCall(glUniform4f(GetUnformLocation(name), v0, v1, v2, v3));
+	GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
 }
 
 uint32 OShader::CompileShader(uint32 type, const OString& Source)

@@ -34,7 +34,7 @@ void OTestModelling::OnUpdate(const float& deltaTime, const float& aspect, const
 
 	ModelTexture.Bind(0);
 
-	GetShader().SetUnformMat4f("mv_matrix", glm::scale(glm::mat4(1.F), { 0.2F, 0.2F, 0.2F }) * glm::translate(VMat, { 0, 2, 0 }));
+	GetShader().SetUniformMat4f("mv_matrix", glm::scale(glm::mat4(1.F), { 0.2F, 0.2F, 0.2F }) * glm::translate(VMat, { 0, 2, 0 }));
 
 	EnableAttribArrayBuffer(ModelHandle);
 	EnableAttribArrayBuffer(TextureHandle);

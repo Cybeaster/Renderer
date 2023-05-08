@@ -278,7 +278,7 @@ void OTestParticles::MoveParticle(Particle& particle, float deltaTime, OMat4 vMa
 
 	OMat4 translation = glm::translate(vMat, particle.getPosition());
 	OMat4 rotation = particle.rotate(deltaTime);
-	GetShader().SetUnformMat4f("mv_matrix", OMat4(translation * rotation));
+	GetShader().SetUniformMat4f("mv_matrix", OMat4(translation * rotation));
 	particle.IncreaseRotSpeed(deltaTime * 10);
 	particle.move();
 }
@@ -367,7 +367,7 @@ void OTestParticles::DrawFields(float deltaTime, OMat4 vMat)
 
 		field.particleField.IncreaseRotSpeed(10);
 
-		GetShader().SetUnformMat4f("mv_matrix", (translation * rot));
+		GetShader().SetUniformMat4f("mv_matrix", (translation * rot));
 		GetShader().SetUniform4f("additionalColor", 1, 0, 0, 1);
 
 		Draw(DefaultParticleHandle);

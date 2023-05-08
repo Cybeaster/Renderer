@@ -31,12 +31,12 @@ public:
 	}
 
 	void SetTarget(const OVec3& Arg);
-
 	void Translate(ETranslateDirection Dir);
 	void Rotate(float XOffset, float YOffset);
 	void Tick(float DeltaTime);
-
 	OMat4 GetCameraView()const;
+
+	void Init();
 private:
 	void UpdateCameraDirection();
 

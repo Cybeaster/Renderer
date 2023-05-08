@@ -7,7 +7,7 @@
 #include "Utils/Delegate/MulticastDelegate.hpp"
 #include "Utils/Types/HashMap/Hash.hpp"
 #include "Utils/Types/Keys/KeyboardKeys.hpp"
-#include "Utils/Types/Set.hpp"
+#include "Utils/Types/Sets/Set.hpp"
 #include "glfw3.h"
 
 namespace RAPI

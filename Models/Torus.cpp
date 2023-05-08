@@ -2,14 +2,18 @@
 
 void RAPI::OTorus::Init(uint32 Precision) noexcept
 {
-	const auto sqrtPrecision = Precision * Precision;
-	NumVertices = sqrtPrecision + 2 * Precision + 1;
 }
 void RAPI::OTorus::PreInit(uint32 Precision) noexcept
 {
 	Super::PreInit(Precision);
-	STangents.resize(NumVertices);
-	TTangents.resize(NumVertices);
+	for (int i = 0; i < NumVertices; i++)
+	{
+		STangents.emplace_back();
+	}
+	for (int i = 0; i < NumVertices; i++)
+	{
+		TTangents.emplace_back();
+	}
 
 	CalcFirstRing(Precision);
 	MultiplyRings(Precision);
@@ -17,71 +21,61 @@ void RAPI::OTorus::PreInit(uint32 Precision) noexcept
 }
 void RAPI::OTorus::CalcFirstRing(uint32 Precision)
 {
-	for (size_t it = 0; it < Precision + 1; ++it)
+	// calculate first ring
+	for (int i = 0; i < Precision + 1; i++)
 	{
-		// build the ring by rotating points around the origin, then moving outward
-		const float amt = SMath::ToRadians(it * 360.F / Precision);
-		OMat4 rMat = glm::rotate(OMat4(1.F), amt, OVec3(0, 0, 1.F));
-		OVec3 startPos(rMat * OVec4(0.F, OuterRadius, 0.F, 1.F));
-		Vertices[it] = OVec3(startPos + OVec3(InnerRadius, 0.F, 0.F));
-
-		// Compute texture coords for each vertex on the ring
-		TexCoords[it] = OVec2(0, static_cast<float>(it) / static_cast<float>(Precision));
-
-		// compute tangents and normals - first tangent is Y-axis rotated around Z.
-		rMat = glm::rotate(OMat4(1.F), amt + (SMath::Pi / 2.0F), OVec3(0, 0, 1.F));
-		TTangents[it] = OVec3(rMat * OVec4(0, -1.F, 0, 0));
-		STangents[it] = OVec3(OVec3(0, 0, -1.F));
-
-		Normals[it] = glm::cross(TTangents[it], STangents[it]);
+		float amt = SMath::ToRadians(i * 360.0f / Precision);
+		// build the ring by rotating points around the origin, then moving them outward
+		glm::mat4 rMat = glm::rotate(glm::mat4(1.0f), amt, glm::vec3(0.0f, 0.0f, 1.0f));
+		glm::vec3 initPos(rMat * glm::vec4(0.0f, OuterRadius, 0.0f, 1.0f));
+		Vertices[i] = glm::vec3(initPos + glm::vec3(InnerRadius, 0.0f, 0.0f));
+		// compute texture coordinates for each vertex on the ring
+		TexCoords[i] = glm::vec2(0.0f, ((float)i / (float)Precision));
+		// compute tangents and normals -- first tangent is Y-axis rotated around Z
+		rMat = glm::rotate(glm::mat4(1.0f), amt + (3.14159f / 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		TTangents[i] = glm::vec3(rMat * glm::vec4(0.0f, -1.0f, 0.0f, 1.0f));
+		STangents[i] = glm::vec3(glm::vec3(0.0f, 0.0f, -1.0f)); // second tangent is -Z.
+		Normals[i] = glm::cross(TTangents[i], STangents[i]); // their X-product is the normal.
 	}
 }
 
 void RAPI::OTorus::MultiplyRings(uint32 Precision)
 {
-	auto incPrecision = Precision + 1;
-	for (size_t ringIdx = 1; ringIdx < Precision; ++ringIdx)
+	// rotate the first ring about Y to get the other rings
+	for (int ring = 1; ring < Precision + 1; ring++)
 	{
-		for (size_t vertIdx = 0; vertIdx < Precision; ++vertIdx)
+		for (int vert = 0; vert < Precision + 1; vert++)
 		{
 			// rotate the vertex positions of the original ring around the Y axis
-			auto amt = static_cast<float>(SMath::ToRadians(ringIdx * 360.F / Precision));
-			OMat4 rMat = glm::rotate(OMat4(1.F), amt, OVec3(0, 1.F, 0));
-
-			Vertices[ringIdx * incPrecision + vertIdx] = OVec3(rMat * OVec4(Vertices[vertIdx], 1.F));
-
-			// compute the texture coord for the vert on the new rings
-			TexCoords[ringIdx * incPrecision + vertIdx] = OVec2((float)ringIdx * 2.F / (float)Precision, TexCoords[vertIdx].t); // NOLINT
-
-			rMat = glm::rotate(OMat4(1.F), amt, OVec3(0, 1.F, 0));
-			STangents[ringIdx * incPrecision + vertIdx] = OVec3(rMat * OVec4(STangents[vertIdx], 1.F));
-
-			rMat = glm::rotate(OMat4(1.F), amt, OVec3(0.0, 1.F, 0.F));
-
-			TTangents[ringIdx * incPrecision + vertIdx] = OVec3(rMat * OVec4(TTangents[vertIdx], 1.F));
-
+			float amt = (float)(SMath::ToRadians(ring * 360.0f / Precision));
+			glm::mat4 rMat = glm::rotate(glm::mat4(1.0f), amt, glm::vec3(0.0f, 1.0f, 0.0f));
+			Vertices[ring * (Precision + 1) + vert] = glm::vec3(rMat * glm::vec4(Vertices[vert], 1.0f));
+			// compute the texture coordinates for the vertices in the new rings
+			TexCoords[ring * (Precision + 1) + vert] = glm::vec2((float)ring * 2.0f / (float)Precision, TexCoords[vert].t);
+			// rotate the tangent and bitangent vectors around the Y axis
+			rMat = glm::rotate(glm::mat4(1.0f), amt, glm::vec3(0.0f, 1.0f, 0.0f));
+			STangents[ring * (Precision + 1) + vert] = glm::vec3(rMat * glm::vec4(STangents[vert], 1.0f));
+			rMat = glm::rotate(glm::mat4(1.0f), amt, glm::vec3(0.0f, 1.0f, 0.0f));
+			TTangents[ring * (Precision + 1) + vert] = glm::vec3(rMat * glm::vec4(TTangents[vert], 1.0f));
 			// rotate the normal vector around the Y axis
-			rMat = glm::rotate(OMat4(1.F), amt, OVec3(0.0, 1.F, 0.F));
-			Normals[ringIdx * incPrecision + vertIdx] = OVec3(rMat * OVec4(Normals[vertIdx], 1.F));
+			rMat = glm::rotate(glm::mat4(1.0f), amt, glm::vec3(0.0f, 1.0f, 0.0f));
+			Normals[ring * (Precision + 1) + vert] = glm::vec3(rMat * glm::vec4(Normals[vert], 1.0f));
 		}
 	}
 }
 void RAPI::OTorus::CalcIndices(uint32 Precision)
 {
 	const auto incPrecision = Precision + 1;
-	for (uint32 ringIdx = 0; ringIdx < Precision; ++ringIdx)
+	for (int ring = 0; ring < Precision; ring++)
 	{
-		for (uint32 vertIdx = 0; vertIdx < Precision; ++vertIdx)
+		for (int vert = 0; vert < Precision; vert++)
 		{
-			const auto idx = (ringIdx * Precision) + vertIdx;
-
-			Indices[(idx * 2) * 3 + 0] = ringIdx * incPrecision + vertIdx;
-			Indices[(idx * 2) * 3 + 1] = (ringIdx + 1) * incPrecision + vertIdx;
-			Indices[(idx * 2) * 3 + 2] = ringIdx * incPrecision + vertIdx + 1;
-
-			Indices[((idx * 2) + 1) * 3 + 0] = ringIdx * incPrecision + vertIdx + 1;
-			Indices[((idx * 2) + 1) * 3 + 1] = (ringIdx + 1) * incPrecision + vertIdx;
-			Indices[((idx * 2) + 1) * 3 + 2] = (ringIdx + 1) * incPrecision + vertIdx + 1;
+			Indices[((ring * Precision + vert) * 2) * 3 + 0] = ring * (Precision + 1) + vert;
+			Indices[((ring * Precision + vert) * 2) * 3 + 1] = (ring + 1) * (Precision + 1) + vert;
+			Indices[((ring * Precision + vert) * 2) * 3 + 2] = ring * (Precision + 1) + vert + 1;
+			Indices[((ring * Precision + vert) * 2 + 1) * 3 + 0] = ring * (Precision + 1) + vert + 1;
+			Indices[((ring * Precision + vert) * 2 + 1) * 3 + 1] = (ring + 1) * (Precision + 1) + vert;
+			Indices[((ring * Precision + vert) * 2 + 1) * 3 + 2] = (ring + 1) * (Precision + 1) + vert + 1;
 		}
 	}
 }

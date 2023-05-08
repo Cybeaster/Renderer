@@ -33,6 +33,7 @@ OTestTexture::OTestTexture(const OPath& TexturePath, const OPath& SecondTextureP
 	// Sphere
 
 	//  Torus
+
 	SModelContext torusContext;
 	Torus.GetVertexTextureNormalPositions(torusContext);
 
@@ -86,19 +87,19 @@ void OTestTexture::OnUpdate(
 	GetShader().SetUniform1i("use_texture", 1);
 
 	EarthTexture.Bind(0);
-	GetShader().SetUnformMat4f("mv_matrix", glm::translate(VMat, { 0, 2, -5 }));
+	GetShader().SetUniformMat4f("mv_matrix", glm::translate(VMat, { 0, 2, -5 }));
 	EnableAttribArrayBuffer(VerticesSphereHandle);
 	EnableAttribArrayBuffer(TexturesSphereHandle);
 	Draw(TexturesSphereHandle);
 	EarthTexture.Unbind();
 
 	WallTexture.Bind(0);
-	GetShader().SetUnformMat4f("mv_matrix", glm::translate(VMat, { -2, 0, -5 }));
+	GetShader().SetUniformMat4f("mv_matrix", glm::translate(VMat, { -2, 0, -5 }));
 	EnableAttribArrayBuffer(pyramidHandle);
 	EnableAttribArrayBuffer(textureHandle);
 	Draw(textureHandle);
 
-	GetShader().SetUnformMat4f("mv_matrix", glm::translate(VMat, { -2, -2, -5 }));
+	GetShader().SetUniformMat4f("mv_matrix", glm::translate(VMat, { -2, -2, -5 }));
 
 	EnableAttribArrayBuffer(VerticesTorusHandle);
 	EnableAttribArrayBuffer(TexturesTorusHandle);
@@ -111,7 +112,7 @@ void OTestTexture::OnUpdate(
 
 	GLCall(glDrawElements(GL_TRIANGLES, Torus.GetNumIndices(), GL_UNSIGNED_INT, 0));
 
-	GetShader().SetUnformMat4f("mv_matrix", glm::translate(VMat, { 2, 2, -5 }) * glm::scale(glm::mat4(1.F), { 0.2F, 0.2F, 0.2F }));
+	GetShader().SetUniformMat4f("mv_matrix", glm::translate(VMat, { 2, 2, -5 }) * glm::scale(glm::mat4(1.F), { 0.2F, 0.2F, 0.2F }));
 	GetShader().SetUniform1i("use_texture", 0);
 
 	EnableAttribArrayBuffer(VerticesImportedHandle);

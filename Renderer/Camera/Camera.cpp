@@ -24,6 +24,11 @@ void OCamera::SetTarget(const OVec3& Arg)
 	UpdateCameraDirection();
 }
 
+void OCamera::Init()
+{
+	Translate(ETranslateDirection::Forward);
+}
+
 void OCamera::UpdateCameraDirection()
 {
 	CameraDirection = glm::normalize(CameraPosition - CameraTarget);

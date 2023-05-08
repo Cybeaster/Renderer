@@ -2,6 +2,7 @@
 #include "Application.hpp"
 
 #include "Renderer.hpp"
+#include "TestLightning.hpp"
 #include "TestModelling.hpp"
 #include "TestTexture.hpp"
 #include "UnitTests/TestGroup.hpp"
@@ -37,8 +38,10 @@ void OApplication::InitRenderer()
 	renderer->SetInput(&InputHandler);
 
 	auto simpleCube = Importer.BuildModelFromPath(simpleCubeModel, EModelType::OBJ);
-	OTestTexture textureTest(brickTexture, earthTexture, GetShaderLocalPathWith(BasicShader), renderer, simpleCube.get());
-	renderer->AddTest(&textureTest);
+	// OTestTexture textureTest(brickTexture, earthTexture, GetShaderLocalPathWith(BasicShader), renderer, simpleCube.get());
+
+	OTestLightning lightning(brickTexture, earthTexture, GetShaderLocalPathWith(SimpleTextureShader), renderer);
+	renderer->AddTest(&lightning);
 
 	while (!Window.get()->NeedClose())
 	{

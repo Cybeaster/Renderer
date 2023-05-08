@@ -38,7 +38,7 @@ void OTestSimpleCube::OnUpdate(
 
 	mMatrix = glm::translate(OMat4(1), cubePos);
 	mvMatrix = mMatrix * VMat;
-	GetShader().SetUnformMat4f("mv_matrix", mvMatrix);
+	GetShader().SetUniformMat4f("mv_matrix", mvMatrix);
 	GetShader().SetUniform4f("additionalColor", 1, 1, 1, 1);
 
 	Draw(handle);

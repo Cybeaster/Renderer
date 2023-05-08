@@ -7,12 +7,25 @@ namespace RAPI
 void OGeneratedModel::PreInit(uint32 Precision) noexcept
 {
 	SqredPrecision = Precision * Precision;
-	NumVertices = SqredPrecision + 2 * Precision + 1;
+	NumVertices = (Precision + 1) * (Precision + 1);
 	NumIndices = SqredPrecision * 6;
 
-	Vertices.resize(NumVertices);
-	TexCoords.resize(NumVertices);
-	Normals.resize(NumVertices);
-	Indices.resize(NumIndices);
+	for (int i = 0; i < NumVertices; i++)
+	{
+		Vertices.emplace_back();
+	}
+	for (int i = 0; i < NumVertices; i++)
+	{
+		TexCoords.emplace_back();
+	}
+	for (int i = 0; i < NumVertices; i++)
+	{
+		Normals.emplace_back();
+	}
+
+	for (int i = 0; i < NumIndices; i++)
+	{
+		Indices.push_back(0);
+	}
 }
 } // namespace RAPI

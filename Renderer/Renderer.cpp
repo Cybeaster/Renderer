@@ -17,6 +17,7 @@ OMat4 ORenderer::PMat{};
 
 void ORenderer::Init()
 {
+	Camera.Init();
 	PostInit();
 }
 

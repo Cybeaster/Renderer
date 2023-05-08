@@ -2,11 +2,11 @@
 #include "Functor/Functor.hpp"
 #include "Pair.hpp"
 #include "Queue.hpp"
-#include "Set.hpp"
 #include "ThreadSafeQueue.hpp"
 #include "Types.hpp"
 #include "Utils/Threads/JoiningThread.hpp"
 #include "Utils/Types/HashMap/Hash.hpp"
+#include "Utils/Types/Sets/Set.hpp"
 #include "Utils/Types/Threads/Thread.hpp"
 #include "Vector.hpp"
 

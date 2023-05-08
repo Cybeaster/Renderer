@@ -13,6 +13,7 @@ class OTorus final : public OGeneratedModel
 
 public:
 	OTorus()
+	    : OGeneratedModel(DefaultPrecision)
 	{
 		PreInit(DefaultPrecision);
 		Init(DefaultPrecision);

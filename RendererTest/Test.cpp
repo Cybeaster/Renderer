@@ -49,7 +49,7 @@ void OTest::OnUpdate(
     OMat4& /*VMat*/)
 {
 	Shader.Bind();
-	Shader.SetUnformMat4f("proj_matrix", PMat);
+	Shader.SetUniformMat4f("proj_matrix", PMat);
 }
 
 SBufferHandle OTest::AddBuffer(const void* Data, size_t Size)
