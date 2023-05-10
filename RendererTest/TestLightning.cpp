@@ -44,38 +44,37 @@ OTestLightning::OTestLightning(const OPath& TextureFirstPath, const OPath& Secon
 
 void OTestLightning::InstallLights(OMat4 VMatrix)
 {
-	LightPosV = OVec3(VMatrix * OVec4(CurrentLightPos, 1.F));
+	LightPosV = OVec3(VMatrix * CurrentLightPos);
 	LightPos[0] = LightPosV.x;
 	LightPos[1] = LightPosV.y;
 	LightPos[2] = LightPosV.z;
 
-	auto goldMaterial = OMaterial::GetGoldMaterial();
-	GetShader().SetUniformVec4f("globalAmbient",GlobalAmbient);
-	GetShader().SetUniformVec4f("light.ambient",LightAmbient);
-	GetShader().SetUniformVec4f("light.diffuse",LightDiffuse);
-	GetShader().SetUniformVec4f("light.specular",LightSpecular);
-	GetShader().SetUniformVec3f("light.position",LightPos);
-	GetShader().SetUniformVec4f("material.ambient",goldMaterial.Ambient);
-	GetShader().SetUniformVec4f("material.diffuse",goldMaterial.Diffuse);
-	GetShader().SetUniformVec4f("material.specular",goldMaterial.Specular);
-	GetShader().SetUniform1f("material.shininess",goldMaterial.Shininess);
-
-
+	auto goldMaterial = OMaterial::GetSilverMaterial();
+	GetShader().SetUniformVec4f("globalAmbient", GlobalAmbient);
+	GetShader().SetUniformVec4f("light.ambient", LightAmbient);
+	GetShader().SetUniformVec4f("light.diffuse", LightDiffuse);
+	GetShader().SetUniformVec4f("light.specular", LightSpecular);
+	GetShader().SetUniformVec3f("light.position", LightPos);
+	GetShader().SetUniformVec4f("material.ambient", goldMaterial.Ambient);
+	GetShader().SetUniformVec4f("material.diffuse", goldMaterial.Diffuse);
+	GetShader().SetUniformVec4f("material.specular", goldMaterial.Specular);
+	GetShader().SetUniform1f("material.shininess", goldMaterial.Shininess);
 }
 
 void OTestLightning::OnUpdate(const float& DeltaTime, const float& Aspect, const OVec3& CameraPos, OMat4& PMat, OMat4& VMat)
 {
 	OTest::OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
 
-	GetShader().SetUniform1i("use_texture", 1);
+	GetShader().SetUniform1i("use_texture", 0);
 	TorusTexture.Bind();
 
-	// InstallLights(VMat);
+	InstallLights(VMat);
 
 	auto MVMatrix = VMat * MTorusMatrix;
 	InvTrMat = glm::transpose(glm::inverse(MVMatrix));
 
-	CurrentLightPos = { InitialLightLoc.x, InitialLightLoc.y, InitialLightLoc.z };
+	CurrentLightPos = { InitialLightLoc.x, InitialLightLoc.y, InitialLightLoc.z, 1.0 };
+	CurrentLightPos *= OVec4(OVec3(cos(DeltaTime)), 1.0);
 	GetShader().SetUniformMat4f("mv_matrix", MVMatrix);
 	GetShader().SetUniformMat4f("norm_matrix", InvTrMat);
 

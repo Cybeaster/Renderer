@@ -51,7 +51,9 @@ private:
 
 	static inline SShaderName SimpleCubeShader = "\\SimpleCube.shader";
 	static inline SShaderName SimpleTextureShader = "\\SimpleTexture.shader";
-	static inline SShaderName BasicShader = "\\Basic.shader";
+	static inline SShaderName BasicGourandShading = "\\BasicGourandShading.glsl";
+	static inline SShaderName BasicPhongShading = "\\BasicGourandShading.glsl";
+
 	static inline OApplication* Application = nullptr;
 };
 } // namespace RAPI

@@ -24,7 +24,7 @@ void OTestSimpleSolarSystem::OnUpdate(
 	GetMVStack().push(GetMVStack().top());
 
 	GetMVStack().top() *= glm::rotate(OMat4(1.0f), float(DeltaTime), OVec3(1.0, 0.0, 0.0));
-	GetShader().SetUnformMat4f("mv_matrix", GetMVStack().top());
+	GetShader().SetUniformMat4f("mv_matrix", GetMVStack().top());
 
 	Draw(pyramidHandle);
 

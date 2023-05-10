@@ -50,17 +50,22 @@ uint32 OShader::GetUniformLocation(const OString& name)
 
 void OShader::SetUniformVec3f(const OString& name, const OVec3& Vector)
 {
-	GLCall(glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(Vector)));
+	GLCall(glProgramUniform3fv(RendererID, GetUniformLocation(name), 1, glm::value_ptr(Vector)));
 }
 
 void OShader::SetUniformVec4f(const OString& name, const OVec4& Vector)
 {
-	GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(Vector)));
+	GLCall(glProgramUniform4fv(RendererID, GetUniformLocation(name), 1, glm::value_ptr(Vector)));
+}
+
+void OShader::SetUniform4f(const OString& name, float v0, float v1, float v2, float v3)
+{
+	GLCall(glProgramUniform4f(RendererID, GetUniformLocation(name), v0, v1, v2, v3));
 }
 
 void OShader::SetUniformMat4f(const OString& name, const OMat4& matrix)
 {
-	GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix)));
+	GLCall(glProgramUniformMatrix4fv(RendererID, GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix)));
 }
 
 void OShader::Bind() const
@@ -71,11 +76,6 @@ void OShader::Bind() const
 void OShader::Unbind() const
 {
 	GLCall(glUseProgram(0));
-}
-
-void OShader::SetUniform4f(const OString& name, float v0, float v1, float v2, float v3)
-{
-	GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
 }
 
 uint32 OShader::CompileShader(uint32 type, const OString& Source)

@@ -40,7 +40,7 @@ void OApplication::InitRenderer()
 	auto simpleCube = Importer.BuildModelFromPath(simpleCubeModel, EModelType::OBJ);
 	// OTestTexture textureTest(brickTexture, earthTexture, GetShaderLocalPathWith(BasicShader), renderer, simpleCube.get());
 
-	OTestLightning lightning(brickTexture, earthTexture, GetShaderLocalPathWith(SimpleTextureShader), renderer);
+	OTestLightning lightning(brickTexture, earthTexture, GetShaderLocalPathWith(BasicPhongShading), renderer);
 	renderer->AddTest(&lightning);
 
 	while (!Window.get()->NeedClose())

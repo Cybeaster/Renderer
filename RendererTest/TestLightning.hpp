@@ -24,14 +24,13 @@ public:
 	    OMat4& VMat) override;
 
 private:
-
 	void InstallLights(OMat4 VMatrix);
 
 	OTexture TorusTexture;
 
-	OVec3 CurrentLightPos;
+	OVec4 CurrentLightPos;
 	OVec3 LightPosV;
-	float LightPos[3];
+	OVec3 LightPos;
 
 	OMat4 InvTrMat;
 
@@ -39,10 +38,10 @@ private:
 
 	OVec3 InitialLightLoc = { 5.F, 2.F, 2.F };
 
-	float GlobalAmbient[4] = { 0.7F, 0.7F, 0.7F, 0.7F };
-	float LightAmbient[4] = { 0, 0, 0, 1.F };
-	float LightDiffuse[4] = { 1.F, 1.F, 1.F, 1.F };
-	float LightSpecular[4] = { 1.F, 1.F, 1.F, 1.F };
+	OVec4 GlobalAmbient = { 0.7F, 0.7F, 0.7F, 0.7F };
+	OVec4 LightAmbient = { 0, 0, 0, 1.F };
+	OVec4 LightDiffuse = { 1.F, 1.F, 1.F, 1.F };
+	OVec4 LightSpecular = { 1.F, 1.F, 1.F, 1.F };
 
 	uint32 VBO[4];
 	uint32 VAO[1];
