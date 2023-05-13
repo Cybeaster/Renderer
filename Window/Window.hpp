@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Math.hpp"
 #include "Types.hpp"
 namespace RAPI
 {
@@ -8,7 +9,7 @@ class OWindow
 {
 public:
 	virtual ~OWindow() = default;
-	virtual void InitWindow() = 0;
+	virtual void InitWindow();
 	virtual bool NeedClose() = 0;
 	virtual void DrawStart() = 0;
 	virtual void DrawEnd() = 0;
@@ -23,17 +24,23 @@ public:
 		return AspectRatio;
 	}
 
+	OVec2 GetNDC() const;
+
+	void OnMousePosition(double NewX, double NewY);
+
 protected:
 	virtual void CalcDeltaTime() = 0;
 	virtual void CalcAspect() = 0;
 
-	int32 Width{ 0 };
-	int32 Height{ 0 };
+	float Width{ 0 };
+	float Height{ 0 };
 
 	double PreviousTime{ 0 };
 	double DeltaTime{ 0 };
 
 	double AspectRatio{ 0 };
+
+	OVec2 MousePosition{ 0, 0 };
 
 	const OString WindowName = "RAPI";
 };

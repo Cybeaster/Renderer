@@ -4,6 +4,7 @@
 
 #include "TestLightning.hpp"
 
+#include "Application/Application.hpp"
 #include "Assert.hpp"
 #include "Materials/Material.hpp"
 
@@ -16,6 +17,7 @@ OTestLightning::OTestLightning(const OPath& TextureFirstPath, const OPath& Secon
 	GLCall(glBindVertexArray(VAO[0]));
 
 	GLCall(glGenBuffers(4, VBO));
+
 	Torus.GetVertexTextureNormalPositions(TorusContext);
 	auto indices = Torus.GetIndices();
 
@@ -36,6 +38,7 @@ OTestLightning::OTestLightning(const OPath& TextureFirstPath, const OPath& Secon
 
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VBO[3]));
 	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int32), indices.data(), GL_STATIC_DRAW));
+	TorusTexture.Bind();
 
 	GLCall(glBindVertexArray(0));
 
@@ -44,12 +47,10 @@ OTestLightning::OTestLightning(const OPath& TextureFirstPath, const OPath& Secon
 
 void OTestLightning::InstallLights(OMat4 VMatrix)
 {
-	LightPosV = OVec3(VMatrix * CurrentLightPos);
-	LightPos[0] = LightPosV.x;
-	LightPos[1] = LightPosV.y;
-	LightPos[2] = LightPosV.z;
+	LightPos = OVec3(VMatrix * CurrentLightPos);
 
-	auto goldMaterial = OMaterial::GetSilverMaterial();
+
+	auto goldMaterial = OMaterial::GetBronzeMaterial();
 	GetShader().SetUniformVec4f("globalAmbient", GlobalAmbient);
 	GetShader().SetUniformVec4f("light.ambient", LightAmbient);
 	GetShader().SetUniformVec4f("light.diffuse", LightDiffuse);
@@ -65,16 +66,28 @@ void OTestLightning::OnUpdate(const float& DeltaTime, const float& Aspect, const
 {
 	OTest::OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
 
-	GetShader().SetUniform1i("use_texture", 0);
-	TorusTexture.Bind();
+	GetShader().SetUniform1i("use_texture", 1);
 
 	InstallLights(VMat);
 
 	auto MVMatrix = VMat * MTorusMatrix;
 	InvTrMat = glm::transpose(glm::inverse(MVMatrix));
 
+	auto ndc = OApplication::GetApplication()->GetWindow()->GetNDC();
+
+	OVec4 rayClip = { ndc.x, ndc.y, -1, 1 };
+	auto rayView = glm::inverse(PMat) * rayClip;
+	rayView.z = -1;
+	rayView.w = 0;
+
+	OVec3 rayWorld = OVec3(glm::inverse(VMat) * rayView);
+	rayWorld = glm::normalize(rayWorld);
+
+	RAPI_LOG(Log, "rayWorld is {}", TO_STRING(rayWorld));
+
 	CurrentLightPos = { InitialLightLoc.x, InitialLightLoc.y, InitialLightLoc.z, 1.0 };
-	CurrentLightPos *= OVec4(OVec3(cos(DeltaTime)), 1.0);
+	CurrentLightPos *= OVec4(rayWorld,1.0);
+
 	GetShader().SetUniformMat4f("mv_matrix", MVMatrix);
 	GetShader().SetUniformMat4f("norm_matrix", InvTrMat);
 
@@ -85,5 +98,13 @@ void OTestLightning::OnUpdate(const float& DeltaTime, const float& Aspect, const
 
 	GLCall(glBindVertexArray(VAO[0]));
 	GLCall(glDrawElements(GL_TRIANGLES, Torus.GetNumIndices(), GL_UNSIGNED_INT, 0));
+
+
+	MVMatrix = VMat * glm::scale(glm::translate(MTorusMatrix, {CurrentLightPos.x,CurrentLightPos.y,CurrentLightPos.z}),{0.5,0.5,0.5});
+	GetShader().SetUniformMat4f("mv_matrix", MVMatrix);
+
+	GLCall(glDrawElements(GL_TRIANGLES, Torus.GetNumIndices(), GL_UNSIGNED_INT, 0));
+
 }
+
 } // namespace RAPI

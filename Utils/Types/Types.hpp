@@ -64,6 +64,12 @@ using OString = std::string;
 #define MIN_DOUBLE (2.2250738585072014e-308) /* min positive value */
 #define MAX_DOUBLE (1.7976931348623158e+308)
 
+template<typename ToType>
+decltype(auto) Cast(auto Object)
+{
+	return static_cast<ToType>(Object);
+}
+
 template<typename T>
 struct STypeLimits;
 
@@ -75,9 +81,23 @@ struct STypeLimits<uint32>
 		return 0;
 	}
 
-	constexpr static uint32 MAX()
+	constexpr static uint32 Max()
 	{
 		return UINT32_MAX;
+	}
+};
+
+template<>
+struct STypeLimits<int32>
+{
+	constexpr static int32 Min()
+	{
+		return INT32_MIN;
+	}
+
+	constexpr static int32 Max()
+	{
+		return INT32_MAX;
 	}
 };
 
@@ -89,7 +109,7 @@ struct STypeLimits<float>
 		return MIN_FLOAT;
 	}
 
-	constexpr static float MAX()
+	constexpr static float Max()
 	{
 		return MAX_FLOAT;
 	}
@@ -103,7 +123,7 @@ struct STypeLimits<double>
 		return MIN_DOUBLE;
 	}
 
-	constexpr static double MAX()
+	constexpr static double Max()
 	{
 		return MAX_DOUBLE;
 	}
@@ -123,7 +143,7 @@ struct SInvalidValue<uint32>
 {
 	constexpr static uint32 Get()
 	{
-		return STypeLimits<uint32>::MAX();
+		return STypeLimits<uint32>::Max();
 	}
 };
 

@@ -131,7 +131,7 @@ void ORendererInputHandler::OnMouseMoved(double XCoord, double YCoord)
 	MousePosition.x = static_cast<float>(XCoord);
 	MousePosition.y = static_cast<float>(YCoord);
 
-	RAPI_LOG(Log, "On Mouse Moved is called! Current mouse position is {}", TO_STRING(MousePosition));
+	// RAPI_LOG(Log, "On Mouse Moved is called! Current mouse position is {}", TO_STRING(MousePosition));
 }
 
 void ORendererInputHandler::SetRenderer(ORenderer* Renderer)

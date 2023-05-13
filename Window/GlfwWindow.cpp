@@ -1,5 +1,6 @@
 #include "GlfwWindow.hpp"
 
+#include "Application/Application.hpp"
 #include "Assert.hpp"
 
 namespace RAPI
@@ -7,6 +8,8 @@ namespace RAPI
 
 void OGLFWWindow::InitWindow()
 {
+	OWindow::InitWindow();
+
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
@@ -66,8 +69,10 @@ void OGLFWWindow::DrawEnd()
 
 void OGLFWWindow::CalcAspect()
 {
-	glfwGetFramebufferSize(Window, &Width, &Height);
-	AspectRatio = static_cast<float>(static_cast<float>(Width) / static_cast<float>(Height));
+	int width = 0;
+	int height = 0;
+	glfwGetFramebufferSize(Window, &width, &height);
+	OnReshaped(width, height);
 }
 
 OGLFWWindow::~OGLFWWindow()
@@ -83,9 +88,10 @@ GLFWwindow* OGLFWWindow::GetWindow()
 
 void OGLFWWindow::OnReshaped(int32 NewWidth, int32 NewHeight)
 {
-	Width = NewWidth;
-	Height = NewHeight;
-	AspectRatio = static_cast<float>(static_cast<float>(Width) / static_cast<float>(Height));
+	Width = Cast<float>(NewWidth);
+	Height = Cast<float>(NewHeight);
+	AspectRatio = Width / Height;
+	glViewport(0, 0, Width, Height);
 }
 
 void OGLFWWindow::WindowReshapeCallback(GLFWwindow* Window, int NewHeight, int NewWidth)

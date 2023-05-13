@@ -11,6 +11,7 @@ class OPrinter
 
 public:
 
+
 	template<class Printable>
 	FORCEINLINE OPrinter& operator<<(Printable Object)
 	{
@@ -24,5 +25,7 @@ public:
 		std::printf(Object);
 		return *this;
 	}
+
+
 };
 #endif // RENDERAPI_PRINTER_HPP

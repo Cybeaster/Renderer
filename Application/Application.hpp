@@ -28,6 +28,16 @@ public:
 	 */
 	void Start(int argc, char** argv);
 
+	OInputHandler* GetInputHandler()
+	{
+		return &InputHandler;
+	}
+
+	OWindow* GetWindow()
+	{
+		return Window.get();
+	}
+
 private:
 	OApplication() = default;
 
@@ -43,6 +53,7 @@ private:
 	OUniquePtr<OWindow> Window;
 	ONamedThreadPool NamedThreadPool;
 	OImportManager Importer;
+
 	static inline OPath DebugPath = current_path();
 	static inline OPath RootDirPath = current_path();
 
@@ -52,7 +63,9 @@ private:
 	static inline SShaderName SimpleCubeShader = "\\SimpleCube.shader";
 	static inline SShaderName SimpleTextureShader = "\\SimpleTexture.shader";
 	static inline SShaderName BasicGourandShading = "\\BasicGourandShading.glsl";
-	static inline SShaderName BasicPhongShading = "\\BasicGourandShading.glsl";
+	static inline SShaderName BasicPhongShading = "\\BasicPhongShading.glsl";
+	static inline SShaderName BasicPhongShadingTwoLight = "\\BasicPhongShadingTwoLightSources.glsl";
+
 
 	static inline OApplication* Application = nullptr;
 };

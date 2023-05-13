@@ -2,6 +2,7 @@
 
 #include "Logging/Printer.hpp"
 #include "Math.hpp"
+#include "Printable.hpp"
 #include "SmartPtr.hpp"
 namespace RAPI
 {
@@ -66,19 +67,18 @@ void OBTreeUtils::Print(NodeType* Where, ETraverseType Type, OPrinter* Printer)
 	                 { *Printer << "Key: " << Node->Key << "Value: " << Node->Value << "\n"; });
 }
 
-
 template<typename NodeType, typename KeyType>
 NodeType* OBTreeUtils::FindNode(NodeType* Node, KeyType Key)
 {
-	if(Node != nullptr)
+	if (Node != nullptr)
 	{
-		if(Node->Key == Key)
+		if (Node->Key == Key)
 		{
 			return Node;
 		}
 		else
 		{
-			return Node->Key > Key ? FindNode(Node->Left,Key) : FindNode(Node->Right, Key);
+			return Node->Key > Key ? FindNode(Node->Left, Key) : FindNode(Node->Right, Key);
 		}
 	}
 	return nullptr;
@@ -258,7 +258,7 @@ ValueType OBTreeUtils::FindValue(NodeType* Node, KeyType Key)
 }
 
 template<typename KeyType, typename ValueType, typename NodeType>
-class OBSearchTreeBase
+class OBSearchTreeBase : public IPrintable
 {
 public:
 	ValueType Find(KeyType Key)
@@ -284,9 +284,14 @@ public:
 		return ValueType();
 	}
 
-	void Print(OPrinter* Printer, ETraverseType TraversType = ETraverseType::Direct)
+	void Print(OPrinter* Printer, ETraverseType TraversType)
 	{
-		OBTreeUtils::Print(Root, ETraverseType::Direct);
+		OBTreeUtils::Print(Root, TraversType, Printer);
+	}
+
+	void Print(OPrinter* Printer) override
+	{
+		OBTreeUtils::Print(Root, ETraverseType::Direct, Printer);
 	}
 
 	virtual void Insert(KeyType Key, ValueType Value) = 0;
