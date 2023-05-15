@@ -110,9 +110,7 @@ void main(void)
 {
     vec3 L = normalize(varyingLightDir);
     vec3 V = normalize(-varyingVertPos);
-
     vec3 N = normalize(varyingNormal);
-
     vec3 H = normalize(varyingHalfVector);
 
     float cosTheta = dot(L, N);

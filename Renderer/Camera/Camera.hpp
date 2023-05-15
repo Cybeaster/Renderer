@@ -34,18 +34,16 @@ public:
 	void Translate(ETranslateDirection Dir);
 	void Rotate(float XOffset, float YOffset);
 	void Tick(float DeltaTime);
-	OMat4 GetCameraView()const;
+	OMat4 GetCameraView() const;
 
 	void Init();
+
 private:
 	void UpdateCameraDirection();
 
-	OMutex TargetMutex;
-	OMutex RotateMutex;
-
 	float Sensitivity = 1.F;
 	float CameraSpeed = 1.F;
-	float CameraSpeedMultiplier = 1.F;
+	float CameraSpeedMultiplier = 10.F;
 
 	OVec3 CameraPosition;
 	OVec3 CameraTarget;

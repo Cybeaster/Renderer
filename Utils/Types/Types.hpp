@@ -156,5 +156,5 @@ struct SInvalidValue<OString>
 	}
 };
 
-#define UINT32_INVALID_VALUE STypeLimits<uint32>::MAX()
+#define UINT32_INVALID_VALUE STypeLimits<uint32>::Max()
 #define STRING_INVALID_VALUE SInvalidValue<OString>::Get();

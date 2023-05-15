@@ -112,11 +112,10 @@ struct Material
     float shininess;
 };
 
-uniform vec4 globalAmbient;
 
+uniform vec4 globalAmbient;
 uniform PositionalLight light;
 uniform PositionalLight secondLight;
-
 uniform Material material;
 
 

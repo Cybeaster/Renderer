@@ -39,6 +39,7 @@ void ORenderer::MoveCamera(ETranslateDirection Dir)
 
 void ORenderer::RendererStart(const SRenderContext& Context)
 {
+	Camera.Tick(Context.DeltaTime);
 	CleanScene();
 	CalcPerspective(Context.AspectRatio);
 }

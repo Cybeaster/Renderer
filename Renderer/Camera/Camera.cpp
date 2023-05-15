@@ -10,23 +10,21 @@ namespace RAPI
 {
 void OCamera::SetPosition(const OVec3& Arg)
 {
-	OMutexGuard guard(TargetMutex);
-
 	CameraPosition = Arg;
 	UpdateCameraDirection();
 }
 
 void OCamera::SetTarget(const OVec3& Arg)
 {
-	OMutexGuard guard(TargetMutex);
-
 	CameraTarget = Arg;
 	UpdateCameraDirection();
 }
 
 void OCamera::Init()
 {
-	Translate(ETranslateDirection::Forward);
+	Rotate(0, 0);
+	CameraPosition = { -5, 0, 0 };
+	UpdateCameraDirection();
 }
 
 void OCamera::UpdateCameraDirection()
@@ -37,8 +35,6 @@ void OCamera::UpdateCameraDirection()
 }
 void OCamera::Rotate(float XOffset, float YOffset)
 {
-	OMutexGuard guard(RotateMutex);
-
 	XOffset *= Sensitivity;
 	YOffset *= Sensitivity;
 
@@ -87,7 +83,6 @@ void OCamera::Translate(ETranslateDirection Dir)
 		delta = -UpVector * CameraSpeed;
 		break;
 	}
-	OMutexGuard guard(TargetMutex);
 	CameraPosition += delta;
 	UpdateCameraDirection();
 }

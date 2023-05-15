@@ -17,6 +17,13 @@ struct SModelContext
 	OVector<float> Normals;
 };
 
+struct SVertex
+{
+	OVec3 Vertex;
+	OVec2 Texel;
+	OVec3 Normal;
+};
+
 namespace RAPI
 {
 
@@ -31,7 +38,7 @@ public:
 	{
 	}
 
-	NODISCARD FORCEINLINE const OVector<int32>& GetIndices() const
+	NODISCARD FORCEINLINE const OVector<uint32>& GetIndices() const
 	{
 		return Indices;
 	}
@@ -39,7 +46,7 @@ public:
 	virtual void GetVertexTextureNormalPositions(SModelContext& OutContext);
 
 protected:
-	OVector<int32> Indices;
+	OVector<uint32> Indices;
 	OVector<OVec3> Vertices;
 	OVector<OVec2> TexCoords;
 	OVector<OVec3> Normals;
