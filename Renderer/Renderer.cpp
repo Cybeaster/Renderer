@@ -150,5 +150,9 @@ void ORenderer::RotateCamera(const OVec2& Delta)
 void ORenderer::AddModel(const SModelContext& Context)
 {
 }
+void ORenderer::SetCameraPosition(OVec3 NewPos)
+{
+	Camera.SetPosition(NewPos);
+}
 
 } // namespace RAPI

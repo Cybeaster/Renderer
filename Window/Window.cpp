@@ -23,5 +23,9 @@ OVec2 OWindow::GetNDC() const
 	result.y = 1.f - (2 * MousePosition.y) / Height;
 	return result;
 }
+OVec2 OWindow::GetWidthHeight() const
+{
+	return { Width, Height };
+}
 
 } // namespace RAPI

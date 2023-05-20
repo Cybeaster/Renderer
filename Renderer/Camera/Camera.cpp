@@ -22,8 +22,10 @@ void OCamera::SetTarget(const OVec3& Arg)
 
 void OCamera::Init()
 {
-	Rotate(0, 0);
+	CameraTarget = { 0, 0, 0 };
 	CameraPosition = { -5, 0, 0 };
+	Rotate(0, 0);
+
 	UpdateCameraDirection();
 }
 
@@ -56,9 +58,8 @@ void OCamera::Rotate(float XOffset, float YOffset)
 	direction.z = sin(yawRadians) * cos(pitchRadians);
 
 	FrontVector = glm::normalize(direction);
-
-	RAPI_LOG(Log, "Camera is rotated! Current Pitch:{} Yaw:{}", TO_STRING(Pitch), TO_STRING(Yaw));
 }
+
 void OCamera::Translate(ETranslateDirection Dir)
 {
 	OVec3 delta;

@@ -25,6 +25,7 @@ public:
 	}
 
 	OVec2 GetNDC() const;
+	OVec2 GetWidthHeight() const;
 
 	void OnMousePosition(double NewX, double NewY);
 

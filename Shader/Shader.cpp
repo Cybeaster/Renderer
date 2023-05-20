@@ -42,7 +42,7 @@ uint32 OShader::GetUniformLocation(const OString& name)
 
 	GLCall(int32 location = glGetUniformLocation(RendererID, name.c_str()));
 	if (location == -1)
-		std::cout << "Warning unform " << name << "  doesn't exist." << std::endl;
+		std::cout << "Warning uniform " << name << "  doesn't exist." << std::endl;
 
 	LocationCache[name] = location;
 	return location;

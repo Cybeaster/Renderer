@@ -66,6 +66,7 @@ private:
 	static inline SShaderName BasicPhongShading = "\\BasicPhongShading.glsl";
 	static inline SShaderName BasicPhongShadingTwoLight = "\\BasicPhongShadingTwoLightSources.glsl";
 	static inline SShaderName BasicPhongShadingSpotlight = "\\BasicPhongShadingSpotlight.glsl";
+	static inline SShaderName BasicShadowShader = "\\ShadowShader.glsl";
 
 	static inline OApplication* Application = nullptr;
 };

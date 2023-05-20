@@ -16,7 +16,7 @@ namespace RAPI
 class OTestLightning : public OTest
 {
 public:
-	OTestLightning(const OPath& TextureFirstPath, const OPath& SecondTexturePath, const OPath& ShaderPath, RAPI::ORenderer* Renderer);
+	OTestLightning(const OPath& TextureFirstPath, const OPath& SecondTexturePath, const OPath& ShaderPath, RAPI::ORenderer* Renderer, const OPath& ShadowShaderPath);
 	~OTestLightning() override = default;
 
 	void OnUpdate(
@@ -27,18 +27,31 @@ public:
 	    OMat4& VMat) override;
 
 private:
+	void ComputeShadows(float Aspect, OVec3& LightDir, OVec3& LightPos);
+
+	OVec3 ComputeRayView(const OMat4& PMat, const OMat4& VMat);
+	void ComputeLight(const OMat4& VMat, const OVec3& CameraPos, const OMat4& PMat);
+	void CalcModelMatrices();
+	void SetupNormalAndMVMatrices(const OMat4& Normal, const OMat4& MV);
 	void OnMouseMoved(double NewX, double newY);
 	void InstallLights(OMat4 VMatrix);
+	void SetupShadowBuffers();
+
+	void DrawModelVertices(uint32 VAOIdx, const OMat4& ModelMatrix, const OMat4& VMat, const SModelContext& Context);
+	void DrawModelIndices(uint32 VAOIdx, const OMat4& ModelMatrix, const OMat4& VMat, uint32 NumIndices);
 
 	OTexture TorusTexture;
 
 	OMat4 InvTrTorusMat;
 	OMat4 InvTrCubeMat;
 
-	OVec4 GlobalAmbient = { 0.7F, 0.7F, 0.7F, 0.7F };
+	OVec4 GlobalAmbient;
 	SSpotlight SpotLight;
 
-	float SquareVertices;
+	OMat4 BiasesMat = OMat4(0.5, 0, 0, 0.5,
+	                        0, 0.5, 0, 0.5,
+	                        0, 0, 0.5, 0.5,
+	                        0, 0, 0, 1);
 
 	uint32 VBO[6];
 	uint32 EBO[2];
@@ -46,6 +59,9 @@ private:
 	OTorus Torus{ 48 };
 
 	OCube Cube;
+
+	OMat4 DownCubeMat = OMat4(1);
+
 	SModelContext CubeContext;
 
 	OVec3 RayWorld;
@@ -54,6 +70,13 @@ private:
 	OMat4 SmallCubeMatrix = OMat4(1);
 	OVec4 ShininessContribution = { 1, 1, 1, 1 };
 	SModelContext TorusContext;
+
+	OShader ShadowShader;
+
+	uint32 ShadowBuffer;
+	uint32 ShadowTexture;
+
+	OMat4 SpotLightPVMat;
 };
 
 } // namespace RAPI

@@ -40,7 +40,6 @@ public:
 	SDrawVertexHandle CreateVertexElement(const SVertexContext& VContext, const SDrawContext& RContext);
 
 	void Draw(const SDrawVertexHandle& Handle);
-
 	void EnableBufferAttribArray(const SDrawVertexHandle& Handle);
 	void EnableBufferAttribArray(const SBufferAttribVertexHandle& Handle);
 
@@ -58,16 +57,17 @@ public:
 
 	void Init();
 	void PostInit();
+	void SetInput(OInputHandler* InputHandler);
 
 	void MoveCamera(ETranslateDirection Dir);
+	void SetCameraPosition(OVec3 NewPos);
 	void RotateCamera(const OVec2& Delta);
 
 	NODISCARD const OVec3& GetCameraPosition() const;
+	NODISCARD const OVec3& GetCameraDirection() const;
 
 	static OMat4 VMat;
 	static OMat4 PMat;
-
-	void SetInput(OInputHandler* InputHandler);
 
 private:
 	ORenderer() = default;

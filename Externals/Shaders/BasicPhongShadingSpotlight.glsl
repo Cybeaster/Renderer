@@ -8,10 +8,8 @@ out vec3 varyingNormal;
 out vec3 varyingLightDir;
 out vec3 varyingHalfVector;
 out vec3 varyingVertPos;
+out vec4 shadowCoord;
 out vec2 tc;
-
-layout (binding = 0) uniform sampler2D sampler;
-
 
 struct AttenuationFactor
 {
@@ -59,21 +57,25 @@ struct Material
 uniform vec4 globalAmbient;
 uniform Spotlight light;
 uniform Material material;
-uniform mat4 proj_matrix;
-uniform mat4 mv_matrix;
-uniform mat4 norm_matrix;
+uniform mat4 projMatrix;
+uniform mat4 mvMatrix;
+uniform mat4 normMatrix;
 uniform int useTexture = 1;
+uniform mat4 shadowMVP;
 
+layout (binding = 0) uniform sampler2DShadow shadowTexture;
 
 void main(void)
 {
-    varyingVertPos = (mv_matrix * vec4(vertPosition, 1.0)).xyz;
+    varyingVertPos = (mvMatrix * vec4(vertPosition, 1.0)).xyz;
 
     varyingLightDir = light.base.position - varyingVertPos;
     varyingHalfVector = (varyingLightDir + (-varyingVertPos)).xyz;
 
-    varyingNormal = (norm_matrix * vec4(normal, 1.0)).xyz;
-    gl_Position = proj_matrix * mv_matrix * vec4(vertPosition, 1.0);
+    shadowCoord = shadowMVP * vec4(vertPosition, 1.0);
+
+    varyingNormal = (normMatrix * vec4(normal, 1.0)).xyz;
+    gl_Position = projMatrix * mvMatrix * vec4(vertPosition, 1.0);
     tc = texels;
 }
 
@@ -88,10 +90,11 @@ in vec3 varyingNormal;
 in vec3 varyingLightDir;
 in vec3 varyingHalfVector;
 in vec3 varyingVertPos;
+in vec4 shadowCoord;
 
 out vec4 fragColor;
 
-layout (binding=0) uniform sampler2D sampler;
+layout (binding = 0) uniform sampler2DShadow shadowTexture;
 
 
 struct AttenuationFactor
@@ -140,9 +143,9 @@ struct Material
 uniform vec4 globalAmbient;
 uniform Spotlight light;
 uniform Material material;
-uniform mat4 proj_matrix;
-uniform mat4 mv_matrix;
-uniform mat4 norm_matrix;
+uniform mat4 projMatrix;
+uniform mat4 mvMatrix;
+uniform mat4 normMatrix;
 uniform int useTexture = 1;
 
 vec4 CalcLightInternal(LightBase Light, vec3 Direction, vec3 Normal)
@@ -158,15 +161,15 @@ vec4 CalcLightInternal(LightBase Light, vec3 Direction, vec3 Normal)
     vec4 diffuse = Light.diffuse * material.diffuse * diffuseFactor;
     vec4 specular = Light.specular * material.specular * pow(specularFactor, material.shininess * 3.0);
 
-    vec4 texColor = texture(sampler, tc);
-    if (useTexture == 1)
+    //vec4 texColor = texture(sampler, tc);
+    float notInShadow = textureProj(shadowTexture, shadowCoord);
+    if (notInShadow == 1.0)
     {
-        return texColor * (ambientColor + diffuse) + specular;
-
+        return (ambientColor + diffuse + specular);
     }
     else
     {
-        return (ambientColor + diffuse + specular);
+        return ambientColor;
     }
 }
 
@@ -193,18 +196,10 @@ vec4 CalcSpotLight(Spotlight Light, vec3 Normal)
     vec3 lightToPixel = normalize(varyingVertPos -  Light.base.position);
     float spotFactor = dot(lightToPixel, Light.direction);
 
-    if (spotFactor > Light.cutoff)
-    {
-        vec4 color = CalcPointLight(Light.base, Normal);
-        float spotLightIntensity = (1.0 - (1.0 - spotFactor) / (1.0 - Light.cutoff));
-        return color * spotLightIntensity;
-    }
-    else
-    {
-        return vec4(0.0, 0.0, 0.0, 0.0);
-    }
+    vec4 color = CalcPointLight(Light.base, Normal);
+    float spotLightIntensity = (1.0 - (1.0 - spotFactor) / (1.0 - Light.cutoff));
+    return color * (spotLightIntensity + globalAmbient);
 
-    return CalcPointLight(Light.base, Normal);
 }
 
 

@@ -18,8 +18,8 @@ void OGLFWWindow::InitWindow()
 	{
 		return;
 	}
-	Height = 720;
-	Width = 720;
+	Width = 1920;
+	Height = 1080;
 	/* Create a windowed mode window and its OpenGL context */
 	Window = glfwCreateWindow(Width, Height, WindowName.c_str(), nullptr, nullptr);
 
