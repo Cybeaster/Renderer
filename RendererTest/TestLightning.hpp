@@ -33,14 +33,14 @@ private:
 	void ComputeLight(const OMat4& VMat, const OVec3& CameraPos, const OMat4& PMat);
 	void CalcModelMatrices();
 	void SetupNormalAndMVMatrices(const OMat4& Normal, const OMat4& MV);
+
 	void OnMouseMoved(double NewX, double newY);
+
 	void InstallLights(OMat4 VMatrix);
 	void SetupShadowBuffers();
 
 	void DrawModelVertices(uint32 VAOIdx, const OMat4& ModelMatrix, const OMat4& VMat, const SModelContext& Context);
 	void DrawModelIndices(uint32 VAOIdx, const OMat4& ModelMatrix, const OMat4& VMat, uint32 NumIndices);
-
-	OTexture TorusTexture;
 
 	OMat4 InvTrTorusMat;
 	OMat4 InvTrCubeMat;
@@ -48,10 +48,10 @@ private:
 	OVec4 GlobalAmbient;
 	SSpotlight SpotLight;
 
-	OMat4 BiasesMat = OMat4(0.5, 0, 0, 0.5,
-	                        0, 0.5, 0, 0.5,
-	                        0, 0, 0.5, 0.5,
-	                        0, 0, 0, 1);
+	OMat4 BiasesMat = OMat4(0.5, 0, 0, 0,
+	                        0, 0.5, 0, 0,
+	                        0, 0, 0.5, 0,
+	                        0.5, 0.5, 0.5, 1);
 
 	uint32 VBO[6];
 	uint32 EBO[2];
@@ -60,14 +60,19 @@ private:
 
 	OCube Cube;
 
+	OPlane Plane;
+	SModelContext PlaneContext;
+
 	OMat4 DownCubeMat = OMat4(1);
-
 	SModelContext CubeContext;
-
 	OVec3 RayWorld;
+
 	OMat4 MTorusMatrix = OMat4(1);
+
 	OMat4 CubeMatrix = OMat4(1);
+
 	OMat4 SmallCubeMatrix = OMat4(1);
+
 	OVec4 ShininessContribution = { 1, 1, 1, 1 };
 	SModelContext TorusContext;
 
@@ -76,7 +81,8 @@ private:
 	uint32 ShadowBuffer;
 	uint32 ShadowTexture;
 
-	OMat4 SpotLightPVMat;
+	OMat4 LightViewMat;
+	OMat4 LightPMat;
 };
 
 } // namespace RAPI

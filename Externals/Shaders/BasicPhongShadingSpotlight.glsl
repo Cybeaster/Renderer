@@ -60,7 +60,9 @@ uniform Material material;
 uniform mat4 projMatrix;
 uniform mat4 mvMatrix;
 uniform mat4 normMatrix;
+
 uniform int useTexture = 1;
+
 uniform mat4 shadowMVP;
 
 layout (binding = 0) uniform sampler2DShadow shadowTexture;
@@ -177,13 +179,13 @@ vec4 CalcLightInternal(LightBase Light, vec3 Direction, vec3 Normal)
 vec4 CalcPointLight(PositionalLight Light, vec3 Normal)
 {
     vec3 dir = varyingVertPos - Light.position;
-    float distance = length(dir);
+    ///float distance = length(dir);
     dir = normalize(dir);
 
-    float attenuation = (Light.attenuation.constant + Light.attenuation.linear * distance + Light.attenuation.quadratic * (distance * distance));
+    //float attenuation = (Light.attenuation.constant + Light.attenuation.linear * distance + Light.attenuation.quadratic * (distance * distance));
 
     vec4 color = CalcLightInternal(Light.base, dir, Normal);
-    return color / attenuation;
+    return color;/// attenuation;
 }
 
 vec4 CalcDirectionalLight(DirectionalLight Light, vec3 Normal)
@@ -193,12 +195,12 @@ vec4 CalcDirectionalLight(DirectionalLight Light, vec3 Normal)
 
 vec4 CalcSpotLight(Spotlight Light, vec3 Normal)
 {
-    vec3 lightToPixel = normalize(varyingVertPos -  Light.base.position);
-    float spotFactor = dot(lightToPixel, Light.direction);
+    //vec3 lightToPixel = normalize(varyingVertPos -  Light.base.position);
+    //float spotFactor = dot(lightToPixel, Light.direction);
 
     vec4 color = CalcPointLight(Light.base, Normal);
-    float spotLightIntensity = (1.0 - (1.0 - spotFactor) / (1.0 - Light.cutoff));
-    return color * (spotLightIntensity + globalAmbient);
+    // float spotLightIntensity = (1.0 - (1.0 - spotFactor) / (1.0 - Light.cutoff));
+    return color;//* (spotLightIntensity + globalAmbient);
 
 }
 

@@ -11,7 +11,6 @@ namespace RAPI
 void OCamera::SetPosition(const OVec3& Arg)
 {
 	CameraPosition = Arg;
-	UpdateCameraDirection();
 }
 
 void OCamera::SetTarget(const OVec3& Arg)
@@ -22,11 +21,9 @@ void OCamera::SetTarget(const OVec3& Arg)
 
 void OCamera::Init()
 {
-	CameraTarget = { 0, 0, 0 };
-	CameraPosition = { -5, 0, 0 };
-	Rotate(0, 0);
-
+	CameraTarget = { 0, 0, -1 };
 	UpdateCameraDirection();
+	CameraPosition = { 0, 3, 0 };
 }
 
 void OCamera::UpdateCameraDirection()
@@ -40,14 +37,15 @@ void OCamera::Rotate(float XOffset, float YOffset)
 	XOffset *= Sensitivity;
 	YOffset *= Sensitivity;
 
-	Yaw += XOffset;
+	Yaw = fmod(Yaw + XOffset, 360);
+
 	Pitch += YOffset;
 
-	if (Pitch > 89)
-		Pitch = 89;
+	if (Pitch > 180)
+		Pitch = 180;
 
-	if (Pitch < -89)
-		Pitch = -89;
+	if (Pitch < -180)
+		Pitch = -180;
 
 	auto yawRadians = SMath::ToRadians(Yaw);
 	auto pitchRadians = SMath::ToRadians(Pitch);
@@ -57,7 +55,7 @@ void OCamera::Rotate(float XOffset, float YOffset)
 	direction.y = sin(pitchRadians);
 	direction.z = sin(yawRadians) * cos(pitchRadians);
 
-	FrontVector = glm::normalize(direction);
+	CameraFront = glm::normalize(direction);
 }
 
 void OCamera::Translate(ETranslateDirection Dir)
@@ -66,16 +64,16 @@ void OCamera::Translate(ETranslateDirection Dir)
 	switch (Dir)
 	{
 	case ETranslateDirection::Forward:
-		delta = FrontVector * CameraSpeed;
+		delta = CameraFront * CameraSpeed;
 		break;
 	case ETranslateDirection::Backward:
-		delta = -FrontVector * CameraSpeed;
+		delta = -CameraFront * CameraSpeed;
 		break;
 	case ETranslateDirection::Left:
-		delta = -glm::normalize(glm::cross(FrontVector, UpVector)) * CameraSpeed;
+		delta = -glm::normalize(glm::cross(CameraFront, UpVector)) * CameraSpeed;
 		break;
 	case ETranslateDirection::Right:
-		delta = glm::normalize(glm::cross(FrontVector, UpVector)) * CameraSpeed;
+		delta = glm::normalize(glm::cross(CameraFront, UpVector)) * CameraSpeed;
 		break;
 	case ETranslateDirection::Up:
 		delta = UpVector * CameraSpeed;
@@ -85,7 +83,6 @@ void OCamera::Translate(ETranslateDirection Dir)
 		break;
 	}
 	CameraPosition += delta;
-	UpdateCameraDirection();
 }
 
 void OCamera::Tick(float DeltaTime)
@@ -94,7 +91,7 @@ void OCamera::Tick(float DeltaTime)
 }
 OMat4 OCamera::GetCameraView() const
 {
-	return glm::lookAt(CameraPosition, CameraPosition + FrontVector, CameraUp);
+	return glm::lookAt(CameraPosition, CameraPosition + CameraFront, CameraUp);
 }
 
 } // namespace RAPI

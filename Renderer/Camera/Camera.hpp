@@ -51,9 +51,9 @@ private:
 
 	OVec3 CameraRight;
 	OVec3 CameraUp;
+	OVec3 CameraFront{ 0, 0, -1.f };
 
-	OVec3 UpVector{ 0, 1, 0 };
-	OVec3 FrontVector{ 0, 0, -1 };
+	OVec3 UpVector{ 0, 1.f, 0 };
 
 	float Yaw{ 0 };
 	float Pitch{ 0 };

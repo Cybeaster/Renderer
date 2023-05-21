@@ -12,7 +12,7 @@ void main() {
 
 #shader fragment
 #version 430
-
 void main()
-{ }
+{
+}
 
