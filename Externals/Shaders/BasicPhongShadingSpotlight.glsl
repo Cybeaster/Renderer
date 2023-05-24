@@ -73,6 +73,9 @@ uniform mat4 projMatrix;
 uniform mat4 mvMatrix;
 uniform mat4 normMatrix;
 
+uniform float windowHeight;
+uniform float windowWidth;
+
 uniform int useTexture = 1;
 
 uniform mat4 shadowMVP;
@@ -180,9 +183,12 @@ uniform mat4 mvMatrix;
 uniform mat4 normMatrix;
 uniform int useTexture = 1;
 
+uniform float windowHeight;
+uniform float windowWidth;
+
 float ShadowLookUp(float Ox, float Oy)
 {
-    return textureProj(shadowTexture, shadowCoord + vec4(Ox * 0.001 * shadowCoord.w, Oy * 0.001 * shadowCoord.w, -0.01, 0.0));
+    return textureProj(shadowTexture, shadowCoord + vec4(Ox * (1/windowWidth) * shadowCoord.w, Oy * (1/windowHeight) * shadowCoord.w, -0.01, 0.0));
 }
 
 vec4 CalcLightInternal(LightBase Light, vec3 Direction, vec3 Normal, vec3 VaryingHalfVector)

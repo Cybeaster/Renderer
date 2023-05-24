@@ -72,15 +72,15 @@ OTestLightning::OTestLightning(const OPath& TextureFirstPath, const OPath& Secon
 	GLCall(glBindVertexArray(0));
 
 	// MTorusMatrix *= glm::rotate(OMat4(1), 45.f, { 0, 1, 0 });
-	MTorusMatrix *= glm::translate(OMat4(1), { 0.5, 1, 0 });
+	MTorusMatrix *= glm::translate(OMat4(1), { 0, 1, 0 });
 	MTorusMatrix *= glm::scale(OMat4(1), { 0.3, 0.3, 0.3 });
 
 	GlobalAmbient = OVec4(1.f);
 
-	SmallCubeMatrix = glm::scale(glm::translate(SmallCubeMatrix, { 0.5, 1, 0.5 }), { 0.1, 0.1, 0.1 });
+	SmallCubeMatrix = glm::scale(SmallCubeMatrix, { 0.1, 0.1, 0.1 });
 
 	DownCubeMat = glm::translate(DownCubeMat, { 0, -2, 0 });
-	DownCubeMat = glm::scale(DownCubeMat, { 5, 1, 5 });
+	DownCubeMat = glm::scale(DownCubeMat, { 1, 1, 1 });
 }
 
 void OTestLightning::InstallLights(OMat4 VMatrix)
@@ -150,7 +150,13 @@ void OTestLightning::SetupShadowBuffers()
 
 void OTestLightning::OnUpdate(const float& DeltaTime, const float& Aspect, const OVec3& CameraPos, OMat4& PMat, OMat4& VMat)
 {
-	auto view = glm::lookAt(PointShadowLight.Position, { 0, -1, 0 }, { 0, 1.f, 0 });
+	auto ndc = OApplication::GetApplication()->GetWindow()->GetNDC();
+	auto lightPos = PointShadowLight.Position + OVec3(ndc.x, ndc.y, 0.0);
+
+	auto view = glm::lookAt(lightPos, { 0, -1, 0 }, { 0, 1.f, 0 });
+
+	SmallCubeMatrix = glm::scale(glm::translate(OMat4(1), lightPos + OVec3(0, 0.2, 0)), { 0.1, 0.1, 0.1 });
+
 	LightViewMat = view;
 	LightPMat = PMat;
 
@@ -158,8 +164,12 @@ void OTestLightning::OnUpdate(const float& DeltaTime, const float& Aspect, const
 	if (CurrentAngle > 360)
 		CurrentAngle = 0;
 	MTorusMatrix = glm::rotate(glm::translate(OMat4(1), { cos(CurrentAngle), 0, sin(CurrentAngle) }), CurrentAngle, { 1, 0.5, 0 });
-	GLCall(glBindVertexArray(0));
 
+	auto size = OApplication::GetApplication()->GetWindow()->GetWidthHeight();
+	GetShader().SetUniform1f("windowHeight", size.y);
+	GetShader().SetUniform1f("windowWidth", size.x);
+
+	GLCall(glBindVertexArray(0));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, ShadowBuffer));
 	GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ShadowTexture, 0));
 	ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
@@ -176,9 +186,9 @@ void OTestLightning::OnUpdate(const float& DeltaTime, const float& Aspect, const
 	glDepthFunc(GL_LEQUAL);
 	glCullFace(GL_BACK);
 
-	glEnable(GL_POLYGON_OFFSET_FILL);
+	// glEnable(GL_POLYGON_OFFSET_FILL);
 
-	glPolygonOffset(2.0f, 4.0f);
+	// glPolygonOffset(2.0f, 4.0f);
 
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO[3]));
 	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0));
@@ -190,7 +200,6 @@ void OTestLightning::OnUpdate(const float& DeltaTime, const float& Aspect, const
 	ShadowShader.SetUniformMat4f("shadowMVP", LightPMat * LightViewMat * DownCubeMat);
 	GLCall(glDrawArrays(GL_TRIANGLES, 0, CubeContext.Vertices.size() / 3));
 
-
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO[0]));
 	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0));
 	GLCall(glEnableVertexAttribArray(0));
@@ -199,7 +208,8 @@ void OTestLightning::OnUpdate(const float& DeltaTime, const float& Aspect, const
 	ShadowShader.SetUniformMat4f("shadowMVP", LightPMat * LightViewMat * MTorusMatrix);
 	GLCall(glDrawElements(GL_TRIANGLES, Torus.GetNumIndices(), GL_UNSIGNED_INT, nullptr));
 
-	glDisable(GL_POLYGON_OFFSET_FILL);
+	// glDisable(GL_POLYGON_OFFSET_FILL);
+
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	GLCall(glActiveTexture(GL_TEXTURE0));
 	GLCall(glBindTexture(GL_TEXTURE_2D, ShadowTexture));
@@ -286,7 +296,7 @@ void OTestLightning::AddPointLights()
 
 void OTestLightning::AddSpotLights()
 {
-	PointShadowLight.Position = { -0.5, 3, 0 };
+	PointShadowLight.Position = { -0.5, 1, 0 };
 	PointShadowLight.Specular = { 1.F, 1.F, 1.F, 1.F };
 	PointShadowLight.Diffuse = { 1.F, 1.F, 1.F, 1.F };
 	PointShadowLight.Ambient = { 0, 0, 0, 1.F };
