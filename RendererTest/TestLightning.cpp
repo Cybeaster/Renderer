@@ -13,6 +13,10 @@ namespace RAPI
 OTestLightning::OTestLightning(const OPath& TextureFirstPath, const OPath& SecondTexturePath, const OPath& ShaderPath, RAPI::ORenderer* Renderer, const OPath& ShadowShaderPath)
     : OTest(ShaderPath, Renderer), ShadowShader(ShadowShaderPath)
 {
+	Renderer->SetCameraPosition({ -1.2, 1, 0 });
+	AddPointLights();
+	AddSpotLights();
+
 	GLCall(glGenVertexArrays(2, VAO));
 
 	GLCall(glGenBuffers(6, VBO));
@@ -43,64 +47,79 @@ OTestLightning::OTestLightning(const OPath& TextureFirstPath, const OPath& Secon
 
 	GLCall(glBindVertexArray(VAO[1]));
 
-	Plane.GetVertexTextureNormalPositions(PlaneContext);
+	Cube.GetVertexTextureNormalPositions(CubeContext);
 
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO[3]));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, PlaneContext.Vertices.size() * sizeof(float), PlaneContext.Vertices.data(), GL_STATIC_DRAW));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, CubeContext.Vertices.size() * sizeof(float), CubeContext.Vertices.data(), GL_STATIC_DRAW));
 	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr));
 	GLCall(glEnableVertexAttribArray(0));
 
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO[4]));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, PlaneContext.TexCoords.size() * sizeof(float), PlaneContext.TexCoords.data(), GL_STATIC_DRAW));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, CubeContext.TexCoords.size() * sizeof(float), CubeContext.TexCoords.data(), GL_STATIC_DRAW));
 	GLCall(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr));
 	GLCall(glEnableVertexAttribArray(1));
 
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO[5]));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, PlaneContext.Normals.size() * sizeof(float), PlaneContext.Normals.data(), GL_STATIC_DRAW));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, CubeContext.Normals.size() * sizeof(float), CubeContext.Normals.data(), GL_STATIC_DRAW));
 	GLCall(glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr));
 	GLCall(glEnableVertexAttribArray(2));
 
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[1]));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, Plane.GetIndices().size() * sizeof(uint32), Plane.GetIndices().data(), GL_STATIC_DRAW));
-
-	GLCall(glBindVertexArray(0));
+	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, Cube.GetIndices().size() * sizeof(uint32), Cube.GetIndices().data(), GL_STATIC_DRAW));
 
 	SetupShadowBuffers();
 
-	MTorusMatrix *= glm::translate(OMat4(1), { 0, 1, 0 });
+	GLCall(glBindVertexArray(0));
+
+	// MTorusMatrix *= glm::rotate(OMat4(1), 45.f, { 0, 1, 0 });
+	MTorusMatrix *= glm::translate(OMat4(1), { 0.5, 1, 0 });
+	MTorusMatrix *= glm::scale(OMat4(1), { 0.3, 0.3, 0.3 });
 
 	GlobalAmbient = OVec4(1.f);
-	SpotLight.Ambient = { 0, 0, 0, 1.F };
-	SpotLight.Specular = { 1.F, 1.F, 1.F, 1.F };
-	SpotLight.Diffuse = { 1.F, 1.F, 1.F, 1.F };
-	SpotLight.Position = OVec3{ 0, 2, 0 };
-	SpotLight.Direction = { 0.0, -1, -1.f };
 
-	SpotLight.Cutoff = 75.f;
+	SmallCubeMatrix = glm::scale(glm::translate(SmallCubeMatrix, { 0.5, 1, 0.5 }), { 0.1, 0.1, 0.1 });
 
-	//	SmallCubeMatrix = glm::scale(glm::translate(SmallCubeMatrix, SpotLight.Position), { 0.1, 0.1, 0.1 });
-	//	CubeMatrix = glm::translate(CubeMatrix, { 0, 0, 0 });
-	//	CubeMatrix = glm::scale(CubeMatrix, { 1, 1, 1 });
-
-	DownCubeMat = glm::translate(DownCubeMat, { 0, -2, -2 });
-	DownCubeMat = glm::rotate(DownCubeMat, 200.f, OVec3(1.0, 0, 0));
+	DownCubeMat = glm::translate(DownCubeMat, { 0, -2, 0 });
+	DownCubeMat = glm::scale(DownCubeMat, { 5, 1, 5 });
 }
 
 void OTestLightning::InstallLights(OMat4 VMatrix)
 {
 	auto goldMaterial = OMaterial::GetGoldMaterial();
-	GetShader().Bind();
 	GetShader().SetUniformVec4f("globalAmbient", GlobalAmbient);
-	GetShader().SetUniformVec4f("light.base.base.ambient", SpotLight.Ambient);
-	GetShader().SetUniformVec4f("light.base.base.diffuse", SpotLight.Diffuse);
-	GetShader().SetUniformVec4f("light.base.base.specular", SpotLight.Specular);
-	GetShader().SetUniformVec3f("light.direction", SpotLight.Direction);
+	GetShader().SetUniform1ui("numPointLights", PointLights.size());
+	GetShader().SetUniform1ui("numSpotLights", SpotLights.size());
 
-	GetShader().SetUniformVec3f("light.base.position", OVec3(VMatrix * OVec4(SpotLight.Position, 1.0)));
+	for (int i = 0; i < SpotLights.size(); ++i)
+	{
+		auto baseName = SLogUtils::Format("spotLights[{}]", i);
 
-	GetShader().SetUniform1f("light.base.attenuation.constant", 1.F);
-	GetShader().SetUniform1f("light.base.attenuation.quadratic", 0.032F);
-	GetShader().SetUniform1f("light.base.attenuation.linear", 0.09F);
+		GetShader().SetUniformVec4f(baseName + ".base.base.ambient", SpotLights[i]->Ambient);
+		GetShader().SetUniformVec4f(baseName + ".base.base.diffuse", SpotLights[i]->Diffuse);
+		GetShader().SetUniformVec4f(baseName + ".base.base.specular", SpotLights[i]->Specular);
+		GetShader().SetUniformVec3f(baseName + ".direction", SpotLights[i]->Direction);
+
+		GetShader().SetUniformVec3f(baseName + ".base.position", OVec3(VMatrix * OVec4(SpotLights[i]->Position, 1.0)));
+
+		GetShader().SetUniform1f(baseName + ".base.attenuation.constant", SpotLights[i]->Attenuation.Constant);
+		GetShader().SetUniform1f(baseName + ".base.attenuation.quadratic", SpotLights[i]->Attenuation.Quadratic);
+		GetShader().SetUniform1f(baseName + ".base.attenuation.linear", SpotLights[i]->Attenuation.Linear);
+	}
+
+	for (int i = 0; i < PointLights.size(); ++i)
+	{
+		auto baseName = SLogUtils::Format("pointLights[{}]", i);
+
+		GetShader().SetUniformVec4f(baseName + ".base.ambient", PointLights[i].Ambient);
+		GetShader().SetUniformVec4f(baseName + ".base.diffuse", PointLights[i].Diffuse);
+		GetShader().SetUniformVec4f(baseName + ".base.specular", PointLights[i].Specular);
+
+		GetShader().SetUniformVec3f(baseName + ".position", OVec3(VMatrix * OVec4(PointLights[i].Position, 1.0)));
+
+		GetShader().SetUniform1f(baseName + ".attenuation.constant", PointLights[i].Attenuation.Constant);
+		GetShader().SetUniform1f(baseName + ".attenuation.quadratic", PointLights[i].Attenuation.Quadratic);
+		GetShader().SetUniform1f(baseName + ".attenuation.linear", PointLights[i].Attenuation.Linear);
+	}
 
 	GetShader().SetUniformVec4f("material.ambient", goldMaterial.Ambient);
 	GetShader().SetUniformVec4f("material.diffuse", goldMaterial.Diffuse);
@@ -110,49 +129,101 @@ void OTestLightning::InstallLights(OMat4 VMatrix)
 
 void OTestLightning::SetupShadowBuffers()
 {
+	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
+	GLCall(glClear(GL_COLOR_BUFFER_BIT));
+
 	GLCall(glGenFramebuffers(1, &ShadowBuffer));
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, ShadowBuffer));
 
 	GLCall(glGenTextures(1, &ShadowTexture));
 	GLCall(glBindTexture(GL_TEXTURE_2D, ShadowTexture));
 
-	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, 2048, 2048, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0));
+	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, 1920, 1080, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0));
 
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL));
-
-	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, ShadowBuffer));
-	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, ShadowTexture, 0));
-
-	GLCall(glReadBuffer(GL_NONE));
-	GLCall(glDrawBuffer(GL_NONE));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 }
 
 void OTestLightning::OnUpdate(const float& DeltaTime, const float& Aspect, const OVec3& CameraPos, OMat4& PMat, OMat4& VMat)
 {
-	LightViewMat = glm::lookAt(SpotLight.Position, SpotLight.Position + SpotLight.Direction, { 0, 1.f, 0 });
+	auto view = glm::lookAt(PointShadowLight.Position, { 0, -1, 0 }, { 0, 1.f, 0 });
+	LightViewMat = view;
 	LightPMat = PMat;
 
+	CurrentAngle += DeltaTime;
+	if (CurrentAngle > 360)
+		CurrentAngle = 0;
+	MTorusMatrix = glm::rotate(glm::translate(OMat4(1), { cos(CurrentAngle), 0, sin(CurrentAngle) }), CurrentAngle, { 1, 0.5, 0 });
+	GLCall(glBindVertexArray(0));
 
-	ComputeShadows(Aspect, SpotLight.Direction, SpotLight.Position);
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, ShadowBuffer));
+	GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, ShadowTexture, 0));
+	ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 
+	GLCall(glDrawBuffer(GL_NONE));
+	GLCall(glEnable(GL_DEPTH_TEST));
+
+	ShadowShader.Bind();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CCW);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glCullFace(GL_BACK);
+
+	glEnable(GL_POLYGON_OFFSET_FILL);
+
+	glPolygonOffset(2.0f, 4.0f);
+
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO[3]));
+	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0));
+	GLCall(glEnableVertexAttribArray(0));
+
+	ShadowShader.SetUniformMat4f("shadowMVP", LightPMat * LightViewMat * SmallCubeMatrix);
+	GLCall(glDrawArrays(GL_TRIANGLES, 0, CubeContext.Vertices.size() / 3));
+
+	ShadowShader.SetUniformMat4f("shadowMVP", LightPMat * LightViewMat * DownCubeMat);
+	GLCall(glDrawArrays(GL_TRIANGLES, 0, CubeContext.Vertices.size() / 3));
+
+
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO[0]));
+	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0));
+	GLCall(glEnableVertexAttribArray(0));
+
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]));
+	ShadowShader.SetUniformMat4f("shadowMVP", LightPMat * LightViewMat * MTorusMatrix);
+	GLCall(glDrawElements(GL_TRIANGLES, Torus.GetNumIndices(), GL_UNSIGNED_INT, nullptr));
+
+	glDisable(GL_POLYGON_OFFSET_FILL);
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	GLCall(glActiveTexture(GL_TEXTURE0));
 	GLCall(glBindTexture(GL_TEXTURE_2D, ShadowTexture));
 	GLCall(glDrawBuffer(GL_FRONT));
 
-	OTest::OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CCW);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glCullFace(GL_BACK);
 
+	OTest::OnUpdate(DeltaTime, Aspect, CameraPos, PMat, VMat);
 	ComputeLight(VMat, CameraPos, PMat);
 
-	DrawModelIndices(VAO[0], VMat, MTorusMatrix, Torus.GetNumIndices());
-	DrawModelVertices(VAO[1], DownCubeMat, VMat, PlaneContext);
+	DrawModelVertices(VAO[1], DownCubeMat, VMat, CubeContext);
+	DrawModelVertices(VAO[1], SmallCubeMatrix, VMat, CubeContext);
+	DrawModelIndices(VAO[0], MTorusMatrix, VMat, Torus.GetNumIndices());
 }
 
 void OTestLightning::DrawModelVertices(uint32 VAOIdx, const OMat4& ModelMatrix, const OMat4& VMat, const SModelContext& Context)
 {
 	SetupNormalAndMVMatrices(VMat, ModelMatrix);
+
 	GLCall(glBindVertexArray(VAOIdx));
 	GLCall(glDrawArrays(GL_TRIANGLES, 0, Context.Vertices.size() / 3));
 }
@@ -160,15 +231,8 @@ void OTestLightning::DrawModelVertices(uint32 VAOIdx, const OMat4& ModelMatrix, 
 void OTestLightning::DrawModelIndices(uint32 VAOIdx, const OMat4& ModelMatrix, const OMat4& VMat, uint32 NumIndices)
 {
 	SetupNormalAndMVMatrices(VMat, ModelMatrix);
+
 	GLCall(glBindVertexArray(VAOIdx));
-
-	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
-
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-
 	GLCall(glDrawElements(GL_TRIANGLES, NumIndices, GL_UNSIGNED_INT, nullptr));
 }
 
@@ -189,39 +253,8 @@ void OTestLightning::ComputeLight(const OMat4& VMat, const OVec3& CameraPos, con
 	InstallLights(VMat);
 }
 
-void OTestLightning::ComputeShadows(float Aspect, OVec3& LightDir, OVec3& LightPos)
+void OTestLightning::ComputeShadows()
 {
-	GLCall(glEnable(GL_DEPTH_TEST));
-
-	ShadowShader.Bind();
-
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO[0]));
-	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0));
-	GLCall(glEnableVertexAttribArray(0));
-
-	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
-
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]));
-
-	ShadowShader.SetUniformMat4f("shadowMVP", LightPMat * LightViewMat * MTorusMatrix);
-	GLCall(glDrawElements(GL_TRIANGLES, Torus.GetNumIndices(), GL_UNSIGNED_INT, nullptr));
-
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO[3]));
-	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0));
-	GLCall(glEnableVertexAttribArray(0));
-
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-
-	ShadowShader.SetUniformMat4f("shadowMVP", LightPMat * LightViewMat * DownCubeMat);
-	GLCall(glDrawArrays(GL_TRIANGLES, 0, PlaneContext.Vertices.size() / 3));
 }
 
 OVec3 OTestLightning::ComputeRayView(const OMat4& PMat, const OMat4& VMat)
@@ -236,8 +269,30 @@ OVec3 OTestLightning::ComputeRayView(const OMat4& PMat, const OMat4& VMat)
 	return RayWorld;
 }
 
-void OTestLightning::CalcModelMatrices()
+void OTestLightning::AddPointLights()
 {
+	auto mainSpot = MakeShared<SSpotlight>();
+
+	mainSpot->Ambient = { 0, 0, 0, 1.F };
+	mainSpot->Specular = { 1.F, 1.F, 1.F, 1.F };
+	mainSpot->Diffuse = { 1.F, 1.F, 1.F, 1.F };
+	mainSpot->Position = OVec3{ 0, 2, 0 };
+	mainSpot->Direction = { 0.0, -1, -1.f };
+	mainSpot->Cutoff = 75.f;
+	mainSpot->Attenuation = DefaultAttenuation;
+
+	// SpotLights.push_back(Move(mainSpot));
+}
+
+void OTestLightning::AddSpotLights()
+{
+	PointShadowLight.Position = { -0.5, 3, 0 };
+	PointShadowLight.Specular = { 1.F, 1.F, 1.F, 1.F };
+	PointShadowLight.Diffuse = { 1.F, 1.F, 1.F, 1.F };
+	PointShadowLight.Ambient = { 0, 0, 0, 1.F };
+	PointShadowLight.Attenuation = DefaultAttenuation;
+
+	PointLights.push_back(PointShadowLight);
 }
 
 } // namespace RAPI

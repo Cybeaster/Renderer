@@ -27,7 +27,7 @@ public:
 	    OMat4& VMat) override;
 
 private:
-	void ComputeShadows(float Aspect, OVec3& LightDir, OVec3& LightPos);
+	void ComputeShadows();
 
 	OVec3 ComputeRayView(const OMat4& PMat, const OMat4& VMat);
 	void ComputeLight(const OMat4& VMat, const OVec3& CameraPos, const OMat4& PMat);
@@ -42,17 +42,26 @@ private:
 	void DrawModelVertices(uint32 VAOIdx, const OMat4& ModelMatrix, const OMat4& VMat, const SModelContext& Context);
 	void DrawModelIndices(uint32 VAOIdx, const OMat4& ModelMatrix, const OMat4& VMat, uint32 NumIndices);
 
+	void AddSpotLights();
+	void AddPointLights();
+
+	OVector<OSharedPtr<SSpotlight>> SpotLights;
+	OVector<SPointLight> PointLights;
+	SPointLight PointShadowLight;
+
+	SAttenuationFactor DefaultAttenuation{ 1.F, 0.032F, 0.09F };
+
 	OMat4 InvTrTorusMat;
 	OMat4 InvTrCubeMat;
 
 	OVec4 GlobalAmbient;
-	SSpotlight SpotLight;
 
-	OMat4 BiasesMat = OMat4(0.5, 0, 0, 0,
-	                        0, 0.5, 0, 0,
-	                        0, 0, 0.5, 0,
-	                        0.5, 0.5, 0.5, 1);
+	OMat4 BiasesMat = OMat4(0.5, 0.0, 0.0, 0.0,
+	                        0.0, 0.5, 0.0, 0.0,
+	                        0.0, 0.0, 0.5, 0.0,
+	                        0.5, 0.5, 0.5, 1.0);
 
+	float CurrentAngle = 0;
 	uint32 VBO[6];
 	uint32 EBO[2];
 	uint32 VAO[2];
@@ -64,6 +73,7 @@ private:
 	SModelContext PlaneContext;
 
 	OMat4 DownCubeMat = OMat4(1);
+
 	SModelContext CubeContext;
 	OVec3 RayWorld;
 

@@ -21,6 +21,7 @@ void OCamera::SetTarget(const OVec3& Arg)
 
 void OCamera::Init()
 {
+	Rotate(0, 0);
 	CameraTarget = { 0, 0, -1 };
 	UpdateCameraDirection();
 	CameraPosition = { 0, 3, 0 };
@@ -41,11 +42,11 @@ void OCamera::Rotate(float XOffset, float YOffset)
 
 	Pitch += YOffset;
 
-	if (Pitch > 180)
-		Pitch = 180;
+	if (Pitch > 90)
+		Pitch = 90;
 
-	if (Pitch < -180)
-		Pitch = -180;
+	if (Pitch < -90)
+		Pitch = -90;
 
 	auto yawRadians = SMath::ToRadians(Yaw);
 	auto pitchRadians = SMath::ToRadians(Pitch);

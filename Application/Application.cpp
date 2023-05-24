@@ -76,6 +76,12 @@ SRenderContext OApplication::MakeRendererContext() const
 
 	SRenderContext context;
 	context.AspectRatio = static_cast<float>(window->GetAspectRation());
+	
+	if(context.AspectRatio > STypeLimits<float>::Max())
+	{
+		context.AspectRatio = 0;
+	}
+
 	context.DeltaTime = static_cast<float>(window->GetDeltaTime());
 
 	return context;

@@ -27,12 +27,17 @@ void OShader::Init(const OPath& Source)
 
 void OShader::SetUniform1i(const OString& name, int32 v0)
 {
-	GLCall(glUniform1i(GetUniformLocation(name), v0));
+	GLCall(glProgramUniform1i(RendererID, GetUniformLocation(name), v0));
+}
+
+void OShader::SetUniform1ui(const OString& name, uint32 v0)
+{
+	GLCall(glProgramUniform1ui(RendererID, GetUniformLocation(name), v0));
 }
 
 void OShader::SetUniform1f(const OString& name, float v0)
 {
-	GLCall(glUniform1f(GetUniformLocation(name), v0));
+	GLCall(glProgramUniform1f(RendererID, GetUniformLocation(name), v0));
 }
 
 uint32 OShader::GetUniformLocation(const OString& name)
@@ -82,22 +87,14 @@ uint32 OShader::CompileShader(uint32 type, const OString& Source)
 {
 	uint32 id = glCreateShader(type);
 	const char* src = Source.c_str();
-	glShaderSource(id, 1, &src, nullptr);
-	glCompileShader(id);
+	GLCall(glShaderSource(id, 1, &src, nullptr));
+	GLCall(glCompileShader(id));
 
-	int32_t result;
-	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-	if (result == GL_FALSE)
+	if (!CatchShaderError(GL_COMPILE_STATUS, id))
 	{
-		int32_t lenght;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &lenght);
-		char* message = (char*)alloca(lenght * sizeof(char));
-		glGetShaderInfoLog(id, lenght, &lenght, message);
-		std::cout << "Shaders isnt compiled" << std::endl;
-		std::cout << message << std::endl;
 		glDeleteShader(id);
-		return GL_FALSE;
 	}
+
 	return id;
 }
 
@@ -137,18 +134,49 @@ SHaderSource OShader::ParseShader(const OPath& filePath)
 
 int OShader::CreateShader(const OString& vertexShader, const OString& fragmentShader)
 {
-	uint32 program = glCreateProgram();
+	GLCall(uint32 program = glCreateProgram());
 	uint32 vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
 	uint32 fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
+	GLCall(glAttachShader(program, vs));
+	GLCall(glAttachShader(program, fs));
 	glLinkProgram(program);
-	glValidateProgram(program);
 
-	glDeleteShader(vs);
-	glDeleteShader(fs);
+	if (!CatchShaderError(GL_LINK_STATUS, program))
+	{
+		glDeleteProgram(program);
+	}
+
+	glValidateProgram(program);
+	if (!CatchShaderError(GL_VALIDATE_STATUS, program))
+	{
+		glDeleteProgram(program);
+	}
+
+	GLCall(glDeleteShader(vs));
+	GLCall(glDeleteShader((fs)));
 
 	return program;
+}
+
+bool OShader::CatchShaderError(int32 ErrorType, uint32 RenderID)
+{
+	int32 isOk;
+	glGetProgramiv(RenderID, ErrorType, &isOk);
+
+	if (isOk == GL_FALSE)
+	{
+		int32_t length;
+		glGetProgramiv(RenderID, GL_INFO_LOG_LENGTH, &length);
+
+		OString msg;
+		msg.resize(length);
+
+		glGetProgramInfoLog(RenderID, length, &length, msg.data());
+
+		std::cout << "Shader Error!" << std::endl;
+		std::cout << msg << std::endl;
+	}
+	return isOk;
 }
 
 } // namespace RAPI
